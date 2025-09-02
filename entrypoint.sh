@@ -65,10 +65,9 @@ setup_laravel_env() {
     fi
     
     # Install dependencies if vendor directory doesn't exist
-    if [ ! -d "vendor" ]; then
-        echo "Installing Composer dependencies..."
-        su -s /bin/bash www-data -c "composer install --no-dev --optimize-autoloader"
-    fi
+    echo "Installing Composer dependencies..."
+    su -s /bin/bash www-data -c "composer install --no-dev --optimize-autoloader"
+
     
     # Create storage directories if they don't exist
     mkdir -p storage/logs
@@ -87,28 +86,20 @@ setup_laravel_env() {
 # Function to wait for database
 wait_for_db() {
     echo "Waiting for database connection..."
-    
     max_attempts=30
     attempt=1
-    
-    cd /var/www/ong
-    
-    while [ $attempt -le $max_attempts ]; do
-        if su -s /bin/bash www-data -c "php artisan migrate:status" >/dev/null 2>&1; then
-            echo "Database connection established!"
+    until su -s /bin/bash www-data -c "php -r 'new PDO(\"mysql:host=${DB_HOST};dbname=${DB_DATABASE};port=${DB_PORT}\", \"${DB_USERNAME}\", \"${DB_PASSWORD}\");' >/dev/null 2>&1"; do
+        if [ $attempt -ge $max_attempts ]; then
+            echo "Database still not ready after $max_attempts attempts"
             break
-        else
-            echo "Attempt $attempt/$max_attempts: Database not ready yet..."
-            sleep 2
-            attempt=$((attempt + 1))
         fi
+        echo "Attempt $attempt/$max_attempts: Database not ready yet..."
+        sleep 2
+        attempt=$((attempt+1))
     done
-    
-    if [ $attempt -gt $max_attempts ]; then
-        echo "Warning: Could not establish database connection after $max_attempts attempts"
-        echo "Application will start anyway. You may need to run migrations manually."
-    fi
+    echo "Database ready!"
 }
+
 
 # Function to run migrations
 run_migrations() {

@@ -16,7 +16,7 @@ services:
       - LOG_CHANNEL=stderr
       # Database configuration
       - DB_CONNECTION=mysql
-      - DB_HOST=db
+      - DB_HOST=mysql_ong
       - DB_PORT=3306
       - DB_DATABASE=${MYSQL_DATABASE:-ong_db}
       - DB_USERNAME=${MYSQL_USER:-laravel_user}

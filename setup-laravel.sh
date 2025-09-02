@@ -1,17 +1,11 @@
 #!/bin/bash
 
-# Ensure we're running as root for permissions
-if [ "$(id -u)" != "0" ]; then
-    echo "Script must run as root for proper permissions handling"
-    exit 1
-fi
-
 # Change ownership of the working directory to www-data
 chown -R www-data:www-data /var/www/ong
 
 # Function to check if Laravel project exists
 check_laravel_exists() {
-    if [ -f "artisan" ] && [ -f "composer.json" ] && [ -d "app" ] && [ -d "config" ]; then
+    if [ -f "/var/www/ong/artisan" ] && [ -f "/var/www/ong/composer.json" ] && [ -d "/var/www/ong/app" ] && [ -d "/var/www/ong/config" ]; then
         echo "Laravel project detected!"
         return 0
     else
@@ -71,10 +65,9 @@ setup_laravel_env() {
     fi
     
     # Install dependencies if vendor directory doesn't exist
-    if [ ! -d "vendor" ]; then
-        echo "Installing Composer dependencies..."
-        su -s /bin/bash www-data -c "composer install --no-dev --optimize-autoloader"
-    fi
+    echo "Installing Composer dependencies..."
+    su -s /bin/bash www-data -c "composer install --no-dev --optimize-autoloader"
+
     
     # Create storage directories if they don't exist
     mkdir -p storage/logs
@@ -93,27 +86,20 @@ setup_laravel_env() {
 # Function to wait for database
 wait_for_db() {
     echo "Waiting for database connection..."
-    
-    cd /var/www/ong
     max_attempts=30
     attempt=1
-    
-    while [ $attempt -le $max_attempts ]; do
-        if su -s /bin/bash www-data -c "php artisan migrate:status" >/dev/null 2>&1; then
-            echo "Database connection established!"
+    until su -s /bin/bash www-data -c "php -r 'new PDO(\"mysql:host=${DB_HOST};dbname=${DB_DATABASE};port=${DB_PORT}\", \"${DB_USERNAME}\", \"${DB_PASSWORD}\");' >/dev/null 2>&1"; do
+        if [ $attempt -ge $max_attempts ]; then
+            echo "Database still not ready after $max_attempts attempts"
             break
-        else
-            echo "Attempt $attempt/$max_attempts: Database not ready yet..."
-            sleep 2
-            attempt=$((attempt + 1))
         fi
+        echo "Attempt $attempt/$max_attempts: Database not ready yet..."
+        sleep 2
+        attempt=$((attempt+1))
     done
-    
-    if [ $attempt -gt $max_attempts ]; then
-        echo "Warning: Could not establish database connection after $max_attempts attempts"
-        echo "Application will start anyway. You may need to run migrations manually."
-    fi
+    echo "Database ready!"
 }
+
 
 # Function to run migrations
 run_migrations() {
