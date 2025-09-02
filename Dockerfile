@@ -8,7 +8,9 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     git \
-    curl
+    curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
@@ -16,18 +18,22 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 # Install Composer
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
+# Create directory structure
+RUN mkdir -p /var/www/ong
+
 # Set working directory
 WORKDIR /var/www/ong
 
-# No necesitamos copiar los archivos aquí porque se montarán como volumen
-# COPY . /var/www/ong
+# Copy setup script
+COPY setup-laravel.sh /usr/local/bin/setup-laravel.sh
+RUN chmod +x /usr/local/bin/setup-laravel.sh
 
-# Eliminamos la instalación de Composer aquí, ya que se ejecutará después de montar los archivos
-# RUN composer install --no-interaction --prefer-dist --optimize-autoloader
-
-# Set permissions
-RUN mkdir -p /var/www/ong/storage /var/www/ong/bootstrap/cache
+# Set permissions for www-data
 RUN chown -R www-data:www-data /var/www/ong
 
+# Create entrypoint script that runs setup and then php-fpm
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 EXPOSE 9000
-CMD ["php-fpm"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
