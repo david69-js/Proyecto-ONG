@@ -48,26 +48,54 @@
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link ">
             <i class="nav-icon fas fa-calendar-alt"></i>
-            <p>Opciones<i class="right fas fa-angle-left"></i></p>
+            <p>Opciones de Usuario<i class="right fas fa-angle-left"></i></p>
           </a>
-          <ul class="nav nav-treeview">
+          <ul class="nav nav-treeview">            
             <li class="nav-item">
-              <a href="">
-                <i class="far fa-circle nav-icon"></i><p>otras opciones</p>
+              <a href="" class="nav-link">
+                <i class="fas fa-tasks nav-icon"></i><p>Crear Usuario</p>
               </a>
             </li>
-            
-        <li class="nav-item">
-          <a href="" class="nav-link">
-            <i class="fas fa-tasks nav-icon"></i><p>Tareas</p>
+
+            <li class="nav-item">
+              <a href="" class="nav-link">
+                <i class="fas fa-tasks nav-icon"></i><p>Editar Usuario</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="" class="nav-link">
+                <i class="fas fa-tasks nav-icon"></i><p>Listar Usuarios</p>
+              </a>
+            </li>
+
+          </ul>
+
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link ">
+            <i class="nav-icon fas fa-calendar-alt"></i>
+            <p>Ubicaciones<i class="right fas fa-angle-left"></i></p>
           </a>
-        </li>
-        <li class="nav-item">
-          <a href="" class="nav-link">
-            <i class="fas fa-user-cog nav-icon"></i><p>Usuarios</p>
-          </a>
-        </li>
-      </ul>
+          <ul class="nav nav-treeview">            
+            <li class="nav-item">
+              <a href="" class="nav-link">
+                <i class="fas fa-tasks nav-icon"></i><p>Crear Ubicacion</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="" class="nav-link">
+                <i class="fas fa-tasks nav-icon"></i><p>Editar Ubicacion</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="" class="nav-link">
+                <i class="fas fa-tasks nav-icon"></i><p>Listar Ubicaciones</p>
+              </a>
+            </li>
+          </ul>
+
     </nav>
   </div>
 </aside>
