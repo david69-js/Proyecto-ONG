@@ -1,19 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>@yield('title') - ONG</title>
-
-  <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/2.0.0/trix.min.css">
-  @stack('styles')
-</head>
+  <x-head-admin />
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
 
@@ -44,7 +29,9 @@
             <i class="nav-icon fas fa-home"></i><p>Dashboard</p>
           </a>
         </li>
-
+        <!-- 
+          Opciones para el administrador
+         -->
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link ">
             <i class="nav-icon fas fa-calendar-alt"></i>
@@ -52,7 +39,7 @@
           </a>
           <ul class="nav nav-treeview">            
             <li class="nav-item">
-              <a href="" class="nav-link">
+              <a href="/usuario/create" class="nav-link">
                 <i class="fas fa-tasks nav-icon"></i><p>Crear Usuario</p>
               </a>
             </li>
@@ -64,13 +51,16 @@
             </li>
 
             <li class="nav-item">
-              <a href="" class="nav-link">
+              <a href="/usuario/" class="nav-link">
                 <i class="fas fa-tasks nav-icon"></i><p>Listar Usuarios</p>
               </a>
             </li>
 
           </ul>
 
+        <!-- 
+          Opciones para el las ubicaciones
+         -->
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link ">
             <i class="nav-icon fas fa-calendar-alt"></i>
@@ -96,6 +86,9 @@
             </li>
           </ul>
 
+        <!-- 
+       Modulo de proyectos
+         -->
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link ">
             <i class="nav-icon fas fa-calendar-alt"></i>
@@ -121,6 +114,9 @@
             </li>
           </ul>
 
+        <!-- 
+          Opciones para el beneficiarios
+         -->
           <li class="nav-item has-treeview">
           <a href="#" class="nav-link ">
             <i class="nav-icon fas fa-calendar-alt"></i>
@@ -149,32 +145,4 @@
     </nav>
   </div>
 </aside>
-
-
-
-  <!-- Contenido -->
-  <div class="content-wrapper">
-    <div class="content-header">
-      <div class="container-fluid"><h4 class="m-0">@yield('header', 'Inicio')</h4></div>
-    </div>
-    <section class="content">
-      <div class="container-fluid">@yield('content')</div>
-    </section>
-  </div>
-
-  <footer class="main-footer text-center"><strong>©️ {{ date('Y') }} Motorepuestos Mota</strong></footer>
-</div>
-
-<!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/trix/2.0.0/trix.min.js"></script>
-
-
-@stack('scripts')
-</body>
-</html>
+  <x-footer-admin />
