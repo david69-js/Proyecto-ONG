@@ -48,7 +48,7 @@
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link ">
             <i class="nav-icon fas fa-calendar-alt"></i>
-            <p>Opciones de Usuario<i class="right fas fa-angle-left"></i></p>
+            <p>Administrador<i class="right fas fa-angle-left"></i></p>
           </a>
           <ul class="nav nav-treeview">            
             <li class="nav-item">
@@ -92,6 +92,56 @@
             <li class="nav-item">
               <a href="" class="nav-link">
                 <i class="fas fa-tasks nav-icon"></i><p>Listar Ubicaciones</p>
+              </a>
+            </li>
+          </ul>
+
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link ">
+            <i class="nav-icon fas fa-calendar-alt"></i>
+            <p>Proyectos<i class="right fas fa-angle-left"></i></p>
+          </a>
+          <ul class="nav nav-treeview">            
+            <li class="nav-item">
+              <a href="" class="nav-link">
+                <i class="fas fa-tasks nav-icon"></i><p>Crear Proyecto</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="" class="nav-link">
+                <i class="fas fa-tasks nav-icon"></i><p>Editar Proyecto</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="" class="nav-link">
+                <i class="fas fa-tasks nav-icon"></i><p>Listar Proyectos</p>
+              </a>
+            </li>
+          </ul>
+
+          <li class="nav-item has-treeview">
+          <a href="#" class="nav-link ">
+            <i class="nav-icon fas fa-calendar-alt"></i>
+            <p>Beneficiarios<i class="right fas fa-angle-left"></i></p>
+          </a>
+          <ul class="nav nav-treeview">            
+            <li class="nav-item">
+              <a href="" class="nav-link">
+                <i class="fas fa-tasks nav-icon"></i><p>Crear Beneficiario</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="" class="nav-link">
+                <i class="fas fa-tasks nav-icon"></i><p>Editar Beneficiario</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="" class="nav-link">
+                <i class="fas fa-tasks nav-icon"></i><p>Listar Beneficiarios</p>
               </a>
             </li>
           </ul>
