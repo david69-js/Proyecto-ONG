@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BeneficiarioController;
 
 Route::get('/', function () {
     return view('index');
@@ -13,6 +14,8 @@ Route::get('/about', function () {
 Route::get('/ingresar', function () {
     return view('ingresar');
 });
+
+Route::resource('beneficiarios', BeneficiarioController::class);
 
 use App\Http\Controllers\UsuarioController;
 

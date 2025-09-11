@@ -124,8 +124,9 @@
           </a>
           <ul class="nav nav-treeview">            
             <li class="nav-item">
-              <a href="" class="nav-link">
-                <i class="fas fa-tasks nav-icon"></i><p>Crear Beneficiario</p>
+              <a href="{{ route('beneficiarios.create') }}" class="nav-link">
+                <i class="fas fa-tasks nav-icon"></i>
+                  <p>Crear Beneficiario</p>
               </a>
             </li>
 
@@ -136,10 +137,12 @@
             </li>
 
             <li class="nav-item">
-              <a href="" class="nav-link">
-                <i class="fas fa-tasks nav-icon"></i><p>Listar Beneficiarios</p>
+              <a href="{{ route('beneficiarios.index') }}" class="nav-link">
+                <i class="fas fa-list nav-icon"></i>
+                  <p>Listar Beneficiarios</p>
               </a>
             </li>
+
           </ul>
 
     </nav>
