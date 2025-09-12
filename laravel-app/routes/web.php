@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProyectoController;
 
 Route::get('/', function () {
     return view('index');
@@ -27,4 +28,14 @@ Route::prefix('users')->name('users.')->group(function () {
     Route::patch('/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle-status');
     Route::get('/{user}/permissions', [UserController::class, 'permissions'])->name('permissions');
     Route::put('/{user}/permissions', [UserController::class, 'updatePermissions'])->name('update-permissions');
+});
+// Proyectos Management Routes
+Route::prefix('proyectos')->name('proyectos.')->group(function () {
+    Route::get('/', [ProyectoController::class, 'index'])->name('index');
+    Route::get('/create', [ProyectoController::class, 'create'])->name('create');
+    Route::post('/', [ProyectoController::class, 'store'])->name('store');
+    Route::get('/{proyecto}', [ProyectoController::class, 'show'])->name('show');
+    Route::get('/{proyecto}/edit', [ProyectoController::class, 'edit'])->name('edit');
+    Route::put('/{proyecto}', [ProyectoController::class, 'update'])->name('update');
+    Route::delete('/{proyecto}', [ProyectoController::class, 'destroy'])->name('destroy');
 });
