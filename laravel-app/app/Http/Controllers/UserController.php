@@ -71,7 +71,7 @@ class UserController extends Controller
             'last_name' => 'required|string|max:100',
             'email' => 'required|email|unique:sys_users',
             'phone' => 'nullable|string|max:20',
-            'password' => 'required|min:8|confirmed',
+            'password' => 'required|min:5|confirmed',
             'roles' => 'required|array|min:1',
             'roles.*' => 'exists:cfg_roles,id',
             'is_active' => 'boolean',
@@ -158,7 +158,7 @@ class UserController extends Controller
             'last_name' => 'required|string|max:100',
             'email' => ['required', 'email', Rule::unique('sys_users')->ignore($user->id)],
             'phone' => 'nullable|string|max:20',
-            'password' => 'nullable|min:8|confirmed',
+            'password' => 'required|min:5|confirmed'
             'roles' => 'required|array|min:1',
             'roles.*' => 'exists:cfg_roles,id',
             'is_active' => 'boolean',
