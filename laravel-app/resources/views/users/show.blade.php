@@ -4,10 +4,6 @@
 
 @section('content')
 <div class="container-fluid">
-    <!-- Navigation -->
-    <x-head-admin />
-
-    <!-- End Navigation -->
     <div class="row">
         <div class="col-12">
             <div class="card">
