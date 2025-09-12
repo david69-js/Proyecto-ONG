@@ -31,7 +31,7 @@
 
         <!-- Main Content -->
         <main class="py-4">
-            <div class="container-fluid">
+            <div class="container">
                 <!-- Flash Messages -->
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -62,16 +62,20 @@
                 @endif
 
                 <!-- Page Content -->
-                @yield('content')
+                <div class="content-wrapper">
+                    <div class="content-header">
+                        <div class="container-fluid"><h4 class="m-0">@yield('header', 'Inicio')</h4></div>
+                    </div>
+                    <section class="content">
+                        <div class="container-fluid">@yield('content')</div>
+                    </section>
+
+                </div>
+
             </div>
         </main>
-
-        <!-- Footer -->
-        <footer class="bg-light text-center text-muted py-3 mt-5">
-            <div class="container">
-                <p class="mb-0">&copy; {{ date('Y') }} ONG Management System. All rights reserved.</p>
-            </div>
-        </footer>
+        
+        <x-footer-admin />
     </div>
 
     <!-- Bootstrap JS -->
