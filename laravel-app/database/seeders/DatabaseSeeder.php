@@ -13,11 +13,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Seed roles and permissions first
+        $this->call([
+            RolePermissionSeeder::class,
         ]);
+
+        // Create a default super admin user if it doesn't exist
+        $adminUser = User::where('email', 'admin@ong.com')->first();
+        
+        if (!$adminUser) {
+            $adminUser = User::create([
+                'first_name' => 'Super',
+                'last_name' => 'Admin',
+                'email' => 'admin@ong.com',
+                'password' => bcrypt('password'),
+                'is_active' => true,
+                'is_verified' => true,
+            ]);
+        }
+        
+        // Assign super admin role if not already assigned
+        if (!$adminUser->hasRole('super_admin')) {
+            $adminUser->assignRole('super_admin');
+        }
     }
 }
