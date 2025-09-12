@@ -39,3 +39,6 @@ Route::prefix('proyectos')->name('proyectos.')->group(function () {
     Route::put('/{proyecto}', [ProyectoController::class, 'update'])->name('update');
     Route::delete('/{proyecto}', [ProyectoController::class, 'destroy'])->name('destroy');
 });
+
+// Opción directa a la vista
+Route::view('Ubicacion/create', 'Ubicacion.create_ubicacion')->name('Ubicacion.create');
