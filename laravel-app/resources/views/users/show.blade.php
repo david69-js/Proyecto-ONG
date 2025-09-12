@@ -4,6 +4,10 @@
 
 @section('content')
 <div class="container-fluid">
+    <!-- Navigation -->
+    <x-head-admin />
+
+    <!-- End Navigation -->
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -256,13 +260,31 @@
 @push('styles')
 <style>
     .badge {
-        font-size: 0.75em;
+        font-size: 0.85em; /* Slightly larger for better readability */
+        padding: 0.4em 0.6em;
     }
     .card {
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem; /* Increased spacing for better layout */
+        border-radius: 0.5rem; /* Softer corners */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    }
+    .card-header {
+        background-color: #f8f9fa; /* Light gray background for headers */
+        font-weight: bold;
     }
     .card-body p {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.75rem; /* Increased spacing for better readability */
+    }
+    .btn {
+        border-radius: 0.3rem; /* Consistent button styling */
+    }
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
     }
 </style>
 @endpush

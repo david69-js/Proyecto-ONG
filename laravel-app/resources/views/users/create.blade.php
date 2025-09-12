@@ -4,6 +4,10 @@
 
 @section('content')
 <div class="container-fluid">
+    <!-- Navigation -->
+    <x-head-admin />
+
+    <!-- End Navigation -->
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -382,10 +386,27 @@
         color: red;
     }
     .card {
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+        background-color: #f8f9fa;
+        font-weight: bold;
     }
     .form-check {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+    .btn {
+        border-radius: 0.3rem;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
     }
 </style>
 @endpush

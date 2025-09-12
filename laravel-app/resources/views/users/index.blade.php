@@ -4,6 +4,10 @@
 
 @section('content')
 <div class="container-fluid">
+    <!-- Navigation -->
+    <x-head-admin />
+
+    <!-- End Navigation -->
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -199,13 +203,31 @@
 @push('styles')
 <style>
     .badge {
-        font-size: 0.75em;
+        font-size: 0.85em;
+        padding: 0.4em 0.6em;
     }
-    .btn-group .btn {
-        margin-right: 2px;
+    .card {
+        margin-bottom: 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    .btn-group .btn:last-child {
-        margin-right: 0;
+    .card-header {
+        background-color: #f8f9fa;
+        font-weight: bold;
+    }
+    .btn {
+        border-radius: 0.3rem;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+    .table th, .table td {
+        vertical-align: middle;
     }
 </style>
 @endpush
