@@ -19,3 +19,5 @@ use App\Http\Controllers\UsuarioController;
 // Rutas personalizadas en español
 Route::get('usuario', [UsuarioController::class, 'index'])->name('usuario.index');
 Route::get('usuario/crear', [UsuarioController::class, 'crear'])->name('usuario.crear');
+// Opción directa a la vista
+Route::view('Ubicacion/create', 'Ubicacion.create_ubicacion')->name('Ubicacion.create');
