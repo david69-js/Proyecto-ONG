@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProyectoController;
+use App\Http\Controllers\BeneficiaryController;
 
 Route::get('/', function () {
     return view('index');
@@ -38,6 +39,18 @@ Route::prefix('proyectos')->name('proyectos.')->group(function () {
     Route::get('/{proyecto}/edit', [ProyectoController::class, 'edit'])->name('edit');
     Route::put('/{proyecto}', [ProyectoController::class, 'update'])->name('update');
     Route::delete('/{proyecto}', [ProyectoController::class, 'destroy'])->name('destroy');
+});
+
+
+// Beneficiaries Management Routes
+Route::prefix('beneficiaries')->name('beneficiaries.')->group(function () {
+    Route::get('/', [BeneficiaryController::class, 'index'])->name('index');
+    Route::get('/create', [BeneficiaryController::class, 'create'])->name('create');
+    Route::post('/', [BeneficiaryController::class, 'store'])->name('store');
+    Route::get('/{beneficiary}', [BeneficiaryController::class, 'show'])->name('show');
+    Route::get('/{beneficiary}/edit', [BeneficiaryController::class, 'edit'])->name('edit');
+    Route::put('/{beneficiary}', [BeneficiaryController::class, 'update'])->name('update');
+    Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('destroy');
 });
 
 // Opción directa a la vista
