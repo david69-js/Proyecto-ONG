@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="container">
-    <h1>Beneficiaries</h1>
-    <a href="{{ route('beneficiaries.create') }}" class="btn btn-primary mb-3">Add New Beneficiary</a>
+    <h1>Beneficiarios</h1>
+    <a href="{{ route('beneficiaries.create') }}" class="btn btn-primary mb-3">Agregar nuevo beneficiario</a>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -12,11 +12,11 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Project</th>
-                <th>Actions</th>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Proyecto</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -27,12 +27,12 @@
                     <td>{{ $beneficiary->status }}</td>
                     <td>{{ $beneficiary->project?->name ?? '-' }}</td>
                     <td>
-                        <a href="{{ route('beneficiaries.show', $beneficiary) }}" class="btn btn-info btn-sm">View</a>
-                        <a href="{{ route('beneficiaries.edit', $beneficiary) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ route('beneficiaries.show', $beneficiary) }}" class="btn btn-info btn-sm">Vizualizar</a>
+                        <a href="{{ route('beneficiaries.edit', $beneficiary) }}" class="btn btn-warning btn-sm">Editar</a>
                         <form action="{{ route('beneficiaries.destroy', $beneficiary) }}" method="POST" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                            <button class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro?')">Eliminar</button>
                         </form>
                     </td>
                 </tr>

@@ -68,7 +68,7 @@ class BeneficiaryController extends Controller
         $beneficiary->update($request->all());
 
         return redirect()->route('beneficiaries.index')
-                     ->with('success', 'Beneficiary updated successfully.');
+                     ->with('success', 'Beneficiario actualizado correctamente.');
     }
     /**
      * Remove the specified resource from storage.
