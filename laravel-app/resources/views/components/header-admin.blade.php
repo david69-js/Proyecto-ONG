@@ -181,12 +181,6 @@
             </li>
 
             <li class="nav-item">
-              <a href="/users/edit" class="nav-link">
-                <i class="fas fa-tasks nav-icon"></i><p>Editar Usuario</p>
-              </a>
-            </li>
-
-            <li class="nav-item">
               <a href="/users/" class="nav-link">
                 <i class="fas fa-tasks nav-icon"></i><p>Listar Usuarios</p>
               </a>
