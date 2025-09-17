@@ -37,7 +37,7 @@ class BeneficiaryController extends Controller
         Beneficiary::create($request->all());
 
         return redirect()->route('beneficiaries.index')
-                         ->with('success', 'Beneficiary created successfully.');
+                         ->with('success', 'Beneficiario creado exitosamente.');
     }
 
     /**
