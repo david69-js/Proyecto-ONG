@@ -198,29 +198,34 @@
           Opciones para el las ubicaciones
          -->
         <li class="nav-item has-treeview">
-          <a href="#" class="nav-link ">
-            <i class="nav-icon fas fa-calendar-alt"></i>
-            <p>Ubicaciones<i class="right fas fa-angle-left"></i></p>
-          </a>
-          <ul class="nav nav-treeview">            
-            <li class="nav-item">
-              <a href="" class="nav-link">
-                <i class="fas fa-tasks nav-icon"></i><p>Crear Ubicacion</p>
-              </a>
-            </li>
+            <a href="#" class="nav-link ">
+              <i class="nav-icon fas fa-calendar-alt"></i>
+              <p>Ubicaciones<i class="right fas fa-angle-left"></i></p>
+            </a>
 
-            <li class="nav-item">
-              <a href="" class="nav-link">
-                <i class="fas fa-tasks nav-icon"></i><p>Editar Ubicacion</p>
-              </a>
-            </li>
+            <ul class="nav nav-treeview">            
+              <li class="nav-item">
+                <a href="{{ route('locations.create') }}" class="nav-link">
+                  <i class="fas fa-tasks nav-icon"></i>
+                  <p>Crear Ubicación</p>
+                </a>
+              </li>
 
-            <li class="nav-item">
-              <a href="" class="nav-link">
-                <i class="fas fa-tasks nav-icon"></i><p>Listar Ubicaciones</p>
-              </a>
-            </li>
-          </ul>
+              <!--li class="nav-item"-->
+                <!--a href="{{ url('locations.edit') }}" class="nav-link">
+                  <i class="fas fa-tasks nav-icon"></i>
+                  <p>Editar Ubicación</p>
+                </a>
+              </li-->
+
+              <li class="nav-item">
+                <a href="{{ route('locations.index') }}" class="nav-link">
+                  <i class="fas fa-tasks nav-icon"></i>
+                  <p>Listar Ubicaciones</p>
+                </a>
+              </li>
+            </ul>
+          </li>
 
         <!-- 
        Modulo de proyectos
