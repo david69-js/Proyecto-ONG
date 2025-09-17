@@ -175,19 +175,13 @@
           </a>
           <ul class="nav nav-treeview">            
             <li class="nav-item">
-              <a href="/usuario/create" class="nav-link">
+              <a href="/users/create" class="nav-link">
                 <i class="fas fa-tasks nav-icon"></i><p>Crear Usuario</p>
               </a>
             </li>
 
             <li class="nav-item">
-              <a href="" class="nav-link">
-                <i class="fas fa-tasks nav-icon"></i><p>Editar Usuario</p>
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a href="/usuario/" class="nav-link">
+              <a href="/users/" class="nav-link">
                 <i class="fas fa-tasks nav-icon"></i><p>Listar Usuarios</p>
               </a>
             </li>
