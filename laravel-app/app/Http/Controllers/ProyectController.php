@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Proyecto;
 use Illuminate\Http\Request;
 
-class ProyectoController extends Controller
+class ProyectController extends Controller
 {
     /**
      * Mostrar todos los proyectos.
