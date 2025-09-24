@@ -54,4 +54,14 @@ Route::prefix('beneficiaries')->name('beneficiaries.')->group(function () {
 });
 
 // Opción directa a la vista
-Route::view('Ubicacion/create', 'Ubicacion.create_ubicacion')->name('Ubicacion.create');
+use App\Http\Controllers\LocationController;
+Route::prefix('locations')->name('locations.')->group(function () {
+    Route::get('/', [LocationController::class, 'index'])->name('index'); // Listar
+    Route::get('/create', [LocationController::class, 'create'])->name('create'); // Crear
+    Route::post('/', [LocationController::class, 'store'])->name('store'); // Guardar
+    Route::get('/{location}/edit', [LocationController::class, 'edit'])->name('edit'); // Editar
+    Route::put('/{location}', [LocationController::class, 'update'])->name('update'); // Actualizar
+    Route::delete('/{location}', [LocationController::class, 'destroy'])->name('destroy'); // Eliminar
+    Route::get('/{location}', [LocationController::class, 'show'])->name('show'); // Mostrar
+});
+
