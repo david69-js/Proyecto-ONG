@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProyectoController;
+use App\Http\Controllers\ProjectController;
 
 Route::get('/', function () {
     return view('index');
@@ -30,12 +30,12 @@ Route::prefix('users')->name('users.')->group(function () {
     Route::put('/{user}/permissions', [UserController::class, 'updatePermissions'])->name('update-permissions');
 });
 // Proyectos Management Routes
-Route::prefix('proyectos')->name('proyectos.')->group(function () {
-    Route::get('/', [ProyectoController::class, 'index'])->name('index');
-    Route::get('/create', [ProyectoController::class, 'create'])->name('create');
-    Route::post('/', [ProyectoController::class, 'store'])->name('store');
-    Route::get('/{proyecto}', [ProyectoController::class, 'show'])->name('show');
-    Route::get('/{proyecto}/edit', [ProyectoController::class, 'edit'])->name('edit');
-    Route::put('/{proyecto}', [ProyectoController::class, 'update'])->name('update');
-    Route::delete('/{proyecto}', [ProyectoController::class, 'destroy'])->name('destroy');
+Route::prefix('projects')->name('projects.')->group(function () {
+    Route::get('/', [ProjectController::class, 'index'])->name('index');
+    Route::get('/create', [ProjectController::class, 'create'])->name('create');
+    Route::post('/', [ProjectController::class, 'store'])->name('store');
+    Route::get('/{project}', [ProjectController::class, 'show'])->name('show');
+    Route::get('/{project}/edit', [ProjectController::class, 'edit'])->name('edit');
+    Route::put('/{project}', [ProjectController::class, 'update'])->name('update');
+    Route::delete('/{project}', [ProjectController::class, 'destroy'])->name('destroy');
 });

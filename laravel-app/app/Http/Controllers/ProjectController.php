@@ -2,23 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Proyecto;
+use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class ProyectoController extends Controller
+class ProjectController extends Controller
 {
-    /**
-     * Mostrar todos los proyectos.
-     */
     public function index()
     {
-        $proyectos = Proyecto::with('responsable')->get();
-        return response()->json($proyectos);
+        $projects = Project::with('responsable')->get();
+        return view('projects.index', compact('projects'));
     }
 
-    /**
-     * Guardar un nuevo proyecto.
-     */
+public function create()
+{
+    $usuarios = User::all(); 
+    return view('projects.create', [
+        'project' => new Project(), 
+        'usuarios' => $usuarios
+    ]);
+}
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -32,29 +36,33 @@ class ProyectoController extends Controller
             'fecha_inicio' => 'required|date',
             'fecha_fin' => 'nullable|date',
             'estado' => 'in:planificado,en_progreso,pausado,finalizado,cancelado',
-            'responsable_id' => 'nullable|exists:sys_users,id',
-            'ubicacion' => 'nullable|string',
+            'responsable_id' => 'nullable|exists:users,id', 
             'resultados_esperados' => 'nullable|string',
             'resultados_obtenidos' => 'nullable|string',
         ]);
 
-        $proyecto = Proyecto::create($validated);
+        Project::create($validated);
 
-        return response()->json($proyecto, 201);
+        return redirect()->route('projects.index')
+                         ->with('success', 'Proyecto creado correctamente.');
     }
 
-    /**
-     * Mostrar un proyecto específico.
-     */
-    public function show(Proyecto $proyecto)
+    public function show(Project $project)
     {
-        return response()->json($proyecto->load('responsable'));
+        return view('projects.show', compact('project'));
     }
 
-    /**
-     * Actualizar un proyecto.
-     */
-    public function update(Request $request, Proyecto $proyecto)
+public function edit(Project $project)
+{
+    $usuarios = User::all();
+    return view('projects.edit', [
+        'project' => $project,
+        'usuarios' => $usuarios
+    ]);
+}
+
+
+    public function update(Request $request, Project $project)
     {
         $validated = $request->validate([
             'nombre' => 'sometimes|required|string|max:255',
@@ -67,24 +75,22 @@ class ProyectoController extends Controller
             'fecha_inicio' => 'sometimes|required|date',
             'fecha_fin' => 'nullable|date',
             'estado' => 'in:planificado,en_progreso,pausado,finalizado,cancelado',
-            'responsable_id' => 'nullable|exists:sys_users,id',
+            'responsable_id' => 'nullable|exists:users,id',
             'ubicacion' => 'nullable|string',
             'resultados_esperados' => 'nullable|string',
             'resultados_obtenidos' => 'nullable|string',
         ]);
 
-        $proyecto->update($validated);
+        $project->update($validated);
 
-        return response()->json($proyecto);
+        return redirect()->route('projects.index')
+                         ->with('success', 'Proyecto actualizado correctamente.');
     }
 
-    /**
-     * Eliminar un proyecto.
-     */
-    public function destroy(Proyecto $proyecto)
+    public function destroy(Project $project)
     {
-        $proyecto->delete();
-
-        return response()->json(['message' => 'Proyecto eliminado correctamente']);
+        $project->delete();
+        return redirect()->route('projects.index')
+                         ->with('success', 'Proyecto eliminado correctamente.');
     }
 }
