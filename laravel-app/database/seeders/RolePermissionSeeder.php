@@ -3,7 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Role;
+use App\Models\Permission;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -12,122 +13,98 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create roles only if they don't exist
-        if (DB::table('cfg_roles')->count() == 0) {
-            $roles = [
-            [
-                'name' => 'Super Administrator',
-                'slug' => 'super_admin',
-                'description' => 'Full system access with all permissions',
-                'is_active' => true,
-                'sort_order' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Administrator',
-                'slug' => 'admin',
-                'description' => 'Administrative access to most system features',
-                'is_active' => true,
-                'sort_order' => 2,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Coordinator',
-                'slug' => 'coordinator',
-                'description' => 'Can manage volunteers and coordinate activities',
-                'is_active' => true,
-                'sort_order' => 3,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Volunteer',
-                'slug' => 'volunteer',
-                'description' => 'Basic volunteer access to participate in activities',
-                'is_active' => true,
-                'sort_order' => 4,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            ];
+        // Asignar permisos a roles usando los modelos
+        $this->assignPermissionsToRoles();
+    }
 
-            DB::table('cfg_roles')->insert($roles);
+    private function assignPermissionsToRoles(): void
+    {
+        // Super Administrador - todos los permisos
+        $superAdmin = Role::where('slug', 'super-admin')->first();
+        if ($superAdmin) {
+            $allPermissions = Permission::all();
+            $superAdmin->permissions()->sync($allPermissions->pluck('id'));
         }
 
-        // Create permissions only if they don't exist
-        if (DB::table('cfg_permissions')->count() == 0) {
-            $permissions = [
-            // User Management
-            ['name' => 'View Users', 'slug' => 'users.view', 'description' => 'View user list and details', 'module' => 'users', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Create Users', 'slug' => 'users.create', 'description' => 'Create new users', 'module' => 'users', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Edit Users', 'slug' => 'users.edit', 'description' => 'Edit existing users', 'module' => 'users', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Delete Users', 'slug' => 'users.delete', 'description' => 'Delete users', 'module' => 'users', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            
-            // Role Management
-            ['name' => 'View Roles', 'slug' => 'roles.view', 'description' => 'View roles and permissions', 'module' => 'roles', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Manage Roles', 'slug' => 'roles.manage', 'description' => 'Create, edit and delete roles', 'module' => 'roles', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            
-            // Activities/Projects
-            ['name' => 'View Activities', 'slug' => 'activities.view', 'description' => 'View activities and projects', 'module' => 'activities', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Create Activities', 'slug' => 'activities.create', 'description' => 'Create new activities', 'module' => 'activities', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Edit Activities', 'slug' => 'activities.edit', 'description' => 'Edit existing activities', 'module' => 'activities', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Delete Activities', 'slug' => 'activities.delete', 'description' => 'Delete activities', 'module' => 'activities', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            
-            // Reports
-            ['name' => 'View Reports', 'slug' => 'reports.view', 'description' => 'View system reports', 'module' => 'reports', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Export Reports', 'slug' => 'reports.export', 'description' => 'Export reports to various formats', 'module' => 'reports', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ];
-
-            DB::table('cfg_permissions')->insert($permissions);
+        // Administrador - permisos amplios excepto gestión de roles
+        $admin = Role::where('slug', 'admin')->first();
+        if ($admin) {
+            $adminPermissions = Permission::whereNotIn('slug', [
+                'roles.manage',
+                'permissions.manage',
+                'settings.manage'
+            ])->get();
+            $admin->permissions()->sync($adminPermissions->pluck('id'));
         }
 
-        // Assign permissions to roles only if not already assigned
-        if (DB::table('rel_role_permissions')->count() == 0) {
-            $rolePermissions = [
-            // Super Admin gets all permissions
-            ['role_id' => 1, 'permission_id' => 1, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 1, 'permission_id' => 2, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 1, 'permission_id' => 3, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 1, 'permission_id' => 4, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 1, 'permission_id' => 5, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 1, 'permission_id' => 6, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 1, 'permission_id' => 7, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 1, 'permission_id' => 8, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 1, 'permission_id' => 9, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 1, 'permission_id' => 10, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 1, 'permission_id' => 11, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 1, 'permission_id' => 12, 'created_at' => now(), 'updated_at' => now()],
-            
-            // Admin gets most permissions except super admin specific ones
-            ['role_id' => 2, 'permission_id' => 1, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 2, 'permission_id' => 2, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 2, 'permission_id' => 3, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 2, 'permission_id' => 4, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 2, 'permission_id' => 5, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 2, 'permission_id' => 7, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 2, 'permission_id' => 8, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 2, 'permission_id' => 9, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 2, 'permission_id' => 10, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 2, 'permission_id' => 11, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 2, 'permission_id' => 12, 'created_at' => now(), 'updated_at' => now()],
-            
-            // Coordinator gets limited permissions
-            ['role_id' => 3, 'permission_id' => 1, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 3, 'permission_id' => 2, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 3, 'permission_id' => 3, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 3, 'permission_id' => 7, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 3, 'permission_id' => 8, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 3, 'permission_id' => 9, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 3, 'permission_id' => 11, 'created_at' => now(), 'updated_at' => now()],
-            
-            // Volunteer gets basic permissions
-            ['role_id' => 4, 'permission_id' => 1, 'created_at' => now(), 'updated_at' => now()],
-            ['role_id' => 4, 'permission_id' => 7, 'created_at' => now(), 'updated_at' => now()],
-            ];
+        // Coordinador de Proyectos - permisos relacionados con proyectos y usuarios
+        $projectCoordinator = Role::where('slug', 'project-coordinator')->first();
+        if ($projectCoordinator) {
+            $projectCoordinatorPermissions = Permission::whereIn('slug', [
+                'users.view',
+                'projects.view',
+                'projects.create',
+                'projects.edit',
+                'beneficiaries.view',
+                'beneficiaries.create',
+                'beneficiaries.edit',
+                'locations.view',
+                'locations.create',
+                'locations.edit',
+                'reports.view',
+            ])->get();
+            $projectCoordinator->permissions()->sync($projectCoordinatorPermissions->pluck('id'));
+        }
 
-            DB::table('rel_role_permissions')->insert($rolePermissions);
+        // Coordinador de Beneficiarios - permisos relacionados con beneficiarios
+        $beneficiaryCoordinator = Role::where('slug', 'beneficiary-coordinator')->first();
+        if ($beneficiaryCoordinator) {
+            $beneficiaryCoordinatorPermissions = Permission::whereIn('slug', [
+                'users.view',
+                'projects.view',
+                'beneficiaries.view',
+                'beneficiaries.create',
+                'beneficiaries.edit',
+                'beneficiaries.delete',
+                'locations.view',
+                'reports.view',
+            ])->get();
+            $beneficiaryCoordinator->permissions()->sync($beneficiaryCoordinatorPermissions->pluck('id'));
+        }
+
+        // Voluntario - permisos básicos de solo lectura
+        $volunteer = Role::where('slug', 'volunteer')->first();
+        if ($volunteer) {
+            $volunteerPermissions = Permission::whereIn('slug', [
+                'users.view',
+                'projects.view',
+                'beneficiaries.view',
+                'locations.view',
+            ])->get();
+            $volunteer->permissions()->sync($volunteerPermissions->pluck('id'));
+        }
+
+        // Consultor - permisos de solo lectura
+        $consultant = Role::where('slug', 'consultant')->first();
+        if ($consultant) {
+            $consultantPermissions = Permission::whereIn('slug', [
+                'users.view',
+                'projects.view',
+                'beneficiaries.view',
+                'locations.view',
+                'reports.view',
+            ])->get();
+            $consultant->permissions()->sync($consultantPermissions->pluck('id'));
+        }
+
+        // Donante - permisos muy limitados
+        $donor = Role::where('slug', 'donor')->first();
+        if ($donor) {
+            $donorPermissions = Permission::whereIn('slug', [
+                'projects.view',
+                'reports.view',
+            ])->get();
+            $donor->permissions()->sync($donorPermissions->pluck('id'));
         }
     }
 }

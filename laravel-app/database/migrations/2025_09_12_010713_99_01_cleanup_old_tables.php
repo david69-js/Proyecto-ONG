@@ -11,29 +11,26 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Eliminar tablas duplicadas que ya no son necesarias
-        // Las nuevas tablas con jerarquía ya están creadas
+        // This migration was intended to clean up old tables, but since the new
+        // table structure uses prefixed names, the old tables don't exist.
+        // This migration is now a no-op but we keep it for migration history.
         
-        // Primero eliminar tablas de relaciones (que tienen claves foráneas)
-        Schema::dropIfExists('user_roles');
-        Schema::dropIfExists('role_permissions');
-        Schema::dropIfExists('user_permissions');
+        // The old table names that were supposed to be dropped don't exist:
+        // - users (now sys_users)
+        // - roles (now cfg_roles) 
+        // - permissions (now cfg_permissions)
+        // - user_profiles (now usr_profiles)
+        // - user_roles (now rel_user_roles)
+        // - role_permissions (now rel_role_permissions)
+        // - user_permissions (now rel_user_permissions)
+        // - sessions (now sys_sessions)
+        // - cache (now sys_cache)
+        // - cache_locks (now sys_cache_locks)
+        // - jobs (now sys_jobs)
+        // - job_batches (now sys_job_batches)
+        // - failed_jobs (now sys_failed_jobs)
         
-        // Luego eliminar tablas que dependen de otras
-        Schema::dropIfExists('user_profiles');
-        
-        // Después eliminar tablas principales
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('roles');
-        Schema::dropIfExists('permissions');
-        
-        // Eliminar tablas de sesiones, cache y jobs duplicadas
-        Schema::dropIfExists('sessions');
-        Schema::dropIfExists('cache');
-        Schema::dropIfExists('cache_locks');
-        Schema::dropIfExists('jobs');
-        Schema::dropIfExists('job_batches');
-        Schema::dropIfExists('failed_jobs');
+        // No action needed as the old tables never existed with these names
     }
 
     /**
@@ -41,8 +38,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // No se puede revertir esta migración ya que elimina tablas
-        // Si necesitas revertir, tendrías que recrear las tablas manualmente
-        throw new Exception('This migration cannot be reversed as it drops tables permanently.');
+        // Since this migration doesn't actually drop any tables (the old tables
+        // never existed with the names it was trying to drop), there's nothing
+        // to reverse. This is a no-op migration.
     }
 };

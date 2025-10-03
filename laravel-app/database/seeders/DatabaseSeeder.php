@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,28 +11,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seed roles and permissions first
+        // Ejecutar seeders en el orden correcto
         $this->call([
+            // 1. Primero crear roles y permisos
+            RoleSeeder::class,
+            PermissionSeeder::class,
+            
+            // 2. Luego asignar permisos a roles
             RolePermissionSeeder::class,
+            
+            // 3. Crear usuarios con sus perfiles
+            UserSeeder::class,
+            
+            // 4. Crear ubicaciones
+            LocationSeeder::class,
+            
+            // 5. Crear proyectos
+            ProjectSeeder::class,
+            
+            // 6. Finalmente crear beneficiarios
+            BeneficiarySeeder::class,
         ]);
-
-        // Create a default super admin user if it doesn't exist
-        $adminUser = User::where('email', 'admin@ong.com')->first();
-        
-        if (!$adminUser) {
-            $adminUser = User::create([
-                'first_name' => 'Super',
-                'last_name' => 'Admin',
-                'email' => 'admin@ong.com',
-                'password' => bcrypt('password'),
-                'is_active' => true,
-                'is_verified' => true,
-            ]);
-        }
-        
-        // Assign super admin role if not already assigned
-        if (!$adminUser->hasRole('super_admin')) {
-            $adminUser->assignRole('super_admin');
-        }
     }
 }
