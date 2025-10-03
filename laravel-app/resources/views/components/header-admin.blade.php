@@ -221,33 +221,34 @@
             </ul>
           </li>
 
-        <!-- 
-       Modulo de proyectos
-         -->
-        <li class="nav-item has-treeview">
-          <a href="#" class="nav-link ">
-            <i class="nav-icon fas fa-calendar-alt"></i>
-            <p>Proyectos<i class="right fas fa-angle-left"></i></p>
-          </a>
-          <ul class="nav nav-treeview">            
-            <li class="nav-item">
-              <a href="" class="nav-link">
-                <i class="fas fa-tasks nav-icon"></i><p>Crear Proyecto</p>
-              </a>
-            </li>
+<!-- Módulo de Proyectos -->
+<li class="nav-item has-treeview">
+    <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-calendar-alt"></i>
+        <p>
+            Proyectos
+            <i class="right fas fa-angle-left"></i>
+        </p>
+    </a>
+    <ul class="nav nav-treeview">
+        <!-- Crear Proyecto -->
+        <li class="nav-item">
+            <a href="{{ route('projects.create') }}" class="nav-link">
+                <i class="fas fa-plus nav-icon"></i>
+                <p>Crear Proyecto</p>
+            </a>
+        </li>
 
-            <li class="nav-item">
-              <a href="" class="nav-link">
-                <i class="fas fa-tasks nav-icon"></i><p>Editar Proyecto</p>
-              </a>
-            </li>
+        <!-- Listar Proyectos -->
+        <li class="nav-item">
+            <a href="{{ route('projects.index') }}" class="nav-link">
+                <i class="fas fa-list nav-icon"></i>
+                <p>Listar Proyectos</p>
+            </a>
+        </li>
+    </ul>
+</li>
 
-            <li class="nav-item">
-              <a href="" class="nav-link">
-                <i class="fas fa-tasks nav-icon"></i><p>Listar Proyectos</p>
-              </a>
-            </li>
-          </ul>
 
         <!-- Opciones para Beneficiarios -->
 <li class="nav-item has-treeview">

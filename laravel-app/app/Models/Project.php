@@ -5,11 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Proyecto extends Model
+
+class Project extends Model
 {
     use HasFactory;
-
-    protected $table = 'proyectos';
 
     protected $fillable = [
         'nombre',
@@ -28,11 +27,8 @@ class Proyecto extends Model
         'resultados_obtenidos',
     ];
 
-    /**
-     * Relación con el usuario responsable
-     */
     public function responsable()
     {
-        return $this->belongsTo(SysUser::class, 'responsable_id');
+        return $this->belongsTo(User::class, 'responsable_id');
     }
 }
