@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProyectController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\BeneficiaryController;
 
 Route::get('/', function () {
@@ -31,16 +32,26 @@ Route::prefix('users')->name('users.')->group(function () {
     Route::put('/{user}/permissions', [UserController::class, 'updatePermissions'])->name('update-permissions');
 });
 // Proyectos Management Routes
-Route::prefix('proyectos')->name('proyectos.')->group(function () {
-    Route::get('/', [ProyectController::class, 'index'])->name('index');
-    Route::get('/create', [ProyectController::class, 'create'])->name('create');
-    Route::post('/', [ProyectController::class, 'store'])->name('store');
-    Route::get('/{proyecto}', [ProyectController::class, 'show'])->name('show');
-    Route::get('/{proyecto}/edit', [ProyectController::class, 'edit'])->name('edit');
-    Route::put('/{proyecto}', [ProyectController::class, 'update'])->name('update');
-    Route::delete('/{proyecto}', [ProyectController::class, 'destroy'])->name('destroy');
+Route::prefix('projects')->name('projects.')->group(function () {
+    Route::get('/', [ProjectController::class, 'index'])->name('index');
+    Route::get('/create', [ProjectController::class, 'create'])->name('create');
+    Route::post('/', [ProjectController::class, 'store'])->name('store');
+    Route::get('/{project}', [ProjectController::class, 'show'])->name('show');
+    Route::get('/{project}/edit', [ProjectController::class, 'edit'])->name('edit');
+    Route::put('/{project}', [ProjectController::class, 'update'])->name('update');
+    Route::delete('/{project}', [ProjectController::class, 'destroy'])->name('destroy');
 });
 
+// Locations Management Routes
+Route::prefix('locations')->name('locations.')->group(function () {
+    Route::get('/', [LocationController::class, 'index'])->name('index');
+    Route::get('/create', [LocationController::class, 'create'])->name('create');
+    Route::post('/', [LocationController::class, 'store'])->name('store');
+    Route::get('/{location}', [LocationController::class, 'show'])->name('show');
+    Route::get('/{location}/edit', [LocationController::class, 'edit'])->name('edit');
+    Route::put('/{location}', [LocationController::class, 'update'])->name('update');
+    Route::delete('/{location}', [LocationController::class, 'destroy'])->name('destroy');
+});
 
 // Beneficiaries Management Routes
 Route::prefix('beneficiaries')->name('beneficiaries.')->group(function () {
@@ -52,16 +63,3 @@ Route::prefix('beneficiaries')->name('beneficiaries.')->group(function () {
     Route::put('/{beneficiary}', [BeneficiaryController::class, 'update'])->name('update');
     Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('destroy');
 });
-
-// Opción directa a la vista
-use App\Http\Controllers\LocationController;
-Route::prefix('locations')->name('locations.')->group(function () {
-    Route::get('/', [LocationController::class, 'index'])->name('index'); // Listar
-    Route::get('/create', [LocationController::class, 'create'])->name('create'); // Crear
-    Route::post('/', [LocationController::class, 'store'])->name('store'); // Guardar
-    Route::get('/{location}/edit', [LocationController::class, 'edit'])->name('edit'); // Editar
-    Route::put('/{location}', [LocationController::class, 'update'])->name('update'); // Actualizar
-    Route::delete('/{location}', [LocationController::class, 'destroy'])->name('destroy'); // Eliminar
-    Route::get('/{location}', [LocationController::class, 'show'])->name('show'); // Mostrar
-});
-

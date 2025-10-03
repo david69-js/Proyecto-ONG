@@ -25,7 +25,7 @@ return new class extends Migration
 
             $table->foreign('project_id')
                   ->references('id')
-                  ->on('proyectos') 
+                  ->on('projects') 
                   ->onDelete('set null');
         });
     }
