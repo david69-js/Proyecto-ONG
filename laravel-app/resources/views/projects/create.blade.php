@@ -4,11 +4,13 @@
 <div class="container">
     <h3>Crear Proyecto</h3>
 
-    <form action="{{ route('proyectos.store') }}" method="POST">
+    <form action="{{ route('projects.store') }}" method="POST">
         @csrf
-        @include('proyectos.partials.form', ['proyecto' => new App\Models\Proyecto])
+        {{-- Pasamos $project y $usuarios al formulario --}}
+        @include('projects.partials.form', ['project' => $project, 'usuarios' => $usuarios])
+
         <button type="submit" class="btn btn-success mt-3">Guardar</button>
-        <a href="{{ route('proyectos.index') }}" class="btn btn-secondary mt-3">Cancelar</a>
+        <a href="{{ route('projects.index') }}" class="btn btn-secondary mt-3">Cancelar</a>
     </form>
 </div>
 @endsection
