@@ -13,6 +13,7 @@ class ProjectController extends Controller
         $projects = Project::with('responsable')->get();
         return view('projects.index', compact('projects'));
     }
+    
 
 public function create()
 {
