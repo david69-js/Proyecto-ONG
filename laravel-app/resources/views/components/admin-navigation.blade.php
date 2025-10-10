@@ -29,199 +29,239 @@
                 
                 <!-- Dashboard -->
                 <li class="nav-item">
-                    <a href="/users" class="nav-link">
+                    <a href="{{ route('dashboard') }}" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
 
-                <!-- Gestión de Usuarios -->
-                @permission('users.view')
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>
-                            Usuarios
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        @permission('users.view')
-                        <li class="nav-item">
-                            <a href="{{ route('users.index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Listar Usuarios</p>
-                            </a>
-                        </li>
-                        @endpermission
-                        @permission('users.create')
-                        <li class="nav-item">
-                            <a href="{{ route('users.create') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Crear Usuario</p>
-                            </a>
-                        </li>
-                        @endpermission
-                    </ul>
-                </li>
-                @endpermission
+                {{-- ========================================== --}}
+                {{-- MENÚ PARA BENEFICIARIOS (simple y directo) --}}
+                {{-- ========================================== --}}
+                @role('beneficiary')
+                    <!-- Mi Perfil -->
+                    <li class="nav-item">
+                        <a href="{{ route('users.show', auth()->id()) }}" class="nav-link">
+                            <i class="nav-icon fas fa-user"></i>
+                            <p>Mi Perfil</p>
+                        </a>
+                    </li>
 
-                <!-- Gestión de Proyectos -->
-                @permission('projects.view')
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-project-diagram"></i>
-                        <p>
-                            Proyectos
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        @permission('projects.view')
-                        <li class="nav-item">
-                            <a href="{{ route('projects.index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Listar Proyectos</p>
-                            </a>
-                        </li>
-                        @endpermission
-                        @permission('projects.create')
-                        <li class="nav-item">
-                            <a href="{{ route('projects.create') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Crear Proyecto</p>
-                            </a>
-                        </li>
-                        @endpermission
-                    </ul>
-                </li>
-                @endpermission
+                    <!-- Mi Proyecto -->
+                    @if(auth()->user()->beneficiary && auth()->user()->beneficiary->project)
+                    <li class="nav-item">
+                        <a href="{{ route('projects.show', auth()->user()->beneficiary->project_id) }}" class="nav-link">
+                            <i class="nav-icon fas fa-project-diagram"></i>
+                            <p>Mi Proyecto</p>
+                        </a>
+                    </li>
+                    @endif
 
-                <!-- Gestión de Beneficiarios -->
-                @permission('beneficiaries.view')
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-heart"></i>
-                        <p>
-                            Beneficiarios
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        @permission('beneficiaries.view')
-                        <li class="nav-item">
-                            <a href="{{ route('beneficiaries.index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Listar Beneficiarios</p>
-                            </a>
-                        </li>
-                        @endpermission
-                        @permission('beneficiaries.create')
-                        <li class="nav-item">
-                            <a href="{{ route('beneficiaries.create') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Crear Beneficiario</p>
-                            </a>
-                        </li>
-                        @endpermission
-                    </ul>
-                </li>
-                @endpermission
+                    <!-- Mis Beneficios -->
+                    @if(auth()->user()->beneficiary)
+                    <li class="nav-item">
+                        <a href="{{ route('beneficiaries.show', auth()->user()->beneficiary->id) }}" class="nav-link">
+                            <i class="nav-icon fas fa-gift"></i>
+                            <p>Mis Beneficios</p>
+                        </a>
+                    </li>
+                    @endif
+                @endrole
 
-                <!-- Gestión de Ubicaciones -->
-                @permission('locations.view')
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-map-marker-alt"></i>
-                        <p>
-                            Ubicaciones
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        @permission('locations.view')
-                        <li class="nav-item">
-                            <a href="{{ route('locations.index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Listar Ubicaciones</p>
-                            </a>
-                        </li>
-                        @endpermission
-                        @permission('locations.create')
-                        <li class="nav-item">
-                            <a href="{{ route('locations.create') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Crear Ubicación</p>
-                            </a>
-                        </li>
-                        @endpermission
-                    </ul>
-                </li>
-                @endpermission
+                {{-- ========================================== --}}
+                {{-- MENÚ PARA ROLES ADMINISTRATIVOS --}}
+                {{-- ========================================== --}}
+                @hasanyrole('super-admin', 'admin', 'project-coordinator', 'beneficiary-coordinator', 'volunteer', 'consultant', 'donor')
+                
+                    <!-- Gestión de Usuarios (SOLO roles administrativos) -->
+                    @permission('users.view')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Usuarios
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @permission('users.view')
+                            <li class="nav-item">
+                                <a href="{{ route('users.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Listar Usuarios</p>
+                                </a>
+                            </li>
+                            @endpermission
+                            @permission('users.create')
+                            <li class="nav-item">
+                                <a href="{{ route('users.create') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Crear Usuario</p>
+                                </a>
+                            </li>
+                            @endpermission
+                        </ul>
+                    </li>
+                    @endpermission
 
-                <!-- Gestión de Donaciones -->
-                @permission('donations.view')
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-hand-holding-usd"></i>
-                        <p>
-                            Donaciones
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        @permission('donations.view')
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Listar Donaciones</p>
-                            </a>
-                        </li>
-                        @endpermission
-                        @permission('donations.create')
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Registrar Donación</p>
-                            </a>
-                        </li>
-                        @endpermission
-                    </ul>
-                </li>
-                @endpermission
+                    <!-- Gestión de Proyectos (SOLO roles administrativos) -->
+                    @permission('projects.view')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-project-diagram"></i>
+                            <p>
+                                Proyectos
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @permission('projects.view')
+                            <li class="nav-item">
+                                <a href="{{ route('projects.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Listar Proyectos</p>
+                                </a>
+                            </li>
+                            @endpermission
+                            @permission('projects.create')
+                            <li class="nav-item">
+                                <a href="{{ route('projects.create') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Crear Proyecto</p>
+                                </a>
+                            </li>
+                            @endpermission
+                        </ul>
+                    </li>
+                    @endpermission
 
-                <!-- Reportes -->
-                @permission('reports.view')
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-chart-bar"></i>
-                        <p>
-                            Reportes
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        @permission('reports.impact-statistics')
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Estadísticas de Impacto</p>
-                            </a>
-                        </li>
-                        @endpermission
-                        @permission('reports.export')
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Exportar Informes</p>
-                            </a>
-                        </li>
-                        @endpermission
-                    </ul>
-                </li>
-                @endpermission
+                    <!-- Gestión de Beneficiarios (SOLO roles administrativos) -->
+                    @permission('beneficiaries.view')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-heart"></i>
+                            <p>
+                                Beneficiarios
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @permission('beneficiaries.view')
+                            <li class="nav-item">
+                                <a href="{{ route('beneficiaries.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Listar Beneficiarios</p>
+                                </a>
+                            </li>
+                            @endpermission
+                            @permission('beneficiaries.create')
+                            <li class="nav-item">
+                                <a href="{{ route('beneficiaries.create') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Crear Beneficiario</p>
+                                </a>
+                            </li>
+                            @endpermission
+                        </ul>
+                    </li>
+                    @endpermission
 
-                <!-- Logout -->
+                    <!-- Gestión de Ubicaciones -->
+                    @permission('locations.view')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-map-marker-alt"></i>
+                            <p>
+                                Ubicaciones
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @permission('locations.view')
+                            <li class="nav-item">
+                                <a href="{{ route('locations.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Listar Ubicaciones</p>
+                                </a>
+                            </li>
+                            @endpermission
+                            @permission('locations.create')
+                            <li class="nav-item">
+                                <a href="{{ route('locations.create') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Crear Ubicación</p>
+                                </a>
+                            </li>
+                            @endpermission
+                        </ul>
+                    </li>
+                    @endpermission
+
+                    <!-- Gestión de Donaciones -->
+                    @permission('donations.view')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-hand-holding-usd"></i>
+                            <p>
+                                Donaciones
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @permission('donations.view')
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Listar Donaciones</p>
+                                </a>
+                            </li>
+                            @endpermission
+                            @permission('donations.create')
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Registrar Donación</p>
+                                </a>
+                            </li>
+                            @endpermission
+                        </ul>
+                    </li>
+                    @endpermission
+
+                    <!-- Reportes -->
+                    @permission('reports.view')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-chart-bar"></i>
+                            <p>
+                                Reportes
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @permission('reports.impact-statistics')
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Estadísticas de Impacto</p>
+                                </a>
+                            </li>
+                            @endpermission
+                            @permission('reports.export')
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Exportar Informes</p>
+                                </a>
+                            </li>
+                            @endpermission
+                        </ul>
+                    </li>
+                    @endpermission
+
+                @endhasanyrole
+
+                <!-- Logout (para todos) -->
                 <li class="nav-item">
                     <form method="POST" action="{{ route('logout') }}" class="d-inline">
                         @csrf

@@ -10,6 +10,9 @@ class LocationController extends Controller
     // Mostrar listado
     public function index()
     { 
+        // Verificar autorización
+        $this->authorize('viewAny', Location::class);
+
         $locations = Location::all();
         return view('locations.index', compact('locations'));
     }
@@ -17,12 +20,18 @@ class LocationController extends Controller
     // Mostrar formulario crear
     public function create()
     {
+        // Verificar autorización
+        $this->authorize('create', Location::class);
+
         return view('locations.create');
     }
 
     // Guardar nueva ubicación
     public function store(Request $request)
     {
+        // Verificar autorización
+        $this->authorize('create', Location::class);
+
         $request->validate([
             'nombre' => 'required|string|max:255',
             'direccion' => 'nullable|string|max:255',
@@ -42,18 +51,27 @@ class LocationController extends Controller
     // Mostrar un registro
     public function show(Location $location)
     {
-        return view('locations.show', compact('locations'));
+        // Verificar autorización
+        $this->authorize('view', $location);
+
+        return view('locations.show', compact('location'));
     }
 
     // Mostrar formulario editar
     public function edit(Location $location)
     {
+        // Verificar autorización
+        $this->authorize('update', $location);
+
         return view('locations.edit', compact('location'));
     }
 
     // Actualizar registro
     public function update(Request $request, Location $location)
     {
+        // Verificar autorización
+        $this->authorize('update', $location);
+
         $request->validate([
             'nombre' => 'required|string|max:255',
             'direccion' => 'nullable|string|max:255',
@@ -71,6 +89,9 @@ class LocationController extends Controller
     // Eliminar registro
     public function destroy(Location $location)
     {
+        // Verificar autorización
+        $this->authorize('delete', $location);
+
         $location->delete();
         return redirect()->route('locations.index')->with('success', 'Ubicación eliminada correctamente');
     }

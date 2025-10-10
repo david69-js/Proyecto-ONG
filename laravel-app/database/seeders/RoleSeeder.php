@@ -62,6 +62,13 @@ class RoleSeeder extends Seeder
                 'is_active' => true,
                 'sort_order' => 7,
             ],
+            [
+                'name' => 'Beneficiario',
+                'slug' => 'beneficiary',
+                'description' => 'Beneficiario con acceso solo a sus propios datos y proyectos asignados',
+                'is_active' => true,
+                'sort_order' => 8,
+            ],
         ];
 
         foreach ($roles as $role) {

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Beneficiary;
+use App\Models\Project;
+use App\Policies\BeneficiaryPolicy;
 use Illuminate\Http\Request;
 
 class BeneficiaryController extends Controller
@@ -12,7 +14,13 @@ class BeneficiaryController extends Controller
      */
     public function index()
     {
-        $beneficiaries = Beneficiary::all();
+        // Verificar autorización
+        $this->authorize('viewAny', Beneficiary::class);
+
+        // Filtrar beneficiarios según el rol del usuario
+        $query = Beneficiary::with(['project', 'user']);
+        $beneficiaries = BeneficiaryPolicy::scopeForUser(auth()->user(), $query)->get();
+
         return view('beneficiaries.index', compact('beneficiaries'));
     }
 
@@ -21,7 +29,11 @@ class BeneficiaryController extends Controller
      */
     public function create()
     {
-        return view('beneficiaries.create');
+        // Verificar autorización
+        $this->authorize('create', Beneficiary::class);
+
+        $projects = Project::all();
+        return view('beneficiaries.create', compact('projects'));
     }
 
     /**
@@ -29,9 +41,21 @@ class BeneficiaryController extends Controller
      */
     public function store(Request $request)
     {
-         $request->validate([
+        // Verificar autorización
+        $this->authorize('create', Beneficiary::class);
+
+        $request->validate([
+            'user_id' => 'nullable|exists:sys_users,id',
             'name' => 'required|string|max:255',
+            'birth_date' => 'nullable|date',
+            'gender' => 'nullable|string',
+            'address' => 'nullable|string',
+            'phone' => 'nullable|string',
             'email' => 'nullable|email',
+            'beneficiary_type' => 'nullable|string',
+            'status' => 'nullable|string',
+            'project_id' => 'nullable|exists:projects,id',
+            'notes' => 'nullable|string',
         ]);
 
         Beneficiary::create($request->all());
@@ -43,43 +67,66 @@ class BeneficiaryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Beneficiary $beneficiary)
     {
-        $beneficiary = Beneficiary::findOrFail($id);
+        // Verificar autorización
+        $this->authorize('view', $beneficiary);
+
+        $beneficiary->load(['project', 'user']);
         return view('beneficiaries.show', compact('beneficiary'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Beneficiary $beneficiary)
     {
-        $beneficiary = Beneficiary::findOrFail($id);
-        return view('beneficiaries.edit', compact('beneficiary'));
+        // Verificar autorización
+        $this->authorize('update', $beneficiary);
+
+        $projects = Project::all();
+        return view('beneficiaries.edit', compact('beneficiary', 'projects'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Beneficiary $beneficiary)
     {
-        $beneficiary = Beneficiary::findOrFail($id);
+        // Verificar autorización
+        $this->authorize('update', $beneficiary);
+
+        $request->validate([
+            'user_id' => 'nullable|exists:sys_users,id',
+            'name' => 'required|string|max:255',
+            'birth_date' => 'nullable|date',
+            'gender' => 'nullable|string',
+            'address' => 'nullable|string',
+            'phone' => 'nullable|string',
+            'email' => 'nullable|email',
+            'beneficiary_type' => 'nullable|string',
+            'status' => 'nullable|string',
+            'project_id' => 'nullable|exists:projects,id',
+            'notes' => 'nullable|string',
+        ]);
 
         $beneficiary->update($request->all());
 
         return redirect()->route('beneficiaries.index')
                      ->with('success', 'Beneficiario actualizado correctamente.');
     }
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Beneficiary $beneficiary)
     {
-        $beneficiary = Beneficiary::findOrFail($id);
+        // Verificar autorización
+        $this->authorize('delete', $beneficiary);
+
         $beneficiary->delete();
 
-        // Redireccionamos a la lista de beneficiarios, no a una vista con $beneficiary
         return redirect()->route('beneficiaries.index')
                      ->with('success', 'Beneficiary deleted successfully.');
-        }
+    }
 }

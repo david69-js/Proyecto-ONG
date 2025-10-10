@@ -14,6 +14,7 @@ class Beneficiary extends Model
     protected $table = 'ng_beneficiaries';
 
     protected $fillable = [
+        'user_id',
         'name',
         'birth_date',
         'gender',
@@ -25,11 +26,20 @@ class Beneficiary extends Model
         'project_id',
         'notes',
     ];
+    
+    /**
+     * Relación con el usuario
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     /**
      * Relación con el proyecto
      */
-    //public function project()
-    //{
-    //    return $this->belongsTo(Project::class, 'project_id');
-    //}
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
 }

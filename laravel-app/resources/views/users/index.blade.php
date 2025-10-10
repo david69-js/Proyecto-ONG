@@ -12,9 +12,11 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Users Management</h3>
+                    @permission('users.create')
                     <a href="{{ route('users.create') }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Add New User
                     </a>
+                    @endpermission
                 </div>
                 
                 <div class="card-body">
@@ -129,21 +131,31 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
+                                                @can('view', $user)
                                                 <a href="{{ route('users.show', $user) }}" 
                                                    class="btn btn-sm btn-outline-info" 
                                                    title="View">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
+                                                @endcan
+                                                
+                                                @can('update', $user)
                                                 <a href="{{ route('users.edit', $user) }}" 
                                                    class="btn btn-sm btn-outline-primary" 
                                                    title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
+                                                @endcan
+                                                
+                                                @can('managePermissions', $user)
                                                 <a href="{{ route('users.permissions', $user) }}" 
                                                    class="btn btn-sm btn-outline-warning" 
                                                    title="Permissions">
                                                     <i class="fas fa-key"></i>
                                                 </a>
+                                                @endcan
+                                                
+                                                @can('update', $user)
                                                 <form action="{{ route('users.toggle-status', $user) }}" 
                                                       method="POST" 
                                                       class="d-inline"
@@ -156,6 +168,9 @@
                                                         <i class="fas fa-{{ $user->is_active ? 'ban' : 'check' }}"></i>
                                                     </button>
                                                 </form>
+                                                @endcan
+                                                
+                                                @can('delete', $user)
                                                 <form action="{{ route('users.destroy', $user) }}" 
                                                       method="POST" 
                                                       class="d-inline"
@@ -168,6 +183,7 @@
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
+                                                @endcan
                                             </div>
                                         </td>
                                     </tr>
@@ -177,7 +193,9 @@
                                             <div class="text-muted">
                                                 <i class="fas fa-users fa-3x mb-3"></i>
                                                 <p>No users found.</p>
+                                                @permission('users.create')
                                                 <a href="{{ route('users.create') }}" class="btn btn-primary">Create First User</a>
+                                                @endpermission
                                             </div>
                                         </td>
                                     </tr>

@@ -3,7 +3,18 @@
 @section('content')
 <div class="container-fluid">
     <h3 class="mb-4">Proyectos</h3>
-    <a href="{{ route('projects.create') }}" class="btn btn-primary mb-3">+ Nuevo Proyecto</a>
+    
+    @permission('projects.create')
+    <a href="{{ route('projects.create') }}" class="btn btn-primary mb-3">
+        <i class="fas fa-plus"></i> Nuevo Proyecto
+    </a>
+    @endpermission
+
+    @role('beneficiary')
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> Estás viendo tu proyecto asignado
+    </div>
+    @endrole
 
     <div class="card">
         <div class="card-body table-responsive">
@@ -29,20 +40,42 @@
                             </td>
                             <td>{{ $project->fecha_inicio }}</td>
                             <td>
-                                <a href="{{ route('projects.show', $project) }}" class="btn btn-sm btn-info">Ver</a>
-                                <a href="{{ route('projects.edit', $project) }}" class="btn btn-sm btn-warning">Editar</a>
+                                @can('view', $project)
+                                <a href="{{ route('projects.show', $project) }}" class="btn btn-sm btn-info">
+                                    <i class="fas fa-eye"></i> Ver
+                                </a>
+                                @endcan
+                                
+                                @can('update', $project)
+                                <a href="{{ route('projects.edit', $project) }}" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                @endcan
+                                
+                                @can('delete', $project)
                                 <form action="{{ route('projects.destroy', $project) }}" method="POST" class="d-inline">
                                     @csrf 
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este proyecto?')">
-                                        Eliminar
+                                        <i class="fas fa-trash"></i> Eliminar
                                     </button>
                                 </form>
+                                @endcan
+
+                                @if(!auth()->user()->can('view', $project) && !auth()->user()->can('update', $project) && !auth()->user()->can('delete', $project))
+                                <span class="text-muted">Sin acceso</span>
+                                @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center">No hay proyectos registrados.</td>
+                            <td colspan="5" class="text-center">
+                                @role('beneficiary')
+                                    No tienes proyectos asignados.
+                                @else
+                                    No hay proyectos registrados.
+                                @endrole
+                            </td>
                         </tr>
                     @endforelse
                 </tbody>

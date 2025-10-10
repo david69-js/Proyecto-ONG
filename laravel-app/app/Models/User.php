@@ -54,6 +54,24 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the user's beneficiary record.
+     */
+    public function beneficiary()
+    {
+        return $this->hasOne(Beneficiary::class);
+    }
+
+    /**
+     * Get the projects assigned to this user.
+     */
+    public function assignedProjects()
+    {
+        return $this->belongsToMany(Project::class, 'rel_project_assignments')
+                    ->withPivot('role_in_project', 'assigned_at', 'assigned_by')
+                    ->withTimestamps();
+    }
+
+    /**
      * Get the user's roles.
      */
     public function roles()

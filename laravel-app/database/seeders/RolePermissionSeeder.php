@@ -31,6 +31,7 @@ class RolePermissionSeeder extends Seeder
         if ($admin) {
             $adminPermissions = Permission::whereNotIn('slug', [
                 'roles.manage',
+                'roles.assign',
                 'permissions.manage',
                 'settings.manage'
             ])->get();
@@ -105,6 +106,18 @@ class RolePermissionSeeder extends Seeder
                 'reports.view',
             ])->get();
             $donor->permissions()->sync($donorPermissions->pluck('id'));
+        }
+
+        // Beneficiario - solo acceso a sus propios datos
+        $beneficiary = Role::where('slug', 'beneficiary')->first();
+        if ($beneficiary) {
+            $beneficiaryPermissions = Permission::whereIn('slug', [
+                'profile.view.own',
+                'profile.edit.own',
+                'projects.view.own',
+                'benefits.view.own',
+            ])->get();
+            $beneficiary->permissions()->sync($beneficiaryPermissions->pluck('id'));
         }
     }
 }

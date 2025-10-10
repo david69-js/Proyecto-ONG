@@ -18,6 +18,9 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        // Verificar autorización
+        $this->authorize('viewAny', User::class);
+
         $query = User::with(['profile', 'roles']);
 
         // Search functionality
@@ -57,6 +60,9 @@ class UserController extends Controller
      */
     public function create()
     {
+        // Verificar autorización
+        $this->authorize('create', User::class);
+
         $roles = Role::active()->ordered()->get();
         return view('users.create', compact('roles'));
     }
@@ -66,6 +72,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        // Verificar autorización
+        $this->authorize('create', User::class);
+
         $request->validate([
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
@@ -134,6 +143,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        // Verificar autorización
+        $this->authorize('view', $user);
+
         $user->load(['profile', 'roles.permissions']);
         return view('users.show', compact('user'));
     }
@@ -143,6 +155,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        // Verificar autorización
+        $this->authorize('update', $user);
+
         $user->load(['profile', 'roles']);
         $roles = Role::active()->ordered()->get();
         return view('users.edit', compact('user', 'roles'));
@@ -153,6 +168,9 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        // Verificar autorización
+        $this->authorize('update', $user);
+
         $request->validate([
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
@@ -232,8 +250,11 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        // Verificar autorización
+        $this->authorize('delete', $user);
+
         // Prevent deleting the last admin
-        if ($user->hasRole('super_admin') && Role::where('slug', 'super_admin')->first()->users()->count() <= 1) {
+        if ($user->hasRole('super-admin') && Role::where('slug', 'super-admin')->first()->users()->count() <= 1) {
             return redirect()->route('users.index')
                 ->with('error', 'Cannot delete the last super administrator.');
         }
@@ -249,6 +270,9 @@ class UserController extends Controller
      */
     public function toggleStatus(User $user)
     {
+        // Verificar autorización
+        $this->authorize('update', $user);
+
         $user->update(['is_active' => !$user->is_active]);
 
         $status = $user->is_active ? 'activated' : 'deactivated';
@@ -261,6 +285,9 @@ class UserController extends Controller
      */
     public function permissions(User $user)
     {
+        // Verificar autorización
+        $this->authorize('managePermissions', $user);
+
         $user->load(['roles.permissions', 'permissions']);
         $permissions = Permission::active()->ordered()->get()->groupBy('module');
         return view('users.permissions', compact('user', 'permissions'));
@@ -271,6 +298,9 @@ class UserController extends Controller
      */
     public function updatePermissions(Request $request, User $user)
     {
+        // Verificar autorización
+        $this->authorize('managePermissions', $user);
+
         $request->validate([
             'permissions' => 'array',
             'permissions.*' => 'exists:cfg_permissions,id',

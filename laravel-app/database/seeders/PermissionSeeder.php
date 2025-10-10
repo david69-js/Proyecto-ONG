@@ -59,6 +59,13 @@ class PermissionSeeder extends Seeder
                 'is_active' => true,
             ],
             [
+                'name' => 'Ver Solo Proyectos Asignados',
+                'slug' => 'projects.view.own',
+                'description' => 'Puede ver solo los proyectos a los que está asignado',
+                'module' => 'projects',
+                'is_active' => true,
+            ],
+            [
                 'name' => 'Crear Proyectos',
                 'slug' => 'projects.create',
                 'description' => 'Puede crear nuevos proyectos',
@@ -149,6 +156,13 @@ class PermissionSeeder extends Seeder
                 'is_active' => true,
             ],
             [
+                'name' => 'Asignar Roles',
+                'slug' => 'roles.assign',
+                'description' => 'Puede asignar roles y permisos a usuarios',
+                'module' => 'roles',
+                'is_active' => true,
+            ],
+            [
                 'name' => 'Gestionar Permisos',
                 'slug' => 'permissions.manage',
                 'description' => 'Puede crear, editar y eliminar permisos',
@@ -178,6 +192,29 @@ class PermissionSeeder extends Seeder
                 'slug' => 'settings.manage',
                 'description' => 'Puede modificar la configuración del sistema',
                 'module' => 'settings',
+                'is_active' => true,
+            ],
+
+            // Permisos específicos para beneficiarios
+            [
+                'name' => 'Ver Perfil Propio',
+                'slug' => 'profile.view.own',
+                'description' => 'Puede ver solo su propio perfil',
+                'module' => 'profile',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Editar Perfil Propio',
+                'slug' => 'profile.edit.own',
+                'description' => 'Puede editar solo su propio perfil',
+                'module' => 'profile',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Ver Beneficios Propios',
+                'slug' => 'benefits.view.own',
+                'description' => 'Puede ver solo sus propios beneficios',
+                'module' => 'beneficiaries',
                 'is_active' => true,
             ],
         ];
