@@ -31,7 +31,29 @@
           <li><a href="programs.html">Programas</a></li>
           <li><a href="projects.html">Proyectos</a></li>
           <li><a href="team.html">Equipo</a></li>
-          <li><a href="users">Ingresar</a></li> 
+          @auth
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fas fa-user"></i> {{ auth()->user()->first_name }}
+                <i class="bi bi-chevron-down toggle-dropdown"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="/users" class="dropdown-item"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                    @csrf
+                    <button type="submit" class="dropdown-item">
+                      <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+          @else
+            <li><a href="{{ route('login') }}">Ingresar</a></li>
+            <li><a href="{{ route('register') }}">Registrarse</a></li>
+          @endauth 
           <li class="dropdown"><a href="#"><span>Más Páginas</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="service-details.html">Detalles del Programa</a></li>

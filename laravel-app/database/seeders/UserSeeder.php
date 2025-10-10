@@ -49,7 +49,7 @@ class UserSeeder extends Seeder
         );
 
         // Asignar rol de Super Admin
-        $superAdminRole = Role::where('slug', 'super-admin')->first();
+        $superAdminRole = Role::where('slug', 'system-admin')->first();
         if ($superAdminRole) {
             $superAdmin->roles()->syncWithoutDetaching([$superAdminRole->id]);
         }
@@ -83,7 +83,7 @@ class UserSeeder extends Seeder
             ]
         );
 
-        $adminRole = Role::where('slug', 'admin')->first();
+        $adminRole = Role::where('slug', 'project-coordinator')->first();
         if ($adminRole) {
             $admin->roles()->syncWithoutDetaching([$adminRole->id]);
         }
