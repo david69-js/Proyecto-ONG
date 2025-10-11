@@ -5,6 +5,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\BeneficiaryController;
+use App\Http\Controllers\AboutSectionController;
+
 
 Route::get('/', function () {
     return view('index');
@@ -92,4 +94,10 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{beneficiary}', [BeneficiaryController::class, 'update'])->name('update')->middleware('any.permission:beneficiaries.edit,profile.edit.own');
         Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('destroy')->middleware('permission:beneficiaries.delete');
     });
+});
+
+// About Section Management Routes
+Route::prefix('admin/about')->name('admin.about.')->group(function () {
+    Route::get('/', [AboutSectionController::class, 'index'])->name('index');
+    Route::put('/{id}', [AboutSectionController::class, 'update'])->name('update');
 });
