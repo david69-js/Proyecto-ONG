@@ -4,6 +4,11 @@
 <body class="index-page">
 <x-header />
 <main class="main">
+  @php
+    use App\Models\AboutSection;
+    $about = AboutSection::first();
+@endphp
+
 
 
     <!-- Sección Hero -->
@@ -64,83 +69,102 @@
 
     </section><!-- /Sección Hero -->
 
-    <!-- Sección Sobre Nosotros -->
-    <section id="about" class="about section">
+ <!-- Sección Sobre Nosotros -->
+<section id="about" class="about section">
 
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
 
-        <div class="row align-items-center g-5">
-          <div class="col-lg-6">
-            <div class="about-content" data-aos="fade-right" data-aos-delay="200">
-              <h2>Construyendo esperanza desde 1995</h2>
-              <p class="lead">Desde nuestros inicios hemos trabajado para que las familias guatemaltecas tengan acceso a una vivienda segura y un entorno digno. Promovemos la solidaridad, la participación comunitaria y el voluntariado.</p>
-              <p>Gracias al apoyo de donantes, voluntarios y aliados, hemos construido y mejorado cientos de hogares, transformando la vida de miles de personas en distintas comunidades del país.</p>
+    <div class="row align-items-center g-5">
 
-              <div class="achievement-boxes row g-4 mt-4">
-                <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="300">
-                  <div class="achievement-box">
-                    <h3>25+</h3>
-                    <p>Años de servicio</p>
-                  </div>
-                </div>
-                <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="400">
-                  <div class="achievement-box">
-                    <h3>500+</h3>
-                    <p>Hogares construidos</p>
-                  </div>
-                </div>
-                <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="500">
-                  <div class="achievement-box">
-                    <h3>100%</h3>
-                    <p>Compromiso social</p>
-                  </div>
-                </div>
-                <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="600">
-                  <div class="achievement-box">
-                    <h3>48</h3>
-                    <p>Colaboradores activos</p>
-                  </div>
-                </div>
-              </div>
+      <!-- Contenido de texto -->
+      <div class="col-lg-6">
+        <div class="about-content" data-aos="fade-right" data-aos-delay="200">
 
-              <div class="certifications mt-5" data-aos="fade-up" data-aos-delay="700">
-                <h5>Alianzas y Reconocimientos</h5>
-                <div class="row g-3 align-items-center">
-                  <div class="col-4 col-md-3">
-                    <img src="assets/img/construction/badge-4.webp" alt="Certificación" class="img-fluid">
-                  </div>
-                  <div class="col-4 col-md-3">
-                    <img src="assets/img/construction/badge-3.webp" alt="Certificación" class="img-fluid">
-                  </div>
-                  <div class="col-4 col-md-3">
-                    <img src="assets/img/construction/badge-5.webp" alt="Certificación" class="img-fluid">
-                  </div>
-                </div>
-              </div>
+          <h2>{{ $about->titulo ?? 'Construyendo esperanza desde 1995' }}</h2>
 
-              <div class="cta-container mt-5" data-aos="fade-up" data-aos-delay="800">
-                <a href="about.html" class="btn btn-primary">Conoce más sobre nosotros</a>
-              </div>
+          <p class="lead">
+            {{ $about->descripcion_principal ?? 'Desde nuestros inicios hemos trabajado para que las familias guatemaltecas tengan acceso a una vivienda segura y un entorno digno.' }}
+          </p>
+
+          <p>
+            {{ $about->descripcion_secundaria ?? 'Gracias al apoyo de donantes, voluntarios y aliados, hemos construido y mejorado cientos de hogares.' }}
+          </p>
+
+          <!-- Logros con imágenes -->
+          @php
+            $logros = [
+              'anios_servicio' => 'Años de servicio',
+              'hogares_construidos' => 'Hogares construidos',
+              'compromiso_social' => 'Compromiso social',
+              'colaboradores_activos' => 'Colaboradores activos',
+            ];
+          @endphp
+          <div class="achievement-boxes row g-4 mt-4">
+            @foreach($logros as $field => $label)
+            @php $imgField = 'imagen_'.$field; @endphp
+            <div class="col-6 col-md-3 text-center" data-aos="fade-up">
+                @if(!empty($about->$imgField))
+                    <img src="{{ asset('storage/'.$about->$imgField) }}" alt="{{ $label }}" class="img-fluid mb-2" width="50">
+                @endif
+                <h3>{{ $about->$field ?? '' }}</h3>
+                <p>{{ $label }}</p>
             </div>
+            @endforeach
           </div>
-
-          <div class="col-lg-6">
-            <div class="about-image position-relative" data-aos="fade-left" data-aos-delay="200">
-              <img src="assets/img/construction/project-3.webp" alt="Equipo de voluntarios" class="img-fluid main-image rounded">
-              <div class="image-overlay">
-                <img src="assets/img/construction/project-7.webp" alt="Familia beneficiada" class="img-fluid rounded">
-              </div>
-              <div class="experience-badge" data-aos="zoom-in" data-aos-delay="500">
-                <span>25+</span>
-                <p>Años de experiencia</p>
-              </div>
+          <!-- Certificaciones -->
+<div class="certifications mt-5" data-aos="fade-up" data-aos-delay="700">
+    <h5>Alianzas y Reconocimientos</h5>
+    <div class="row g-3 align-items-center">
+        @foreach(['badge_1', 'badge_2', 'badge_3'] as $badge)
+            <div class="col-4 col-md-3">
+                @if(!empty($about->$badge))
+                    <img src="{{ asset('storage/'.$about->$badge) }}" alt="Certificación" class="img-fluid">
+                @else
+                    <!-- Imagen por defecto si no hay badge -->
+                    <img src="{{ asset('assets/img/construction/default-badge.webp') }}" alt="Certificación" class="img-fluid">
+                @endif
             </div>
+        @endforeach
+    </div>
+</div>
+          <!-- Botón -->
+          <div class="cta-container mt-5" data-aos="fade-up" data-aos-delay="800">
+            <a href="{{ $about->link_conoce_mas ?? '#' }}" class="btn btn-primary">Conoce más sobre nosotros</a>
           </div>
         </div>
-
       </div>
 
-    </section><!-- /Sección Sobre Nosotros -->
+      <!-- Imágenes principales -->
+      <div class="col-lg-6">
+        <div class="about-image position-relative" data-aos="fade-left" data-aos-delay="200">
+
+          @if(!empty($about->imagen_principal))
+            <img src="{{ asset('storage/'.$about->imagen_principal) }}" alt="Equipo de voluntarios" class="img-fluid main-image rounded">
+          @else
+            <img src="{{ asset('assets/img/construction/project-3.webp') }}" alt="Equipo de voluntarios" class="img-fluid main-image rounded">
+          @endif
+
+          <div class="image-overlay">
+            @if(!empty($about->imagen_secundaria))
+              <img src="{{ asset('storage/'.$about->imagen_secundaria) }}" alt="Familia beneficiada" class="img-fluid rounded">
+            @else
+              <img src="{{ asset('assets/img/construction/project-7.webp') }}" alt="Familia beneficiada" class="img-fluid rounded">
+            @endif
+          </div>
+
+          <div class="experience-badge" data-aos="zoom-in" data-aos-delay="500">
+            <span>{{ $about->anios_servicio ?? '25+' }}</span>
+            <p>Años de experiencia</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+<!-- /Sección Sobre Nosotros -->
 
     <!-- Sección de Programas -->
     <section id="services" class="services section">

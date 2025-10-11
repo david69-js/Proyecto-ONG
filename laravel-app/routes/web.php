@@ -5,6 +5,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\BeneficiaryController;
+use App\Http\Controllers\AboutSectionController;
+
 
 Route::get('/', function () {
     return view('index');
@@ -62,4 +64,10 @@ Route::prefix('beneficiaries')->name('beneficiaries.')->group(function () {
     Route::get('/{beneficiary}/edit', [BeneficiaryController::class, 'edit'])->name('edit');
     Route::put('/{beneficiary}', [BeneficiaryController::class, 'update'])->name('update');
     Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('destroy');
+});
+
+// About Section Management Routes
+Route::prefix('admin/about')->name('admin.about.')->group(function () {
+    Route::get('/', [AboutSectionController::class, 'index'])->name('index');
+    Route::put('/{id}', [AboutSectionController::class, 'update'])->name('update');
 });
