@@ -200,12 +200,17 @@
                 </div>
 
                 <div class="d-grid gap-2">
-                    <a href="#" class="btn btn-outline-primary btn-sm">
+                @can('update', auth()->user())
+                <a href="{{ route('users.permissions', auth()->user()) }}"  class="btn btn-outline-primary btn-sm">
                         <i class="fas fa-edit"></i> Editar Perfil
                     </a>
-                    <a href="#" class="btn btn-outline-secondary btn-sm">
+                @endcan
+                @can('update', auth()->user())
+                    <a href="{{ route('users.edit', auth()->user()) }}" class="btn btn-outline-secondary btn-sm">
                         <i class="fas fa-cog"></i> Configuración
                     </a>
+                @endcan
+               
                 </div>
             </div>
         </div>
