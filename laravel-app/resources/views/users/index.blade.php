@@ -1,44 +1,41 @@
 @extends('layouts.app')
 
-@section('title', 'Users Management')
+@section('title', 'Gestión de Usuarios')
 
 @section('content')
 <div class="container-fluid">
-    <!-- Navigation -->
-
-    <!-- End Navigation -->
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Users Management</h3>
+                    <h3 class="card-title">Gestión de Usuarios</h3>
                     @permission('users.create')
                     <a href="{{ route('users.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Add New User
+                        <i class="fas fa-plus"></i> Agregar Nuevo Usuario
                     </a>
                     @endpermission
                 </div>
                 
                 <div class="card-body">
-                    <!-- Search and Filter Form -->
+                    <!-- Formulario de búsqueda y filtros -->
                     <form method="GET" action="{{ route('users.index') }}" class="mb-4">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="search">Search</label>
+                                    <label for="search">Buscar</label>
                                     <input type="text" 
                                            class="form-control" 
                                            id="search" 
                                            name="search" 
                                            value="{{ request('search') }}" 
-                                           placeholder="Search by name or email...">
+                                           placeholder="Buscar por nombre o correo...">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="role">Role</label>
+                                    <label for="role">Rol</label>
                                     <select class="form-control" id="role" name="role">
-                                        <option value="">All Roles</option>
+                                        <option value="">Todos los roles</option>
                                         @foreach($roles as $role)
                                             <option value="{{ $role->slug }}" 
                                                     {{ request('role') == $role->slug ? 'selected' : '' }}>
@@ -50,11 +47,11 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="status">Status</label>
+                                    <label for="status">Estado</label>
                                     <select class="form-control" id="status" name="status">
-                                        <option value="">All Status</option>
-                                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
-                                        <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                        <option value="">Todos los estados</option>
+                                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Activo</option>
+                                        <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactivo</option>
                                     </select>
                                 </div>
                             </div>
@@ -62,26 +59,26 @@
                                 <div class="form-group">
                                     <label>&nbsp;</label>
                                     <div>
-                                        <button type="submit" class="btn btn-primary">Filter</button>
-                                        <a href="{{ route('users.index') }}" class="btn btn-secondary">Clear</a>
+                                        <button type="submit" class="btn btn-primary">Filtrar</button>
+                                        <a href="{{ route('users.index') }}" class="btn btn-secondary">Limpiar</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </form>
 
-                    <!-- Users Table -->
+                    <!-- Tabla de usuarios -->
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
+                                    <th>Nombre</th>
+                                    <th>Correo</th>
+                                    <th>Teléfono</th>
                                     <th>Roles</th>
-                                    <th>Status</th>
-                                    <th>Last Login</th>
-                                    <th>Actions</th>
+                                    <th>Estado</th>
+                                    <th>Último acceso</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -103,7 +100,7 @@
                                                 <div>
                                                     <strong>{{ $user->full_name }}</strong>
                                                     @if($user->is_verified)
-                                                        <i class="fas fa-check-circle text-success ms-1" title="Verified"></i>
+                                                        <i class="fas fa-check-circle text-success ms-1" title="Verificado"></i>
                                                     @endif
                                                 </div>
                                             </div>
@@ -119,14 +116,14 @@
                                         </td>
                                         <td>
                                             <span class="badge badge-{{ $user->is_active ? 'success' : 'danger' }}">
-                                                {{ $user->is_active ? 'Active' : 'Inactive' }}
+                                                {{ $user->is_active ? 'Activo' : 'Inactivo' }}
                                             </span>
                                         </td>
                                         <td>
                                             @if($user->last_login_at)
                                                 {{ $user->last_login_at->diffForHumans() }}
                                             @else
-                                                Never
+                                                Nunca
                                             @endif
                                         </td>
                                         <td>
@@ -134,7 +131,7 @@
                                                 @can('view', $user)
                                                 <a href="{{ route('users.show', $user) }}" 
                                                    class="btn btn-sm btn-outline-info" 
-                                                   title="View">
+                                                   title="Ver">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                                 @endcan
@@ -142,7 +139,7 @@
                                                 @can('update', $user)
                                                 <a href="{{ route('users.edit', $user) }}" 
                                                    class="btn btn-sm btn-outline-primary" 
-                                                   title="Edit">
+                                                   title="Editar">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 @endcan
@@ -150,7 +147,7 @@
                                                 @can('managePermissions', $user)
                                                 <a href="{{ route('users.permissions', $user) }}" 
                                                    class="btn btn-sm btn-outline-warning" 
-                                                   title="Permissions">
+                                                   title="Permisos">
                                                     <i class="fas fa-key"></i>
                                                 </a>
                                                 @endcan
@@ -159,12 +156,12 @@
                                                 <form action="{{ route('users.toggle-status', $user) }}" 
                                                       method="POST" 
                                                       class="d-inline"
-                                                      onsubmit="return confirm('Are you sure you want to {{ $user->is_active ? 'deactivate' : 'activate' }} this user?')">
+                                                      onsubmit="return confirm('¿Seguro que deseas {{ $user->is_active ? 'desactivar' : 'activar' }} este usuario?')">
                                                     @csrf
                                                     @method('PATCH')
                                                     <button type="submit" 
                                                             class="btn btn-sm btn-outline-{{ $user->is_active ? 'warning' : 'success' }}" 
-                                                            title="{{ $user->is_active ? 'Deactivate' : 'Activate' }}">
+                                                            title="{{ $user->is_active ? 'Desactivar' : 'Activar' }}">
                                                         <i class="fas fa-{{ $user->is_active ? 'ban' : 'check' }}"></i>
                                                     </button>
                                                 </form>
@@ -174,12 +171,12 @@
                                                 <form action="{{ route('users.destroy', $user) }}" 
                                                       method="POST" 
                                                       class="d-inline"
-                                                      onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
+                                                      onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" 
                                                             class="btn btn-sm btn-outline-danger" 
-                                                            title="Delete">
+                                                            title="Eliminar">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
@@ -192,9 +189,9 @@
                                         <td colspan="7" class="text-center py-4">
                                             <div class="text-muted">
                                                 <i class="fas fa-users fa-3x mb-3"></i>
-                                                <p>No users found.</p>
+                                                <p>No se encontraron usuarios.</p>
                                                 @permission('users.create')
-                                                <a href="{{ route('users.create') }}" class="btn btn-primary">Create First User</a>
+                                                <a href="{{ route('users.create') }}" class="btn btn-primary">Crear Primer Usuario</a>
                                                 @endpermission
                                             </div>
                                         </td>
@@ -204,7 +201,7 @@
                         </table>
                     </div>
 
-                    <!-- Pagination -->
+                    <!-- Paginación -->
                     @if($users->hasPages())
                         <div class="d-flex justify-content-center">
                             {{ $users->appends(request()->query())->links() }}
@@ -234,14 +231,6 @@
     }
     .btn {
         border-radius: 0.3rem;
-    }
-    .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-    }
-    .btn-secondary {
-        background-color: #6c757d;
-        border-color: #6c757d;
     }
     .table th, .table td {
         vertical-align: middle;

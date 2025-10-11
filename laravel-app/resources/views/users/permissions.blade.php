@@ -1,24 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'User Permissions - ' . $user->full_name)
+@section('title', 'Permisos del Usuario - ' . $user->full_name)
 
 @section('content')
 <div class="container-fluid">
-    <!-- Navigation -->
+    <!-- Navegación -->
     <x-head-admin />
+    <!-- Fin Navegación -->
 
-    <!-- End Navigation -->
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Manage Permissions: {{ $user->full_name }}</h3>
+                    <h3 class="card-title">Gestionar Permisos: {{ $user->full_name }}</h3>
                     <div>
                         <a href="{{ route('users.show', $user) }}" class="btn btn-info me-2">
-                            <i class="fas fa-user"></i> View User
+                            <i class="fas fa-user"></i> Ver Usuario
                         </a>
                         <a href="{{ route('users.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Back to Users
+                            <i class="fas fa-arrow-left"></i> Volver a Usuarios
                         </a>
                     </div>
                 </div>
@@ -28,14 +28,14 @@
                         @csrf
                         @method('PUT')
                         
-                        <!-- User Info -->
+                        <!-- Información del Usuario -->
                         <div class="row mb-4">
                             <div class="col-12">
                                 <div class="alert alert-info">
-                                    <h5 class="alert-heading">User Information</h5>
-                                    <p class="mb-1"><strong>Name:</strong> {{ $user->full_name }}</p>
-                                    <p class="mb-1"><strong>Email:</strong> {{ $user->email }}</p>
-                                    <p class="mb-0"><strong>Current Roles:</strong> 
+                                    <h5 class="alert-heading">Información del Usuario</h5>
+                                    <p class="mb-1"><strong>Nombre:</strong> {{ $user->full_name }}</p>
+                                    <p class="mb-1"><strong>Correo:</strong> {{ $user->email }}</p>
+                                    <p class="mb-0"><strong>Roles Actuales:</strong> 
                                         @foreach($user->roles as $role)
                                             <span class="badge badge-{{ $role->slug === 'super_admin' ? 'danger' : ($role->slug === 'admin' ? 'warning' : ($role->slug === 'coordinator' ? 'info' : 'secondary')) }} me-1">
                                                 {{ $role->name }}
@@ -46,16 +46,16 @@
                             </div>
                         </div>
                         
-                        <!-- Permissions by Module -->
+                        <!-- Permisos por Módulo -->
                         <div class="row">
                             @foreach($permissions as $module => $modulePermissions)
                                 <div class="col-md-6 mb-4">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5 class="card-title mb-0 text-capitalize">
-                                                {{ $module }} Permissions
+                                                Permisos de {{ $module }}
                                                 <span class="badge badge-secondary float-right">
-                                                    {{ $modulePermissions->count() }} permissions
+                                                    {{ $modulePermissions->count() }} permisos
                                                 </span>
                                             </h5>
                                         </div>
@@ -67,7 +67,7 @@
                                                            id="select_all_{{ $module }}" 
                                                            onchange="toggleModulePermissions('{{ $module }}', this.checked)">
                                                     <label class="custom-control-label font-weight-bold" for="select_all_{{ $module }}">
-                                                        Select All {{ ucfirst($module) }} Permissions
+                                                        Seleccionar todos los permisos de {{ ucfirst($module) }}
                                                     </label>
                                                 </div>
                                                 
@@ -97,18 +97,18 @@
                             @endforeach
                         </div>
                         
-                        <!-- Role-based Permissions Info -->
+                        <!-- Información de permisos por rol -->
                         <div class="row mt-4">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 class="card-title mb-0">Role-based Permissions</h5>
+                                        <h5 class="card-title mb-0">Permisos basados en Roles</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="alert alert-warning">
                                             <i class="fas fa-info-circle"></i>
-                                            <strong>Note:</strong> The user also has permissions through their assigned roles. 
-                                            Direct permission assignments will be added to role-based permissions.
+                                            <strong>Nota:</strong> El usuario también posee permisos a través de los roles asignados. 
+                                            Los permisos directos se sumarán a los permisos heredados del rol.
                                         </div>
                                         
                                         @if($user->roles->count() > 0)
@@ -132,7 +132,7 @@
                                                                         </div>
                                                                     @endforeach
                                                                 @else
-                                                                    <p class="text-muted mb-0">No permissions assigned to this role.</p>
+                                                                    <p class="text-muted mb-0">Este rol no tiene permisos asignados.</p>
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -140,20 +140,20 @@
                                                 @endforeach
                                             </div>
                                         @else
-                                            <p class="text-muted">No roles assigned to this user.</p>
+                                            <p class="text-muted">Este usuario no tiene roles asignados.</p>
                                         @endif
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Submit Buttons -->
+                        <!-- Botones de acción -->
                         <div class="row mt-4">
                             <div class="col-12">
                                 <div class="d-flex justify-content-end">
-                                    <a href="{{ route('users.show', $user) }}" class="btn btn-secondary me-2">Cancel</a>
+                                    <a href="{{ route('users.show', $user) }}" class="btn btn-secondary me-2">Cancelar</a>
                                     <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save"></i> Update Permissions
+                                        <i class="fas fa-save"></i> Actualizar Permisos
                                     </button>
                                 </div>
                             </div>
@@ -192,7 +192,7 @@ function updateSelectAll(module) {
     }
 }
 
-// Initialize select all checkboxes on page load
+// Inicializar checkboxes de "Seleccionar todo" al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
     @foreach($permissions as $module => $modulePermissions)
         updateSelectAll('{{ $module }}');

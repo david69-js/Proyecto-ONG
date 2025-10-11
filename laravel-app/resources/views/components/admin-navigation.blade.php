@@ -1,4 +1,4 @@
-<nav class="main-sidebar sidebar-dark-primary elevation-4">
+<nav class="main-sidebar sidebar-dark-primary elevation-4" style="position: fixed;">
     <!-- Brand Logo -->
     <a href="/" class="brand-link">
         <img src="{{ asset('assets/img/habitat-logo.webp') }}" alt="Habitat Guatemala" class="brand-image img-circle elevation-3" style="opacity: .8">

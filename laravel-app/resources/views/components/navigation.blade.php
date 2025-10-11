@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4 fixed">
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="brand-link">
         <i class="fas fa-hands-helping brand-image"></i>
