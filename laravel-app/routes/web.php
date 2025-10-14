@@ -5,6 +5,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\BeneficiaryController;
+use App\Http\Controllers\SponsorController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\AboutSectionController;
 
 
@@ -93,6 +95,39 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{beneficiary}/edit', [BeneficiaryController::class, 'edit'])->name('edit')->middleware('any.permission:beneficiaries.edit,profile.edit.own');
         Route::put('/{beneficiary}', [BeneficiaryController::class, 'update'])->name('update')->middleware('any.permission:beneficiaries.edit,profile.edit.own');
         Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('destroy')->middleware('permission:beneficiaries.delete');
+    });
+
+    // ============================================
+    // Sponsors Management Routes
+    // ============================================
+    Route::prefix('sponsors')->name('sponsors.')->middleware('permission:sponsors.view')->group(function () {
+        Route::get('/', [SponsorController::class, 'index'])->name('index');
+        Route::get('/create', [SponsorController::class, 'create'])->name('create')->middleware('permission:sponsors.create');
+        Route::post('/', [SponsorController::class, 'store'])->name('store')->middleware('permission:sponsors.create');
+        Route::get('/{sponsor}', [SponsorController::class, 'show'])->name('show');
+        Route::get('/{sponsor}/edit', [SponsorController::class, 'edit'])->name('edit')->middleware('permission:sponsors.edit');
+        Route::put('/{sponsor}', [SponsorController::class, 'update'])->name('update')->middleware('permission:sponsors.edit');
+        Route::delete('/{sponsor}', [SponsorController::class, 'destroy'])->name('destroy')->middleware('permission:sponsors.delete');
+        Route::patch('/{sponsor}/toggle-featured', [SponsorController::class, 'toggleFeatured'])->name('toggle-featured')->middleware('permission:sponsors.edit');
+        Route::patch('/{sponsor}/toggle-status', [SponsorController::class, 'toggleStatus'])->name('toggle-status')->middleware('permission:sponsors.edit');
+    });
+
+    // ============================================
+    // Events Management Routes
+    // ============================================
+    Route::prefix('events')->name('events.')->middleware('permission:events.view')->group(function () {
+        Route::get('/', [EventController::class, 'index'])->name('index');
+        Route::get('/create', [EventController::class, 'create'])->name('create')->middleware('permission:events.create');
+        Route::post('/', [EventController::class, 'store'])->name('store')->middleware('permission:events.create');
+        Route::get('/{event}', [EventController::class, 'show'])->name('show');
+        Route::get('/{event}/edit', [EventController::class, 'edit'])->name('edit')->middleware('permission:events.edit');
+        Route::put('/{event}', [EventController::class, 'update'])->name('update')->middleware('permission:events.edit');
+        Route::delete('/{event}', [EventController::class, 'destroy'])->name('destroy')->middleware('permission:events.delete');
+        Route::patch('/{event}/toggle-featured', [EventController::class, 'toggleFeatured'])->name('toggle-featured')->middleware('permission:events.edit');
+        Route::patch('/{event}/change-status', [EventController::class, 'changeStatus'])->name('change-status')->middleware('permission:events.edit');
+        Route::post('/{event}/register', [EventController::class, 'register'])->name('register');
+        Route::patch('/registrations/{registration}/status', [EventController::class, 'updateRegistrationStatus'])->name('registration.status')->middleware('permission:events.edit');
+        Route::delete('/registrations/{registration}', [EventController::class, 'deleteRegistration'])->name('registration.delete')->middleware('permission:events.edit');
     });
 });
 

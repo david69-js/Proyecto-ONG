@@ -197,6 +197,68 @@
                     </li>
                     @endpermission
 
+                    <!-- Gestión de Patrocinadores -->
+                    @permission('sponsors.view')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-handshake"></i>
+                            <p>
+                                Patrocinadores
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @permission('sponsors.view')
+                            <li class="nav-item">
+                                <a href="{{ route('sponsors.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Listar Patrocinadores</p>
+                                </a>
+                            </li>
+                            @endpermission
+                            @permission('sponsors.create')
+                            <li class="nav-item">
+                                <a href="{{ route('sponsors.create') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Crear Patrocinador</p>
+                                </a>
+                            </li>
+                            @endpermission
+                        </ul>
+                    </li>
+                    @endpermission
+
+                    <!-- Gestión de Eventos -->
+                    @permission('events.view')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-calendar-alt"></i>
+                            <p>
+                                Eventos
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @permission('events.view')
+                            <li class="nav-item">
+                                <a href="{{ route('events.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Listar Eventos</p>
+                                </a>
+                            </li>
+                            @endpermission
+                            @permission('events.create')
+                            <li class="nav-item">
+                                <a href="{{ route('events.create') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Crear Evento</p>
+                                </a>
+                            </li>
+                            @endpermission
+                        </ul>
+                    </li>
+                    @endpermission
+
                     <!-- Gestión de Donaciones -->
                     @permission('donations.view')
                     <li class="nav-item">

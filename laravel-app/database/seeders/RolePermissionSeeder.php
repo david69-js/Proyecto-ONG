@@ -52,6 +52,9 @@ class RolePermissionSeeder extends Seeder
                 'locations.view',
                 'locations.create',
                 'locations.edit',
+                'sponsors.view',
+                'sponsors.create',
+                'sponsors.edit',
                 'reports.view',
             ])->get();
             $projectCoordinator->permissions()->sync($projectCoordinatorPermissions->pluck('id'));
@@ -81,6 +84,7 @@ class RolePermissionSeeder extends Seeder
                 'projects.view',
                 'beneficiaries.view',
                 'locations.view',
+                'sponsors.view',
             ])->get();
             $volunteer->permissions()->sync($volunteerPermissions->pluck('id'));
         }
@@ -93,6 +97,7 @@ class RolePermissionSeeder extends Seeder
                 'projects.view',
                 'beneficiaries.view',
                 'locations.view',
+                'sponsors.view',
                 'reports.view',
             ])->get();
             $consultant->permissions()->sync($consultantPermissions->pluck('id'));
@@ -103,6 +108,7 @@ class RolePermissionSeeder extends Seeder
         if ($donor) {
             $donorPermissions = Permission::whereIn('slug', [
                 'projects.view',
+                'sponsors.view',
                 'reports.view',
             ])->get();
             $donor->permissions()->sync($donorPermissions->pluck('id'));

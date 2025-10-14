@@ -12,14 +12,49 @@ class BeneficiaryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         // Verificar autorización
         $this->authorize('viewAny', Beneficiary::class);
 
         // Filtrar beneficiarios según el rol del usuario
         $query = Beneficiary::with(['project', 'user']);
-        $beneficiaries = BeneficiaryPolicy::scopeForUser(auth()->user(), $query)->get();
+        $query = BeneficiaryPolicy::scopeForUser(auth()->user(), $query);
+
+        // Aplicar filtros de búsqueda
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
+            });
+        }
+
+        // Filtro por tipo de beneficiario
+        if ($request->filled('beneficiary_type')) {
+            $query->where('beneficiary_type', $request->beneficiary_type);
+        }
+
+        // Filtro por estado
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filtro por proyecto
+        if ($request->filled('project_id')) {
+            $query->where('project_id', $request->project_id);
+        }
+
+        // Ordenamiento
+        $sortBy = $request->get('sort_by', 'name');
+        $sortOrder = $request->get('sort_order', 'asc');
+        
+        if (in_array($sortBy, ['name', 'beneficiary_type', 'status', 'created_at'])) {
+            $query->orderBy($sortBy, $sortOrder);
+        }
+
+        $beneficiaries = $query->paginate(15)->withQueryString();
 
         return view('beneficiaries.index', compact('beneficiaries'));
     }
@@ -32,7 +67,9 @@ class BeneficiaryController extends Controller
         // Verificar autorización
         $this->authorize('create', Beneficiary::class);
 
-        $projects = Project::all();
+        $projects = Project::where('estado', '!=', 'completado')
+                          ->orderBy('nombre')
+                          ->get();
         return view('beneficiaries.create', compact('projects'));
     }
 
@@ -84,7 +121,8 @@ class BeneficiaryController extends Controller
         // Verificar autorización
         $this->authorize('update', $beneficiary);
 
-        $projects = Project::all();
+        // Obtener solo proyectos activos (no completados)
+        $projects = Project::where('estado', '!=', 'completado')->get();
         return view('beneficiaries.edit', compact('beneficiary', 'projects'));
     }
 

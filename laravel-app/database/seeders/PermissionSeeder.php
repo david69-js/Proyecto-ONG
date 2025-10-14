@@ -217,6 +217,36 @@ class PermissionSeeder extends Seeder
                 'module' => 'beneficiaries',
                 'is_active' => true,
             ],
+
+            // Patrocinadores
+            [
+                'name' => 'Ver Patrocinadores',
+                'slug' => 'sponsors.view',
+                'description' => 'Puede ver la lista de patrocinadores',
+                'module' => 'sponsors',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Crear Patrocinadores',
+                'slug' => 'sponsors.create',
+                'description' => 'Puede crear nuevos patrocinadores',
+                'module' => 'sponsors',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Editar Patrocinadores',
+                'slug' => 'sponsors.edit',
+                'description' => 'Puede editar información de patrocinadores',
+                'module' => 'sponsors',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Eliminar Patrocinadores',
+                'slug' => 'sponsors.delete',
+                'description' => 'Puede eliminar patrocinadores',
+                'module' => 'sponsors',
+                'is_active' => true,
+            ],
         ];
 
         foreach ($permissions as $permission) {

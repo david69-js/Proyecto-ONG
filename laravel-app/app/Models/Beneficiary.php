@@ -42,4 +42,45 @@ class Beneficiary extends Model
     {
         return $this->belongsTo(Project::class, 'project_id');
     }
+
+    /**
+     * Accessor para obtener el género formateado
+     */
+    public function getGenderFormattedAttribute()
+    {
+        $genders = [
+            'Male' => 'Masculino',
+            'Female' => 'Femenino',
+            'Other' => 'Otro',
+        ];
+
+        return $genders[$this->gender] ?? $this->gender;
+    }
+
+    /**
+     * Accessor para obtener el tipo de beneficiario formateado
+     */
+    public function getBeneficiaryTypeFormattedAttribute()
+    {
+        $types = [
+            'Person' => 'Persona',
+            'Family' => 'Familia',
+            'Community' => 'Comunidad',
+        ];
+
+        return $types[$this->beneficiary_type] ?? $this->beneficiary_type;
+    }
+
+    /**
+     * Accessor para obtener el estado formateado
+     */
+    public function getStatusFormattedAttribute()
+    {
+        $statuses = [
+            'Active' => 'Activo',
+            'Inactive' => 'Inactivo',
+        ];
+
+        return $statuses[$this->status] ?? $this->status;
+    }
 }
