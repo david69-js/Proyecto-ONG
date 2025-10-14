@@ -29,7 +29,16 @@ class DatabaseSeeder extends Seeder
             // 5. Crear proyectos
             ProjectSeeder::class,
             
-            // 6. Finalmente crear beneficiarios
+            // 6. Crear patrocinadores
+            SponsorSeeder::class,
+            
+            // 7. Crear eventos
+            EventSeeder::class,
+            
+            // 8. Crear inscripciones de eventos
+            EventRegistrationSeeder::class,
+            
+            // 9. Finalmente crear beneficiarios
             BeneficiarySeeder::class,
         ]);
     }

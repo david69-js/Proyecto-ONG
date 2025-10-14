@@ -46,8 +46,35 @@
                            value="{{ request('search') }}" placeholder="Nombre, email, teléfono...">
                 </div>
                 
+                <!-- Email -->
+                <div class="col-12 col-md-4 mb-3">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Email
+                    </label>
+                    <input type="email" class="form-control" id="email" name="email" 
+                           value="{{ request('email') }}" placeholder="Buscar por email específico...">
+                </div>
+                
+                <!-- Botones de acción -->
+                <div class="col-12 col-md-4 mb-3">
+                    <label class="d-block">&nbsp;</label>
+                    <div class="btn-group w-100" role="group">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                            <span class="ml-1">Buscar</span>
+                        </button>
+                        <a href="{{ route('beneficiaries.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i>
+                            <span class="ml-1">Limpiar</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Segunda fila de filtros -->
+            <div class="row">
                 <!-- Tipo de beneficiario -->
-                <div class="col-6 col-md-2 mb-3">
+                <div class="col-6 col-md-3 mb-3">
                     <label for="beneficiary_type">Tipo</label>
                     <select class="form-control" id="beneficiary_type" name="beneficiary_type">
                         <option value="">Todos</option>
@@ -58,7 +85,7 @@
                 </div>
                 
                 <!-- Estado -->
-                <div class="col-6 col-md-2 mb-3">
+                <div class="col-6 col-md-3 mb-3">
                     <label for="status">Estado</label>
                     <select class="form-control" id="status" name="status">
                         <option value="">Todos</option>
@@ -68,7 +95,7 @@
                 </div>
                 
                 <!-- Proyecto -->
-                <div class="col-6 col-md-2 mb-3">
+                <div class="col-12 col-md-6 mb-3">
                     <label for="project_id">Proyecto</label>
                     <select class="form-control" id="project_id" name="project_id">
                         <option value="">Todos</option>
@@ -78,21 +105,6 @@
                             </option>
                         @endforeach
                     </select>
-                </div>
-                
-                <!-- Botones de acción -->
-                <div class="col-6 col-md-2 mb-3">
-                    <label class="d-block">&nbsp;</label>
-                    <div class="btn-group w-100" role="group">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-search d-md-none"></i>
-                            <span class="d-none d-md-inline">Buscar</span>
-                        </button>
-                        <a href="{{ route('beneficiaries.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-times d-md-none"></i>
-                            <span class="d-none d-md-inline">Limpiar</span>
-                        </a>
-                    </div>
                 </div>
             </div>
         </form>

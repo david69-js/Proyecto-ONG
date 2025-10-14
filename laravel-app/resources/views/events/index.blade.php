@@ -6,7 +6,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12" style="margin-right: -15px; padding-right: 0;">
+        <div class="col-12" style="margin-left: -15px; margin-right: -30px; padding-left: 0; padding-right: 0;">
             <!-- Card principal -->
             <div class="card">
                 <div class="card-header">
@@ -403,15 +403,26 @@
     margin-left: 0.25rem;
 }
 
-/* Extender solo hacia la derecha para no afectar el menú lateral */
-.col-12[style*="margin-right"] {
-    margin-right: -30px !important;
+/* Extender hacia ambos lados para más espacio */
+.col-12[style*="margin-left"] {
+    margin-left: -30px !important;
+    margin-right: -45px !important;
+    padding-left: 0 !important;
     padding-right: 0 !important;
 }
 
 /* Asegurar que la card use todo el espacio disponible */
 .card {
+    margin-left: 0 !important;
     margin-right: 0 !important;
+}
+
+/* Ajustar para móviles */
+@media (max-width: 576px) {
+    .col-12[style*="margin-left"] {
+        margin-left: -15px !important;
+        margin-right: -20px !important;
+    }
 }
 
 /* Ajustar botones de acción para que no se salgan */

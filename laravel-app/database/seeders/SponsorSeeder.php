@@ -13,6 +13,9 @@ class SponsorSeeder extends Seeder
      */
     public function run(): void
     {
+        // Obtener proyectos para las asociaciones
+        $projects = Project::all();
+        
         $sponsors = [
             [
                 'name' => 'Fundación Carlos Slim',
@@ -170,10 +173,26 @@ class SponsorSeeder extends Seeder
         ];
 
         foreach ($sponsors as $sponsorData) {
-            Sponsor::updateOrCreate(
+            $sponsor = Sponsor::updateOrCreate(
                 ['email' => $sponsorData['email']],
                 $sponsorData
             );
+
+            // Asociar sponsors con proyectos aleatoriamente
+            if ($projects->count() > 0) {
+                $randomProjects = $projects->random(rand(1, min(3, $projects->count())));
+                
+                foreach ($randomProjects as $project) {
+                    $sponsor->projects()->syncWithoutDetaching([
+                        $project->id => [
+                            'contribution_amount' => $sponsorData['contribution_amount'] * (rand(50, 100) / 100), // 50-100% del monto total
+                            'contribution_type' => $sponsorData['contribution_type'],
+                            'sponsorship_date' => $sponsorData['partnership_start_date'],
+                            'notes' => 'Asociación automática generada por seeder',
+                        ]
+                    ]);
+                }
+            }
         }
     }
 }

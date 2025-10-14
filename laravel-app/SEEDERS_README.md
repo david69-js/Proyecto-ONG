@@ -1,128 +1,129 @@
-# Seeders de la Aplicación ONG
+# 📊 Seeders de Eventos y Patrocinadores
 
-Este documento describe los seeders creados para poblar la base de datos con información por defecto.
+Este documento explica cómo usar los seeders para poblar la base de datos con datos de prueba para eventos y patrocinadores.
 
-## Seeders Disponibles
+## 🎯 Seeders Disponibles
 
-### 1. RoleSeeder
-Crea los roles del sistema:
-- **Super Administrador**: Acceso completo al sistema
-- **Administrador**: Administrador con permisos amplios
-- **Coordinador de Proyectos**: Coordina y supervisa proyectos
-- **Coordinador de Beneficiarios**: Gestiona información de beneficiarios
-- **Voluntario**: Acceso limitado al sistema
-- **Consultor**: Acceso de solo lectura
-- **Donante**: Acceso limitado a reportes
+### 1. **SponsorSeeder**
+- **Archivo**: `database/seeders/SponsorSeeder.php`
+- **Función**: Crea patrocinadores con datos realistas
+- **Datos incluidos**:
+  - 8 patrocinadores de diferentes tipos (individual, corporativo, fundación, ONG, gobierno)
+  - Información completa de contacto
+  - Asociaciones automáticas con proyectos existentes
+  - Montos de contribución variados (Q5,000 - Q100,000)
 
-### 2. PermissionSeeder
-Crea los permisos del sistema organizados por módulos:
-- **Usuarios**: Ver, crear, editar, eliminar, gestionar permisos
-- **Proyectos**: Ver, crear, editar, eliminar
-- **Beneficiarios**: Ver, crear, editar, eliminar
-- **Ubicaciones**: Ver, crear, editar, eliminar
-- **Roles**: Gestionar roles y permisos
-- **Reportes**: Ver reportes, exportar datos
-- **Configuración**: Gestionar configuración del sistema
+### 2. **EventSeeder**
+- **Archivo**: `database/seeders/EventSeeder.php`
+- **Función**: Crea eventos de diferentes tipos
+- **Datos incluidos**:
+  - 8 eventos variados (carrera solidaria, talleres, feria de voluntariado, etc.)
+  - Diferentes tipos: fundraising, training, volunteer, awareness, community, other
+  - Fechas futuras realistas
+  - Información completa de contacto y requisitos
 
-### 3. RolePermissionSeeder
-Asigna permisos a los roles según su nivel de acceso:
-- **Super Administrador**: Todos los permisos
-- **Administrador**: Todos excepto gestión de roles y configuración
-- **Coordinador de Proyectos**: Permisos relacionados con proyectos y usuarios
-- **Coordinador de Beneficiarios**: Permisos relacionados con beneficiarios
-- **Voluntario**: Solo lectura básica
-- **Consultor**: Solo lectura con acceso a reportes
-- **Donante**: Solo visualización de proyectos y reportes
+### 3. **EventRegistrationSeeder**
+- **Archivo**: `database/seeders/EventRegistrationSeeder.php`
+- **Función**: Crea inscripciones de eventos
+- **Datos incluidos**:
+  - 10 inscripciones de muestra
+  - Diferentes estados: confirmed, pending
+  - Asociadas a eventos que requieren registro
 
-### 4. UserSeeder
-Crea usuarios de ejemplo con perfiles completos:
-- **admin@ong.com** - Super Administrador (password: password123)
-- **coordinador@ong.com** - Administrador (password: password123)
-- **proyectos@ong.com** - Coordinador de Proyectos (password: password123)
-- **beneficiarios@ong.com** - Coordinador de Beneficiarios (password: password123)
-- **voluntario@ong.com** - Voluntario (password: password123)
-- **consultor@ong.com** - Consultor (password: password123)
+## 🚀 Cómo Ejecutar los Seeders
 
-### 5. LocationSeeder
-Crea 15 ubicaciones de ejemplo en diferentes estados de México:
-- Centros comunitarios
-- Escuelas rurales
-- Centros de salud
-- Centros de capacitación
-- Comunidades rurales
-- Reservas naturales
+### Opción 1: Scripts Automatizados (Recomendado)
 
-### 6. ProjectSeeder
-Crea 7 proyectos de ejemplo:
-- **Educación Comunitaria Rural**: Mejora del acceso a la educación
-- **Salud Preventiva Infantil**: Programas de vacunación y nutrición
-- **Desarrollo Empresarial Femenino**: Capacitación para mujeres emprendedoras
-- **Agua Potable y Saneamiento**: Sistemas de purificación de agua
-- **Apoyo a Adultos Mayores**: Atención integral a adultos mayores
-- **Capacitación Técnica Juvenil**: Formación técnica para jóvenes
-- **Conservación Ambiental Comunitaria**: Reforestación y educación ambiental
-
-### 7. BeneficiarySeeder
-Crea 16 beneficiarios de ejemplo:
-- Personas individuales
-- Familias
-- Comunidades
-- Asignados a diferentes proyectos
-- Con información completa de contacto
-
-## Cómo Ejecutar los Seeders
-
-### Ejecutar todos los seeders:
+#### En Windows:
 ```bash
-php artisan db:seed
+# Ejecutar desde la carpeta laravel-app
+seed-events-sponsors.bat
 ```
 
-### Ejecutar un seeder específico:
+#### En Linux/Mac:
 ```bash
-php artisan db:seed --class=RoleSeeder
-php artisan db:seed --class=PermissionSeeder
-php artisan db:seed --class=UserSeeder
-# etc.
+# Ejecutar desde la carpeta laravel-app
+./seed-events-sponsors.sh
 ```
 
-### Refrescar la base de datos y ejecutar seeders:
+### Opción 2: Comandos Individuales
+
 ```bash
-php artisan migrate:refresh --seed
+# Patrocinadores
+docker-compose exec app php artisan db:seed --class=SponsorSeeder
+
+# Eventos
+docker-compose exec app php artisan db:seed --class=EventSeeder
+
+# Inscripciones de eventos
+docker-compose exec app php artisan db:seed --class=EventRegistrationSeeder
 ```
 
-## Datos de Acceso
+### Opción 3: Todos los Seeders
 
-Después de ejecutar los seeders, puedes acceder al sistema con cualquiera de estos usuarios:
-
-| Email | Contraseña | Rol |
-|-------|------------|-----|
-| admin@ong.com | password123 | Super Administrador |
-| coordinador@ong.com | password123 | Administrador |
-| proyectos@ong.com | password123 | Coordinador de Proyectos |
-| beneficiarios@ong.com | password123 | Coordinador de Beneficiarios |
-| voluntario@ong.com | password123 | Voluntario |
-| consultor@ong.com | password123 | Consultor |
-
-## Estructura de Datos Creada
-
-- **7 roles** con diferentes niveles de acceso
-- **22 permisos** organizados por módulos
-- **6 usuarios** con perfiles completos y roles asignados
-- **15 ubicaciones** en diferentes estados de México
-- **7 proyectos** con información detallada y responsables asignados
-- **16 beneficiarios** asignados a diferentes proyectos
-
-## Notas Importantes
-
-1. Los seeders usan `updateOrCreate()` para evitar duplicados
-2. Los usuarios tienen contraseñas hasheadas con `Hash::make()`
-3. Los proyectos están asignados a coordinadores existentes
-4. Los beneficiarios están vinculados a proyectos específicos
-5. Todos los datos son realistas y representativos de una ONG real
-
-## Personalización
-
-Para personalizar los datos, edita los archivos de seeder correspondientes en `database/seeders/` y ejecuta:
 ```bash
-php artisan db:seed --class=NombreDelSeeder
+# Ejecutar todos los seeders (incluye usuarios, proyectos, etc.)
+docker-compose exec app php artisan db:seed
 ```
+
+## 📋 Datos Creados
+
+### Patrocinadores (8 registros)
+- **Fundación Carlos Slim** - Q50,000 (Fundación)
+- **Constructora Nacional S.A.** - Q25,000 (Corporativo)
+- **Dr. Ana Patricia López** - Q10,000 (Individual)
+- **USAID Guatemala** - Q100,000 (Gobierno)
+- **Habitat for Humanity** - Q75,000 (ONG)
+- **Voluntarios Sin Fronteras** - Q5,000 (ONG)
+- **Cementos Progreso** - Q15,000 (Corporativo)
+- **Fundación Tigo** - Q30,000 (Corporativo)
+
+### Eventos (8 registros)
+1. **Carrera Solidaria 2024** - Fundraising (Q50)
+2. **Taller de Construcción Sostenible** - Training (Gratis)
+3. **Feria de Voluntariado** - Volunteer (Gratis)
+4. **Campaña de Concientización** - Awareness (Gratis)
+5. **Construcción Comunitaria** - Community (Gratis)
+6. **Reunión de Evaluación** - Other (Gratis)
+7. **Cena de Gala Anual** - Fundraising (Q200)
+8. **Taller de Liderazgo** - Training (Q25)
+
+### Inscripciones (Variable)
+- Entre 3-8 inscripciones por evento que requiere registro
+- Estados: confirmed, pending
+- Datos de contacto realistas
+
+## ⚠️ Consideraciones Importantes
+
+1. **Dependencias**: Los seeders requieren que existan:
+   - Proyectos (ProjectSeeder)
+   - Usuarios (UserSeeder)
+
+2. **Orden de Ejecución**: Los seeders están configurados en el orden correcto en `DatabaseSeeder.php`
+
+3. **Datos Únicos**: Los seeders usan `updateOrCreate()` para evitar duplicados
+
+4. **Relaciones**: Los patrocinadores se asocian automáticamente con proyectos aleatorios
+
+## 🔄 Re-ejecutar Seeders
+
+Si necesitas re-ejecutar los seeders:
+
+```bash
+# Limpiar y recrear la base de datos
+docker-compose exec app php artisan migrate:fresh --seed
+
+# O solo ejecutar seeders específicos
+docker-compose exec app php artisan db:seed --class=SponsorSeeder
+```
+
+## 📊 Verificar Datos
+
+Puedes verificar que los datos se crearon correctamente visitando:
+- **Patrocinadores**: `/sponsors`
+- **Eventos**: `/events`
+- **Dashboard**: `/dashboard` (estadísticas)
+
+## 🛠️ Personalizar Datos
+
+Para modificar los datos de los seeders, edita los archivos correspondientes en `database/seeders/` y vuelve a ejecutar los comandos.
