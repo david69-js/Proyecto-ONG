@@ -12,6 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('ng_beneficiaries', function (Blueprint $table) {
+            // Drop the existing foreign key constraint
+            $table->dropForeign(['project_id']);
+            
             // Add the new foreign key constraint referencing the correct table
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('set null');
         });
@@ -25,6 +28,9 @@ return new class extends Migration
         Schema::table('ng_beneficiaries', function (Blueprint $table) {
             // Drop the new foreign key constraint
             $table->dropForeign(['project_id']);
+            
+            // Restore the original foreign key constraint
+            $table->foreign('project_id')->references('id')->on('proyectos')->onDelete('set null');
         });
     }
 };

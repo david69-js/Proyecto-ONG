@@ -25,6 +25,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-
+        Schema::table('rel_sponsor_projects', function (Blueprint $table) {
+            // Eliminar la restricción de clave foránea actual
+            $table->dropForeign(['project_id']);
+            
+            // Restaurar la restricción original (aunque sea incorrecta)
+            $table->foreign('project_id')->references('id')->on('proyectos')->onDelete('cascade');
+        });
     }
 };
