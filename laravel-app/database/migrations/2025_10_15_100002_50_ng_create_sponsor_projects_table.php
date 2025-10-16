@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('rel_sponsor_projects', function (Blueprint $table) {
@@ -21,15 +18,11 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->timestamps();
 
-            // Índices
             $table->unique(['sponsor_id', 'project_id']);
             $table->index('sponsorship_date');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('rel_sponsor_projects');
