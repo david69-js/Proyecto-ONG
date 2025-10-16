@@ -13,7 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('name');
             $table->date('birth_date')->nullable();
-            $table->string('gender')->nullable();
+            $table->string('gender', 20)->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
@@ -25,8 +25,6 @@ return new class extends Migration
 
             $table->foreign('project_id')->references('id')->on('ng_projects')->onDelete('set null');
         });
-
-
     }
 
     public function down(): void
