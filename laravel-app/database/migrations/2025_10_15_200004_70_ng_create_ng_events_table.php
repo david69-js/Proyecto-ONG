@@ -32,7 +32,7 @@ return new class extends Migration
             $table->string('contact_phone')->nullable();
             $table->text('requirements')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('sys_users')->onDelete('set null');
-            $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('set null');
+            $table->foreignId('project_id')->nullable()->constrained('ng_projects')->onDelete('set null');
             $table->timestamps();
         });
     }

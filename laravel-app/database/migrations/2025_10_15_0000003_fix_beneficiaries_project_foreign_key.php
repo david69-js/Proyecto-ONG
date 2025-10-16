@@ -16,7 +16,7 @@ return new class extends Migration
             $table->dropForeign(['project_id']);
             
             // Add the new foreign key constraint referencing the correct table
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('set null');
+            $table->foreign('project_id')->references('id')->on('ng_projects')->onDelete('set null');
         });
     }
 
@@ -30,7 +30,7 @@ return new class extends Migration
             $table->dropForeign(['project_id']);
             
             // Restore the original foreign key constraint
-            $table->foreign('project_id')->references('id')->on('proyectos')->onDelete('set null');
+            $table->foreign('project_id')->references('id')->on('ng_projects')->onDelete('set null');
         });
     }
 };

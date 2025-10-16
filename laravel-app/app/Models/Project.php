@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     use HasFactory;
-
+    protected $table = 'ng_projects';
+    
     protected $fillable = [
         'nombre',
         'descripcion',

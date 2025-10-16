@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('rel_project_assignments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('sys_users')->onDelete('cascade');
-            $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
+            $table->foreignId('project_id')->constrained('ng_projects')->onDelete('cascade');
             $table->enum('role_in_project', ['coordinator', 'volunteer', 'staff'])->default('volunteer');
             $table->date('assigned_at')->nullable();
             $table->foreignId('assigned_by')->nullable()->constrained('sys_users')->onDelete('set null');

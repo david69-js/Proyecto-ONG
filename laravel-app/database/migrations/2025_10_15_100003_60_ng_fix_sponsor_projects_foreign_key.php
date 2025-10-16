@@ -16,7 +16,7 @@ return new class extends Migration
             $table->dropForeign(['project_id']);
             
             // Agregar la nueva restricción de clave foránea que apunta a la tabla correcta
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+            $table->foreign('project_id')->references('id')->on('ng_projects')->onDelete('cascade');
         });
     }
 
@@ -30,7 +30,7 @@ return new class extends Migration
             $table->dropForeign(['project_id']);
             
             // Restaurar la restricción original (aunque sea incorrecta)
-            $table->foreign('project_id')->references('id')->on('proyectos')->onDelete('cascade');
+            $table->foreign('project_id')->references('id')->on('ng_projects')->onDelete('cascade');
         });
     }
 };
