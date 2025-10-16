@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             // 1. Primero crear roles y permisos
             RoleSeeder::class,
             PermissionSeeder::class,
+            $this->call(CreatePermissionsSeeder::class);
             
             // 2. Luego asignar permisos a roles
             RolePermissionSeeder::class,
@@ -40,6 +41,7 @@ class DatabaseSeeder extends Seeder
             
             // 9. Finalmente crear beneficiarios
             BeneficiarySeeder::class,
+            $this->call(AssignBeneficiaryPermissionsSeeder::class);
         ]);
     }
 }

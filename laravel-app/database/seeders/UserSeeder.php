@@ -223,5 +223,39 @@ class UserSeeder extends Seeder
         if ($consultantRole) {
             $consultant->roles()->syncWithoutDetaching([$consultantRole->id]);
         }
+
+        // Crear Beneficiario
+        $beneficiary = User::updateOrCreate(
+            ['email' => 'beneficiario@ong.com'],
+            [
+                'first_name' => 'Juan',
+                'last_name' => 'Pérez',
+                'email' => 'beneficiario@ong.com',
+                'password' => Hash::make('password123'),
+                'phone' => '+1234567896',
+                'is_active' => true,
+                'is_verified' => true,
+                'email_verified_at' => now(),
+            ]
+        );
+
+        UserProfile::updateOrCreate(
+            ['user_id' => $beneficiary->id],
+            [
+                'date_of_birth' => '1998-07-15',
+                'gender' => 'male',
+                'bio' => 'Beneficiario del sistema',
+                'address' => 'Calle Beneficiarios 123',
+                'city' => 'Ciudad Beneficio',
+                'state' => 'Estado Beneficio',
+                'postal_code' => '12350',
+                'country' => 'México',
+            ]
+        );
+
+        $beneficiaryRole = Role::where('slug', 'beneficiary')->first();
+        if ($beneficiaryRole) {
+            $beneficiary->roles()->syncWithoutDetaching([$beneficiaryRole->id]);
+        }
     }
 }
