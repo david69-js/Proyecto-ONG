@@ -12,12 +12,17 @@ class BeneficiaryPolicy
      */
     public function viewAny(User $user): bool
     {
-        // Roles administrativos pueden ver todos
-        if ($user->hasAnyRole(['super-admin', 'admin', 'project-coordinator', 'beneficiary-coordinator', 'consultant', 'volunteer'])) {
-            return $user->hasPermission('beneficiaries.view');
+        // Super admin y admin pueden ver todos
+        if ($user->hasAnyRole(['super-admin', 'admin'])) {
+            return true;
         }
 
-        // Beneficiarios pueden ver sus propios beneficios
+        // Project coordinator, beneficiary coordinator, consultant, volunteer - necesitan permiso
+        if ($user->hasAnyRole(['project-coordinator', 'beneficiary-coordinator', 'consultant', 'volunteer'])) {
+            return $user->hasPermission('beneficiaries.view') || $user->hasPermission('beneficiaries.view.own');
+        }
+
+        // Beneficiarios pueden ver sus propios datos
         if ($user->hasRole('beneficiary')) {
             return $user->hasPermission('benefits.view.own');
         }
@@ -30,12 +35,31 @@ class BeneficiaryPolicy
      */
     public function view(User $user, Beneficiary $beneficiary): bool
     {
-        // Roles administrativos pueden ver todos
-        if ($user->hasAnyRole(['super-admin', 'admin', 'project-coordinator', 'beneficiary-coordinator', 'consultant', 'volunteer'])) {
+        // Super admin y admin pueden ver todos
+        if ($user->hasAnyRole(['super-admin', 'admin'])) {
+            return true;
+        }
+
+        // Project coordinator - solo ve beneficiarios de sus proyectos asignados
+        if ($user->hasRole('project-coordinator')) {
+            return $user->assignedProjects()
+                ->where('projects.id', $beneficiary->project_id)
+                ->exists();
+        }
+
+        // Beneficiary coordinator y consultant - pueden ver todos
+        if ($user->hasAnyRole(['beneficiary-coordinator', 'consultant'])) {
             return $user->hasPermission('beneficiaries.view');
         }
 
-        // Un beneficiario puede ver sus propios datos
+        // Volunteer - solo ve beneficiarios de sus proyectos asignados
+        if ($user->hasRole('volunteer')) {
+            return $user->assignedProjects()
+                ->where('projects.id', $beneficiary->project_id)
+                ->exists();
+        }
+
+        // Un beneficiario solo puede ver sus propios datos
         if ($user->hasRole('beneficiary')) {
             $userBeneficiary = $user->beneficiary;
             return $userBeneficiary && $userBeneficiary->id === $beneficiary->id;
@@ -57,17 +81,36 @@ class BeneficiaryPolicy
      */
     public function update(User $user, Beneficiary $beneficiary): bool
     {
-        // Roles administrativos pueden editar todos
-        if ($user->hasAnyRole(['super-admin', 'admin', 'project-coordinator', 'beneficiary-coordinator'])) {
+        // Super admin puede editar todos
+        if ($user->hasRole('super-admin')) {
+            return true;
+        }
+
+        // Admin puede editar todos si tiene el permiso
+        if ($user->hasRole('admin')) {
             return $user->hasPermission('beneficiaries.edit');
         }
 
-        // Un beneficiario puede editar sus propios datos limitados si tiene el permiso
+        // Project coordinator - solo edita beneficiarios de sus proyectos
+        if ($user->hasRole('project-coordinator')) {
+            return $user->assignedProjects()
+                ->where('projects.id', $beneficiary->project_id)
+                ->exists() 
+                && $user->hasPermission('beneficiaries.edit');
+        }
+
+        // Beneficiary coordinator - puede editar todos
+        if ($user->hasRole('beneficiary-coordinator')) {
+            return $user->hasPermission('beneficiaries.edit');
+        }
+
+        // Un beneficiario puede editar sus propios datos limitados
         if ($user->hasRole('beneficiary')) {
             $userBeneficiary = $user->beneficiary;
             return $userBeneficiary && $userBeneficiary->id === $beneficiary->id && $user->hasPermission('profile.edit.own');
         }
 
+        // Voluntario y consultor no pueden editar
         return false;
     }
 
@@ -76,9 +119,22 @@ class BeneficiaryPolicy
      */
     public function delete(User $user, Beneficiary $beneficiary): bool
     {
-        // Solo roles específicos pueden eliminar
-        return $user->hasAnyRole(['super-admin', 'admin', 'beneficiary-coordinator']) 
-               && $user->hasPermission('beneficiaries.delete');
+        // Super admin puede eliminar
+        if ($user->hasRole('super-admin')) {
+            return $user->hasPermission('beneficiaries.delete');
+        }
+
+        // Admin NO puede eliminar (según la nueva estructura)
+        if ($user->hasRole('admin')) {
+            return false;
+        }
+
+        // Solo beneficiary coordinator puede eliminar
+        if ($user->hasRole('beneficiary-coordinator')) {
+            return $user->hasPermission('beneficiaries.delete');
+        }
+
+        return false;
     }
 
     /**
@@ -86,9 +142,24 @@ class BeneficiaryPolicy
      */
     public static function scopeForUser(User $user, $query)
     {
-        // Roles administrativos ven todos
-        if ($user->hasAnyRole(['super-admin', 'admin', 'project-coordinator', 'beneficiary-coordinator', 'consultant', 'volunteer'])) {
+        // Super admin y admin ven todos
+        if ($user->hasAnyRole(['super-admin', 'admin'])) {
             return $query;
+        }
+
+        // Project coordinator - solo ve beneficiarios de sus proyectos asignados
+        if ($user->hasRole('project-coordinator')) {
+            return $query->whereIn('project_id', $user->assignedProjects()->pluck('projects.id'));
+        }
+
+        // Beneficiary coordinator y consultant - ven todos
+        if ($user->hasAnyRole(['beneficiary-coordinator', 'consultant'])) {
+            return $query;
+        }
+
+        // Volunteer - solo ve beneficiarios de sus proyectos asignados
+        if ($user->hasRole('volunteer')) {
+            return $query->whereIn('project_id', $user->assignedProjects()->pluck('projects.id'));
         }
 
         // Beneficiarios solo ven su propio registro
@@ -100,7 +171,7 @@ class BeneficiaryPolicy
             return $query->whereRaw('1 = 0');
         }
 
+        // Por defecto, no retorna nada
         return $query->whereRaw('1 = 0');
     }
 }
-

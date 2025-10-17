@@ -12,8 +12,22 @@ class LocationPolicy
      */
     public function viewAny(User $user): bool
     {
-        // La mayoría de roles pueden ver ubicaciones
-        return $user->hasAnyPermission(['locations.view', 'projects.view', 'beneficiaries.view']);
+        // Super admin y admin pueden ver todos
+        if ($user->hasAnyRole(['super-admin', 'admin'])) {
+            return true;
+        }
+
+        // Coordinadores, consultores y voluntarios pueden ver ubicaciones
+        if ($user->hasAnyRole(['project-coordinator', 'beneficiary-coordinator', 'consultant', 'volunteer'])) {
+            return $user->hasPermission('locations.view');
+        }
+
+        // Beneficiarios pueden ver ubicaciones
+        if ($user->hasRole('beneficiary')) {
+            return $user->hasPermission('locations.view');
+        }
+
+        return false;
     }
 
     /**
@@ -21,8 +35,22 @@ class LocationPolicy
      */
     public function view(User $user, Location $location): bool
     {
-        // La mayoría de roles pueden ver ubicaciones
-        return $user->hasAnyPermission(['locations.view', 'projects.view', 'beneficiaries.view']);
+        // Super admin y admin pueden ver todos
+        if ($user->hasAnyRole(['super-admin', 'admin'])) {
+            return true;
+        }
+
+        // Coordinadores, consultores y voluntarios pueden ver si tienen el permiso
+        if ($user->hasAnyRole(['project-coordinator', 'beneficiary-coordinator', 'consultant', 'volunteer'])) {
+            return $user->hasPermission('locations.view');
+        }
+
+        // Beneficiarios pueden ver ubicaciones
+        if ($user->hasRole('beneficiary')) {
+            return $user->hasPermission('locations.view');
+        }
+
+        return false;
     }
 
     /**
@@ -38,7 +66,28 @@ class LocationPolicy
      */
     public function update(User $user, Location $location): bool
     {
-        return $user->hasPermission('locations.edit');
+        // Super admin puede editar todos
+        if ($user->hasRole('super-admin')) {
+            return true;
+        }
+
+        // Admin puede editar si tiene el permiso
+        if ($user->hasRole('admin')) {
+            return $user->hasPermission('locations.edit');
+        }
+
+        // Project coordinator puede editar si tiene el permiso
+        if ($user->hasRole('project-coordinator')) {
+            return $user->hasPermission('locations.edit');
+        }
+
+        // Beneficiary coordinator puede editar si tiene el permiso
+        if ($user->hasRole('beneficiary-coordinator')) {
+            return $user->hasPermission('locations.edit');
+        }
+
+        // Otros roles no pueden editar
+        return false;
     }
 
     /**
@@ -46,9 +95,36 @@ class LocationPolicy
      */
     public function delete(User $user, Location $location): bool
     {
-        // Solo roles administrativos pueden eliminar
-        return $user->hasAnyRole(['super-admin', 'admin']) 
-               && $user->hasPermission('locations.delete');
+        // Super admin puede eliminar
+        if ($user->hasRole('super-admin')) {
+            return $user->hasPermission('locations.delete');
+        }
+
+        // Admin puede eliminar si tiene el permiso
+        if ($user->hasRole('admin')) {
+            return $user->hasPermission('locations.delete');
+        }
+
+        // Otros roles no pueden eliminar
+        return false;
+    }
+
+    /**
+     * Scope query to filter locations based on user role.
+     */
+    public static function scopeForUser(User $user, $query)
+    {
+        // Super admin y admin ven todos
+        if ($user->hasAnyRole(['super-admin', 'admin'])) {
+            return $query;
+        }
+
+        // Todos los otros roles que tienen permiso ven todas las ubicaciones
+        if ($user->hasPermission('locations.view')) {
+            return $query;
+        }
+
+        // Por defecto, no retorna nada
+        return $query->whereRaw('1 = 0');
     }
 }
-

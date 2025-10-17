@@ -13,125 +13,240 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
+        // Primero, crear o actualizar todos los permisos
+        $this->createPermissions();
+        
+        // Luego, asignar permisos a cada rol
         $this->assignPermissionsToRoles();
     }
 
+    /**
+     * Crear o actualizar todos los permisos del sistema
+     */
+    private function createPermissions(): void
+    {
+        $permissions = [
+            // Permisos de Usuarios
+            ['name' => 'Ver Usuarios', 'slug' => 'users.view', 'description' => 'Ver listado de usuarios'],
+            ['name' => 'Crear Usuario', 'slug' => 'users.create', 'description' => 'Crear nuevos usuarios'],
+            ['name' => 'Editar Usuario', 'slug' => 'users.edit', 'description' => 'Editar información de usuarios'],
+            ['name' => 'Eliminar Usuario', 'slug' => 'users.delete', 'description' => 'Eliminar usuarios del sistema'],
+
+            // Permisos de Proyectos
+            ['name' => 'Ver Proyectos', 'slug' => 'projects.view', 'description' => 'Ver todos los proyectos'],
+            ['name' => 'Ver Proyectos Propios', 'slug' => 'projects.view.own', 'description' => 'Ver solo proyectos asignados'],
+            ['name' => 'Crear Proyecto', 'slug' => 'projects.create', 'description' => 'Crear nuevos proyectos'],
+            ['name' => 'Editar Proyecto', 'slug' => 'projects.edit', 'description' => 'Editar proyectos'],
+            ['name' => 'Eliminar Proyecto', 'slug' => 'projects.delete', 'description' => 'Eliminar proyectos'],
+
+            // Permisos de Beneficiarios
+            ['name' => 'Ver Beneficiarios', 'slug' => 'beneficiaries.view', 'description' => 'Ver todos los beneficiarios'],
+            ['name' => 'Ver Beneficiarios Propios', 'slug' => 'beneficiaries.view.own', 'description' => 'Ver solo beneficiarios del proyecto asignado'],
+            ['name' => 'Crear Beneficiario', 'slug' => 'beneficiaries.create', 'description' => 'Crear nuevos beneficiarios'],
+            ['name' => 'Editar Beneficiario', 'slug' => 'beneficiaries.edit', 'description' => 'Editar información de beneficiarios'],
+            ['name' => 'Eliminar Beneficiario', 'slug' => 'beneficiaries.delete', 'description' => 'Eliminar beneficiarios'],
+
+            // Permisos de Ubicaciones
+            ['name' => 'Ver Ubicaciones', 'slug' => 'locations.view', 'description' => 'Ver ubicaciones'],
+            ['name' => 'Crear Ubicación', 'slug' => 'locations.create', 'description' => 'Crear nuevas ubicaciones'],
+            ['name' => 'Editar Ubicación', 'slug' => 'locations.edit', 'description' => 'Editar ubicaciones'],
+            ['name' => 'Eliminar Ubicación', 'slug' => 'locations.delete', 'description' => 'Eliminar ubicaciones'],
+
+            // Permisos de Patrocinadores
+            ['name' => 'Ver Patrocinadores', 'slug' => 'sponsors.view', 'description' => 'Ver patrocinadores'],
+            ['name' => 'Crear Patrocinador', 'slug' => 'sponsors.create', 'description' => 'Crear nuevos patrocinadores'],
+            ['name' => 'Editar Patrocinador', 'slug' => 'sponsors.edit', 'description' => 'Editar patrocinadores'],
+            ['name' => 'Eliminar Patrocinador', 'slug' => 'sponsors.delete', 'description' => 'Eliminar patrocinadores'],
+
+            // Permisos de Eventos
+            ['name' => 'Ver Eventos', 'slug' => 'events.view', 'description' => 'Ver eventos'],
+            ['name' => 'Crear Evento', 'slug' => 'events.create', 'description' => 'Crear nuevos eventos'],
+            ['name' => 'Editar Evento', 'slug' => 'events.edit', 'description' => 'Editar eventos'],
+            ['name' => 'Eliminar Evento', 'slug' => 'events.delete', 'description' => 'Eliminar eventos'],
+
+            // Permisos de Donaciones
+            ['name' => 'Ver Donaciones', 'slug' => 'donations.view', 'description' => 'Ver donaciones'],
+            ['name' => 'Crear Donación', 'slug' => 'donations.create', 'description' => 'Registrar nuevas donaciones'],
+            ['name' => 'Editar Donación', 'slug' => 'donations.edit', 'description' => 'Editar donaciones'],
+            ['name' => 'Eliminar Donación', 'slug' => 'donations.delete', 'description' => 'Eliminar donaciones'],
+
+            // Permisos de Reportes
+            ['name' => 'Ver Reportes', 'slug' => 'reports.view', 'description' => 'Ver reportes'],
+            ['name' => 'Exportar Reportes', 'slug' => 'reports.export', 'description' => 'Exportar reportes a diferentes formatos'],
+            ['name' => 'Ver Estadísticas', 'slug' => 'reports.statistics', 'description' => 'Ver estadísticas e indicadores'],
+
+            // Permisos de Perfil
+            ['name' => 'Ver Perfil Propio', 'slug' => 'profile.view.own', 'description' => 'Ver perfil personal'],
+            ['name' => 'Editar Perfil Propio', 'slug' => 'profile.edit.own', 'description' => 'Editar perfil personal'],
+
+            // Permisos de Beneficios
+            ['name' => 'Ver Beneficios Propios', 'slug' => 'benefits.view.own', 'description' => 'Ver beneficios personales'],
+        ];
+
+        foreach ($permissions as $permission) {
+            Permission::updateOrCreate(
+                ['slug' => $permission['slug']],
+                $permission
+            );
+        }
+    }
+
+    /**
+     * Asignar permisos a roles
+     */
     private function assignPermissionsToRoles(): void
     {
-        // Super Administrador - TODOS los permisos
+        // SUPER ADMINISTRADOR - Todos los permisos
         $superAdmin = Role::where('slug', 'super-admin')->first();
         if ($superAdmin) {
             $allPermissions = Permission::all();
             $superAdmin->permissions()->sync($allPermissions->pluck('id'));
         }
 
-        // Administrador - todos los permisos EXCEPTO gestión de roles
+        // ADMINISTRADOR - Todos los permisos excepto eliminar usuarios
         $admin = Role::where('slug', 'admin')->first();
         if ($admin) {
             $adminPermissions = Permission::whereNotIn('slug', [
-                // Excluir solo gestión de roles si existe ese permiso
+                'users.delete', // No puede eliminar usuarios
             ])->get();
             $admin->permissions()->sync($adminPermissions->pluck('id'));
         }
 
-        // Coordinador de Proyectos - permisos de proyectos, beneficiarios, ubicaciones y EVENTOS
+        // COORDINADOR DE PROYECTOS
         $projectCoordinator = Role::where('slug', 'project-coordinator')->first();
         if ($projectCoordinator) {
             $projectCoordinatorPermissions = Permission::whereIn('slug', [
+                // Usuarios - Solo ver
                 'users.view',
+                
+                // Proyectos - Ver, crear, editar (propios)
                 'projects.view',
                 'projects.create',
                 'projects.edit',
+                
+                // Beneficiarios - Ver, crear, editar propios
                 'beneficiaries.view',
                 'beneficiaries.create',
                 'beneficiaries.edit',
+                
+                // Ubicaciones - Ver, crear, editar
                 'locations.view',
                 'locations.create',
                 'locations.edit',
+                
+                // Patrocinadores - Ver, crear, editar
                 'sponsors.view',
                 'sponsors.create',
                 'sponsors.edit',
+                
+                // Reportes - Ver propios
                 'reports.view',
-                // AGREGADOS: Permisos de eventos
-                'events.view',
-                'events.create',
-                'events.edit',
-                'events.delete',
             ])->get();
             $projectCoordinator->permissions()->sync($projectCoordinatorPermissions->pluck('id'));
         }
 
-        // Coordinador de Beneficiarios - permisos de beneficiarios y EVENTOS (lectura)
+        // COORDINADOR DE BENEFICIARIOS
         $beneficiaryCoordinator = Role::where('slug', 'beneficiary-coordinator')->first();
         if ($beneficiaryCoordinator) {
             $beneficiaryCoordinatorPermissions = Permission::whereIn('slug', [
+                // Usuarios - Solo ver
                 'users.view',
+                
+                // Proyectos - Solo ver todos
                 'projects.view',
+                
+                // Beneficiarios - Ver, crear, editar, eliminar (todos)
                 'beneficiaries.view',
                 'beneficiaries.create',
                 'beneficiaries.edit',
                 'beneficiaries.delete',
+                
+                // Ubicaciones - Solo ver
                 'locations.view',
+                
+                // Reportes - Ver
                 'reports.view',
-                // AGREGADOS: Permisos de eventos (lectura)
-                'events.view',
             ])->get();
             $beneficiaryCoordinator->permissions()->sync($beneficiaryCoordinatorPermissions->pluck('id'));
         }
 
-        // Voluntario - permisos básicos de solo lectura + EVENTOS
+        // VOLUNTARIO - Solo lectura limitada
         $volunteer = Role::where('slug', 'volunteer')->first();
         if ($volunteer) {
             $volunteerPermissions = Permission::whereIn('slug', [
-                'projects.view',
-                'beneficiaries.view',
+                // Proyectos - Ver asignados
+                'projects.view.own',
+                
+                // Beneficiarios - Ver asignados
+                'beneficiaries.view.own',
+                
+                // Ubicaciones - Solo ver
                 'locations.view',
-                'sponsors.view',
-                // AGREGADOS: Permisos de eventos (lectura)
+                
+                // Eventos - Solo ver
                 'events.view',
             ])->get();
             $volunteer->permissions()->sync($volunteerPermissions->pluck('id'));
         }
 
-        // Consultor - permisos de solo lectura + EVENTOS
+        // CONSULTOR - Solo lectura
         $consultant = Role::where('slug', 'consultant')->first();
         if ($consultant) {
             $consultantPermissions = Permission::whereIn('slug', [
+                // Usuarios - Solo ver
                 'users.view',
+                
+                // Proyectos - Ver todos
                 'projects.view',
+                
+                // Beneficiarios - Ver todos
                 'beneficiaries.view',
+                
+                // Ubicaciones - Solo ver
                 'locations.view',
+                
+                // Patrocinadores - Solo ver
                 'sponsors.view',
+                
+                // Reportes - Ver y exportar
                 'reports.view',
-                // AGREGADOS: Permisos de eventos (lectura)
-                'events.view',
+                'reports.export',
+                'reports.statistics',
             ])->get();
             $consultant->permissions()->sync($consultantPermissions->pluck('id'));
         }
 
-        // Donante - permisos muy limitados + EVENTOS
+        // DONANTE - Acceso muy limitado
         $donor = Role::where('slug', 'donor')->first();
         if ($donor) {
             $donorPermissions = Permission::whereIn('slug', [
+                // Proyectos - Ver (donde tiene donaciones)
                 'projects.view',
+                
+                // Patrocinadores - Ver
                 'sponsors.view',
+                
+                // Reportes - Ver y exportar
                 'reports.view',
-                // AGREGADOS: Permisos de eventos (lectura)
-                'events.view',
+                'reports.export',
+                'reports.statistics',
             ])->get();
             $donor->permissions()->sync($donorPermissions->pluck('id'));
         }
 
-        // Beneficiario - solo acceso a sus propios datos
+        // BENEFICIARIO - Solo acceso a datos personales
         $beneficiary = Role::where('slug', 'beneficiary')->first();
         if ($beneficiary) {
             $beneficiaryPermissions = Permission::whereIn('slug', [
+                // Perfil - Ver y editar propio
                 'profile.view.own',
                 'profile.edit.own',
+                
+                // Proyectos - Ver asignado
                 'projects.view.own',
+                
+                // Beneficios - Ver propios
                 'benefits.view.own',
-                // AGREGADOS: Permisos de eventos (lectura)
-                'events.view',
             ])->get();
             $beneficiary->permissions()->sync($beneficiaryPermissions->pluck('id'));
         }

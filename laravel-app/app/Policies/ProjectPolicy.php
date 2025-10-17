@@ -17,9 +17,14 @@ class ProjectPolicy
             return true;
         }
 
-        // Coordinadores, consultores, donantes y voluntarios pueden ver proyectos
-        if ($user->hasAnyRole(['project-coordinator', 'beneficiary-coordinator', 'consultant', 'donor', 'volunteer'])) {
+        // Project coordinator, beneficiary coordinator, consultant y donor necesitan permiso
+        if ($user->hasAnyRole(['project-coordinator', 'beneficiary-coordinator', 'consultant', 'donor'])) {
             return $user->hasPermission('projects.view');
+        }
+
+        // Volunteer solo ve proyectos asignados
+        if ($user->hasRole('volunteer')) {
+            return $user->hasPermission('projects.view.own');
         }
 
         // Beneficiarios solo pueden ver proyectos asignados
@@ -45,12 +50,29 @@ class ProjectPolicy
             return true;
         }
 
-        // Coordinador de proyecto solo ve proyectos asignados
+        // Project coordinator - solo ve proyectos asignados o donde es responsable
         if ($user->hasRole('project-coordinator')) {
             return $user->assignedProjects()->where('projects.id', $project->id)->exists();
         }
 
-        // Voluntario solo ve proyectos asignados
+        // Beneficiary coordinator - puede ver todos
+        if ($user->hasRole('beneficiary-coordinator')) {
+            return $user->hasPermission('projects.view');
+        }
+
+        // Consultant - puede ver todos
+        if ($user->hasRole('consultant')) {
+            return $user->hasPermission('projects.view');
+        }
+
+        // Donor - puede ver proyectos donde tiene donaciones
+        if ($user->hasRole('donor')) {
+            // Aquí puedes agregar lógica para verificar si el donante tiene donaciones en este proyecto
+            // Por ahora, permitimos que vea todos si tiene el permiso
+            return $user->hasPermission('projects.view');
+        }
+
+        // Volunteer - solo ve proyectos asignados
         if ($user->hasRole('volunteer')) {
             return $user->assignedProjects()->where('projects.id', $project->id)->exists();
         }
@@ -59,11 +81,6 @@ class ProjectPolicy
         if ($user->hasRole('beneficiary')) {
             $beneficiary = $user->beneficiary;
             return $beneficiary && $beneficiary->project_id === $project->id;
-        }
-
-        // Consultores, donantes y coordinadores de beneficiarios pueden ver todos con permiso
-        if ($user->hasAnyRole(['beneficiary-coordinator', 'consultant', 'donor'])) {
-            return $user->hasPermission('projects.view');
         }
 
         return false;
@@ -82,7 +99,7 @@ class ProjectPolicy
      */
     public function update(User $user, Project $project): bool
     {
-        // Super admin puede editar todos sin necesidad de permiso explícito
+        // Super admin puede editar todos
         if ($user->hasRole('super-admin')) {
             return true;
         }
@@ -97,12 +114,13 @@ class ProjectPolicy
             return true;
         }
 
-        // Coordinador solo puede editar SUS proyectos asignados
+        // Project coordinator - solo edita sus proyectos asignados
         if ($user->hasRole('project-coordinator')) {
             return $user->assignedProjects()->where('projects.id', $project->id)->exists() 
                    && $user->hasPermission('projects.edit');
         }
 
+        // Otros roles no pueden editar
         return false;
     }
 
@@ -111,9 +129,9 @@ class ProjectPolicy
      */
     public function delete(User $user, Project $project): bool
     {
-        // Solo super admin puede eliminar sin permiso explícito
+        // Super admin puede eliminar
         if ($user->hasRole('super-admin')) {
-            return true;
+            return $user->hasPermission('projects.delete');
         }
 
         // Admin puede eliminar si tiene el permiso
@@ -121,6 +139,7 @@ class ProjectPolicy
             return $user->hasPermission('projects.delete');
         }
 
+        // Otros roles no pueden eliminar
         return false;
     }
 
@@ -134,7 +153,7 @@ class ProjectPolicy
             return $query;
         }
 
-        // Coordinador de proyecto solo ve proyectos asignados o donde es responsable
+        // Project coordinator - solo ve proyectos asignados o donde es responsable
         if ($user->hasRole('project-coordinator')) {
             return $query->where(function($q) use ($user) {
                 $q->where('responsable_id', $user->id)
@@ -142,7 +161,12 @@ class ProjectPolicy
             });
         }
 
-        // Voluntario solo ve proyectos asignados
+        // Beneficiary coordinator, consultant y donor - ven todos
+        if ($user->hasAnyRole(['beneficiary-coordinator', 'consultant', 'donor'])) {
+            return $query;
+        }
+
+        // Volunteer - solo ve proyectos asignados
         if ($user->hasRole('volunteer')) {
             return $query->whereIn('id', $user->assignedProjects()->pluck('projects.id'));
         }
@@ -154,11 +178,6 @@ class ProjectPolicy
                 return $query->where('id', $beneficiary->project_id);
             }
             return $query->whereRaw('1 = 0');
-        }
-
-        // Consultores, donantes y coordinadores de beneficiarios ven todos
-        if ($user->hasAnyRole(['beneficiary-coordinator', 'consultant', 'donor'])) {
-            return $query;
         }
 
         // Por defecto, no retorna nada
