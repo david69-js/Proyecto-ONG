@@ -34,7 +34,7 @@ class RolePermissionSeeder extends Seeder
             $admin->permissions()->sync($adminPermissions->pluck('id'));
         }
 
-        // Coordinador de Proyectos - permisos de proyectos, beneficiarios y ubicaciones
+        // Coordinador de Proyectos - permisos de proyectos, beneficiarios, ubicaciones y EVENTOS
         $projectCoordinator = Role::where('slug', 'project-coordinator')->first();
         if ($projectCoordinator) {
             $projectCoordinatorPermissions = Permission::whereIn('slug', [
@@ -52,11 +52,16 @@ class RolePermissionSeeder extends Seeder
                 'sponsors.create',
                 'sponsors.edit',
                 'reports.view',
+                // AGREGADOS: Permisos de eventos
+                'events.view',
+                'events.create',
+                'events.edit',
+                'events.delete',
             ])->get();
             $projectCoordinator->permissions()->sync($projectCoordinatorPermissions->pluck('id'));
         }
 
-        // Coordinador de Beneficiarios - permisos de beneficiarios
+        // Coordinador de Beneficiarios - permisos de beneficiarios y EVENTOS (lectura)
         $beneficiaryCoordinator = Role::where('slug', 'beneficiary-coordinator')->first();
         if ($beneficiaryCoordinator) {
             $beneficiaryCoordinatorPermissions = Permission::whereIn('slug', [
@@ -68,11 +73,13 @@ class RolePermissionSeeder extends Seeder
                 'beneficiaries.delete',
                 'locations.view',
                 'reports.view',
+                // AGREGADOS: Permisos de eventos (lectura)
+                'events.view',
             ])->get();
             $beneficiaryCoordinator->permissions()->sync($beneficiaryCoordinatorPermissions->pluck('id'));
         }
 
-        // Voluntario - permisos básicos de solo lectura
+        // Voluntario - permisos básicos de solo lectura + EVENTOS
         $volunteer = Role::where('slug', 'volunteer')->first();
         if ($volunteer) {
             $volunteerPermissions = Permission::whereIn('slug', [
@@ -80,11 +87,13 @@ class RolePermissionSeeder extends Seeder
                 'beneficiaries.view',
                 'locations.view',
                 'sponsors.view',
+                // AGREGADOS: Permisos de eventos (lectura)
+                'events.view',
             ])->get();
             $volunteer->permissions()->sync($volunteerPermissions->pluck('id'));
         }
 
-        // Consultor - permisos de solo lectura
+        // Consultor - permisos de solo lectura + EVENTOS
         $consultant = Role::where('slug', 'consultant')->first();
         if ($consultant) {
             $consultantPermissions = Permission::whereIn('slug', [
@@ -94,17 +103,21 @@ class RolePermissionSeeder extends Seeder
                 'locations.view',
                 'sponsors.view',
                 'reports.view',
+                // AGREGADOS: Permisos de eventos (lectura)
+                'events.view',
             ])->get();
             $consultant->permissions()->sync($consultantPermissions->pluck('id'));
         }
 
-        // Donante - permisos muy limitados
+        // Donante - permisos muy limitados + EVENTOS
         $donor = Role::where('slug', 'donor')->first();
         if ($donor) {
             $donorPermissions = Permission::whereIn('slug', [
                 'projects.view',
                 'sponsors.view',
                 'reports.view',
+                // AGREGADOS: Permisos de eventos (lectura)
+                'events.view',
             ])->get();
             $donor->permissions()->sync($donorPermissions->pluck('id'));
         }
@@ -117,6 +130,8 @@ class RolePermissionSeeder extends Seeder
                 'profile.edit.own',
                 'projects.view.own',
                 'benefits.view.own',
+                // AGREGADOS: Permisos de eventos (lectura)
+                'events.view',
             ])->get();
             $beneficiary->permissions()->sync($beneficiaryPermissions->pluck('id'));
         }

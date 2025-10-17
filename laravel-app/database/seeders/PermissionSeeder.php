@@ -147,6 +147,36 @@ class PermissionSeeder extends Seeder
                 'is_active' => true,
             ],
 
+            // Eventos (CONSOLIDADO AQUÍ)
+            [
+                'name' => 'Ver Eventos',
+                'slug' => 'events.view',
+                'description' => 'Puede ver la lista de eventos',
+                'module' => 'events',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Crear Eventos',
+                'slug' => 'events.create',
+                'description' => 'Puede crear nuevos eventos',
+                'module' => 'events',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Editar Eventos',
+                'slug' => 'events.edit',
+                'description' => 'Puede editar eventos existentes',
+                'module' => 'events',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Eliminar Eventos',
+                'slug' => 'events.delete',
+                'description' => 'Puede eliminar eventos',
+                'module' => 'events',
+                'is_active' => true,
+            ],
+
             // Roles y Permisos
             [
                 'name' => 'Gestionar Roles',
@@ -195,7 +225,7 @@ class PermissionSeeder extends Seeder
                 'is_active' => true,
             ],
 
-            // Permisos específicos para beneficiarios
+            // Permisos específicos para perfil y beneficiarios
             [
                 'name' => 'Ver Perfil Propio',
                 'slug' => 'profile.view.own',

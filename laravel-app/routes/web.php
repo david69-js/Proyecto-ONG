@@ -112,10 +112,10 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/{sponsor}/toggle-status', [SponsorController::class, 'toggleStatus'])->name('toggle-status')->middleware('permission:sponsors.edit');
     });
 
-    // ============================================
+  // ============================================
     // Events Management Routes
     // ============================================
-    Route::prefix('events')->name('events.')->middleware('permission:events.view')->group(function () {
+    Route::prefix('events')->name('events.')->middleware('any.permission:events.view')->group(function () {
         Route::get('/', [EventController::class, 'index'])->name('index');
         Route::get('/create', [EventController::class, 'create'])->name('create')->middleware('permission:events.create');
         Route::post('/', [EventController::class, 'store'])->name('store')->middleware('permission:events.create');
