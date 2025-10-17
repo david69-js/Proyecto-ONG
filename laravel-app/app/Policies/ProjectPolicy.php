@@ -19,7 +19,7 @@ class ProjectPolicy
 
         // Coordinadores, consultores, donantes y voluntarios pueden ver proyectos
         if ($user->hasAnyRole(['project-coordinator', 'beneficiary-coordinator', 'consultant', 'donor', 'volunteer'])) {
-            return $user->hasAnyPermission(['projects.view', 'projects.view.own']);
+            return $user->hasPermission('projects.view');
         }
 
         // Beneficiarios solo pueden ver proyectos asignados
@@ -50,7 +50,7 @@ class ProjectPolicy
             return $user->assignedProjects()->where('projects.id', $project->id)->exists();
         }
 
-        // Voluntario/Staff solo ve proyectos asignados
+        // Voluntario solo ve proyectos asignados
         if ($user->hasRole('volunteer')) {
             return $user->assignedProjects()->where('projects.id', $project->id)->exists();
         }
@@ -61,7 +61,7 @@ class ProjectPolicy
             return $beneficiary && $beneficiary->project_id === $project->id;
         }
 
-        // Consultores y coordinadores de beneficiarios pueden ver todos con permiso
+        // Consultores, donantes y coordinadores de beneficiarios pueden ver todos con permiso
         if ($user->hasAnyRole(['beneficiary-coordinator', 'consultant', 'donor'])) {
             return $user->hasPermission('projects.view');
         }
@@ -82,9 +82,14 @@ class ProjectPolicy
      */
     public function update(User $user, Project $project): bool
     {
-        // Super admin puede editar todos
+        // Super admin puede editar todos sin necesidad de permiso explícito
         if ($user->hasRole('super-admin')) {
             return true;
+        }
+
+        // Admin puede editar si tiene el permiso
+        if ($user->hasRole('admin')) {
+            return $user->hasPermission('projects.edit');
         }
 
         // El responsable del proyecto puede editarlo si tiene el permiso
@@ -98,11 +103,6 @@ class ProjectPolicy
                    && $user->hasPermission('projects.edit');
         }
 
-        // Admin puede editar si tiene el permiso
-        if ($user->hasRole('admin')) {
-            return $user->hasPermission('projects.edit');
-        }
-
         return false;
     }
 
@@ -111,8 +111,13 @@ class ProjectPolicy
      */
     public function delete(User $user, Project $project): bool
     {
-        // Solo super admin y admin pueden eliminar
-        if ($user->hasAnyRole(['super-admin', 'admin'])) {
+        // Solo super admin puede eliminar sin permiso explícito
+        if ($user->hasRole('super-admin')) {
+            return true;
+        }
+
+        // Admin puede eliminar si tiene el permiso
+        if ($user->hasRole('admin')) {
             return $user->hasPermission('projects.delete');
         }
 
@@ -148,7 +153,7 @@ class ProjectPolicy
             if ($beneficiary) {
                 return $query->where('id', $beneficiary->project_id);
             }
-            return $query->whereRaw('1 = 0'); // No retorna nada si no tiene beneficiario
+            return $query->whereRaw('1 = 0');
         }
 
         // Consultores, donantes y coordinadores de beneficiarios ven todos
@@ -156,7 +161,7 @@ class ProjectPolicy
             return $query;
         }
 
-        // Por defecto, filtrar por responsable
-        return $query->where('responsable_id', $user->id);
+        // Por defecto, no retorna nada
+        return $query->whereRaw('1 = 0');
     }
 }

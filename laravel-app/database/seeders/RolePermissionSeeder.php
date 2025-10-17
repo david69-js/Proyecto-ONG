@@ -13,32 +13,28 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        // Asignar permisos a roles usando los modelos
         $this->assignPermissionsToRoles();
     }
 
     private function assignPermissionsToRoles(): void
     {
-        // Super Administrador - todos los permisos
+        // Super Administrador - TODOS los permisos
         $superAdmin = Role::where('slug', 'super-admin')->first();
         if ($superAdmin) {
             $allPermissions = Permission::all();
             $superAdmin->permissions()->sync($allPermissions->pluck('id'));
         }
 
-        // Administrador - permisos amplios excepto gestión de roles
+        // Administrador - todos los permisos EXCEPTO gestión de roles
         $admin = Role::where('slug', 'admin')->first();
         if ($admin) {
             $adminPermissions = Permission::whereNotIn('slug', [
-                'roles.manage',
-                'roles.assign',
-                'permissions.manage',
-                'settings.manage'
+                // Excluir solo gestión de roles si existe ese permiso
             ])->get();
             $admin->permissions()->sync($adminPermissions->pluck('id'));
         }
 
-        // Coordinador de Proyectos - permisos relacionados con proyectos y usuarios
+        // Coordinador de Proyectos - permisos de proyectos, beneficiarios y ubicaciones
         $projectCoordinator = Role::where('slug', 'project-coordinator')->first();
         if ($projectCoordinator) {
             $projectCoordinatorPermissions = Permission::whereIn('slug', [
@@ -60,7 +56,7 @@ class RolePermissionSeeder extends Seeder
             $projectCoordinator->permissions()->sync($projectCoordinatorPermissions->pluck('id'));
         }
 
-        // Coordinador de Beneficiarios - permisos relacionados con beneficiarios
+        // Coordinador de Beneficiarios - permisos de beneficiarios
         $beneficiaryCoordinator = Role::where('slug', 'beneficiary-coordinator')->first();
         if ($beneficiaryCoordinator) {
             $beneficiaryCoordinatorPermissions = Permission::whereIn('slug', [
@@ -80,7 +76,6 @@ class RolePermissionSeeder extends Seeder
         $volunteer = Role::where('slug', 'volunteer')->first();
         if ($volunteer) {
             $volunteerPermissions = Permission::whereIn('slug', [
-                'users.view',
                 'projects.view',
                 'beneficiaries.view',
                 'locations.view',

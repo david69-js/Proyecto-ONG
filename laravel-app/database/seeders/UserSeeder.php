@@ -48,8 +48,8 @@ class UserSeeder extends Seeder
             ]
         );
 
-        // Asignar rol de Super Admin
-        $superAdminRole = Role::where('slug', 'system-admin')->first();
+        // Asignar rol de Super Admin - CORRECCIÓN: usar 'super-admin' no 'system-admin'
+        $superAdminRole = Role::where('slug', 'super-admin')->first();
         if ($superAdminRole) {
             $superAdmin->roles()->syncWithoutDetaching([$superAdminRole->id]);
         }
@@ -74,7 +74,7 @@ class UserSeeder extends Seeder
             [
                 'date_of_birth' => '1988-05-20',
                 'gender' => 'female',
-                'bio' => 'Coordinadora general de proyectos',
+                'bio' => 'Administrador general del sistema',
                 'address' => 'Avenida Central 456',
                 'city' => 'Ciudad Capital',
                 'state' => 'Estado Principal',
@@ -83,7 +83,8 @@ class UserSeeder extends Seeder
             ]
         );
 
-        $adminRole = Role::where('slug', 'project-coordinator')->first();
+        // CORRECCIÓN: Asignar rol 'admin' correctamente
+        $adminRole = Role::where('slug', 'admin')->first();
         if ($adminRole) {
             $admin->roles()->syncWithoutDetaching([$adminRole->id]);
         }
@@ -222,6 +223,40 @@ class UserSeeder extends Seeder
         $consultantRole = Role::where('slug', 'consultant')->first();
         if ($consultantRole) {
             $consultant->roles()->syncWithoutDetaching([$consultantRole->id]);
+        }
+
+        // Crear Donante
+        $donor = User::updateOrCreate(
+            ['email' => 'donante@ong.com'],
+            [
+                'first_name' => 'Juan',
+                'last_name' => 'Pérez',
+                'email' => 'donante@ong.com',
+                'password' => Hash::make('password123'),
+                'phone' => '+1234567897',
+                'is_active' => true,
+                'is_verified' => true,
+                'email_verified_at' => now(),
+            ]
+        );
+
+        UserProfile::updateOrCreate(
+            ['user_id' => $donor->id],
+            [
+                'date_of_birth' => '1975-02-14',
+                'gender' => 'male',
+                'bio' => 'Donante comprometido con la organización',
+                'address' => 'Residencia Donantes 111',
+                'city' => 'Ciudad Capital',
+                'state' => 'Estado Principal',
+                'postal_code' => '12351',
+                'country' => 'México',
+            ]
+        );
+
+        $donorRole = Role::where('slug', 'donor')->first();
+        if ($donorRole) {
+            $donor->roles()->syncWithoutDetaching([$donorRole->id]);
         }
     }
 }
