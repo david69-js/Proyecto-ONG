@@ -247,6 +247,71 @@ class PermissionSeeder extends Seeder
                 'module' => 'sponsors',
                 'is_active' => true,
             ],
+
+            // Donaciones
+            [
+                'name' => 'Ver Donaciones',
+                'slug' => 'donations.view',
+                'description' => 'Puede ver la lista de donaciones',
+                'module' => 'donations',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Ver Solo Sus Donaciones',
+                'slug' => 'donations.view.own',
+                'description' => 'Puede ver solo sus propias donaciones',
+                'module' => 'donations',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Crear Donaciones',
+                'slug' => 'donations.create',
+                'description' => 'Puede crear nuevas donaciones',
+                'module' => 'donations',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Editar Donaciones',
+                'slug' => 'donations.edit',
+                'description' => 'Puede editar información de donaciones',
+                'module' => 'donations',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Eliminar Donaciones',
+                'slug' => 'donations.delete',
+                'description' => 'Puede eliminar donaciones',
+                'module' => 'donations',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Confirmar Donaciones',
+                'slug' => 'donations.confirm',
+                'description' => 'Puede confirmar donaciones pendientes',
+                'module' => 'donations',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Procesar Donaciones',
+                'slug' => 'donations.process',
+                'description' => 'Puede procesar donaciones confirmadas',
+                'module' => 'donations',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Ver Reportes de Donaciones',
+                'slug' => 'donations.reports',
+                'description' => 'Puede ver reportes y estadísticas de donaciones',
+                'module' => 'donations',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Exportar Donaciones',
+                'slug' => 'donations.export',
+                'description' => 'Puede exportar datos de donaciones',
+                'module' => 'donations',
+                'is_active' => true,
+            ],
         ];
 
         foreach ($permissions as $permission) {

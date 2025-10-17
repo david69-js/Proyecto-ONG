@@ -7,6 +7,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\BeneficiaryController;
 use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\DonationController;
 use App\Http\Controllers\AboutSectionController;
 
 
@@ -128,6 +129,29 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/{event}/register', [EventController::class, 'register'])->name('register');
         Route::patch('/registrations/{registration}/status', [EventController::class, 'updateRegistrationStatus'])->name('registration.status')->middleware('permission:events.edit');
         Route::delete('/registrations/{registration}', [EventController::class, 'deleteRegistration'])->name('registration.delete')->middleware('permission:events.edit');
+    });
+
+    // ============================================
+    // Donations Management Routes
+    // ============================================
+    Route::prefix('donations')->name('donations.')->middleware('any.permission:donations.view,donations.view.own')->group(function () {
+        Route::get('/', [DonationController::class, 'index'])->name('index');
+        Route::get('/create', [DonationController::class, 'create'])->name('create')->middleware('permission:donations.create');
+        Route::post('/', [DonationController::class, 'store'])->name('store')->middleware('permission:donations.create');
+        Route::get('/{donation}', [DonationController::class, 'show'])->name('show');
+        Route::get('/{donation}/edit', [DonationController::class, 'edit'])->name('edit')->middleware('any.permission:donations.edit,donations.view.own');
+        Route::put('/{donation}', [DonationController::class, 'update'])->name('update')->middleware('any.permission:donations.edit,donations.view.own');
+        Route::delete('/{donation}', [DonationController::class, 'destroy'])->name('destroy')->middleware('any.permission:donations.delete,donations.view.own');
+        
+        // Acciones específicas de donaciones
+        Route::patch('/{donation}/confirm', [DonationController::class, 'confirm'])->name('confirm')->middleware('permission:donations.confirm');
+        Route::patch('/{donation}/process', [DonationController::class, 'process'])->name('process')->middleware('permission:donations.process');
+        Route::patch('/{donation}/reject', [DonationController::class, 'reject'])->name('reject')->middleware('permission:donations.edit');
+        Route::patch('/{donation}/cancel', [DonationController::class, 'cancel'])->name('cancel')->middleware('any.permission:donations.edit,donations.view.own');
+        
+        // Reportes y exportación
+        Route::get('/reports/statistics', [DonationController::class, 'reports'])->name('reports')->middleware('permission:donations.reports');
+        Route::get('/export/data', [DonationController::class, 'export'])->name('export')->middleware('permission:donations.export');
     });
 });
 
