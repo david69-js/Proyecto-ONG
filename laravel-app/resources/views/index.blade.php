@@ -8,64 +8,93 @@
     use App\Models\AboutSection;
     $about = AboutSection::first();
 @endphp
-
+  @php
+    use App\Models\HeroSection;
+    $hero = HeroSection::first();
+@endphp 
+ @php
+    use App\Models\Project; // 
+    $projects = Project::all(); 
+@endphp
 
 
     <!-- Sección Hero -->
-    <section id="hero" class="hero section">
+<section id="hero" class="hero section">
 
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
 
-        <div class="row align-items-center">
-          <div class="col-lg-6">
-            <div class="hero-content" data-aos="fade-right" data-aos-delay="200">
-              <span class="subtitle">Construyendo esperanza</span>
-              <h1>Juntos construimos hogares, comunidades y futuro</h1>
-              <p>Trabajamos cada día para mejorar la calidad de vida de las familias guatemaltecas, construyendo viviendas seguras, sostenibles y dignas. Creemos que todos merecen un lugar al que llamar hogar.</p>
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <div class="hero-content" data-aos="fade-right" data-aos-delay="200">
+          
+          <!-- Subtítulo -->
+          <span class="subtitle">{{ $hero->subtitle ?? 'Construyendo esperanza' }}</span>
+          
+          <!-- Título principal -->
+          <h1>{{ $hero->title ?? 'Juntos construimos hogares, comunidades y futuro' }}</h1>
+          
+          <!-- Descripción -->
+          <p>{{ $hero->description ?? 'Trabajamos cada día para mejorar la calidad de vida de las familias guatemaltecas, construyendo viviendas seguras, sostenibles y dignas. Creemos que todos merecen un lugar al que llamar hogar.' }}</p>
 
-              <div class="hero-buttons">
-                <a href="#" class="btn-primary">Haz tu donación</a>
-                <a href="#" class="btn-secondary">Conoce nuestros proyectos</a>
+          <!-- Botones -->
+          <div class="hero-buttons">
+            <a href="{{ $hero->button_primary_link ?? '#' }}" class="btn-primary">
+              {{ $hero->button_primary_text ?? 'Haz tu donación' }}
+            </a>
+            <a href="{{ $hero->button_secondary_link ?? '#' }}" class="btn-secondary">
+              {{ $hero->button_secondary_text ?? 'Conoce nuestros proyectos' }}
+            </a>
+          </div>
+
+          <!-- Logros numéricos -->
+          <div class="trust-badges">
+            <div class="badge-item">
+              <i class="bi bi-people"></i>
+              <div class="badge-text">
+                <span class="count">{{ $hero->anios_servicio ?? '25+' }}</span>
+                <span class="label">Años de servicio</span>
               </div>
-
-              <div class="trust-badges">
-                <div class="badge-item">
-                  <i class="bi bi-people"></i>
-                  <div class="badge-text">
-                    <span class="count">25+</span>
-                    <span class="label">Años de servicio</span>
-                  </div>
-                </div>
-                <div class="badge-item">
-                  <i class="bi bi-house-heart"></i>
-                  <div class="badge-text">
-                    <span class="count">500+</span>
-                    <span class="label">Viviendas construidas</span>
-                  </div>
-                </div>
-                <div class="badge-item">
-                  <i class="bi bi-person-hearts"></i>
-                  <div class="badge-text">
-                    <span class="count">300+</span>
-                    <span class="label">Familias beneficiadas</span>
-                  </div>
-                </div>
+            </div>
+            <div class="badge-item">
+              <i class="bi bi-house-heart"></i>
+              <div class="badge-text">
+                <span class="count">{{ $hero->viviendas_construidas ?? '500+' }}</span>
+                <span class="label">Viviendas construidas</span>
+              </div>
+            </div>
+            <div class="badge-item">
+              <i class="bi bi-person-hearts"></i>
+              <div class="badge-text">
+                <span class="count">{{ $hero->familias_beneficiadas ?? '300+' }}</span>
+                <span class="label">Familias beneficiadas</span>
               </div>
             </div>
           </div>
 
-          <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
-            <div class="hero-image">
-              <img src="assets/img/construction/showcase-3.webp" alt="Voluntarios construyendo" class="img-fluid">
-              <div class="image-badge">
-                <span>Organización sin fines de lucro</span>
-                <p>Comprometidos con Guatemala</p>
-              </div>
-            </div>
-          </div>
         </div>
-
       </div>
+
+      <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
+        <div class="hero-image">
+          
+          <!-- Imagen principal -->
+          <img src="{{ $hero->image_main ? asset('storage/'.$hero->image_main) : asset('assets/img/construction/showcase-3.webp') }}" 
+               alt="Voluntarios construyendo" class="img-fluid">
+
+          <!-- Badge de la imagen -->
+          <div class="image-badge">
+            <span>{{ $hero->image_badge_text ?? 'Organización sin fines de lucro' }}</span>
+            <p>{{ $hero->image_badge_subtext ?? 'Comprometidos con Guatemala' }}</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
 
     </section><!-- /Sección Hero -->
 
@@ -166,76 +195,50 @@
 </section>
 <!-- /Sección Sobre Nosotros -->
 
-    <!-- Sección de Programas -->
-    <section id="services" class="services section">
+   <!-- Sección de Eventos/Publicados -->
+<section id="services" class="services section">
 
-      <!-- Título de sección -->
-      <div class="container section-title">
-        <h2>Programas y Proyectos</h2>
-        <p>Conoce las diferentes áreas en las que trabajamos para transformar vidas y comunidades</p>
-      </div><!-- Fin Título -->
+  <!-- Título de sección -->
+  <div class="container section-title">
+    <h2>Eventos</h2>
+    <p>Conoce los eventos que tenemos disponibles y participa activamente en nuestras actividades</p>
+  </div><!-- Fin Título -->
 
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
 
-        <div class="row gy-4">
-          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
-            <div class="service-card">
-              <div class="service-icon">
-                <i class="bi bi-house-heart"></i>
-              </div>
-              <h3>Construcción de Viviendas</h3>
-              <p>Apoyamos a familias en situación vulnerable para que puedan acceder a una vivienda segura y digna.</p>
-              <div class="service-features">
-                <span><i class="bi bi-check-circle"></i> Viviendas nuevas</span>
-                <span><i class="bi bi-check-circle"></i> Mejoras habitacionales</span>
-                <span><i class="bi bi-check-circle"></i> Asesoría técnica</span>
-              </div>
-              <a href="service-details.html" class="service-link">Ver más <i class="bi bi-arrow-right"></i></a>
+    <div class="row gy-4">
+      @forelse(\App\Models\Event::published()->get() as $event)
+        <div class="col-lg-4" data-aos="fade-up" data-aos-delay="{{ 200 + $loop->index * 100 }}">
+          <div class="service-card {{ $event->featured ? 'featured' : '' }}">
+            @if($event->featured)
+              <div class="service-badge">Destacado</div>
+            @endif
+            <div class="service-icon">
+              <i class="bi bi-calendar-event"></i>
             </div>
-          </div><!-- Fin Programa -->
-
-          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
-            <div class="service-card featured">
-              <div class="service-badge">Más Popular</div>
-              <div class="service-icon">
-                <i class="bi bi-people"></i>
-              </div>
-              <h3>Voluntariado</h3>
-              <p>Únete a nuestros equipos de voluntarios locales e internacionales y sé parte del cambio.</p>
-              <div class="service-features">
-                <span><i class="bi bi-check-circle"></i> Brigadas comunitarias</span>
-                <span><i class="bi bi-check-circle"></i> Voluntariado internacional</span>
-                <span><i class="bi bi-check-circle"></i> Programas estudiantiles</span>
-              </div>
-              <a href="service-details.html" class="service-link">Participa <i class="bi bi-arrow-right"></i></a>
+            <h3>{{ $event->title }}</h3>
+            <p>{{ Str::limit($event->description, 100) }}</p>
+            <div class="service-features">
+              <span><i class="bi bi-geo-alt"></i> {{ $event->location ?? 'Sin ubicación' }}</span>
+              @if($event->start_date)
+                <span><i class="bi bi-clock"></i> {{ $event->start_date->format('d/m/Y H:i') }}</span>
+              @endif
+              @if($event->end_date)
+                <span><i class="bi bi-clock-history"></i> {{ $event->end_date->format('d/m/Y H:i') }}</span>
+              @endif
             </div>
-          </div><!-- Fin Programa -->
-
-          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="400">
-            <div class="service-card">
-              <div class="service-icon">
-                <i class="bi bi-heart-pulse"></i>
-              </div>
-              <h3>Educación y Desarrollo</h3>
-              <p>Promovemos el desarrollo integral a través de talleres, educación financiera y capacitación técnica.</p>
-              <div class="service-features">
-                <span><i class="bi bi-check-circle"></i> Educación comunitaria</span>
-                <span><i class="bi bi-check-circle"></i> Formación en liderazgo</span>
-                <span><i class="bi bi-check-circle"></i> Programas sostenibles</span>
-              </div>
-              <a href="service-details.html" class="service-link">Ver más <i class="bi bi-arrow-right"></i></a>
-            </div>
-          </div><!-- Fin Programa -->
+            <a href="{{ route('events.show', $event) }}" class="service-link">
+              Ver más <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
         </div>
+      @empty
+        <p class="text-muted">No hay eventos publicados actualmente.</p>
+      @endforelse
+    </div>
 
-        <div class="cta-container text-center mt-5" data-aos="fade-up" data-aos-delay="300">
-          <h3>¿Quieres ayudar a construir un futuro mejor?</h3>
-          <p>Con tu apoyo podemos seguir transformando vidas y comunidades.</p>
-          <a href="#" class="btn btn-cta">Haz tu donación</a>
-        </div>
-
-      </div>
-    </section><!-- /Sección de Programas -->
+  </div>
+</section><!-- /Sección de Eventos -->
 
   </main>
 </body>
@@ -243,258 +246,78 @@
 <!-- /APARTADO1 -->
 </section><!-- /Servicios Section -->
 
+
 <!-- Sección de Proyectos -->
 <section id="projects" class="projects section">
-
-  <!-- Título de la Sección -->
   <div class="container section-title">
     <h2>Proyectos</h2>
     <p>Transformamos vidas a través de la construcción de viviendas seguras y comunidades sostenibles.</p>
-  </div><!-- Fin del título de la sección -->
-
-  <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-    <div class="projects-grid">
-
-      <div class="project-item" data-aos="zoom-in" data-aos-delay="100">
-        <div class="project-content">
-          <div class="project-header">
-            <span class="project-category">Vivienda Familiar</span>
-            <span class="project-status completed">Completado</span>
-          </div>
-          <h3 class="project-title">Comunidad Esperanza</h3>
-          <div class="project-details">
-            <div class="project-info">
-              <p>Construcción de viviendas dignas para familias de escasos recursos, con enfoque en desarrollo comunitario y sostenibilidad.</p>
-              <div class="project-specs">
-                <span class="spec-item">
-                  <i class="bi bi-house"></i>
-                  50 Viviendas
-                </span>
-                <span class="spec-item">
-                  <i class="bi bi-calendar-check"></i>
-                  18 Meses
-                </span>
-              </div>
-            </div>
-            <div class="project-location">
-              <i class="bi bi-geo-alt-fill"></i>
-              <span>Chimaltenango, Guatemala</span>
-            </div>
-          </div>
-          <a href="project-details.html" class="project-link">
-            <span>Ver Proyecto</span>
-            <i class="bi bi-arrow-right"></i>
-          </a>
-        </div>
-        <div class="project-visual">
-          <img src="assets/img/construction/project-2.webp" alt="Comunidad Esperanza" class="img-fluid">
-          <div class="project-badge">
-            <i class="bi bi-heart"></i>
-          </div>
-        </div>
-      </div><!-- Fin del proyecto -->
-
-      <div class="project-item" data-aos="zoom-in" data-aos-delay="200">
-        <div class="project-content">
-          <div class="project-header">
-            <span class="project-category">Educación y Capacitación</span>
-            <span class="project-status in-progress">En Progreso</span>
-          </div>
-          <h3 class="project-title">Centro de Formación Comunitaria</h3>
-          <div class="project-details">
-            <div class="project-info">
-              <p>Espacio diseñado para brindar talleres y capacitaciones en oficios, liderazgo y gestión de recursos locales.</p>
-              <div class="project-specs">
-                <span class="spec-item">
-                  <i class="bi bi-mortarboard"></i>
-                  1 Edificio Principal
-                </span>
-                <span class="spec-item">
-                  <i class="bi bi-calendar-check"></i>
-                  12 Meses
-                </span>
-              </div>
-            </div>
-            <div class="project-location">
-              <i class="bi bi-geo-alt-fill"></i>
-              <span>Quetzaltenango, Guatemala</span>
-            </div>
-          </div>
-          <a href="project-details.html" class="project-link">
-            <span>Ver Proyecto</span>
-            <i class="bi bi-arrow-right"></i>
-          </a>
-        </div>
-        <div class="project-visual">
-          <img src="assets/img/construction/project-6.webp" alt="Centro de Formación Comunitaria" class="img-fluid">
-          <div class="project-badge">
-            <i class="bi bi-people"></i>
-          </div>
-        </div>
-      </div><!-- Fin del proyecto -->
-
-      <div class="project-item" data-aos="zoom-in" data-aos-delay="300">
-        <div class="project-content">
-          <div class="project-header">
-            <span class="project-category">Infraestructura Comunitaria</span>
-            <span class="project-status completed">Completado</span>
-          </div>
-          <h3 class="project-title">Rehabilitación de Camino Rural</h3>
-          <div class="project-details">
-            <div class="project-info">
-              <p>Proyecto de mejora vial que conecta a comunidades rurales con acceso a mercados, escuelas y servicios básicos.</p>
-              <div class="project-specs">
-                <span class="spec-item">
-                  <i class="bi bi-rulers"></i>
-                  3 km de Camino
-                </span>
-                <span class="spec-item">
-                  <i class="bi bi-calendar-check"></i>
-                  10 Meses
-                </span>
-              </div>
-            </div>
-            <div class="project-location">
-              <i class="bi bi-geo-alt-fill"></i>
-              <span>Alta Verapaz, Guatemala</span>
-            </div>
-          </div>
-          <a href="project-details.html" class="project-link">
-            <span>Ver Proyecto</span>
-            <i class="bi bi-arrow-right"></i>
-          </a>
-        </div>
-        <div class="project-visual">
-          <img src="assets/img/construction/project-10.webp" alt="Rehabilitación de Camino Rural" class="img-fluid">
-          <div class="project-badge">
-            <i class="bi bi-gear"></i>
-          </div>
-        </div>
-      </div><!-- Fin del proyecto -->
-
-      <div class="project-item" data-aos="zoom-in" data-aos-delay="100">
-        <div class="project-content">
-          <div class="project-header">
-            <span class="project-category">Salud y Bienestar</span>
-            <span class="project-status completed">Completado</span>
-          </div>
-          <h3 class="project-title">Clínica Comunitaria Infantil</h3>
-          <div class="project-details">
-            <div class="project-info">
-              <p>Centro médico especializado en atención pediátrica con espacios seguros y accesibles para todas las familias.</p>
-              <div class="project-specs">
-                <span class="spec-item">
-                  <i class="bi bi-hospital"></i>
-                  6 Consultorios
-                </span>
-                <span class="spec-item">
-                  <i class="bi bi-calendar-check"></i>
-                  14 Meses
-                </span>
-              </div>
-            </div>
-            <div class="project-location">
-              <i class="bi bi-geo-alt-fill"></i>
-              <span>Escuintla, Guatemala</span>
-            </div>
-          </div>
-          <a href="project-details.html" class="project-link">
-            <span>Ver Proyecto</span>
-            <i class="bi bi-arrow-right"></i>
-          </a>
-        </div>
-        <div class="project-visual">
-          <img src="assets/img/construction/project-4.webp" alt="Clínica Comunitaria Infantil" class="img-fluid">
-          <div class="project-badge">
-            <i class="bi bi-heart-pulse"></i>
-          </div>
-        </div>
-      </div><!-- Fin del proyecto -->
-
-      <div class="project-item" data-aos="zoom-in" data-aos-delay="200">
-        <div class="project-content">
-          <div class="project-header">
-            <span class="project-category">Educación</span>
-            <span class="project-status planning">Planeación</span>
-          </div>
-          <h3 class="project-title">Centro Educativo Luz del Futuro</h3>
-          <div class="project-details">
-            <div class="project-info">
-              <p>Diseño y construcción de aulas ecológicas y espacios de aprendizaje colaborativo para niños y jóvenes.</p>
-              <div class="project-specs">
-                <span class="spec-item">
-                  <i class="bi bi-mortarboard"></i>
-                  5 Aulas
-                </span>
-                <span class="spec-item">
-                  <i class="bi bi-calendar-check"></i>
-                  20 Meses
-                </span>
-              </div>
-            </div>
-            <div class="project-location">
-              <i class="bi bi-geo-alt-fill"></i>
-              <span>Sololá, Guatemala</span>
-            </div>
-          </div>
-          <a href="project-details.html" class="project-link">
-            <span>Ver Proyecto</span>
-            <i class="bi bi-arrow-right"></i>
-          </a>
-        </div>
-        <div class="project-visual">
-          <img src="assets/img/construction/project-8.webp" alt="Centro Educativo Luz del Futuro" class="img-fluid">
-          <div class="project-badge">
-            <i class="bi bi-lightbulb"></i>
-          </div>
-        </div>
-      </div><!-- Fin del proyecto -->
-
-      <div class="project-item" data-aos="zoom-in" data-aos-delay="300">
-        <div class="project-content">
-          <div class="project-header">
-            <span class="project-category">Energía Sostenible</span>
-            <span class="project-status completed">Completado</span>
-          </div>
-          <h3 class="project-title">Planta Solar Comunitaria</h3>
-          <div class="project-details">
-            <div class="project-info">
-              <p>Implementación de paneles solares para proveer energía limpia a viviendas y escuelas rurales.</p>
-              <div class="project-specs">
-                <span class="spec-item">
-                  <i class="bi bi-lightning"></i>
-                  100 kW Instalados
-                </span>
-                <span class="spec-item">
-                  <i class="bi bi-calendar-check"></i>
-                  16 Meses
-                </span>
-              </div>
-            </div>
-            <div class="project-location">
-              <i class="bi bi-geo-alt-fill"></i>
-              <span>Jalapa, Guatemala</span>
-            </div>
-          </div>
-          <a href="project-details.html" class="project-link">
-            <span>Ver Proyecto</span>
-            <i class="bi bi-arrow-right"></i>
-          </a>
-        </div>
-        <div class="project-visual">
-          <img src="assets/img/construction/project-12.webp" alt="Planta Solar Comunitaria" class="img-fluid">
-          <div class="project-badge">
-            <i class="bi bi-leaf"></i>
-          </div>
-        </div>
-      </div><!-- Fin del proyecto -->
-
-    </div>
-
   </div>
 
-</section><!-- /Sección de Proyectos -->
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="projects-grid">
+      @forelse($projects as $project)
+        <div class="project-item" data-aos="zoom-in" data-aos-delay="{{ $loop->iteration * 100 }}">
+          <div class="project-content">
+            <div class="project-header">
+              <span class="project-category">{{ $project->categoria ?? 'Sin categoría' }}</span>
+              <span class="project-status {{ $project->estado == 'completado' ? 'completed' : ($project->estado == 'en progreso' ? 'in-progress' : 'planning') }}">
+                {{ ucfirst($project->estado) }}
+              </span>
+            </div>
+
+            <h3 class="project-title">{{ $project->nombre }}</h3>
+
+            <div class="project-details">
+              <div class="project-info">
+                <p>{{ $project->descripcion ?? 'Sin descripción' }}</p>
+                <div class="project-specs">
+                  @if($project->viviendas)
+                    <span class="spec-item">
+                      <i class="bi bi-house"></i>
+                      {{ $project->viviendas }} Viviendas
+                    </span>
+                  @endif
+                  @if($project->duracion_meses)
+                    <span class="spec-item">
+                      <i class="bi bi-calendar-check"></i>
+                      {{ $project->duracion_meses }} Meses
+                    </span>
+                  @endif
+                  @if($project->area_km)
+                    <span class="spec-item">
+                      <i class="bi bi-rulers"></i>
+                      {{ $project->area_km }} km²
+                    </span>
+                  @endif
+                </div>
+              </div>
+
+              <div class="project-location">
+                <i class="bi bi-geo-alt-fill"></i>
+                <span>{{ $project->ubicacion ?? 'Ubicación no definida' }}</span>
+              </div>
+            </div>
+
+            <a href="{{ route('projects.show', $project) }}" class="project-link">
+              <span>Ver Proyecto</span>
+              <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+
+          <div class="project-visual">
+            <img src="{{ $project->imagen ?? asset('assets/img/construction/default.webp') }}" 
+                 alt="{{ $project->nombre }}" 
+                 class="img-fluid">
+          </div>
+        </div>
+      @empty
+        <p class="text-center">No hay proyectos publicados por el momento.</p>
+      @endforelse
+    </div>
+  </div>
+</section>
+
 
  <style>
 /* ---------------- Beneficiarios ---------------- */

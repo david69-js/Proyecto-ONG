@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AboutSection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AboutSectionController extends Controller
 {
@@ -43,7 +44,7 @@ class AboutSectionController extends Controller
     {
         $about = AboutSection::findOrFail($id);
 
-        // Validar datos básicos (opcional)
+        // Validar datos
         $request->validate([
             'titulo' => 'required|string|max:255',
             'descripcion_principal' => 'nullable|string',
@@ -73,19 +74,22 @@ class AboutSectionController extends Controller
             'link_conoce_mas',
         ]));
 
-        // Manejo de imágenes generales
-        foreach (['imagen_principal', 'imagen_secundaria', 'imagen_extra'] as $img) {
+        // Manejo de imágenes generales y badges
+        $imagenes = array_merge(
+            ['imagen_principal', 'imagen_secundaria', 'imagen_extra'],
+            ['badge_1', 'badge_2', 'badge_3']
+        );
+
+        foreach ($imagenes as $img) {
             if ($request->hasFile($img)) {
+                // Eliminar imagen antigua si existe y no es la de assets inicial
+                if ($about->$img && !str_starts_with($about->$img, 'assets/')) {
+                    Storage::disk('public')->delete($about->$img);
+                }
+
+                // Guardar nueva imagen
                 $path = $request->file($img)->store('about', 'public');
                 $about->$img = $path;
-            }
-        }
-
-        // Manejo de badges de Alianzas y Reconocimientos
-        foreach (['badge_1', 'badge_2', 'badge_3'] as $badge) {
-            if ($request->hasFile($badge)) {
-                $path = $request->file($badge)->store('about', 'public');
-                $about->$badge = $path;
             }
         }
 

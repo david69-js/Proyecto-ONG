@@ -354,55 +354,7 @@
                 </li>
                 @endanypermission
 
-<!-- Secciones -->
-<li class="nav-item">
-    <a href="#" class="nav-link">
-        <i class="fas fa-star nav-icon"></i>
-        <p>Hero</p>
-    </a>
-</li>
 
-<li class="nav-item">
-    <a href="#" class="nav-link">
-        <i class="fas fa-info-circle nav-icon"></i>
-        <p>Sobre Nosotros</p>
-    </a>
-</li>
-
-<li class="nav-item">
-    <a href="#" class="nav-link">
-        <i class="fas fa-calendar-alt nav-icon"></i>
-        <p>Eventos</p>
-    </a>
-</li>
-
-<li class="nav-item">
-    <a href="#" class="nav-link">
-        <i class="fas fa-briefcase nav-icon"></i>
-        <p>Proyectos</p>
-    </a>
-</li>
-
-<li class="nav-item">
-    <a href="#" class="nav-link">
-        <i class="fas fa-users nav-icon"></i>
-        <p>Beneficiarios</p>
-    </a>
-</li>
-
-<li class="nav-item">
-    <a href="#" class="nav-link">
-        <i class="fas fa-handshake nav-icon"></i>
-        <p>Patrocinadores</p>
-    </a>
-</li>
-
-<li class="nav-item">
-    <a href="#" class="nav-link">
-        <i class="fas fa-donate nav-icon"></i>
-        <p>Donadores</p>
-    </a>
-</li>
                 <!-- Auditoría -->
                 @anypermission(['audit.view-history', 'audit.view-logs'])
                 <li class="nav-item has-treeview">
