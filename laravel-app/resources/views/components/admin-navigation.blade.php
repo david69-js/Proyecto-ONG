@@ -402,6 +402,76 @@
                     @endpermission
 
                 @endhasanyrole
+              <!-- Menú Secciones -->
+<li class="nav-item has-treeview {{ request()->is('admin/hero*') || request()->is('admin/about*') || request()->is('admin/events*') || request()->is('admin/projects*') ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link {{ request()->is('admin/hero*') || request()->is('admin/about*') || request()->is('admin/events*') || request()->is('admin/projects*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-th-large"></i>
+        <p>
+            Secciones
+            <i class="right fas fa-angle-left"></i>
+        </p>
+    </a>
+
+    <ul class="nav nav-treeview">
+        {{-- Hero --}}
+        <li class="nav-item">
+            <a href="{{ route('admin.hero.index') }}" class="nav-link {{ request()->routeIs('admin.hero.*') ? 'active' : '' }}">
+                <i class="fas fa-star nav-icon"></i>
+                <p>Hero</p>
+            </a>
+        </li>
+
+        {{-- Sobre Nosotros --}}
+        <li class="nav-item">
+            <a href="{{ route('admin.about.index') }}" class="nav-link {{ request()->routeIs('admin.about.*') ? 'active' : '' }}">
+                <i class="fas fa-info-circle nav-icon"></i>
+                <p>Sobre Nosotros</p>
+            </a>
+        </li>
+
+        {{-- Eventos --}}
+        <li class="nav-item">
+            <a href="{{ route('admin.events.index.edit') }}" class="nav-link {{ request()->routeIs('admin.events.*') ? 'active' : '' }}">
+                <i class="fas fa-calendar-alt nav-icon"></i>
+                <p>Eventos</p>
+            </a>
+        </li>
+
+        {{-- Proyectos --}}
+        <li class="nav-item">
+            <a href="{{ route('admin.projects.index') }}" class="nav-link {{ request()->routeIs('admin.projects.*') ? 'active' : '' }}">
+                <i class="fas fa-briefcase nav-icon"></i>
+                <p>Proyectos</p>
+            </a>
+        </li>
+
+        {{-- Beneficiarios --}}
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="fas fa-users nav-icon"></i>
+                <p>Beneficiarios</p>
+            </a>
+        </li>
+
+        {{-- Patrocinadores --}}
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="fas fa-handshake nav-icon"></i>
+                <p>Patrocinadores</p>
+            </a>
+        </li>
+
+        {{-- Donadores --}}
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="fas fa-donate nav-icon"></i>
+                <p>Donadores</p>
+            </a>
+        </li>
+    </ul>
+</li>
+
+
 
                 <!-- Logout (para todos) -->
                 <li class="nav-item">

@@ -354,6 +354,7 @@
                 </li>
                 @endanypermission
 
+
                 <!-- Auditoría -->
                 @anypermission(['audit.view-history', 'audit.view-logs'])
                 <li class="nav-item has-treeview">

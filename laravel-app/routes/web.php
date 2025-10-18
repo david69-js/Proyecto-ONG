@@ -10,6 +10,10 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AboutSectionController;
+use App\Http\Controllers\HeroSectionController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\EventIndexController;
+use App\Http\Controllers\ProjectIndexController;
 
 
 Route::get('/', function () {
@@ -202,8 +206,42 @@ Route::prefix('products')->name('products.')->middleware('auth')->group(function
     Route::get('/{product}', [ProductController::class, 'show'])->name('show')->middleware('permission:products.view');
 });
 
+
 // About Section Management Routes
-Route::prefix('admin/about')->name('admin.about.')->group(function () {
-    Route::get('/', [AboutSectionController::class, 'index'])->name('index');
-    Route::put('/{id}', [AboutSectionController::class, 'update'])->name('update');
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::get('about', [AboutSectionController::class, 'index'])->name('about.index');
+    Route::put('about/{id}', [AboutSectionController::class, 'update'])->name('about.update');
+    Route::get('admin/about', [AboutSectionController::class, 'index'])->name('admin.about.index');
+
+});
+
+
+// Admin - Hero
+Route::middleware(['auth']) 
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('hero', [HeroSectionController::class, 'index'])->name('hero.index');      
+        Route::post('hero', [HeroSectionController::class, 'store'])->name('hero.store');      
+        Route::put('hero/{id}', [HeroSectionController::class, 'update'])->name('hero.update');
+    });
+Route::get('/', function () {
+    return view('index'); 
+});
+
+
+
+// Event Index Management Routes
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::get('events/index', [EventIndexController::class, 'edit'])->name('events.index.edit');
+    Route::patch('events/index/{event}/toggle', [EventIndexController::class, 'toggle'])->name('events.toggle_index');
+     Route::patch('events/{event}/unpublish', [EventIndexController::class, 'unpublish'])->name('events.unpublish');
+    Route::patch('events/index/{event}/toggle-featured', [EventIndexController::class, 'toggleFeatured'])->name('events.toggle_featured');
+});
+
+// Project Index Management Routes
+Route::prefix('admin/projects')->name('admin.projects.')->group(function() {
+    Route::get('/', [ProjectIndexController::class, 'indexAdmin'])->name('index');
+    Route::patch('{project}/toggle', [ProjectIndexController::class, 'toggle'])->name('toggle');
+    Route::delete('{project}', [ProjectIndexController::class, 'destroy'])->name('destroy');
 });
