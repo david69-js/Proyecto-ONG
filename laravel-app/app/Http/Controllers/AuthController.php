@@ -23,37 +23,48 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        try {
-            $request->validate([
-                'email' => 'required|email',
-                'password' => 'required',
-            ]);
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-            $credentials = $request->only('email', 'password');
-            $remember = $request->has('remember') && $request->remember == '1';
+        $user = User::where('email', $request->email)->first();
 
-            if (Auth::attempt($credentials, $remember)) {
-                $request->session()->regenerate();
-
-                // Actualizar último login
-                Auth::user()->update([
-                    'last_login_at' => now(),
-                    'last_login_ip' => $request->ip(),
-                ]);
-
-                return redirect()->intended('/users');
-            }
-
+        if (! $user) {
+            // El correo no existe
             return back()->withErrors([
-                'email' => 'Las credenciales proporcionadas no coinciden con nuestros registros.',
-            ])->withInput($request->except('password'));
-
-        } catch (\Exception $e) {
-            return back()->withErrors([
-                'email' => 'Error al procesar el login. Intenta nuevamente.',
+                'email' => 'El correo ingresado no está registrado.',
             ])->withInput($request->except('password'));
         }
+
+        if (! Hash::check($request->password, $user->password)) {
+            // El correo existe pero la contraseña es incorrecta
+            return back()->withErrors([
+                'password' => 'La contraseña ingresada es incorrecta.',
+            ])->withInput($request->except('password'));
+        }
+
+        if (! $user->is_active) {
+            // (Opcional) Usuario inactivo
+            return back()->withErrors([
+                'email' => 'Tu cuenta está desactivada. Contacta al administrador.',
+            ]);
+        }
+
+        // Si llega aquí, las credenciales son correctas → iniciar sesión
+        Auth::login($user, $request->has('remember'));
+
+        $request->session()->regenerate();
+
+        // Actualizar último login
+        $user->update([
+            'last_login_at' => now(),
+            'last_login_ip' => $request->ip(),
+        ]);
+
+        return redirect()->intended('/users');
     }
+
 
     /**
      * Show the registration form.
