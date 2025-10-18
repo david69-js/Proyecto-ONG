@@ -8,43 +8,76 @@ use Illuminate\Support\Facades\Storage;
 
 class HeroSectionController extends Controller
 {
-    // Mostrar Hero en index
+    // Muestra una sola página de admin con el formulario (si hay registro, lo edita; si no, lo crea)
     public function index()
     {
         $hero = HeroSection::first();
-        return view('sections.hero.index', compact('hero'));
+        return view('sections.hero.index', compact('hero')); // vista admin
     }
 
-    // Mostrar formulario para editar Hero
-    public function edit($id)
+    // Crear (si aún no hay Hero)
+    public function store(Request $request)
     {
-        $hero = HeroSection::findOrFail($id);
-        return view('hero.edit', compact('hero'));
+        $data = $request->validate([
+            'subtitle'               => 'nullable|string|max:255',
+            'title'                  => 'nullable|string|max:255',
+            'description'            => 'nullable|string',
+            'button_primary_text'    => 'nullable|string|max:255',
+            'button_primary_link'    => 'nullable|string|max:255',
+            'button_secondary_text'  => 'nullable|string|max:255',
+            'button_secondary_link'  => 'nullable|string|max:255',
+            'anios_servicio'         => 'nullable|integer',
+            'viviendas_construidas'  => 'nullable|integer',
+            'familias_beneficiadas'  => 'nullable|integer',
+            'image_badge_text'       => 'nullable|string|max:255',
+            'image_badge_subtext'    => 'nullable|string|max:255',
+            'image_main'             => 'nullable|image|max:4096',
+        ]);
+
+        if ($request->hasFile('image_main')) {
+            $data['image_main'] = $request->file('image_main')->store('hero_images', 'public');
+        }
+
+        // para garantizar un solo registro
+        $existing = HeroSection::first();
+        if ($existing) {
+            $existing->update($data);
+            return redirect()->route('admin.hero.index')->with('success', 'Sección Hero actualizada.');
+        }
+
+        HeroSection::create($data);
+        return redirect()->route('admin.hero.index')->with('success', 'Sección Hero creada.');
     }
 
-    // Actualizar Hero
+    // Actualizar (si ya existe)
     public function update(Request $request, $id)
     {
         $hero = HeroSection::findOrFail($id);
 
-        $data = $request->only([
-            'subtitle', 'title', 'description',
-            'button_primary_text', 'button_primary_link',
-            'button_secondary_text', 'button_secondary_link',
-            'anios_servicio', 'viviendas_construidas', 'familias_beneficiadas',
-            'image_badge_text', 'image_badge_subtext'
+        $data = $request->validate([
+            'subtitle'               => 'nullable|string|max:255',
+            'title'                  => 'nullable|string|max:255',
+            'description'            => 'nullable|string',
+            'button_primary_text'    => 'nullable|string|max:255',
+            'button_primary_link'    => 'nullable|string|max:255',
+            'button_secondary_text'  => 'nullable|string|max:255',
+            'button_secondary_link'  => 'nullable|string|max:255',
+            'anios_servicio'         => 'nullable|integer',
+            'viviendas_construidas'  => 'nullable|integer',
+            'familias_beneficiadas'  => 'nullable|integer',
+            'image_badge_text'       => 'nullable|string|max:255',
+            'image_badge_subtext'    => 'nullable|string|max:255',
+            'image_main'             => 'nullable|image|max:4096',
         ]);
 
-        // Imagen principal
         if ($request->hasFile('image_main')) {
             if ($hero->image_main) {
-                Storage::delete($hero->image_main);
+                Storage::disk('public')->delete($hero->image_main);
             }
-            $data['image_main'] = $request->file('image_main')->store('hero_images');
+            $data['image_main'] = $request->file('image_main')->store('hero_images', 'public');
         }
 
         $hero->update($data);
-
-        return redirect()->back()->with('success', 'Sección Hero actualizada correctamente.');
+        return back()->with('success', 'Sección Hero actualizada.');
     }
 }

@@ -198,12 +198,20 @@ Route::prefix('admin')->name('admin.')->group(function() {
 });
 
 
-// Hero Section Management Routes
-Route::prefix('admin')->name('admin.')->group(function() {
-    Route::get('hero', [HeroSectionController::class, 'index'])->name('hero.index');
-    Route::put('hero/{id}', [HeroSectionController::class, 'update'])->name('hero.update');
-    Route::get('admin/hero', [HeroSectionController::class, 'index'])->name('admin.hero.index');
+// Admin - Hero
+Route::middleware(['auth']) 
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('hero', [HeroSectionController::class, 'index'])->name('hero.index');      
+        Route::post('hero', [HeroSectionController::class, 'store'])->name('hero.store');      
+        Route::put('hero/{id}', [HeroSectionController::class, 'update'])->name('hero.update');
+    });
+Route::get('/', function () {
+    return view('index'); 
 });
+
+
 
 // Event Index Management Routes
 Route::prefix('admin')->name('admin.')->group(function() {

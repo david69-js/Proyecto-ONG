@@ -17,32 +17,29 @@
     $projects = Project::all(); 
 @endphp
 
-
-    <!-- Sección Hero -->
+   <!-- Sección Hero -->
 <section id="hero" class="hero section">
-
   <div class="container" data-aos="fade-up" data-aos-delay="100">
-
     <div class="row align-items-center">
       <div class="col-lg-6">
         <div class="hero-content" data-aos="fade-right" data-aos-delay="200">
-          
+
           <!-- Subtítulo -->
-          <span class="subtitle">{{ $hero->subtitle ?? 'Construyendo esperanza' }}</span>
-          
+          <span class="subtitle">{{ optional($hero)->subtitle ?? 'Construyendo esperanza' }}</span>
+
           <!-- Título principal -->
-          <h1>{{ $hero->title ?? 'Juntos construimos hogares, comunidades y futuro' }}</h1>
-          
+          <h1>{{ optional($hero)->title ?? 'Juntos construimos hogares, comunidades y futuro' }}</h1>
+
           <!-- Descripción -->
-          <p>{{ $hero->description ?? 'Trabajamos cada día para mejorar la calidad de vida de las familias guatemaltecas, construyendo viviendas seguras, sostenibles y dignas. Creemos que todos merecen un lugar al que llamar hogar.' }}</p>
+          <p>{{ optional($hero)->description ?? 'Trabajamos cada día para mejorar la calidad de vida...' }}</p>
 
           <!-- Botones -->
           <div class="hero-buttons">
-            <a href="{{ $hero->button_primary_link ?? '#' }}" class="btn-primary">
-              {{ $hero->button_primary_text ?? 'Haz tu donación' }}
+            <a href="{{ optional($hero)->button_primary_link ?? '#' }}" class="btn-primary">
+              {{ optional($hero)->button_primary_text ?? 'Haz tu donación' }}
             </a>
-            <a href="{{ $hero->button_secondary_link ?? '#' }}" class="btn-secondary">
-              {{ $hero->button_secondary_text ?? 'Conoce nuestros proyectos' }}
+            <a href="{{ optional($hero)->button_secondary_link ?? '#' }}" class="btn-secondary">
+              {{ optional($hero)->button_secondary_text ?? 'Conoce nuestros proyectos' }}
             </a>
           </div>
 
@@ -51,21 +48,21 @@
             <div class="badge-item">
               <i class="bi bi-people"></i>
               <div class="badge-text">
-                <span class="count">{{ $hero->anios_servicio ?? '25+' }}</span>
+                <span class="count">{{ optional($hero)->anios_servicio ?? '25+' }}</span>
                 <span class="label">Años de servicio</span>
               </div>
             </div>
             <div class="badge-item">
               <i class="bi bi-house-heart"></i>
               <div class="badge-text">
-                <span class="count">{{ $hero->viviendas_construidas ?? '500+' }}</span>
+                <span class="count">{{ optional($hero)->viviendas_construidas ?? '500+' }}</span>
                 <span class="label">Viviendas construidas</span>
               </div>
             </div>
             <div class="badge-item">
               <i class="bi bi-person-hearts"></i>
               <div class="badge-text">
-                <span class="count">{{ $hero->familias_beneficiadas ?? '300+' }}</span>
+                <span class="count">{{ optional($hero)->familias_beneficiadas ?? '300+' }}</span>
                 <span class="label">Familias beneficiadas</span>
               </div>
             </div>
@@ -76,27 +73,23 @@
 
       <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
         <div class="hero-image">
-          
           <!-- Imagen principal -->
-          <img src="{{ $hero->image_main ? asset('storage/'.$hero->image_main) : asset('assets/img/construction/showcase-3.webp') }}" 
-               alt="Voluntarios construyendo" class="img-fluid">
+          <img
+            src="{{ optional($hero)->image_main ? asset('storage/'.optional($hero)->image_main) : asset('assets/img/construction/showcase-3.webp') }}"
+            alt="Voluntarios construyendo" class="img-fluid">
 
           <!-- Badge de la imagen -->
           <div class="image-badge">
-            <span>{{ $hero->image_badge_text ?? 'Organización sin fines de lucro' }}</span>
-            <p>{{ $hero->image_badge_subtext ?? 'Comprometidos con Guatemala' }}</p>
+            <span>{{ optional($hero)->image_badge_text ?? 'Organización sin fines de lucro' }}</span>
+            <p>{{ optional($hero)->image_badge_subtext ?? 'Comprometidos con Guatemala' }}</p>
           </div>
-
         </div>
       </div>
 
     </div>
-
   </div>
-</section>
+</section><!-- /Sección Hero -->
 
-
-    </section><!-- /Sección Hero -->
 
  <!-- Sección Sobre Nosotros -->
 <section id="about" class="about section">
