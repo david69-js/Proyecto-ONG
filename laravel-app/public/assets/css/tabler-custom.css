@@ -1,10 +1,5 @@
 /* Estilos personalizados para Tabler */
 
-/* Estilos base del sidebar */
-.navbar-vertical {
-    background-color: #1f2937 !important;
-}
-
 .navbar-vertical .navbar-collapse {
     display: block !important;
 }
@@ -21,7 +16,6 @@
 /* Forzar visibilidad del sidebar */
 #sidebar-menu {
     display: block !important;
-    background-color: #1f2937 !important;
     min-height: 100vh !important;
 }
 
@@ -51,16 +45,11 @@
 #sidebar-menu .navbar-nav .nav-link {
     display: block !important;
     width: 100% !important;
-    color: white !important;
+    color: rgb(0, 0, 0) !important;
     padding: 0.75rem 1.5rem !important;
 }
 
 /* Debug: hacer el sidebar muy visible */
-.navbar-vertical {
-    border: 3px solid red !important;
-    background-color: #1f2937 !important;
-}
-
 /* En desktop, mostrar solo el sidebar */
 @media (min-width: 400px) {
     .navbar-expand-md {

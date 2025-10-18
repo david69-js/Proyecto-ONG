@@ -31,9 +31,9 @@
     @stack('styles')
 </head>
 <body>
+    <x-tabler-sidebar />
     <div class="page">
         <!-- Sidebar -->
-        <x-tabler-sidebar />
         
         <!-- Wrapper -->
         <div class="page-wrapper">
