@@ -1,0 +1,68 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: laravel-app
+    container_name: laravel-ong-app
+    restart: unless-stopped
+    working_dir: /var/www/ong
+    volumes:
+      - ./laravel-app:/var/www/ong
+    environment:
+      # Laravel specific environment variables
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - LOG_CHANNEL=stderr
+      # Database configuration
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql_ong
+      - DB_PORT=3306
+      - DB_DATABASE=${MYSQL_DATABASE:-ong_db}
+      - DB_USERNAME=${MYSQL_USER:-laravel_user}
+      - DB_PASSWORD=${MYSQL_PASSWORD:-root}
+    networks:
+      - laravel
+    depends_on:
+      - db
+
+  webserver:
+    image: nginx:alpine
+    container_name: nginx_ong
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./laravel-app:/var/www/ong
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - laravel
+    depends_on:
+      - app
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_ong
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ong_db}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_USER: ${MYSQL_USER:-laravel_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-root}
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - laravel
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+networks:
+  laravel:
+    driver: bridge
+
+volumes:
+  dbdata:

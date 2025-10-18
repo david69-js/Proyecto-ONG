@@ -1,0 +1,200 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use App\Models\Event;
+use App\Models\Project;
+use App\Models\User;
+use Carbon\Carbon;
+
+class EventSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        // Obtener proyectos y usuarios para las relaciones
+        $projects = Project::all();
+        $users = User::all();
+        
+        $events = [
+            [
+                'title' => 'Carrera Solidaria 2024',
+                'description' => 'Carrera de 5K y 10K para recaudar fondos destinados a la construcción de viviendas en comunidades rurales. Incluye actividades familiares, rifas y venta de comida.',
+                'event_type' => 'fundraising',
+                'start_date' => Carbon::now()->addDays(30)->setTime(7, 0),
+                'end_date' => Carbon::now()->addDays(30)->setTime(12, 0),
+                'location' => 'Parque Central de Antigua Guatemala',
+                'address' => 'Parque Central, Antigua Guatemala, Sacatepéquez',
+                'max_participants' => 500,
+                'current_participants' => 0,
+                'registration_required' => true,
+                'registration_deadline' => Carbon::now()->addDays(25),
+                'cost' => 50.00,
+                'status' => 'published',
+                'featured' => true,
+                'contact_email' => 'carrera@ongvivienda.org',
+                'contact_phone' => '+502 5555-1234',
+                'requirements' => 'Ropa deportiva cómoda, hidratación, documento de identidad. Menores de 16 años deben estar acompañados por un adulto.',
+                'created_by' => $users->first()?->id,
+                'project_id' => $projects->first()?->id,
+            ],
+            [
+                'title' => 'Taller de Construcción Sostenible',
+                'description' => 'Capacitación práctica sobre técnicas de construcción ecológica y sostenible. Dirigido a constructores locales y voluntarios.',
+                'event_type' => 'training',
+                'start_date' => Carbon::now()->addDays(15)->setTime(8, 0),
+                'end_date' => Carbon::now()->addDays(17)->setTime(17, 0),
+                'location' => 'Centro de Capacitación Comunitario',
+                'address' => 'Aldea San Juan, Chimaltenango, Guatemala',
+                'max_participants' => 25,
+                'current_participants' => 0,
+                'registration_required' => true,
+                'registration_deadline' => Carbon::now()->addDays(10),
+                'cost' => 0.00,
+                'status' => 'published',
+                'featured' => false,
+                'contact_email' => 'capacitacion@ongvivienda.org',
+                'contact_phone' => '+502 5555-5678',
+                'requirements' => 'Ropa de trabajo, botas de seguridad, guantes, casco. Conocimientos básicos de construcción preferible.',
+                'created_by' => $users->first()?->id,
+                'project_id' => $projects->skip(1)->first()?->id,
+            ],
+            [
+                'title' => 'Feria de Voluntariado',
+                'description' => 'Evento para reclutar nuevos voluntarios y mostrar los proyectos en curso. Incluye presentaciones, testimonios y actividades interactivas.',
+                'event_type' => 'volunteer',
+                'start_date' => Carbon::now()->addDays(45)->setTime(9, 0),
+                'end_date' => Carbon::now()->addDays(45)->setTime(16, 0),
+                'location' => 'Universidad de San Carlos de Guatemala',
+                'address' => 'Ciudad Universitaria, Zona 12, Ciudad de Guatemala',
+                'max_participants' => 200,
+                'current_participants' => 0,
+                'registration_required' => false,
+                'registration_deadline' => null,
+                'cost' => 0.00,
+                'status' => 'published',
+                'featured' => true,
+                'contact_email' => 'voluntarios@ongvivienda.org',
+                'contact_phone' => '+502 5555-9012',
+                'requirements' => 'Interés en el voluntariado social, disponibilidad de tiempo.',
+                'created_by' => $users->first()?->id,
+                'project_id' => null,
+            ],
+            [
+                'title' => 'Campaña de Concientización sobre Vivienda Digna',
+                'description' => 'Campaña educativa en comunidades urbanas marginadas para sensibilizar sobre la importancia de la vivienda digna y los derechos habitacionales.',
+                'event_type' => 'awareness',
+                'start_date' => Carbon::now()->addDays(60)->setTime(14, 0),
+                'end_date' => Carbon::now()->addDays(60)->setTime(18, 0),
+                'location' => 'Mercado Central de Quetzaltenango',
+                'address' => 'Centro Histórico, Quetzaltenango, Guatemala',
+                'max_participants' => 100,
+                'current_participants' => 0,
+                'registration_required' => false,
+                'registration_deadline' => null,
+                'cost' => 0.00,
+                'status' => 'published',
+                'featured' => false,
+                'contact_email' => 'conciencia@ongvivienda.org',
+                'contact_phone' => '+502 5555-3456',
+                'requirements' => 'Disponibilidad para interactuar con la comunidad, conocimiento básico de los derechos habitacionales.',
+                'created_by' => $users->first()?->id,
+                'project_id' => null,
+            ],
+            [
+                'title' => 'Construcción Comunitaria - Casa Modelo',
+                'description' => 'Construcción participativa de una casa modelo con la comunidad. Los participantes aprenderán técnicas de construcción mientras contribuyen al proyecto.',
+                'event_type' => 'community',
+                'start_date' => Carbon::now()->addDays(90)->setTime(7, 0),
+                'end_date' => Carbon::now()->addDays(90)->setTime(16, 0),
+                'location' => 'Aldea El Progreso, Huehuetenango',
+                'address' => 'Aldea El Progreso, Huehuetenango, Guatemala',
+                'max_participants' => 40,
+                'current_participants' => 0,
+                'registration_required' => true,
+                'registration_deadline' => Carbon::now()->addDays(85),
+                'cost' => 0.00,
+                'status' => 'published',
+                'featured' => true,
+                'contact_email' => 'construccion@ongvivienda.org',
+                'contact_phone' => '+502 5555-7890',
+                'requirements' => 'Ropa de trabajo, botas de seguridad, guantes, casco. Física y mentalmente preparado para trabajo de construcción.',
+                'created_by' => $users->first()?->id,
+                'project_id' => $projects->skip(2)->first()?->id,
+            ],
+            [
+                'title' => 'Reunión de Evaluación Trimestral',
+                'description' => 'Reunión interna para evaluar el progreso de los proyectos del trimestre y planificar las actividades del próximo período.',
+                'event_type' => 'other',
+                'start_date' => Carbon::now()->addDays(7)->setTime(9, 0),
+                'end_date' => Carbon::now()->addDays(7)->setTime(12, 0),
+                'location' => 'Oficinas Centrales ONG',
+                'address' => 'Zona 10, Ciudad de Guatemala, Guatemala',
+                'max_participants' => 20,
+                'current_participants' => 0,
+                'registration_required' => true,
+                'registration_deadline' => Carbon::now()->addDays(5),
+                'cost' => 0.00,
+                'status' => 'draft',
+                'featured' => false,
+                'contact_email' => 'admin@ongvivienda.org',
+                'contact_phone' => '+502 5555-2468',
+                'requirements' => 'Solo personal de la organización y invitados especiales.',
+                'created_by' => $users->first()?->id,
+                'project_id' => null,
+            ],
+            [
+                'title' => 'Cena de Gala Anual',
+                'description' => 'Evento de recaudación de fondos con cena de gala, subasta silenciosa y presentación de resultados del año. Dirigido a donantes y patrocinadores.',
+                'event_type' => 'fundraising',
+                'start_date' => Carbon::now()->addDays(120)->setTime(19, 0),
+                'end_date' => Carbon::now()->addDays(120)->setTime(23, 0),
+                'location' => 'Hotel InterContinental Guatemala',
+                'address' => '14 Calle 2-51, Zona 10, Ciudad de Guatemala',
+                'max_participants' => 150,
+                'current_participants' => 0,
+                'registration_required' => true,
+                'registration_deadline' => Carbon::now()->addDays(110),
+                'cost' => 200.00,
+                'status' => 'published',
+                'featured' => true,
+                'contact_email' => 'gala@ongvivienda.org',
+                'contact_phone' => '+502 5555-1357',
+                'requirements' => 'Vestimenta formal, confirmación de asistencia requerida.',
+                'created_by' => $users->first()?->id,
+                'project_id' => null,
+            ],
+            [
+                'title' => 'Taller de Liderazgo Comunitario',
+                'description' => 'Capacitación para líderes comunitarios sobre gestión de proyectos, resolución de conflictos y desarrollo comunitario sostenible.',
+                'event_type' => 'training',
+                'start_date' => Carbon::now()->addDays(75)->setTime(8, 0),
+                'end_date' => Carbon::now()->addDays(77)->setTime(17, 0),
+                'location' => 'Centro de Desarrollo Comunitario',
+                'address' => 'Cobán, Alta Verapaz, Guatemala',
+                'max_participants' => 30,
+                'current_participants' => 0,
+                'registration_required' => true,
+                'registration_deadline' => Carbon::now()->addDays(70),
+                'cost' => 25.00,
+                'status' => 'published',
+                'featured' => false,
+                'contact_email' => 'liderazgo@ongvivienda.org',
+                'contact_phone' => '+502 5555-9753',
+                'requirements' => 'Ser líder comunitario reconocido, compromiso de aplicar conocimientos en su comunidad.',
+                'created_by' => $users->first()?->id,
+                'project_id' => $projects->skip(3)->first()?->id,
+            ],
+        ];
+
+        foreach ($events as $eventData) {
+            Event::updateOrCreate(
+                ['title' => $eventData['title']],
+                $eventData
+            );
+        }
+    }
+}
