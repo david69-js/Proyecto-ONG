@@ -1,4 +1,4 @@
-<header class="navbar navbar-expand-md navbar-light d-print-none">
+<header class="navbar">
     <div class="container-xl">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="true" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -11,7 +11,7 @@
             </a>
         </h1>
         
-        <div class="navbar-nav flex-row order-md-last">
+        <div class="navbar-nav  navbar-expand-md navbar-light d-print-none flex-row order-md-last">
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
                     <span class="avatar avatar-sm" style="background-image: url({{ asset('assets/img/default-avatar.png') }})"></span>

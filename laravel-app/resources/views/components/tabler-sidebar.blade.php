@@ -1,5 +1,5 @@
-<aside class="navbar navbar-vertical navbar-expand-md navbar-dark">
-    <div class="w-100 flex">
+<aside class="navbar navbar-vertical navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
         <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="true" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
