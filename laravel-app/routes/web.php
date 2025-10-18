@@ -131,6 +131,7 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
+
 // About Section Management Routes
 Route::prefix('admin/about')->name('admin.about.')->group(function () {
     Route::get('/', [AboutSectionController::class, 'index'])->name('index');

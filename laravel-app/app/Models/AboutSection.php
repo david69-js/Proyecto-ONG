@@ -19,6 +19,6 @@ class AboutSection extends Model
         'colaboradores_activos',
         'imagen_principal',
         'imagen_secundaria',
-        'link_conoce_mas'
+        'link_conoce_mas',
     ];
 }
