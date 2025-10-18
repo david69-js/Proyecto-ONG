@@ -6,10 +6,7 @@
 
 @section('content')
 <!-- Header del Dashboard -->
-<div class="page-header">
-    <h1 class="page-title">Panel Principal</h1>
-    <p class="page-description">Resumen general del sistema de gestión de ONG</p>
-</div>
+
 
 <div class="row row-deck row-cards">
     <!-- Tarjetas de Estadísticas -->

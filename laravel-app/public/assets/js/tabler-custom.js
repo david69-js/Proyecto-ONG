@@ -1,5 +1,62 @@
 // JavaScript personalizado para Tabler
 
+// Manejar el sidebar responsive
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebarToggle = document.querySelector('.navbar-toggler');
+    const sidebar = document.querySelector('.navbar-vertical');
+    const sidebarMenu = document.querySelector('#sidebar-menu');
+    
+    function updateSidebarVisibility() {
+        if (window.innerWidth >= 400) {
+            // Desktop: sidebar siempre visible
+            if (sidebar) {
+                sidebar.style.display = 'block';
+                sidebar.style.transform = 'translateX(0)';
+                sidebar.classList.remove('show');
+            }
+            if (sidebarMenu) {
+                sidebarMenu.classList.add('show');
+                sidebarMenu.style.display = 'block';
+            }
+        } else {
+            // Móvil: sidebar oculto por defecto
+            if (sidebar) {
+                sidebar.style.transform = 'translateX(-100%)';
+                sidebar.classList.remove('show');
+            }
+        }
+    }
+    
+    // Aplicar configuración inicial
+    updateSidebarVisibility();
+    
+    if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', function() {
+            if (window.innerWidth < 400) {
+                sidebar.classList.toggle('show');
+                if (sidebar.classList.contains('show')) {
+                    sidebar.style.transform = 'translateX(0)';
+                } else {
+                    sidebar.style.transform = 'translateX(-100%)';
+                }
+            }
+        });
+        
+        // Cerrar sidebar al hacer clic fuera de él en móviles
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth < 400) {
+                if (!sidebar.contains(event.target) && !sidebarToggle.contains(event.target)) {
+                    sidebar.classList.remove('show');
+                    sidebar.style.transform = 'translateX(-100%)';
+                }
+            }
+        });
+        
+        // Manejar el resize de ventana
+        window.addEventListener('resize', updateSidebarVisibility);
+    }
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializar tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));

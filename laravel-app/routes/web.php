@@ -26,6 +26,16 @@ Route::get('/test-tabler', function () {
     return view('test-tabler');
 })->middleware('auth');
 
+// Ruta de prueba para Sidebar
+Route::get('/test-sidebar', function () {
+    return view('test-sidebar');
+})->middleware('auth');
+
+// Ruta de prueba para Sidebar Debug
+Route::get('/test-sidebar-debug', function () {
+    return view('test-sidebar-debug');
+})->middleware('auth');
+
 
 Route::get('/about', function () {
     return view('about');

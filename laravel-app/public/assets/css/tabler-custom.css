@@ -1,5 +1,116 @@
 /* Estilos personalizados para Tabler */
 
+/* Estilos base del sidebar */
+.navbar-vertical {
+    background-color: #1f2937 !important;
+}
+
+.navbar-vertical .navbar-collapse {
+    display: block !important;
+}
+
+.navbar-vertical .navbar-nav {
+    display: block !important;
+}
+
+/* Ajustar el contenido principal para el sidebar */
+.page-wrapper {
+    margin-left: 250px;
+}
+
+/* Forzar visibilidad del sidebar */
+#sidebar-menu {
+    display: block !important;
+    background-color: #1f2937 !important;
+    min-height: 100vh !important;
+}
+
+/* Forzar que el menú esté expandido sin importar el estado del botón */
+.collapse:not(.show) {
+    display: block !important;
+}
+
+#sidebar-menu.collapse {
+    display: block !important;
+}
+
+#sidebar-menu.collapse:not(.show) {
+    display: block !important;
+}
+
+#sidebar-menu .navbar-nav {
+    display: block !important;
+    width: 100% !important;
+}
+
+#sidebar-menu .navbar-nav .nav-item {
+    display: block !important;
+    width: 100% !important;
+}
+
+#sidebar-menu .navbar-nav .nav-link {
+    display: block !important;
+    width: 100% !important;
+    color: white !important;
+    padding: 0.75rem 1.5rem !important;
+}
+
+/* Debug: hacer el sidebar muy visible */
+.navbar-vertical {
+    border: 3px solid red !important;
+    background-color: #1f2937 !important;
+}
+
+/* En desktop, mostrar solo el sidebar */
+@media (min-width: 400px) {
+    .navbar-expand-md {
+        display: none !important;
+    }
+    
+    /* Asegurar que el sidebar esté visible en desktop */
+    .navbar-vertical {
+        display: block !important;
+        transform: translateX(0) !important;
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 250px;
+        z-index: 1000;
+    }
+    
+    .navbar-vertical .navbar-collapse {
+        display: block !important;
+    }
+    
+    .navbar-vertical .navbar-nav {
+        display: block !important;
+    }
+}
+
+@media (max-width: 399px) {
+    .page-wrapper {
+        margin-left: 0;
+    }
+    
+    .navbar-vertical {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .navbar-vertical.show {
+        transform: translateX(0);
+    }
+    
+    .navbar-vertical .navbar-collapse {
+        display: none !important;
+    }
+    
+    .navbar-vertical.show .navbar-collapse {
+        display: block !important;
+    }
+}
+
 /* Ajustes para el sidebar */
 .navbar-vertical .navbar-brand {
     padding: 1rem 1.5rem;
