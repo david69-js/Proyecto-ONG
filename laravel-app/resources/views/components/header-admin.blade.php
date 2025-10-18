@@ -9,24 +9,29 @@
       </li>
     </ul>
 
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-      <!-- Nombre del usuario -->
-      <li class="nav-item">
-        <span class="nav-link">{{ auth()->user()->full_name }}</span>
-      </li>
+   <!-- Right navbar links -->
+<ul class="navbar-nav ml-auto">
+    <!-- Nombre del usuario -->
+    <li class="nav-item">
+        @if(auth()->check())
+            <span class="nav-link">{{ auth()->user()->full_name }}</span>
+        @else
+            <span class="nav-link">Invitado</span>
+        @endif
+    </li>
 
-      <!-- Botón de Logout -->
-      <li class="nav-item">
+    <!-- Botón de Logout -->
+    @if(auth()->check())
+    <li class="nav-item">
         <form method="POST" action="{{ route('logout') }}" class="d-inline">
-          @csrf
-          <button type="submit" class="nav-link btn btn-link" style="border: none; background: none;">
-            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-          </button>
+            @csrf
+            <button type="submit" class="nav-link btn btn-link" style="border: none; background: none;">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
         </form>
-      </li>
-    </ul>
-  </nav>
+    </li>
+    @endif
+</ul>
 
 <!-- Usar el componente de navegación protegido -->
 <x-admin-navigation />

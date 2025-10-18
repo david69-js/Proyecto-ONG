@@ -133,7 +133,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 // About Section Management Routes
-Route::prefix('admin/about')->name('admin.about.')->group(function () {
+Route::prefix('admin/about')->name('admin.about.')->middleware('auth')->group(function () {
     Route::get('/', [AboutSectionController::class, 'index'])->name('index');
     Route::put('/{id}', [AboutSectionController::class, 'update'])->name('update');
 });
