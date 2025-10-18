@@ -276,15 +276,6 @@
 
 /* Ajustes para el sidebar en móviles */
 @media (max-width: 768px) {
-    .navbar-vertical {
-        position: fixed;
-        top: 0;
-        left: -100%;
-        width: 280px;
-        height: 100vh;
-        z-index: 1050;
-        transition: left 0.3s ease;
-    }
     
     .navbar-vertical.show {
         left: 0;

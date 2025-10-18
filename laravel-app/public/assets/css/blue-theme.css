@@ -23,7 +23,7 @@
 .page-header {
     background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
     color: white;
-    border-radius: 8px;
+    border-radius: 0 px;
     margin-bottom: 1.5rem;
     padding: 1.5rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
