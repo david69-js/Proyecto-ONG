@@ -69,9 +69,34 @@
                 @endrole
 
                 {{-- ========================================== --}}
+                {{-- MENÚ PARA DONANTES (acceso limitado) --}}
+                {{-- ========================================== --}}
+                @role('donor')
+                    <!-- Mis Donaciones -->
+                    @permission('donations.view.own')
+                    <li class="nav-item">
+                        <a href="{{ route('donations.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-hand-holding-usd"></i>
+                            <p>Mis Donaciones</p>
+                        </a>
+                    </li>
+                    @endpermission
+                    
+                    <!-- Registrar Donación -->
+                    @permission('donations.create')
+                    <li class="nav-item">
+                        <a href="{{ route('donations.create') }}" class="nav-link">
+                            <i class="nav-icon fas fa-plus-circle"></i>
+                            <p>Registrar Donación</p>
+                        </a>
+                    </li>
+                    @endpermission
+                @endrole
+
+                {{-- ========================================== --}}
                 {{-- MENÚ PARA ROLES ADMINISTRATIVOS --}}
                 {{-- ========================================== --}}
-                @hasanyrole('super-admin', 'admin', 'project-coordinator', 'beneficiary-coordinator', 'volunteer', 'consultant', 'donor')
+                @hasanyrole('super-admin', 'admin', 'project-coordinator', 'beneficiary-coordinator', 'volunteer', 'consultant')
                 
                     <!-- Gestión de Usuarios (SOLO roles administrativos) -->
                     @permission('users.view')
@@ -272,7 +297,7 @@
                         <ul class="nav nav-treeview">
                             @permission('donations.view')
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="{{ route('donations.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Listar Donaciones</p>
                                 </a>
@@ -280,9 +305,64 @@
                             @endpermission
                             @permission('donations.create')
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="{{ route('donations.create') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Registrar Donación</p>
+                                </a>
+                            </li>
+                            @endpermission
+                            @permission('donations.reports')
+                            <li class="nav-item">
+                                <a href="{{ route('donations.reports') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Reportes de Donaciones</p>
+                                </a>
+                            </li>
+                            @endpermission
+                        </ul>
+                    </li>
+                    @endpermission
+
+                    <!-- Gestión de Productos -->
+                    @permission('products.view')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-box"></i>
+                            <p>
+                                Productos
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @permission('products.view')
+                            <li class="nav-item">
+                                <a href="{{ route('products.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Listar Productos</p>
+                                </a>
+                            </li>
+                            @endpermission
+                            @permission('products.create')
+                            <li class="nav-item">
+                                <a href="{{ route('products.create') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Crear Producto</p>
+                                </a>
+                            </li>
+                            @endpermission
+                            @permission('products.catalog')
+                            <li class="nav-item">
+                                <a href="{{ route('products.catalog') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Catálogo Público</p>
+                                </a>
+                            </li>
+                            @endpermission
+                            @permission('products.statistics')
+                            <li class="nav-item">
+                                <a href="{{ route('products.statistics') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Estadísticas</p>
                                 </a>
                             </li>
                             @endpermission
