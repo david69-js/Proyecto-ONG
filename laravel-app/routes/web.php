@@ -16,6 +16,16 @@ Route::get('/', function () {
     return view('index');
 });
 
+// Ruta temporal para probar Tabler
+Route::get('/dashboard-tabler', function () {
+    return view('dashboard-tabler');
+})->middleware('auth');
+
+// Ruta de prueba para Tabler
+Route::get('/test-tabler', function () {
+    return view('test-tabler');
+})->middleware('auth');
+
 
 Route::get('/about', function () {
     return view('about');
