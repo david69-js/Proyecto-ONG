@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Nueva Donación')
+@section('title', 'Editar Donación')
 
 @section('content')
 <div class="container-fluid">
@@ -9,14 +9,15 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <i class="fas fa-heart text-danger"></i>
-                        Nueva Donación
+                        <i class="fas fa-edit text-primary"></i>
+                        Editar Donación: {{ $donation->donation_code }}
                     </h3>
                 </div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('donations.store') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('donations.update', $donation) }}" enctype="multipart/form-data">
                         @csrf
+                        @method('PUT')
                         
                         <div class="row">
                             <!-- Información de la Donación -->
@@ -30,11 +31,11 @@
                                     <select class="form-select @error('donation_type') is-invalid @enderror" 
                                             id="donation_type" name="donation_type" required>
                                         <option value="">Seleccionar tipo</option>
-                                        <option value="monetary" {{ old('donation_type') == 'monetary' ? 'selected' : '' }}>Monetaria</option>
-                                        <option value="materials" {{ old('donation_type') == 'materials' ? 'selected' : '' }}>Materiales</option>
-                                        <option value="services" {{ old('donation_type') == 'services' ? 'selected' : '' }}>Servicios</option>
-                                        <option value="volunteer" {{ old('donation_type') == 'volunteer' ? 'selected' : '' }}>Voluntariado</option>
-                                        <option value="mixed" {{ old('donation_type') == 'mixed' ? 'selected' : '' }}>Mixta</option>
+                                        <option value="monetary" {{ old('donation_type', $donation->donation_type) == 'monetary' ? 'selected' : '' }}>Monetaria</option>
+                                        <option value="materials" {{ old('donation_type', $donation->donation_type) == 'materials' ? 'selected' : '' }}>Materiales</option>
+                                        <option value="services" {{ old('donation_type', $donation->donation_type) == 'services' ? 'selected' : '' }}>Servicios</option>
+                                        <option value="volunteer" {{ old('donation_type', $donation->donation_type) == 'volunteer' ? 'selected' : '' }}>Voluntariado</option>
+                                        <option value="mixed" {{ old('donation_type', $donation->donation_type) == 'mixed' ? 'selected' : '' }}>Mixta</option>
                                     </select>
                                     @error('donation_type')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -48,12 +49,12 @@
                                             <div class="input-group">
                                                 <input type="number" step="0.01" min="0" 
                                                        class="form-control @error('amount') is-invalid @enderror" 
-                                                       id="amount" name="amount" value="{{ old('amount') }}">
+                                                       id="amount" name="amount" value="{{ old('amount', $donation->amount) }}">
                                                 <select class="form-select" id="currency" name="currency">
-                                                    <option value="GTQ" {{ old('currency', 'GTQ') == 'GTQ' ? 'selected' : '' }}>GTQ (Quetzales)</option>
-                                                    <option value="USD" {{ old('currency') == 'USD' ? 'selected' : '' }}>USD (Dólares)</option>
-                                                    <option value="EUR" {{ old('currency') == 'EUR' ? 'selected' : '' }}>EUR (Euros)</option>
-                                                    <option value="MXN" {{ old('currency') == 'MXN' ? 'selected' : '' }}>MXN (Pesos Mexicanos)</option>
+                                                    <option value="GTQ" {{ old('currency', $donation->currency) == 'GTQ' ? 'selected' : '' }}>GTQ (Quetzales)</option>
+                                                    <option value="USD" {{ old('currency', $donation->currency) == 'USD' ? 'selected' : '' }}>USD (Dólares)</option>
+                                                    <option value="EUR" {{ old('currency', $donation->currency) == 'EUR' ? 'selected' : '' }}>EUR (Euros)</option>
+                                                    <option value="MXN" {{ old('currency', $donation->currency) == 'MXN' ? 'selected' : '' }}>MXN (Pesos Mexicanos)</option>
                                                 </select>
                                             </div>
                                             @error('amount')
@@ -66,7 +67,7 @@
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Descripción *</label>
                                     <textarea class="form-control @error('description') is-invalid @enderror" 
-                                              id="description" name="description" rows="3" required>{{ old('description') }}</textarea>
+                                              id="description" name="description" rows="3" required>{{ old('description', $donation->description) }}</textarea>
                                     @error('description')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -78,7 +79,7 @@
                                             id="project_id" name="project_id">
                                         <option value="">Sin proyecto específico</option>
                                         @foreach($projects as $project)
-                                            <option value="{{ $project->id }}" {{ old('project_id') == $project->id ? 'selected' : '' }}>
+                                            <option value="{{ $project->id }}" {{ old('project_id', $donation->project_id) == $project->id ? 'selected' : '' }}>
                                                 {{ $project->nombre }}
                                             </option>
                                         @endforeach
@@ -94,7 +95,7 @@
                                             id="sponsor_id" name="sponsor_id">
                                         <option value="">Sin patrocinador</option>
                                         @foreach($sponsors as $sponsor)
-                                            <option value="{{ $sponsor->id }}" {{ old('sponsor_id') == $sponsor->id ? 'selected' : '' }}>
+                                            <option value="{{ $sponsor->id }}" {{ old('sponsor_id', $donation->sponsor_id) == $sponsor->id ? 'selected' : '' }}>
                                                 {{ $sponsor->name }}
                                             </option>
                                         @endforeach
@@ -116,11 +117,11 @@
                                     <select class="form-select @error('donor_type') is-invalid @enderror" 
                                             id="donor_type" name="donor_type" required>
                                         <option value="">Seleccionar tipo</option>
-                                        <option value="individual" {{ old('donor_type') == 'individual' ? 'selected' : '' }}>Individual</option>
-                                        <option value="corporate" {{ old('donor_type') == 'corporate' ? 'selected' : '' }}>Corporativo</option>
-                                        <option value="foundation" {{ old('donor_type') == 'foundation' ? 'selected' : '' }}>Fundación</option>
-                                        <option value="ngo" {{ old('donor_type') == 'ngo' ? 'selected' : '' }}>ONG</option>
-                                        <option value="government" {{ old('donor_type') == 'government' ? 'selected' : '' }}>Gobierno</option>
+                                        <option value="individual" {{ old('donor_type', $donation->donor_type) == 'individual' ? 'selected' : '' }}>Individual</option>
+                                        <option value="corporate" {{ old('donor_type', $donation->donor_type) == 'corporate' ? 'selected' : '' }}>Corporativo</option>
+                                        <option value="foundation" {{ old('donor_type', $donation->donor_type) == 'foundation' ? 'selected' : '' }}>Fundación</option>
+                                        <option value="ngo" {{ old('donor_type', $donation->donor_type) == 'ngo' ? 'selected' : '' }}>ONG</option>
+                                        <option value="government" {{ old('donor_type', $donation->donor_type) == 'government' ? 'selected' : '' }}>Gobierno</option>
                                     </select>
                                     @error('donor_type')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -130,7 +131,7 @@
                                 <div class="mb-3">
                                     <label for="donor_name" class="form-label">Nombre del Donante *</label>
                                     <input type="text" class="form-control @error('donor_name') is-invalid @enderror" 
-                                           id="donor_name" name="donor_name" value="{{ old('donor_name') }}" required>
+                                           id="donor_name" name="donor_name" value="{{ old('donor_name', $donation->donor_name) }}" required>
                                     @error('donor_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -139,7 +140,7 @@
                                 <div class="mb-3">
                                     <label for="donor_email" class="form-label">Email</label>
                                     <input type="email" class="form-control @error('donor_email') is-invalid @enderror" 
-                                           id="donor_email" name="donor_email" value="{{ old('donor_email') }}">
+                                           id="donor_email" name="donor_email" value="{{ old('donor_email', $donation->donor_email) }}">
                                     @error('donor_email')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -148,7 +149,7 @@
                                 <div class="mb-3">
                                     <label for="donor_phone" class="form-label">Teléfono</label>
                                     <input type="text" class="form-control @error('donor_phone') is-invalid @enderror" 
-                                           id="donor_phone" name="donor_phone" value="{{ old('donor_phone') }}">
+                                           id="donor_phone" name="donor_phone" value="{{ old('donor_phone', $donation->donor_phone) }}">
                                     @error('donor_phone')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -157,7 +158,7 @@
                                 <div class="mb-3">
                                     <label for="donor_address" class="form-label">Dirección</label>
                                     <textarea class="form-control @error('donor_address') is-invalid @enderror" 
-                                              id="donor_address" name="donor_address" rows="2">{{ old('donor_address') }}</textarea>
+                                              id="donor_address" name="donor_address" rows="2">{{ old('donor_address', $donation->donor_address) }}</textarea>
                                     @error('donor_address')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -166,7 +167,7 @@
                                 <div class="mb-3">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="is_anonymous" name="is_anonymous" 
-                                               value="1" {{ old('is_anonymous') ? 'checked' : '' }}>
+                                               value="1" {{ old('is_anonymous', $donation->is_anonymous) ? 'checked' : '' }}>
                                         <label class="form-check-label" for="is_anonymous">
                                             Donación anónima
                                         </label>
@@ -189,11 +190,11 @@
                                     <select class="form-select @error('payment_method') is-invalid @enderror" 
                                             id="payment_method" name="payment_method" required>
                                         <option value="">Seleccionar método</option>
-                                        <option value="transfer" {{ old('payment_method') == 'transfer' ? 'selected' : '' }}>Transferencia</option>
-                                        <option value="cash" {{ old('payment_method') == 'cash' ? 'selected' : '' }}>Efectivo</option>
-                                        <option value="check" {{ old('payment_method') == 'check' ? 'selected' : '' }}>Cheque</option>
-                                        <option value="kind" {{ old('payment_method') == 'kind' ? 'selected' : '' }}>En Especie</option>
-                                        <option value="other" {{ old('payment_method') == 'other' ? 'selected' : '' }}>Otro</option>
+                                        <option value="transfer" {{ old('payment_method', $donation->payment_method) == 'transfer' ? 'selected' : '' }}>Transferencia</option>
+                                        <option value="cash" {{ old('payment_method', $donation->payment_method) == 'cash' ? 'selected' : '' }}>Efectivo</option>
+                                        <option value="check" {{ old('payment_method', $donation->payment_method) == 'check' ? 'selected' : '' }}>Cheque</option>
+                                        <option value="kind" {{ old('payment_method', $donation->payment_method) == 'kind' ? 'selected' : '' }}>En Especie</option>
+                                        <option value="other" {{ old('payment_method', $donation->payment_method) == 'other' ? 'selected' : '' }}>Otro</option>
                                     </select>
                                     @error('payment_method')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -203,7 +204,7 @@
                                 <div class="mb-3">
                                     <label for="payment_reference" class="form-label">Referencia de Pago</label>
                                     <input type="text" class="form-control @error('payment_reference') is-invalid @enderror" 
-                                           id="payment_reference" name="payment_reference" value="{{ old('payment_reference') }}">
+                                           id="payment_reference" name="payment_reference" value="{{ old('payment_reference', $donation->payment_reference) }}">
                                     @error('payment_reference')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -212,7 +213,7 @@
                                 <div class="mb-3">
                                     <label for="payment_notes" class="form-label">Notas del Pago</label>
                                     <textarea class="form-control @error('payment_notes') is-invalid @enderror" 
-                                              id="payment_notes" name="payment_notes" rows="2">{{ old('payment_notes') }}</textarea>
+                                              id="payment_notes" name="payment_notes" rows="2">{{ old('payment_notes', $donation->payment_notes) }}</textarea>
                                     @error('payment_notes')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -221,7 +222,7 @@
 
                             <div class="col-md-6">
                                 <h5 class="text-primary mb-3">
-                                    <i class="fas fa-file-alt"></i> Documentos
+                                    <i class="fas fa-file-alt"></i> Documentos y Estado
                                 </h5>
 
                                 <div class="mb-3">
@@ -229,7 +230,23 @@
                                     <input type="file" class="form-control @error('receipt') is-invalid @enderror" 
                                            id="receipt" name="receipt" accept=".pdf,.jpg,.jpeg,.png">
                                     <div class="form-text">Formatos permitidos: PDF, JPG, PNG (máx. 2MB)</div>
+                                    @if($donation->receipt_path)
+                                        <div class="mt-2">
+                                            <a href="{{ $donation->receipt_url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-file-pdf"></i> Ver Comprobante Actual
+                                            </a>
+                                        </div>
+                                    @endif
                                     @error('receipt')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="status_notes" class="form-label">Notas del Estado</label>
+                                    <textarea class="form-control @error('status_notes') is-invalid @enderror" 
+                                              id="status_notes" name="status_notes" rows="2">{{ old('status_notes', $donation->status_notes) }}</textarea>
+                                    @error('status_notes')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -237,7 +254,7 @@
                                 <div class="mb-3">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="is_tax_deductible" name="is_tax_deductible" 
-                                               value="1" {{ old('is_tax_deductible') ? 'checked' : '' }}>
+                                               value="1" {{ old('is_tax_deductible', $donation->is_tax_deductible) ? 'checked' : '' }}>
                                         <label class="form-check-label" for="is_tax_deductible">
                                             Deducible de impuestos
                                         </label>
@@ -247,7 +264,7 @@
                                 <div class="mb-3">
                                     <label for="special_instructions" class="form-label">Instrucciones Especiales</label>
                                     <textarea class="form-control @error('special_instructions') is-invalid @enderror" 
-                                              id="special_instructions" name="special_instructions" rows="3">{{ old('special_instructions') }}</textarea>
+                                              id="special_instructions" name="special_instructions" rows="3">{{ old('special_instructions', $donation->special_instructions) }}</textarea>
                                     @error('special_instructions')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -256,11 +273,11 @@
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            <a href="{{ route('donations.index') }}" class="btn btn-secondary">
+                            <a href="{{ route('donations.show', $donation) }}" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Cancelar
                             </a>
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Crear Donación
+                                <i class="fas fa-save"></i> Actualizar Donación
                             </button>
                         </div>
                     </form>

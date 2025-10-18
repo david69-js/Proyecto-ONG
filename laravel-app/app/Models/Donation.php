@@ -53,6 +53,10 @@ class Donation extends Model
         'metadata' => 'array',
     ];
 
+    protected $attributes = [
+        'currency' => 'GTQ',
+    ];
+
     /**
      * Relación con el usuario donante (si está registrado)
      */
@@ -147,6 +151,14 @@ class Donation extends Model
     public function scopeProcessed($query)
     {
         return $query->where('status', 'processed');
+    }
+
+    /**
+     * Scope para donaciones pendientes
+     */
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
     }
 
     /**
@@ -254,7 +266,15 @@ class Donation extends Model
             return 'N/A';
         }
 
-        return number_format($this->amount, 2) . ' ' . $this->currency;
+        $symbols = [
+            'GTQ' => 'Q',
+            'USD' => '$',
+            'EUR' => '€',
+            'MXN' => '$',
+        ];
+
+        $symbol = $symbols[$this->currency] ?? $this->currency;
+        return $symbol . number_format($this->amount, 2);
     }
 
     /**
@@ -335,6 +355,7 @@ class Donation extends Model
         return $code;
     }
 
+
     /**
      * Boot method para generar código automáticamente
      */
@@ -376,9 +397,9 @@ class Donation extends Model
         return [
             'total_donations' => $query->count(),
             'total_amount' => $query->monetary()->sum('amount'),
-            'confirmed_donations' => $query->clone()->confirmed()->count(),
-            'processed_donations' => $query->clone()->processed()->count(),
-            'pending_donations' => $query->clone()->pending()->count(),
+            'confirmed_donations' => (clone $query)->confirmed()->count(),
+            'processed_donations' => (clone $query)->processed()->count(),
+            'pending_donations' => (clone $query)->pending()->count(),
         ];
     }
 }

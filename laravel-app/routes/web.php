@@ -8,12 +8,14 @@ use App\Http\Controllers\BeneficiaryController;
 use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AboutSectionController;
 
 
 Route::get('/', function () {
     return view('index');
 });
+
 
 Route::get('/about', function () {
     return view('about');
@@ -153,6 +155,33 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reports/statistics', [DonationController::class, 'reports'])->name('reports')->middleware('permission:donations.reports');
         Route::get('/export/data', [DonationController::class, 'export'])->name('export')->middleware('permission:donations.export');
     });
+});
+
+// Product Management Routes
+Route::prefix('products')->name('products.')->middleware('auth')->group(function () {
+    // Rutas específicas primero (antes que las genéricas)
+    Route::get('/create', [ProductController::class, 'create'])->name('create')->middleware('permission:products.create');
+    Route::get('/statistics/overview', [ProductController::class, 'statistics'])->name('statistics')->middleware('permission:products.statistics');
+    Route::get('/catalog/show', [ProductController::class, 'catalog'])->name('catalog');
+    
+    // Rutas administrativas
+    Route::middleware('permission:products.view')->group(function () {
+        Route::get('/', [ProductController::class, 'index'])->name('index');
+    });
+    
+    Route::middleware('permission:products.create')->group(function () {
+        Route::post('/', [ProductController::class, 'store'])->name('store');
+    });
+    
+    Route::middleware('permission:products.edit')->group(function () {
+        Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('edit');
+        Route::put('/{product}', [ProductController::class, 'update'])->name('update');
+    });
+    
+    Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy')->middleware('permission:products.delete');
+    
+    // Ruta genérica al final
+    Route::get('/{product}', [ProductController::class, 'show'])->name('show')->middleware('permission:products.view');
 });
 
 // About Section Management Routes

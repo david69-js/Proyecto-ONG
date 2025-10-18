@@ -312,6 +312,57 @@ class PermissionSeeder extends Seeder
                 'module' => 'donations',
                 'is_active' => true,
             ],
+
+            // Productos
+            [
+                'name' => 'Ver Productos',
+                'slug' => 'products.view',
+                'description' => 'Puede ver la lista de productos',
+                'module' => 'products',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Crear Productos',
+                'slug' => 'products.create',
+                'description' => 'Puede crear nuevos productos',
+                'module' => 'products',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Editar Productos',
+                'slug' => 'products.edit',
+                'description' => 'Puede editar información de productos',
+                'module' => 'products',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Eliminar Productos',
+                'slug' => 'products.delete',
+                'description' => 'Puede eliminar productos',
+                'module' => 'products',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Ver Catálogo Público',
+                'slug' => 'products.catalog',
+                'description' => 'Puede ver el catálogo público de productos',
+                'module' => 'products',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Ver Estadísticas de Productos',
+                'slug' => 'products.statistics',
+                'description' => 'Puede ver estadísticas de productos',
+                'module' => 'products',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Gestionar Inventario',
+                'slug' => 'products.inventory',
+                'description' => 'Puede gestionar el inventario de productos',
+                'module' => 'products',
+                'is_active' => true,
+            ],
         ];
 
         foreach ($permissions as $permission) {

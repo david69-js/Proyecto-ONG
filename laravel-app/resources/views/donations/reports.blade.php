@@ -72,7 +72,7 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <h4 class="mb-0">${{ number_format($statistics['total_amount'], 2) }}</h4>
+                                            <h4 class="mb-0">Q{{ number_format($statistics['total_amount'], 2) }}</h4>
                                             <p class="mb-0">Monto Total</p>
                                         </div>
                                         <div class="align-self-center">
@@ -202,7 +202,7 @@
                                                 </tr>
                                                 <tr class="table-success">
                                                     <td><strong>Monto Total Recaudado</strong></td>
-                                                    <td class="text-end"><strong>${{ number_format($statistics['total_amount'], 2) }}</strong></td>
+                                                    <td class="text-end"><strong>Q{{ number_format($statistics['total_amount'], 2) }}</strong></td>
                                                     <td class="text-end">-</td>
                                                 </tr>
                                             </tbody>
@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'short' });
             }),
             datasets: [{
-                label: 'Monto Recaudado ($)',
+                label: 'Monto Recaudado (Q)',
                 data: monthlyDonationsData.map(item => parseFloat(item.total)),
                 borderColor: colors.primary,
                 backgroundColor: colors.primary + '20',
@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     beginAtZero: true,
                     ticks: {
                         callback: function(value) {
-                            return '$' + value.toLocaleString();
+                            return 'Q' + value.toLocaleString();
                         }
                     }
                 }

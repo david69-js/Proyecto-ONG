@@ -25,7 +25,7 @@ class DonationSeeder extends Seeder
             [
                 'donation_type' => 'monetary',
                 'amount' => 500.00,
-                'currency' => 'USD',
+                'currency' => 'GTQ',
                 'description' => 'Donación para el proyecto de construcción de viviendas',
                 'donor_name' => 'María González',
                 'donor_email' => 'maria.gonzalez@email.com',
@@ -46,7 +46,7 @@ class DonationSeeder extends Seeder
             [
                 'donation_type' => 'monetary',
                 'amount' => 1000.00,
-                'currency' => 'USD',
+                'currency' => 'GTQ',
                 'description' => 'Aporte para programa de educación',
                 'donor_name' => 'Corporación ABC',
                 'donor_email' => 'donaciones@abc.com',
@@ -65,7 +65,7 @@ class DonationSeeder extends Seeder
             [
                 'donation_type' => 'monetary',
                 'amount' => 250.00,
-                'currency' => 'USD',
+                'currency' => 'GTQ',
                 'description' => 'Donación anónima para ayuda alimentaria',
                 'donor_name' => 'Donante Anónimo',
                 'donor_email' => null,
@@ -140,7 +140,7 @@ class DonationSeeder extends Seeder
             [
                 'donation_type' => 'mixed',
                 'amount' => 750.00,
-                'currency' => 'USD',
+                'currency' => 'GTQ',
                 'description' => 'Donación mixta: $500 en efectivo + materiales escolares',
                 'donor_name' => 'Fundación Educativa GHI',
                 'donor_email' => 'donaciones@ghi.org',
@@ -159,7 +159,7 @@ class DonationSeeder extends Seeder
             [
                 'donation_type' => 'monetary',
                 'amount' => 5000.00,
-                'currency' => 'USD',
+                'currency' => 'GTQ',
                 'description' => 'Subsidio gubernamental para programa de salud',
                 'donor_name' => 'Ministerio de Salud Pública',
                 'donor_email' => 'subsidios@salud.gob',
@@ -179,7 +179,7 @@ class DonationSeeder extends Seeder
             [
                 'donation_type' => 'monetary',
                 'amount' => 100.00,
-                'currency' => 'USD',
+                'currency' => 'GTQ',
                 'description' => 'Donación con información incompleta',
                 'donor_name' => 'Juan Pérez',
                 'donor_email' => 'juan@email.com',
@@ -195,7 +195,7 @@ class DonationSeeder extends Seeder
             [
                 'donation_type' => 'monetary',
                 'amount' => 300.00,
-                'currency' => 'USD',
+                'currency' => 'GTQ',
                 'description' => 'Donación cancelada por el donante',
                 'donor_name' => 'Ana López',
                 'donor_email' => 'ana@email.com',

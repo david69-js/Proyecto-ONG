@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('donation_code')->unique(); // Código único de donación
             $table->enum('donation_type', ['monetary', 'materials', 'services', 'volunteer', 'mixed'])->default('monetary');
             $table->decimal('amount', 15, 2)->nullable(); // Monto en caso de donación monetaria
-            $table->string('currency', 3)->default('USD'); // Moneda
+            $table->string('currency', 3)->default('GTQ'); // Moneda
             $table->text('description'); // Descripción de la donación
             
             // Información del donante
@@ -61,6 +61,7 @@ return new class extends Migration
             $table->foreignId('created_by')->nullable()->constrained('sys_users')->onDelete('set null');
             $table->foreignId('updated_by')->nullable()->constrained('sys_users')->onDelete('set null');
             $table->timestamps();
+            $table->softDeletes();
             
             // Índices para optimización
             $table->index(['donation_type', 'status']);
