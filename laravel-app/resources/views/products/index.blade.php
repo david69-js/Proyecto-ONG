@@ -1,4 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
+
+@section('page-title', 'Gestión de Productos')
+@section('page-description', 'Administrar productos del sistema')
 
 @section('title', 'Gestión de Productos')
 

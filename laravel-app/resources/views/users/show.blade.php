@@ -1,6 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'User Details - ' . $user->full_name)
+@section('page-title', 'Detalles del Usuario')
+@section('page-description', 'Información completa del usuario: ' . $user->full_name)
 
 @section('content')
 <div class="container-fluid">

@@ -113,13 +113,13 @@
                                         <td>{{ $user->phone ?? 'N/A' }}</td>
                                         <td>
                                             @foreach($user->roles as $role)
-                                                <span class="badge bg-{{ $role->slug === 'super_admin' ? 'danger' : ($role->slug === 'admin' ? 'warning' : ($role->slug === 'coordinator' ? 'info' : 'secondary')) }}">
+                                                <span class="badge bg-{{ $role->slug === 'super_admin' ? 'danger' : ($role->slug === 'admin' ? 'warning' : ($role->slug === 'coordinator' ? 'info' : 'secondary')) }} text-white">
                                                     {{ $role->name }}
                                                 </span>
                                             @endforeach
                                         </td>
                                         <td>
-                                            <span class="badge bg-{{ $user->is_active ? 'success' : 'danger' }}">
+                                            <span class="badge bg-{{ $user->is_active ? 'success' : 'danger' }} text-white">
                                                 {{ $user->is_active ? 'Activo' : 'Inactivo' }}
                                             </span>
                                         </td>

@@ -1,4 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
+
+@section('page-title', 'Gestión de Patrocinadores')
+@section('page-description', 'Administrar patrocinadores del sistema')
 
 @section('title', 'Patrocinadores y Colaboradores')
 

@@ -1,30 +1,29 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'Detalles del Evento')
-
-@section('header', 'Detalles del Evento')
+@section('page-title', 'Detalles del Evento')
+@section('page-description', 'Información completa del evento: ' . $event->title)
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <!-- Contenido Principal -->
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h3 class="card-title">
-                            <i class="fas fa-calendar-alt"></i>
-                            {{ $event->title }}
-                        </h3>
+<div class="row">
+    <!-- Contenido Principal -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        {{ $event->title }}
+                    </h3>
                         <div>
                             @if($event->featured)
-                                <span class="badge badge-warning">
-                                    <i class="fas fa-star"></i>
+                                <span class="badge bg-warning text-white">
+                                    <i class="fas fa-star me-1"></i>
                                     Destacado
                                 </span>
                             @endif
-                            <span class="badge badge-{{ $event->status_color }}">
-                                {{ $event->status_formatted }}
+                            <span class="badge bg-{{ $event->status === 'published' ? 'success' : ($event->status === 'draft' ? 'secondary' : ($event->status === 'cancelled' ? 'danger' : 'info')) }} text-white">
+                                {{ ucfirst($event->status) }}
                             </span>
                         </div>
                     </div>
@@ -44,8 +43,8 @@
                                 <tr>
                                     <td><strong>Tipo:</strong></td>
                                     <td>
-                                        <span class="badge badge-{{ $event->event_type_color }}">
-                                            {{ $event->event_type_formatted }}
+                                        <span class="badge bg-{{ $event->event_type === 'fundraising' ? 'success' : ($event->event_type === 'volunteer' ? 'info' : ($event->event_type === 'awareness' ? 'warning' : 'primary')) }} text-white">
+                                            {{ ucfirst(str_replace('_', ' ', $event->event_type)) }}
                                         </span>
                                     </td>
                                 </tr>
@@ -97,7 +96,7 @@
                                     <tr>
                                         <td><strong>Requiere Registro:</strong></td>
                                         <td>
-                                            <span class="badge badge-info">Sí</span>
+                                            <span class="badge bg-info text-white">Sí</span>
                                             @if($event->registration_deadline)
                                                 <br><small class="text-muted">
                                                     Límite: {{ $event->registration_deadline->format('d/m/Y H:i') }}
@@ -150,7 +149,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped">
+                            <table class="table table-vcenter card-table">
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
@@ -168,8 +167,8 @@
                                             <td>{{ $registration->email }}</td>
                                             <td>{{ $registration->phone ?? '-' }}</td>
                                             <td>
-                                                <span class="badge badge-{{ $registration->status_color }}">
-                                                    {{ $registration->status_formatted }}
+                                                <span class="badge bg-{{ $registration->status === 'confirmed' ? 'success' : ($registration->status === 'pending' ? 'warning' : 'secondary') }} text-white">
+                                                    {{ ucfirst($registration->status) }}
                                                 </span>
                                             </td>
                                             <td>{{ $registration->registered_at->format('d/m/Y H:i') }}</td>

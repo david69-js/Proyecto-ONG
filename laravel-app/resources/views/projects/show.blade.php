@@ -1,4 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
+
+@section('page-title', 'Detalles del Proyecto')
+@section('page-description', 'Información completa del proyecto')
 
 @section('content')
 <div class="container-fluid">

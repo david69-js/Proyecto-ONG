@@ -1,14 +1,18 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
+
+@section('title', 'Proyectos')
+@section('page-title', 'Gestión de Proyectos')
+@section('page-description', 'Administrar proyectos del sistema')
+
+@section('page-actions')
+@permission('projects.create')
+<a href="{{ route('projects.create') }}" class="btn btn-primary">
+    <i class="fas fa-plus me-1"></i>Nuevo Proyecto
+</a>
+@endpermission
+@endsection
 
 @section('content')
-<div class="container-fluid">
-    <h3 class="mb-4">Proyectos</h3>
-    
-    @permission('projects.create')
-    <a href="{{ route('projects.create') }}" class="btn btn-primary mb-3">
-        <i class="fas fa-plus"></i> Nuevo Proyecto
-    </a>
-    @endpermission
 
     @role('beneficiary')
     <div class="alert alert-info">

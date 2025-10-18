@@ -24,6 +24,9 @@
     
     <!-- Custom Tabler CSS -->
     <link href="{{ asset('assets/css/tabler-custom.css') }}" rel="stylesheet">
+    
+    <!-- Blue Theme CSS -->
+    <link href="{{ asset('assets/css/blue-theme.css') }}" rel="stylesheet">
 
     @stack('styles')
 </head>

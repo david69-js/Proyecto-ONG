@@ -1,6 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'Permisos del Usuario - ' . $user->full_name)
+@section('page-title', 'Gestionar Permisos')
+@section('page-description', 'Asignar permisos al usuario: ' . $user->full_name)
 
 @section('content')
 <div class="container-fluid">

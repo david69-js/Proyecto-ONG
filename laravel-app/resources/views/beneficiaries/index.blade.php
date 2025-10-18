@@ -1,7 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'Beneficiarios')
-@section('header', 'Gestión de Beneficiarios')
+@section('page-title', 'Gestión de Beneficiarios')
+@section('page-description', 'Administrar beneficiarios del sistema')
 
 @section('content')
 @if(session('success'))

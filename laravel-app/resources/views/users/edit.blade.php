@@ -1,6 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'Editar Usuario - ' . $user->full_name)
+@section('page-title', 'Editar Usuario')
+@section('page-description', 'Modificar información del usuario: ' . $user->full_name)
 
 @section('content')
 <div class="container-fluid">

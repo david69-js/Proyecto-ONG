@@ -1,18 +1,19 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'Catálogo de Productos')
+@section('page-title', 'Catálogo de Productos')
+@section('page-description', 'Explorar todos los productos disponibles')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h3 class="card-title">
-                            <i class="fas fa-store text-primary"></i>
-                            Catálogo de Productos
-                        </h3>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">
+                        <i class="fas fa-store text-primary me-2"></i>
+                        Catálogo de Productos
+                    </h3>
                         <div class="d-flex gap-2">
                             <a href="{{ route('products.index') }}" class="btn btn-outline-primary">
                                 <i class="fas fa-cog"></i> Administrar

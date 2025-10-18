@@ -1,4 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
+
+@section('page-title', 'Gestión de Ubicaciones')
+@section('page-description', 'Administrar ubicaciones del sistema')
 
 @section('content')
 <div class="container-fluid">

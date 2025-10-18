@@ -1,18 +1,19 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', $product->name)
+@section('page-title', 'Detalles del Producto')
+@section('page-description', 'Información completa del producto: ' . $product->name)
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Productos</a></li>
-                    <li class="breadcrumb-item active">{{ $product->name }}</li>
-                </ol>
-            </nav>
+<div class="row">
+    <div class="col-12">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Productos</a></li>
+                <li class="breadcrumb-item active">{{ $product->name }}</li>
+            </ol>
+        </nav>
 
             <div class="card">
                 <div class="card-header">
