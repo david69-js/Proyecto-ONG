@@ -1,18 +1,19 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'Reportes de Donaciones')
+@section('page-title', 'Reportes de Donaciones')
+@section('page-description', 'Análisis y estadísticas de donaciones del sistema')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-chart-bar text-primary"></i>
-                        Reportes de Donaciones
-                    </h3>
-                </div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-bar text-primary me-2"></i>
+                    Reportes de Donaciones
+                </h3>
+            </div>
 
                 <div class="card-body">
                     <!-- Filtros -->
@@ -171,7 +172,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-striped">
+                                        <table class="table table-vcenter card-table">
                                             <thead>
                                                 <tr>
                                                     <th>Métrica</th>

@@ -1,18 +1,19 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'Estadísticas de Productos')
+@section('page-title', 'Estadísticas de Productos')
+@section('page-description', 'Análisis y métricas de los productos del sistema')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h3 class="card-title">
-                            <i class="fas fa-chart-bar text-primary"></i>
-                            Estadísticas de Productos
-                        </h3>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">
+                        <i class="fas fa-chart-bar text-primary me-2"></i>
+                        Estadísticas de Productos
+                    </h3>
                         <div class="d-flex gap-2">
                             <a href="{{ route('products.index') }}" class="btn btn-outline-primary">
                                 <i class="fas fa-arrow-left"></i> Volver a Productos
@@ -132,7 +133,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-striped">
+                                        <table class="table table-vcenter card-table">
                                             <thead>
                                                 <tr>
                                                     <th>Categoría</th>
@@ -168,7 +169,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-striped">
+                                        <table class="table table-vcenter card-table">
                                             <thead>
                                                 <tr>
                                                     <th>Condición</th>

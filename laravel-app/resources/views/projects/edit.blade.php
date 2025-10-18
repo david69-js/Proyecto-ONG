@@ -1,4 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
+
+@section('page-title', 'Editar Proyecto')
+@section('page-description', 'Modificar información del proyecto')
 
 @section('content')
 <div class="container">

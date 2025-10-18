@@ -1,8 +1,17 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
+
+@section('title', 'Crear Proyecto')
+@section('page-title', 'Crear Nuevo Proyecto')
+@section('page-description', 'Registrar un nuevo proyecto en el sistema')
 
 @section('content')
-<div class="container">
-    <h3>Crear Proyecto</h3>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Información del Proyecto</h3>
+            </div>
+            <div class="card-body">
 
     <form action="{{ route('projects.store') }}" method="POST">
         @csrf

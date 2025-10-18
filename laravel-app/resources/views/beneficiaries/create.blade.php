@@ -1,4 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
+
+@section('page-title', 'Crear Beneficiario')
+@section('page-description', 'Registrar un nuevo beneficiario')
 
 @section('title', 'Crear Beneficiario')
 @section('header', 'Crear Nuevo Beneficiario')

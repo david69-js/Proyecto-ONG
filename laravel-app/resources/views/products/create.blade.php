@@ -1,18 +1,19 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'Crear Producto')
+@section('page-title', 'Crear Nuevo Producto')
+@section('page-description', 'Registrar un nuevo producto en el catálogo')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-plus text-primary"></i>
-                        Crear Nuevo Producto
-                    </h3>
-                </div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-plus text-primary me-2"></i>
+                    Crear Nuevo Producto
+                </h3>
+            </div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">

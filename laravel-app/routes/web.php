@@ -16,6 +16,26 @@ Route::get('/', function () {
     return view('index');
 });
 
+// Ruta temporal para probar Tabler
+Route::get('/dashboard-tabler', function () {
+    return view('dashboard-tabler');
+})->middleware('auth');
+
+// Ruta de prueba para Tabler
+Route::get('/test-tabler', function () {
+    return view('test-tabler');
+})->middleware('auth');
+
+// Ruta de prueba para Sidebar
+Route::get('/test-sidebar', function () {
+    return view('test-sidebar');
+})->middleware('auth');
+
+// Ruta de prueba para Sidebar Debug
+Route::get('/test-sidebar-debug', function () {
+    return view('test-sidebar-debug');
+})->middleware('auth');
+
 
 Route::get('/about', function () {
     return view('about');
@@ -41,9 +61,7 @@ Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->
 Route::middleware(['auth'])->group(function () {
     
     // Dashboard
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
     // ============================================
     // User Management Routes

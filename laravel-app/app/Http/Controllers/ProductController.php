@@ -385,7 +385,7 @@ class ProductController extends Controller
             ->orderBy('count', 'desc')
             ->get();
 
-        $conditionStats = Product::selectRaw('condition, COUNT(*) as count')
+        $conditionStats = Product::selectRaw('`condition`, COUNT(*) as count')
             ->groupBy('condition')
             ->orderBy('count', 'desc')
             ->get();

@@ -1,20 +1,24 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'Gestión de Usuarios')
+@section('page-title', 'Gestión de Usuarios')
+@section('page-description', 'Administrar usuarios del sistema')
+
+@section('page-actions')
+@permission('users.create')
+<a href="{{ route('users.create') }}" class="btn btn-primary">
+    <i class="fas fa-plus me-1"></i> Agregar Nuevo Usuario
+</a>
+@endpermission
+@endsection
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Gestión de Usuarios</h3>
-                    @permission('users.create')
-                    <a href="{{ route('users.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Agregar Nuevo Usuario
-                    </a>
-                    @endpermission
-                </div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Filtros de Búsqueda</h3>
+            </div>
                 
                 <div class="card-body">
                     <!-- Formulario de búsqueda y filtros -->
@@ -69,8 +73,8 @@
 
                     <!-- Tabla de usuarios -->
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <thead class="thead-dark">
+                        <table class="table table-vcenter card-table">
+                            <thead>
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Correo</th>
@@ -78,7 +82,7 @@
                                     <th>Roles</th>
                                     <th>Estado</th>
                                     <th>Último acceso</th>
-                                    <th>Acciones</th>
+                                    <th class="w-1">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -109,13 +113,13 @@
                                         <td>{{ $user->phone ?? 'N/A' }}</td>
                                         <td>
                                             @foreach($user->roles as $role)
-                                                <span class="badge badge-{{ $role->slug === 'super_admin' ? 'danger' : ($role->slug === 'admin' ? 'warning' : ($role->slug === 'coordinator' ? 'info' : 'secondary')) }}">
+                                                <span class="badge bg-{{ $role->slug === 'super_admin' ? 'danger' : ($role->slug === 'admin' ? 'warning' : ($role->slug === 'coordinator' ? 'info' : 'secondary')) }} text-white">
                                                     {{ $role->name }}
                                                 </span>
                                             @endforeach
                                         </td>
                                         <td>
-                                            <span class="badge badge-{{ $user->is_active ? 'success' : 'danger' }}">
+                                            <span class="badge bg-{{ $user->is_active ? 'success' : 'danger' }} text-white">
                                                 {{ $user->is_active ? 'Activo' : 'Inactivo' }}
                                             </span>
                                         </td>
@@ -130,7 +134,7 @@
                                             <div class="btn-group" role="group">
                                                 @can('view', $user)
                                                 <a href="{{ route('users.show', $user) }}" 
-                                                   class="btn btn-sm btn-outline-info" 
+                                                   class="btn btn-sm btn-outline-primary" 
                                                    title="Ver">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
@@ -138,7 +142,7 @@
                                                 
                                                 @can('update', $user)
                                                 <a href="{{ route('users.edit', $user) }}" 
-                                                   class="btn btn-sm btn-outline-primary" 
+                                                   class="btn btn-sm btn-outline-warning" 
                                                    title="Editar">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
@@ -211,29 +215,33 @@
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 @push('styles')
 <style>
     .badge {
-        font-size: 0.85em;
-        padding: 0.4em 0.6em;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.375rem 0.75rem;
     }
-    .card {
-        margin-bottom: 1.5rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    .btn-group .btn {
+        margin-right: 0.25rem;
     }
-    .card-header {
-        background-color: #f8f9fa;
-        font-weight: bold;
-    }
-    .btn {
-        border-radius: 0.3rem;
+    .btn-group .btn:last-child {
+        margin-right: 0;
     }
     .table th, .table td {
         vertical-align: middle;
+    }
+    .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.875rem;
     }
 </style>
 @endpush

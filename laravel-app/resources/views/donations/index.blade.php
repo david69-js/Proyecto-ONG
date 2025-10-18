@@ -1,4 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
+
+@section('page-title', 'Gestión de Donaciones')
+@section('page-description', 'Administrar donaciones del sistema')
 
 @section('title', 'Gestión de Donaciones')
 
