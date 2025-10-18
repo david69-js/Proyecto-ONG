@@ -8,10 +8,12 @@ use App\Models\Project;
 use App\Models\User;
 use App\Models\Beneficiary;
 use App\Models\Location;
+use App\Models\Donation;
 use App\Policies\ProjectPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\BeneficiaryPolicy;
 use App\Policies\LocationPolicy;
+use App\Policies\DonationPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
         User::class => UserPolicy::class,
         Beneficiary::class => BeneficiaryPolicy::class,
         Location::class => LocationPolicy::class,
+        Donation::class => DonationPolicy::class,
     ];
 
     /**
