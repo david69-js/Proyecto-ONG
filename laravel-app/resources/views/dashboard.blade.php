@@ -229,7 +229,7 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">
-                    <i class="fas fa-user me-2"></i>Mi Perfil
+                    <i class="fas fa-user me-2"></i>Mi Perfil siempre
                 </h3>
             </div>
             <div class="card-body">

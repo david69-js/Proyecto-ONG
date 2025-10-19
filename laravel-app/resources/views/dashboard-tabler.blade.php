@@ -7,6 +7,7 @@
 @section('content')
 <div class="row row-deck row-cards">
     <!-- Estadísticas principales -->
+     <h1 class="text-center">Estadísticas</h1>
     <div class="col-sm-6 col-lg-3">
         <div class="card">
             <div class="card-body">

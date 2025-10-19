@@ -41,6 +41,7 @@
        
             <!-- Page header -->
             <div class="page-header d-print-none">
+                <h1 class="text-center">@yield('page-title', 'Dashboard')</h1>
                 <div class="container-xl">
                     <div class="row g-2 align-items-center">
                         <div class="col">
