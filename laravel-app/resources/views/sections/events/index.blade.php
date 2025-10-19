@@ -26,10 +26,10 @@
                         <p class="text-muted">{{ Str::limit($event->description, 100) }}</p>
 
                         <div class="d-flex flex-wrap gap-1 mb-2">
-                            <!-- Ver Evento -->
-                            <a href="{{ route('events.show', $event) }}" class="btn btn-sm btn-info">
-                                <i class="fas fa-eye"></i> Ver
-                            </a>
+                           <!-- Ver Evento (ADMIN) -->
+<a href="{{ route('admin.events.show', $event) }}" class="btn btn-sm btn-info">
+    <i class="fas fa-eye"></i> Ver
+</a>
 
                             <!-- Destacar -->
                             <form action="{{ route('admin.events.toggle_featured', $event) }}" method="POST">

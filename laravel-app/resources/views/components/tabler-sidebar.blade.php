@@ -139,15 +139,12 @@
                             <a class="dropdown-item" href="{{ route('admin.about.index') }}">
                                 <i class="fas fa-info-circle me-2"></i>Sobre Nosotros
                             </a>
-                            <a class="dropdown-item" href="{{ route('admin.events.index.edit') }}">
+                            <a class="dropdown-item" href="{{ route('admin.events.index') }}">
                                 <i class="fas fa-calendar-alt me-2"></i>Eventos
                             </a>
                             <a class="dropdown-item" href="{{ route('admin.projects.index') }}">
                                 <i class="fas fa-briefcase me-2"></i>Proyectos
-                            </a>
-                            <a class="dropdown-item" href="{{ route('admin.beneficiaries.index') }}">
-                                <i class="fas fa-users me-2"></i>Beneficiarios
-                            </a>
+                          
                             <a class="dropdown-item" href="{{ route('admin.sponsors.index') }}">
                                 <i class="fas fa-handshake me-2"></i>Patrocinadores
                             </a>
@@ -277,29 +274,32 @@
                     </li>
                     @endpermission
 
-                    <!-- Gestión de Eventos -->
-                    @permission('events.view')
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#navbar-events" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
-                            <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                <i class="fas fa-calendar-alt"></i>
-                            </span>
-                            <span class="nav-link-title">Eventos</span>
-                        </a>
-                        <div class="dropdown-menu">
-                            @permission('events.view')
-                            <a class="dropdown-item" href="{{ route('events.index') }}">
-                                <i class="fas fa-list me-2"></i>Listar Eventos
-                            </a>
-                            @endpermission
-                            @permission('events.create')
-                            <a class="dropdown-item" href="{{ route('events.create') }}">
-                                <i class="fas fa-plus me-2"></i>Crear Evento
-                            </a>
-                            @endpermission
-                        </div>
-                    </li>
-                    @endpermission
+                   <!-- Gestión de Eventos -->
+@permission('events.view')
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#navbar-events" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+        <span class="nav-link-icon d-md-none d-lg-inline-block">
+            <i class="fas fa-calendar-alt"></i>
+        </span>
+        <span class="nav-link-title">Eventos</span>
+    </a>
+
+    <div class="dropdown-menu">
+        @permission('events.view')
+        <a class="dropdown-item" href="{{ route('admin.events.index') }}">
+            <i class="fas fa-list me-2"></i> Listar Eventos
+        </a>
+        @endpermission
+
+        @permission('events.create')
+        <a class="dropdown-item" href="{{ route('admin.events.create') }}">
+            <i class="fas fa-plus me-2"></i> Crear Evento
+        </a>
+        @endpermission
+    </div>
+</li>
+@endpermission
+
 
                     <!-- Gestión de Donaciones -->
                     @permission('donations.view')

@@ -138,22 +138,38 @@ Route::middleware(['auth'])->group(function () {
     });
 
   // ============================================
-    // Events Management Routes
-    // ============================================
-    Route::prefix('events')->name('events.')->middleware('any.permission:events.view')->group(function () {
-        Route::get('/', [EventController::class, 'index'])->name('index');
-        Route::get('/create', [EventController::class, 'create'])->name('create')->middleware('permission:events.create');
-        Route::post('/', [EventController::class, 'store'])->name('store')->middleware('permission:events.create');
-        Route::get('/{event}', [EventController::class, 'show'])->name('show');
-        Route::get('/{event}/edit', [EventController::class, 'edit'])->name('edit')->middleware('permission:events.edit');
-        Route::put('/{event}', [EventController::class, 'update'])->name('update')->middleware('permission:events.edit');
-        Route::delete('/{event}', [EventController::class, 'destroy'])->name('destroy')->middleware('permission:events.delete');
-        Route::patch('/{event}/toggle-featured', [EventController::class, 'toggleFeatured'])->name('toggle-featured')->middleware('permission:events.edit');
-        Route::patch('/{event}/change-status', [EventController::class, 'changeStatus'])->name('change-status')->middleware('permission:events.edit');
-        Route::post('/{event}/register', [EventController::class, 'register'])->name('register');
-        Route::patch('/registrations/{registration}/status', [EventController::class, 'updateRegistrationStatus'])->name('registration.status')->middleware('permission:events.edit');
-        Route::delete('/registrations/{registration}', [EventController::class, 'deleteRegistration'])->name('registration.delete')->middleware('permission:events.edit');
+// Events Management Routes (ADMIN)
+// ============================================
+Route::middleware(['auth'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('events', [EventController::class,'index'])->name('events.index');
+        Route::get('events/create', [EventController::class,'create'])->name('events.create');
+        Route::post('events', [EventController::class,'store'])->name('events.store');
+
+        Route::get('events/{event}', [EventController::class,'show'])->name('events.show');
+
+        Route::get('events/{event}/edit', [EventController::class,'edit'])->name('events.edit');
+        Route::put('events/{event}', [EventController::class,'update'])->name('events.update');
+        Route::delete('events/{event}', [EventController::class,'destroy'])->name('events.destroy');
+
+        Route::patch('events/{event}/toggle-featured', [EventController::class,'toggleFeatured'])
+            ->name('events.toggle_featured');
+
+        Route::post('events/{event}/change-status', [EventController::class,'changeStatus'])
+            ->name('events.change-status');
+
+        Route::post('events/{event}/register', [EventController::class,'register'])
+            ->name('events.register');
+
+        Route::post('registrations/{registration}/status', [EventController::class,'updateRegistrationStatus'])
+            ->name('registrations.update-status');
+
+        Route::delete('registrations/{registration}', [EventController::class,'deleteRegistration'])
+            ->name('registrations.destroy');
     });
+Route::get('/eventos/{event}', [EventController::class, 'showPublic'])->name('events.public.show');
 
     // ============================================
     // Donations Management Routes

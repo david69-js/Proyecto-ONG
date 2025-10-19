@@ -220,7 +220,7 @@
                 <span><i class="bi bi-clock-history"></i> {{ $event->end_date->format('d/m/Y H:i') }}</span>
               @endif
             </div>
-            <a href="{{ route('events.show', $event) }}" class="service-link">
+            <a href="{{ route('events.public.show', $event) }}" class="service-link">
               Ver más <i class="bi bi-arrow-right"></i>
             </a>
           </div>
