@@ -1,37 +1,66 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'Editar Patrocinador')
-
-@section('header', 'Editar Patrocinador')
+@section('page-title', 'Editar Patrocinador')
+@section('page-description', 'Modifica los datos del patrocinador seleccionado')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-xl">
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <i class="fas fa-edit"></i>
+                        <i class="fas fa-edit me-2"></i>
                         Editar Patrocinador: {{ $sponsor->name }}
                     </h3>
+                    <div class="card-actions">
+                        <a href="{{ route('sponsors.show', $sponsor) }}" class="btn btn-outline-info custom">
+                            <i class="fas fa-eye me-1"></i>
+                            Ver Detalles
+                        </a>
+                        <a href="{{ route('sponsors.index') }}" class="btn btn-outline-secondary custom">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Volver
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     @if($errors->any())
-                        <div class="alert alert-danger">
-                            <strong>Corrige los siguientes errores:</strong>
-                            <ul class="mb-0 mt-2">
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <div class="d-flex">
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M12 9v2m0 4v.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <strong>Corrige los siguientes errores:</strong>
+                                    <ul class="mb-0 mt-2">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                            <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                         </div>
                     @endif
                     @if(session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            {{ session('error') }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <div class="d-flex">
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M12 9v2m0 4v.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    {{ session('error') }}
+                                </div>
+                            </div>
+                            <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                         </div>
                     @endif
                     <form action="{{ route('sponsors.update', $sponsor) }}" method="POST" enctype="multipart/form-data">
@@ -48,8 +77,8 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="name">Nombre *</label>
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label required">Nombre</label>
                                             <input type="text" class="form-control @error('name') is-invalid @enderror" 
                                                    id="name" name="name" value="{{ old('name', $sponsor->name) }}" required>
                                             @error('name')
@@ -58,8 +87,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="company_name">Empresa</label>
+                                        <div class="mb-3">
+                                            <label for="company_name" class="form-label">Empresa</label>
                                             <input type="text" class="form-control @error('company_name') is-invalid @enderror" 
                                                    id="company_name" name="company_name" value="{{ old('company_name', $sponsor->company_name) }}">
                                             @error('company_name')
@@ -71,7 +100,7 @@
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="contact_person">Persona de Contacto</label>
                                             <input type="text" class="form-control @error('contact_person') is-invalid @enderror" 
                                                    id="contact_person" name="contact_person" value="{{ old('contact_person', $sponsor->contact_person) }}">
@@ -81,7 +110,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="email">Email *</label>
                                             <input type="email" class="form-control @error('email') is-invalid @enderror" 
                                                    id="email" name="email" value="{{ old('email', $sponsor->email) }}" required>
@@ -94,7 +123,7 @@
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="phone">Teléfono</label>
                                             <input type="text" class="form-control @error('phone') is-invalid @enderror" 
                                                    id="phone" name="phone" value="{{ old('phone', $sponsor->phone) }}">
@@ -104,7 +133,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="website">Sitio Web</label>
                                             <input type="url" class="form-control @error('website') is-invalid @enderror" 
                                                    id="website" name="website" value="{{ old('website', $sponsor->website) }}">
@@ -115,7 +144,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <label for="address">Dirección</label>
                                     <textarea class="form-control @error('address') is-invalid @enderror" 
                                               id="address" name="address" rows="3">{{ old('address', $sponsor->address) }}</textarea>
@@ -134,7 +163,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="sponsor_type">Tipo de Patrocinador *</label>
                                             <select class="form-control @error('sponsor_type') is-invalid @enderror" 
                                                     id="sponsor_type" name="sponsor_type" required>
@@ -152,7 +181,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="contribution_type">Tipo de Contribución *</label>
                                             <select class="form-control @error('contribution_type') is-invalid @enderror" 
                                                     id="contribution_type" name="contribution_type" required>
@@ -172,7 +201,7 @@
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="contribution_amount">Monto de Contribución</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
@@ -187,7 +216,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="priority_level">Nivel de Prioridad *</label>
                                             <select class="form-control @error('priority_level') is-invalid @enderror" 
                                                     id="priority_level" name="priority_level" required>
@@ -204,13 +233,62 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <label for="contribution_description">Descripción de la Contribución</label>
                                     <textarea class="form-control @error('contribution_description') is-invalid @enderror" 
                                               id="contribution_description" name="contribution_description" rows="3">{{ old('contribution_description', $sponsor->contribution_description) }}</textarea>
                                     @error('contribution_description')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Logo del Patrocinador -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-image"></i> Logo del Patrocinador
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                @if($sponsor->logo_path)
+                                    <div class="mb-3">
+                                        <label>Logo Actual</label>
+                                        <div class="text-center">
+                                            <img src="{{ asset('storage/' . $sponsor->logo_path) }}" 
+                                                 alt="Logo actual" class="img-thumbnail" 
+                                                 style="max-width: 200px; max-height: 200px;">
+                                        </div>
+                                    </div>
+                                @endif
+                                
+                                <div class="mb-3">
+                                    <label for="logo">
+                                        <i class="fas fa-upload"></i> {{ $sponsor->logo_path ? 'Cambiar Logo' : 'Subir Logo' }}
+                                    </label>
+                                    <input type="file" class="form-control @error('logo') is-invalid @enderror" 
+                                           id="logo" name="logo" accept="image/*">
+                                    <div class="form-text">
+                                        Formatos permitidos: JPG, PNG, GIF, SVG (máx. 2MB)
+                                        @if($sponsor->logo_path)
+                                            <br><small class="text-muted">Dejar en blanco para mantener el logo actual</small>
+                                        @endif
+                                    </div>
+                                    @error('logo')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                
+                                <div id="logo-preview" class="text-center" style="display: none;">
+                                    <label>Vista Previa del Nuevo Logo</label>
+                                    <img id="preview-img" src="" alt="Vista previa del logo" 
+                                         class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                                    <div class="mt-2">
+                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeLogo()">
+                                            <i class="fas fa-trash"></i> Eliminar
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -222,7 +300,7 @@
                                 <h3 class="card-title">Proyectos Asociados</h3>
                             </div>
                             <div class="card-body">
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <label>Seleccionar Proyectos</label>
                                     <div class="row">
                                         @foreach($projects as $project)
@@ -273,35 +351,6 @@
 
                     <!-- Panel Lateral -->
                     <div class="col-md-4">
-                        <!-- Logo -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Logo</h3>
-                            </div>
-                            <div class="card-body text-center">
-                                @if($sponsor->logo_path)
-                                <div class="mb-3">
-                                    <img src="{{ $sponsor->logo_url }}" alt="{{ $sponsor->name }}" 
-                                         class="img-fluid rounded" style="max-height: 150px;">
-                                </div>
-                                @endif
-                                
-                                <div class="form-group">
-                                    <label for="logo">Cambiar Logo</label>
-                                    <input type="file" class="form-control-file @error('logo') is-invalid @enderror" 
-                                           id="logo" name="logo" accept="image/*">
-                                    @error('logo')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                    <small class="form-text text-muted">
-                                        Formatos: JPG, PNG, GIF, SVG. Máximo 2MB.
-                                    </small>
-                                </div>
-                                <div id="logo-preview" class="mt-3" style="display: none;">
-                                    <img id="preview-img" src="" alt="Preview" class="img-fluid" style="max-height: 150px;">
-                                </div>
-                            </div>
-                        </div>
 
                         <!-- Estado y Configuración -->
                         <div class="card">
@@ -309,7 +358,7 @@
                                 <h3 class="card-title">Estado y Configuración</h3>
                             </div>
                             <div class="card-body">
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <label for="status">Estado *</label>
                                     <select class="form-control @error('status') is-invalid @enderror" 
                                             id="status" name="status" required>
@@ -323,7 +372,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured" 
                                                value="1" {{ old('is_featured', $sponsor->is_featured) ? 'checked' : '' }}>
@@ -335,7 +384,7 @@
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="partnership_start_date">Fecha de Inicio</label>
                                             <input type="date" class="form-control @error('partnership_start_date') is-invalid @enderror" 
                                                    id="partnership_start_date" name="partnership_start_date" 
@@ -346,7 +395,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="partnership_end_date">Fecha de Fin</label>
                                             <input type="date" class="form-control @error('partnership_end_date') is-invalid @enderror" 
                                                    id="partnership_end_date" name="partnership_end_date" 
@@ -366,7 +415,7 @@
                                 <h3 class="card-title">Descripción y Notas</h3>
                             </div>
                             <div class="card-body">
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <label for="description">Descripción</label>
                                     <textarea class="form-control @error('description') is-invalid @enderror" 
                                               id="description" name="description" rows="4">{{ old('description', $sponsor->description) }}</textarea>
@@ -375,8 +424,8 @@
                                     @enderror
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="notes">Notas Internas</label>
+                                <div class="mb-3">
+                                    <label for="notes" class="form-label">Notas Internas</label>
                                     <textarea class="form-control @error('notes') is-invalid @enderror" 
                                               id="notes" name="notes" rows="3">{{ old('notes', $sponsor->notes) }}</textarea>
                                     @error('notes')
@@ -394,11 +443,11 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
-                                    <a href="{{ route('sponsors.show', $sponsor) }}" class="btn btn-secondary">
-                                        <i class="fas fa-arrow-left"></i> Cancelar
+                                    <a href="{{ route('sponsors.show', $sponsor) }}" class="btn btn-outline-secondary custom">
+                                        <i class="fas fa-arrow-left me-1"></i> Cancelar
                                     </a>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save"></i> Actualizar Patrocinador
+                                    <button type="submit" class="btn btn-primary custom">
+                                        <i class="fas fa-save me-1"></i> Actualizar Patrocinador
                                     </button>
                                 </div>
                             </div>
@@ -447,6 +496,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+function removeLogo() {
+    document.getElementById('logo').value = '';
+    document.getElementById('logo-preview').style.display = 'none';
+}
 </script>
 @endpush
 @endsection

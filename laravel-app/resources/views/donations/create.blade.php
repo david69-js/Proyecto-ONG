@@ -1,29 +1,60 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
-@section('title', 'Nueva Donación')
+@section('title', 'Crear Donación')
+@section('page-title', 'Crear Donación')
+@section('page-description', 'Registra una nueva donación en el sistema')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-xl">
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <i class="fas fa-heart text-danger"></i>
+                        <i class="fas fa-heart text-danger me-2"></i>
                         Nueva Donación
                     </h3>
+                    <div class="card-actions">
+                        <a href="{{ route('donations.index') }}" class="btn btn-outline-secondary custom">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Volver
+                        </a>
+                    </div>
                 </div>
 
                 <div class="card-body">
+                    @if($errors->any())
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <div class="d-flex">
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M12 9v2m0 4v.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <strong>Por favor, corrige los siguientes errores:</strong>
+                                    <ul class="mb-0 mt-2">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                            <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                        </div>
+                    @endif
+
                     <form method="POST" action="{{ route('donations.store') }}" enctype="multipart/form-data">
                         @csrf
                         
                         <div class="row">
                             <!-- Información de la Donación -->
                             <div class="col-md-6">
-                                <h5 class="text-primary mb-3">
-                                    <i class="fas fa-gift"></i> Información de la Donación
-                                </h5>
+                                <div class="hr-text">
+                                    <i class="fas fa-gift me-2"></i>
+                                    Información de la Donación
+                                </div>
                                 
                                 <div class="mb-3">
                                     <label for="donation_type" class="form-label">Tipo de Donación *</label>
@@ -107,9 +138,10 @@
 
                             <!-- Información del Donante -->
                             <div class="col-md-6">
-                                <h5 class="text-primary mb-3">
-                                    <i class="fas fa-user"></i> Información del Donante
-                                </h5>
+                                <div class="hr-text">
+                                    <i class="fas fa-user me-2"></i>
+                                    Información del Donante
+                                </div>
 
                                 <div class="mb-3">
                                     <label for="donor_type" class="form-label">Tipo de Donante *</label>
@@ -180,9 +212,10 @@
                         <!-- Información de Pago -->
                         <div class="row">
                             <div class="col-md-6">
-                                <h5 class="text-primary mb-3">
-                                    <i class="fas fa-credit-card"></i> Información de Pago
-                                </h5>
+                                <div class="hr-text">
+                                    <i class="fas fa-credit-card me-2"></i>
+                                    Información de Pago
+                                </div>
 
                                 <div class="mb-3">
                                     <label for="payment_method" class="form-label">Método de Pago *</label>
@@ -220,9 +253,10 @@
                             </div>
 
                             <div class="col-md-6">
-                                <h5 class="text-primary mb-3">
-                                    <i class="fas fa-file-alt"></i> Documentos
-                                </h5>
+                                <div class="hr-text">
+                                    <i class="fas fa-file-alt me-2"></i>
+                                    Documentos
+                                </div>
 
                                 <div class="mb-3">
                                     <label for="receipt" class="form-label">Comprobante</label>
@@ -255,13 +289,17 @@
                             </div>
                         </div>
 
-                        <div class="d-flex justify-content-between">
-                            <a href="{{ route('donations.index') }}" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> Cancelar
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Crear Donación
-                            </button>
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ route('donations.index') }}" class="btn btn-outline-secondary custom">
+                                    <i class="fas fa-arrow-left me-1"></i>
+                                    Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-primary custom">
+                                    <i class="fas fa-save me-1"></i>
+                                    Crear Donación
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -269,7 +307,9 @@
         </div>
     </div>
 </div>
+@endsection
 
+@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const donationTypeSelect = document.getElementById('donation_type');
@@ -292,4 +332,4 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleAmountField(); // Ejecutar al cargar la página
 });
 </script>
-@endsection
+@endpush

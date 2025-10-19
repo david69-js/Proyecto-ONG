@@ -66,7 +66,7 @@ class SponsorController extends Controller
      */
     public function create()
     {
-        $projects = Project::where('estado', '!=', 'completado')->get();
+        $projects = Project::where('estado', '!=', 'finalizado')->get();
         return view('sponsors.create', compact('projects'));
     }
 
@@ -96,7 +96,7 @@ class SponsorController extends Controller
             'is_featured' => 'boolean',
             'priority_level' => 'required|integer|min:1|max:10',
             'projects' => 'nullable|array',
-            'projects.*' => 'exists:projects,id',
+            'projects.*' => 'exists:ng_projects,id',
         ]);
 
         // Defaults
@@ -145,7 +145,7 @@ class SponsorController extends Controller
      */
     public function edit(Sponsor $sponsor)
     {
-        $projects = Project::where('estado', '!=', 'completado')->get();
+        $projects = Project::where('estado', '!=', 'finalizado')->get();
         $sponsor->load('projects');
         return view('sponsors.edit', compact('sponsor', 'projects'));
     }
@@ -176,7 +176,7 @@ class SponsorController extends Controller
             'is_featured' => 'boolean',
             'priority_level' => 'required|integer|min:1|max:10',
             'projects' => 'nullable|array',
-            'projects.*' => 'exists:projects,id',
+            'projects.*' => 'exists:ng_projects,id',
         ]);
 
         // Defaults

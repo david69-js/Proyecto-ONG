@@ -1,56 +1,50 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'Crear Evento')
-
-@section('header', 'Crear Nuevo Evento')
+@section('page-title', 'Crear Evento')
+@section('page-description', 'Registra un nuevo evento en el sistema')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-xl">
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <i class="fas fa-calendar-plus"></i>
+                        <i class="fas fa-calendar-plus me-2"></i>
                         Información del Evento
                     </h3>
+                    <div class="card-actions">
+                        <a href="{{ route('events.index') }}" class="btn btn-outline-secondary custom">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Volver
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         
-                        <!-- Modal de Errores -->
+                        <!-- Alertas de Errores -->
                         @if($errors->any())
-                            <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header bg-danger text-white">
-                                            <h5 class="modal-title" id="errorModalLabel">
-                                                <i class="fas fa-exclamation-triangle"></i>
-                                                Errores de Validación
-                                            </h5>
-                                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="alert alert-danger">
-                                                <h6><i class="fas fa-info-circle"></i> Por favor corrige los siguientes errores:</h6>
-                                                <ul class="mb-0">
-                                                    @foreach($errors->all() as $error)
-                                                        <li>{{ $error }}</li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                                <i class="fas fa-times"></i>
-                                                Cerrar
-                                            </button>
-                                        </div>
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <div class="d-flex">
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M12 9v2m0 4v.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <strong>Por favor, corrige los siguientes errores:</strong>
+                                        <ul class="mb-0 mt-2">
+                                            @foreach($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
                                     </div>
                                 </div>
+                                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                             </div>
                         @endif
 
@@ -67,11 +61,10 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="title">
-                                                        <i class="fas fa-heading"></i>
-                                                        Título del Evento 
-                                                        <span class="text-danger font-weight-bold">*</span>
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label required">
+                                                        <i class="fas fa-heading me-1"></i>
+                                                        Título del Evento
                                                     </label>
                                                     <input type="text" 
                                                            class="form-control @error('title') is-invalid @enderror" 
@@ -86,7 +79,7 @@
                                             </div>
                                             
                                             <div class="col-12">
-                                                <div class="form-group">
+                                                <div class="mb-3">
                                                     <label for="description">
                                                         <i class="fas fa-align-left"></i>
                                                         Descripción
@@ -102,7 +95,7 @@
                                             </div>
                                             
                                             <div class="col-12 col-md-6">
-                                                <div class="form-group">
+                                                <div class="mb-3">
                                                     <label for="event_type">
                                                         <i class="fas fa-tags"></i>
                                                         Tipo de Evento 
@@ -126,7 +119,7 @@
                                             </div>
                                             
                                             <div class="col-12 col-md-6">
-                                                <div class="form-group">
+                                                <div class="mb-3">
                                                     <label for="status">
                                                         <i class="fas fa-flag"></i>
                                                         Estado 
@@ -162,7 +155,7 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12 col-md-6">
-                                                <div class="form-group">
+                                                <div class="mb-3">
                                                     <label for="start_date">
                                                         <i class="fas fa-play"></i>
                                                         Fecha de Inicio 
@@ -181,7 +174,7 @@
                                             </div>
                                             
                                             <div class="col-12 col-md-6">
-                                                <div class="form-group">
+                                                <div class="mb-3">
                                                     <label for="end_date">
                                                         <i class="fas fa-stop"></i>
                                                         Fecha de Fin
@@ -198,7 +191,7 @@
                                             </div>
                                             
                                             <div class="col-12 col-md-6">
-                                                <div class="form-group">
+                                                <div class="mb-3">
                                                     <label for="location">
                                                         <i class="fas fa-map-marker-alt"></i>
                                                         Ubicación
@@ -216,7 +209,7 @@
                                             </div>
                                             
                                             <div class="col-12 col-md-6">
-                                                <div class="form-group">
+                                                <div class="mb-3">
                                                     <label for="cost">
                                                         <i class="fas fa-coins"></i>
                                                         Costo (Q)
@@ -240,7 +233,7 @@
                                             </div>
                                             
                                             <div class="col-12">
-                                                <div class="form-group">
+                                                <div class="mb-3">
                                                     <label for="address">
                                                         <i class="fas fa-map"></i>
                                                         Dirección Completa
@@ -271,7 +264,7 @@
                                         </h5>
                                     </div>
                                     <div class="card-body">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="max_participants">
                                                 <i class="fas fa-user-plus"></i>
                                                 Máximo de Participantes
@@ -287,7 +280,7 @@
                                             @enderror
                                         </div>
                                         
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <div class="form-check">
                                                 <input type="checkbox" 
                                                        class="form-check-input" 
@@ -301,7 +294,7 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="form-group" id="registration_deadline_group" style="display: none;">
+                                        <div class="mb-3" id="registration_deadline_group" style="display: none;">
                                             <label for="registration_deadline">
                                                 <i class="fas fa-clock"></i>
                                                 Fecha Límite de Registro
@@ -327,7 +320,7 @@
                                         </h5>
                                     </div>
                                     <div class="card-body">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="project_id">
                                                 <i class="fas fa-folder"></i>
                                                 Proyecto
@@ -358,7 +351,7 @@
                                         </h5>
                                     </div>
                                     <div class="card-body">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <div class="form-check">
                                                 <input type="checkbox" 
                                                        class="form-check-input" 
@@ -372,7 +365,7 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="image">
                                                 <i class="fas fa-image"></i>
                                                 Imagen del Evento
@@ -407,7 +400,7 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12 col-md-6">
-                                                <div class="form-group">
+                                                <div class="mb-3">
                                                     <label for="contact_email">
                                                         <i class="fas fa-envelope"></i>
                                                         Email de Contacto
@@ -425,7 +418,7 @@
                                             </div>
                                             
                                             <div class="col-12 col-md-6">
-                                                <div class="form-group">
+                                                <div class="mb-3">
                                                     <label for="contact_phone">
                                                         <i class="fas fa-phone"></i>
                                                         Teléfono de Contacto
@@ -443,7 +436,7 @@
                                             </div>
                                             
                                             <div class="col-12">
-                                                <div class="form-group">
+                                                <div class="mb-3">
                                                     <label for="requirements">
                                                         <i class="fas fa-list-check"></i>
                                                         Requisitos
@@ -467,14 +460,25 @@
                         <!-- Información sobre Campos Requeridos -->
                         <div class="row">
                             <div class="col-12">
-                                <div class="alert alert-info">
-                                    <h6><i class="fas fa-info-circle"></i> Información Importante:</h6>
-                                    <ul class="mb-0">
-                                        <li>Los campos marcados con <span class="text-danger font-weight-bold">*</span> son obligatorios</li>
-                                        <li>Si hay errores de validación, se mostrará un modal con los detalles</li>
-                                        <li>La fecha de fin debe ser posterior a la fecha de inicio</li>
-                                        <li>La fecha límite de registro debe ser anterior a la fecha de inicio del evento</li>
-                                    </ul>
+                                <div class="alert alert-info alert-dismissible" role="alert">
+                                    <div class="d-flex">
+                                        <div>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M12 9v2m0 4v.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h6><i class="fas fa-info-circle me-1"></i> Información Importante:</h6>
+                                            <ul class="mb-0">
+                                                <li>Los campos marcados con <span class="text-danger fw-bold">*</span> son obligatorios</li>
+                                                <li>Si hay errores de validación, se mostrará una alerta con los detalles</li>
+                                                <li>La fecha de fin debe ser posterior a la fecha de inicio</li>
+                                                <li>La fecha límite de registro debe ser anterior a la fecha de inicio del evento</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                                 </div>
                             </div>
                         </div>
@@ -484,12 +488,12 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body text-center">
-                                        <a href="{{ route('events.index') }}" class="btn btn-secondary mr-2">
-                                            <i class="fas fa-arrow-left"></i>
+                                        <a href="{{ route('events.index') }}" class="btn btn-outline-secondary me-2 custom">
+                                            <i class="fas fa-arrow-left me-1"></i>
                                             Cancelar
                                         </a>
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-save"></i>
+                                        <button type="submit" class="btn btn-primary custom">
+                                            <i class="fas fa-save me-1"></i>
                                             Crear Evento
                                         </button>
                                     </div>
@@ -505,11 +509,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Mostrar modal de errores automáticamente si hay errores
-    const errorModal = document.getElementById('errorModal');
-    if (errorModal) {
-        $(errorModal).modal('show');
-    }
+    // Las alertas de errores se muestran automáticamente
     
     // Manejar campo de registro requerido
     const registrationRequired = document.getElementById('registration_required');

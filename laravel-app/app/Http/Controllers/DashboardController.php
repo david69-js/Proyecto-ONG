@@ -34,9 +34,15 @@ class DashboardController extends Controller
         $stats['completed_projects'] = Project::where('estado', 'finalizado')->count();
 
         // Beneficiarios activos
-        $stats['active_beneficiaries'] = Beneficiary::whereHas('user', function($query) {
-            $query->where('is_active', true);
-        })->count();
+        $stats['active_beneficiaries'] = Beneficiary::where('is_active', true)->count();
+        
+        // Beneficiarios por género
+        $stats['male_beneficiaries'] = Beneficiary::where('gender', 'male')->count();
+        $stats['female_beneficiaries'] = Beneficiary::where('gender', 'female')->count();
+        
+        // Beneficiarios por edad
+        $stats['child_beneficiaries'] = Beneficiary::where('age', '<', 18)->count();
+        $stats['adult_beneficiaries'] = Beneficiary::where('age', '>=', 18)->count();
 
         // Donaciones del mes actual
         $stats['donations_this_month'] = Donation::whereMonth('created_at', Carbon::now()->month)
@@ -57,6 +63,15 @@ class DashboardController extends Controller
 
         // Eventos próximos
         $stats['upcoming_events'] = Event::where('start_date', '>=', Carbon::now())->count();
+        
+        // Patrocinadores activos
+        $stats['active_sponsors'] = Sponsor::where('status', 'active')->count();
+        
+        // Donaciones confirmadas
+        $stats['confirmed_donations'] = Donation::where('status', 'confirmed')->count();
+        
+        // Donaciones pendientes
+        $stats['pending_donations'] = Donation::where('status', 'pending')->count();
 
         // Proyectos recientes (últimos 5)
         $recent_projects = Project::with(['beneficiaries'])
@@ -76,6 +91,12 @@ class DashboardController extends Controller
 
         // Usuarios recientes (últimos 5)
         $recent_users = User::with(['roles'])
+            ->latest()
+            ->take(5)
+            ->get();
+            
+        // Beneficiarios recientes (últimos 5)
+        $recent_beneficiaries = Beneficiary::with(['user'])
             ->latest()
             ->take(5)
             ->get();
@@ -123,6 +144,7 @@ class DashboardController extends Controller
             'recent_projects',
             'recent_donations',
             'recent_users',
+            'recent_beneficiaries',
             'monthly_stats',
             'projects_by_status',
             'donations_by_status',

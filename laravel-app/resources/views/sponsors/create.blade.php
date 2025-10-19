@@ -1,40 +1,62 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'Crear Patrocinador')
-
-@section('header', 'Crear Patrocinador')
+@section('page-title', 'Crear Patrocinador')
+@section('page-description', 'Registra un nuevo patrocinador en el sistema')
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-plus"></i> Crear Nuevo Patrocinador
-                </h3>
-                <div class="card-tools">
-                    <a href="{{ route('sponsors.index') }}" class="btn btn-tool">
-                        <i class="fas fa-times"></i>
-                    </a>
+<div class="container-xl">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-plus me-2"></i>
+                        Crear Nuevo Patrocinador
+                    </h3>
+                    <div class="card-actions">
+                        <a href="{{ route('sponsors.index') }}" class="btn btn-outline-secondary custom">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Volver
+                        </a>
+                    </div>
                 </div>
-            </div>
             <div class="card-body">
             @if($errors->any())
-                <div class="alert alert-danger">
-                    <strong>Corrige los siguientes errores:</strong>
-                    <ul class="mb-0 mt-2">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M12 9v2m0 4v.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <strong>Corrige los siguientes errores:</strong>
+                            <ul class="mb-0 mt-2">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                 </div>
             @endif
             @if(session('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ session('error') }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M12 9v2m0 4v.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            {{ session('error') }}
+                        </div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                 </div>
             @endif
             <form action="{{ route('sponsors.store') }}" method="POST" enctype="multipart/form-data">
@@ -52,9 +74,9 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 col-md-6">
-                                        <div class="form-group">
-                                            <label for="name">
-                                                <i class="fas fa-user"></i> Nombre *
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label required">
+                                                <i class="fas fa-user me-1"></i> Nombre
                                             </label>
                                             <input type="text" class="form-control @error('name') is-invalid @enderror" 
                                                    id="name" name="name" value="{{ old('name') }}" required>
@@ -64,7 +86,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="company_name">
                                                 <i class="fas fa-building"></i> Empresa
                                             </label>
@@ -79,7 +101,7 @@
 
                                 <div class="row">
                                     <div class="col-12 col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="contact_person">
                                                 <i class="fas fa-user-tie"></i> Persona de Contacto
                                             </label>
@@ -91,7 +113,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="email">
                                                 <i class="fas fa-envelope"></i> Email *
                                             </label>
@@ -106,7 +128,7 @@
 
                                 <div class="row">
                                     <div class="col-12 col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="phone">
                                                 <i class="fas fa-phone"></i> Teléfono
                                             </label>
@@ -118,7 +140,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="website">
                                                 <i class="fas fa-globe"></i> Sitio Web
                                             </label>
@@ -131,7 +153,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <label for="address">
                                         <i class="fas fa-map-marker-alt"></i> Dirección
                                     </label>
@@ -154,7 +176,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="sponsor_type">
                                                 <i class="fas fa-tag"></i> Tipo de Patrocinador *
                                             </label>
@@ -174,7 +196,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="contribution_type">
                                                 <i class="fas fa-gift"></i> Tipo de Contribución *
                                             </label>
@@ -196,7 +218,7 @@
 
                                 <div class="row">
                                     <div class="col-12 col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="contribution_amount">
                                                 <i class="fas fa-coins"></i> Monto de Contribución
                                             </label>
@@ -214,7 +236,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="priority_level">
                                                 <i class="fas fa-star"></i> Nivel de Prioridad *
                                             </label>
@@ -233,7 +255,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <label for="contribution_description">
                                         <i class="fas fa-align-left"></i> Descripción de la Contribución
                                     </label>
@@ -247,6 +269,40 @@
                             </div>
                         </div>
 
+                        <!-- Logo del Patrocinador -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-image"></i> Logo del Patrocinador
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="logo">
+                                        <i class="fas fa-upload"></i> Subir Logo
+                                    </label>
+                                    <input type="file" class="form-control @error('logo') is-invalid @enderror" 
+                                           id="logo" name="logo" accept="image/*">
+                                    <div class="form-text">
+                                        Formatos permitidos: JPG, PNG, GIF, SVG (máx. 2MB)
+                                    </div>
+                                    @error('logo')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                
+                                <div id="logo-preview" class="text-center" style="display: none;">
+                                    <img id="preview-img" src="" alt="Vista previa del logo" 
+                                         class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                                    <div class="mt-2">
+                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeLogo()">
+                                            <i class="fas fa-trash"></i> Eliminar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Proyectos Asociados -->
                         @if($projects->count() > 0)
                         <div class="card">
@@ -256,7 +312,7 @@
                                 </h3>
                             </div>
                             <div class="card-body">
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <label>
                                         <i class="fas fa-check-square"></i> Seleccionar Proyectos
                                     </label>
@@ -315,32 +371,6 @@
 
                     <!-- Panel Lateral -->
                     <div class="col-12 col-lg-4">
-                        <!-- Logo -->
-                        <div class="card mb-3">
-                            <div class="card-header">
-                                <h3 class="card-title">
-                                    <i class="fas fa-image"></i> Logo
-                                </h3>
-                            </div>
-                            <div class="card-body text-center">
-                                <div class="form-group">
-                                    <label for="logo">
-                                        <i class="fas fa-upload"></i> Subir Logo
-                                    </label>
-                                    <input type="file" class="form-control-file @error('logo') is-invalid @enderror" 
-                                           id="logo" name="logo" accept="image/*">
-                                    @error('logo')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                    <small class="form-text text-muted">
-                                        <i class="fas fa-info-circle"></i> Formatos: JPG, PNG, GIF, SVG. Máximo 2MB.
-                                    </small>
-                                </div>
-                                <div id="logo-preview" class="mt-3" style="display: none;">
-                                    <img id="preview-img" src="" alt="Preview" class="img-fluid rounded shadow-sm" style="max-height: 150px;">
-                                </div>
-                            </div>
-                        </div>
 
                         <!-- Estado y Configuración -->
                         <div class="card mb-3">
@@ -350,7 +380,7 @@
                                 </h3>
                             </div>
                             <div class="card-body">
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <label for="status">
                                         <i class="fas fa-toggle-on"></i> Estado *
                                     </label>
@@ -366,7 +396,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured" 
                                                value="1" {{ old('is_featured') ? 'checked' : '' }}>
@@ -378,7 +408,7 @@
 
                                 <div class="row">
                                     <div class="col-12 col-sm-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="partnership_start_date">
                                                 <i class="fas fa-calendar-plus"></i> Fecha de Inicio
                                             </label>
@@ -391,7 +421,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-sm-6">
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <label for="partnership_end_date">
                                                 <i class="fas fa-calendar-minus"></i> Fecha de Fin
                                             </label>
@@ -415,7 +445,7 @@
                                 </h3>
                             </div>
                             <div class="card-body">
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <label for="description">
                                         <i class="fas fa-align-left"></i> Descripción
                                     </label>
@@ -427,7 +457,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <label for="notes">
                                         <i class="fas fa-clipboard"></i> Notas Internas
                                     </label>
@@ -450,14 +480,14 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 col-sm-6 mb-2 mb-sm-0">
-                                        <a href="{{ route('sponsors.index') }}" class="btn btn-secondary btn-block">
-                                            <i class="fas fa-arrow-left"></i> 
+                                        <a href="{{ route('sponsors.index') }}" class="btn btn-outline-secondary w-100 custom">
+                                            <i class="fas fa-arrow-left me-1"></i> 
                                             <span class="d-none d-sm-inline">Cancelar</span>
                                         </a>
                                     </div>
                                     <div class="col-12 col-sm-6">
-                                        <button type="submit" class="btn btn-primary btn-block">
-                                            <i class="fas fa-save"></i> 
+                                        <button type="submit" class="btn btn-primary w-100 custom">
+                                            <i class="fas fa-save me-1"></i> 
                                             <span class="d-none d-sm-inline">Crear Patrocinador</span>
                                             <span class="d-sm-none">Crear</span>
                                         </button>
@@ -507,7 +537,29 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Vista previa del logo
+    const logoInput = document.getElementById('logo');
+    const logoPreview = document.getElementById('logo-preview');
+    const previewImg = document.getElementById('preview-img');
+
+    logoInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                logoPreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 });
+
+function removeLogo() {
+    document.getElementById('logo').value = '';
+    document.getElementById('logo-preview').style.display = 'none';
+}
 </script>
 @endpush
 @endsection

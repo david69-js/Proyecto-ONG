@@ -115,6 +115,7 @@
 /* Badges con colores azules */
 .badge.bg-primary {
     background-color: var(--primary-blue) !important;
+    color: #ffffff !important;
 }
 
 .badge.bg-info {

@@ -138,70 +138,6 @@
                 </div>
             </div>
             
-            <!-- Registros del Evento -->
-            @if($event->registrations->count() > 0)
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            <i class="fas fa-user-check"></i>
-                            Registros ({{ $event->registrations->count() }})
-                        </h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-vcenter card-table">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Email</th>
-                                        <th>Teléfono</th>
-                                        <th>Estado</th>
-                                        <th>Fecha de Registro</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($event->registrations as $registration)
-                                        <tr>
-                                            <td>{{ $registration->name }}</td>
-                                            <td>{{ $registration->email }}</td>
-                                            <td>{{ $registration->phone ?? '-' }}</td>
-                                            <td>
-                                                <span class="badge bg-{{ $registration->status === 'confirmed' ? 'success' : ($registration->status === 'pending' ? 'warning' : 'secondary') }} text-white">
-                                                    {{ ucfirst($registration->status) }}
-                                                </span>
-                                            </td>
-                                            <td>{{ $registration->registered_at->format('d/m/Y H:i') }}</td>
-                                            <td>
-                                                @can('update', $event)
-                                                    <div class="btn-group btn-group-sm">
-                                                        <form method="POST" action="{{ route('events.registration.status', $registration) }}" class="d-inline">
-                                                            @csrf
-                                                            @method('PATCH')
-                                                            <select name="status" class="form-control form-control-sm" onchange="this.form.submit()">
-                                                                <option value="pending" {{ $registration->status == 'pending' ? 'selected' : '' }}>Pendiente</option>
-                                                                <option value="confirmed" {{ $registration->status == 'confirmed' ? 'selected' : '' }}>Confirmado</option>
-                                                                <option value="cancelled" {{ $registration->status == 'cancelled' ? 'selected' : '' }}>Cancelado</option>
-                                                            </select>
-                                                        </form>
-                                                        <form method="POST" action="{{ route('events.registration.delete', $registration) }}" class="d-inline" onsubmit="return confirm('¿Eliminar este registro?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                @endcan
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            @endif
         </div>
         
         <!-- Panel Lateral -->
@@ -338,5 +274,75 @@
             </div>
         </div>
     </div>
+    
+    <!-- Tabla de Registros - Ancho Completo -->
+    @if($event->registrations->count() > 0)
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-user-check"></i>
+                            Registros ({{ $event->registrations->count() }})
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-vcenter card-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Email</th>
+                                        <th>Teléfono</th>
+                                        <th>Estado</th>
+                                        <th>Fecha de Registro</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($event->registrations as $registration)
+                                        <tr>
+                                            <td>{{ $registration->name }}</td>
+                                            <td>{{ $registration->email }}</td>
+                                            <td>{{ $registration->phone ?? '-' }}</td>
+                                            <td>
+                                                <span class="badge bg-{{ $registration->status === 'confirmed' ? 'success' : ($registration->status === 'pending' ? 'warning' : 'secondary') }} text-white">
+                                                    {{ ucfirst($registration->status) }}
+                                                </span>
+                                            </td>
+                                            <td>{{ $registration->registered_at->format('d/m/Y H:i') }}</td>
+                                            <td>
+                                                @can('update', $event)
+                                                    <div class="btn-group btn-group-sm">
+                                                        <form method="POST" action="{{ route('events.registration.status', $registration) }}" class="d-inline">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <select name="status" class="form-control form-control-sm" onchange="this.form.submit()">
+                                                                <option value="pending" {{ $registration->status == 'pending' ? 'selected' : '' }}>Pendiente</option>
+                                                                <option value="confirmed" {{ $registration->status == 'confirmed' ? 'selected' : '' }}>Confirmado</option>
+                                                                <option value="cancelled" {{ $registration->status == 'cancelled' ? 'selected' : '' }}>Cancelado</option>
+                                                            </select>
+                                                        </form>
+                                                        <form method="POST" action="{{ route('events.registration.delete', $registration) }}" class="d-inline" onsubmit="return confirm('¿Eliminar este registro?')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                @endcan
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>
 @endsection
+

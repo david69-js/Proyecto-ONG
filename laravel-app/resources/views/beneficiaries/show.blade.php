@@ -225,7 +225,7 @@
                                 <div class="card-body">
                                     <div class="d-grid gap-2">
                                         @can('update', $beneficiary)
-                                        <a href="{{ route('beneficiaries.edit', $beneficiary) }}" class="btn btn-warning btn-lg">
+                                        <a href="{{ route('beneficiaries.edit', $beneficiary) }}" class="btn btn-warning">
                                             <i class="fas fa-edit mr-2"></i>
                                             Editar Beneficiario
                                         </a>
@@ -236,14 +236,14 @@
                                               class="d-inline" onsubmit="return confirm('¿Estás seguro de eliminar este beneficiario?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-lg w-100">
+                                            <button type="submit" class="btn btn-danger w-100">
                                                 <i class="fas fa-trash mr-2"></i>
                                                 Eliminar Beneficiario
                                             </button>
                                         </form>
                                         @endcan
 
-                                        <a href="{{ route('beneficiaries.index') }}" class="btn btn-secondary btn-lg">
+                                        <a href="{{ route('beneficiaries.index') }}" class="btn btn-secondary">
                                             <i class="fas fa-arrow-left mr-2"></i>
                                             Volver a la Lista
                                         </a>

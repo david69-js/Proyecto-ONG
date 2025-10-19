@@ -10,19 +10,35 @@
 @section('content')
             
             @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M5 12l5 5l10 -10"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            {{ session('success') }}
+                        </div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                 </div>
             @endif
             @if(session('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ session('error') }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M12 9v2m0 4v.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            {{ session('error') }}
+                        </div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                 </div>
             @endif
 
@@ -32,11 +48,6 @@
                     <h3 class="card-title">
                         <i class="fas fa-filter"></i> Filtros de Búsqueda
                     </h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
                 </div>
                 <div class="card-body">
                     <form method="GET" action="{{ route('sponsors.index') }}">
@@ -163,11 +174,11 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="badge badge-info">{{ $sponsor->sponsor_type_formatted }}</span>
+                                            <span class="badge bg-info">{{ $sponsor->sponsor_type_formatted }}</span>
                                         </td>
                                         <td>
                                             <div>
-                                                <span class="badge badge-success">{{ $sponsor->contribution_type_formatted }}</span>
+                                                <span class="badge bg-success">{{ $sponsor->contribution_type_formatted }}</span>
                                                 @if($sponsor->contribution_amount)
                                                     <br><small class="text-muted">Q{{ number_format($sponsor->contribution_amount, 2) }}</small>
                                                 @endif
@@ -176,22 +187,22 @@
                                         <td>
                                             @php
                                                 $statusClasses = [
-                                                    'active' => 'badge-success',
-                                                    'inactive' => 'badge-secondary',
-                                                    'pending' => 'badge-warning',
-                                                    'suspended' => 'badge-danger'
+                                                    'active' => 'bg-success',
+                                                    'inactive' => 'bg-secondary',
+                                                    'pending' => 'bg-warning',
+                                                    'suspended' => 'bg-danger'
                                                 ];
                                             @endphp
-                                            <span class="badge {{ $statusClasses[$sponsor->status] ?? 'badge-secondary' }}">
+                                            <span class="badge {{ $statusClasses[$sponsor->status] ?? 'bg-secondary' }}">
                                                 {{ $sponsor->status_formatted }}
                                             </span>
                                         </td>
                                         <td>
-                                            <span class="badge badge-primary">{{ $sponsor->priority_level }}</span>
+                                            <span class="badge bg-primary">{{ $sponsor->priority_level }}</span>
                                         </td>
                                         <td>
                                             @if($sponsor->is_featured)
-                                                <span class="badge badge-warning">
+                                                <span class="badge bg-warning">
                                                     <i class="fas fa-star"></i> Destacado
                                                 </span>
                                             @else
@@ -200,17 +211,17 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('sponsors.show', $sponsor) }}" class="btn btn-info btn-sm" title="Ver">
+                                                <a href="{{ route('sponsors.show', $sponsor) }}" class="btn btn-outline-info btn-sm" title="Ver">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                                 @permission('sponsors.edit')
-                                                <a href="{{ route('sponsors.edit', $sponsor) }}" class="btn btn-warning btn-sm" title="Editar">
+                                                <a href="{{ route('sponsors.edit', $sponsor) }}" class="btn btn-outline-warning btn-sm" title="Editar">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 <form method="POST" action="{{ route('sponsors.toggle-featured', $sponsor) }}" class="d-inline">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <button type="submit" class="btn btn-sm {{ $sponsor->is_featured ? 'btn-outline-warning' : 'btn-warning' }}" 
+                                                    <button type="submit" class="btn btn-sm {{ $sponsor->is_featured ? 'btn-warning' : 'btn-outline-warning' }}" 
                                                             title="{{ $sponsor->is_featured ? 'Quitar destacado' : 'Marcar destacado' }}">
                                                         <i class="fas fa-star"></i>
                                                     </button>
@@ -218,7 +229,7 @@
                                                 <form method="POST" action="{{ route('sponsors.toggle-status', $sponsor) }}" class="d-inline">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <button type="submit" class="btn btn-sm {{ $sponsor->status === 'active' ? 'btn-outline-success' : 'btn-success' }}" 
+                                                    <button type="submit" class="btn btn-sm {{ $sponsor->status === 'active' ? 'btn-success' : 'btn-outline-success' }}" 
                                                             title="{{ $sponsor->status === 'active' ? 'Desactivar' : 'Activar' }}">
                                                         <i class="fas fa-power-off"></i>
                                                     </button>
@@ -229,7 +240,7 @@
                                                       onsubmit="return confirm('¿Estás seguro de eliminar este patrocinador?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm" title="Eliminar">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>

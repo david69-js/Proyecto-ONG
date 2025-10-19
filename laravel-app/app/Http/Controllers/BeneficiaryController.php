@@ -67,7 +67,7 @@ class BeneficiaryController extends Controller
         // Verificar autorización
         $this->authorize('create', Beneficiary::class);
 
-        $projects = Project::where('estado', '!=', 'completado')
+        $projects = Project::where('estado', '!=', 'finalizado')
                           ->orderBy('nombre')
                           ->get();
         return view('beneficiaries.create', compact('projects'));
@@ -91,7 +91,7 @@ class BeneficiaryController extends Controller
             'email' => 'nullable|email',
             'beneficiary_type' => 'nullable|string',
             'status' => 'nullable|string',
-            'project_id' => 'nullable|exists:projects,id',
+            'project_id' => 'nullable|exists:ng_projects,id',
             'notes' => 'nullable|string',
         ]);
 
@@ -144,7 +144,7 @@ class BeneficiaryController extends Controller
             'email' => 'nullable|email',
             'beneficiary_type' => 'nullable|string',
             'status' => 'nullable|string',
-            'project_id' => 'nullable|exists:projects,id',
+            'project_id' => 'nullable|exists:ng_projects,id',
             'notes' => 'nullable|string',
         ]);
 

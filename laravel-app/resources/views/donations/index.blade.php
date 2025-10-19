@@ -108,7 +108,7 @@
                                         <code>{{ $donation->donation_code }}</code>
                                     </td>
                                     <td>
-                                        <span class="badge bg-info">{{ $donation->donation_type_formatted }}</span>
+                                        <span class="badge bg-info custom-badge">{{ $donation->donation_type_formatted }}</span>
                                     </td>
                                     <td>
                                         <div>

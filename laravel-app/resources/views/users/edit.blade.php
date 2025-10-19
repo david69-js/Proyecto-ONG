@@ -5,22 +5,46 @@
 @section('page-description', 'Modificar información del usuario: ' . $user->full_name)
 
 @section('content')
-<div class="container-fluid">
-    <!-- Navegación -->
-    <x-head-admin />
-
-    <!-- Fin Navegación -->
+<div class="container-xl">
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Editar Usuario: {{ $user->full_name }}</h3>
-                    <a href="{{ route('users.index') }}" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Volver a Usuarios
-                    </a>
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-user-edit me-2"></i>
+                        Editar Usuario: {{ $user->full_name }}
+                    </h3>
+                    <div class="card-actions">
+                        <a href="{{ route('users.index') }}" class="btn btn-outline-secondary custom">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Volver a Usuarios
+                        </a>
+                    </div>
                 </div>
                 
                 <div class="card-body">
+                    @if($errors->any())
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <div class="d-flex">
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M12 9v2m0 4v.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <strong>Por favor, corrige los siguientes errores:</strong>
+                                    <ul class="mb-0 mt-2">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                            <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                        </div>
+                    @endif
+
                     <form action="{{ route('users.update', $user) }}" method="POST">
                         @csrf
                         @method('PUT')
@@ -35,8 +59,8 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="first_name" class="required">Nombre</label>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="first_name" class="required">Nombre</label>
                                                     <input type="text" 
                                                            class="form-control @error('first_name') is-invalid @enderror" 
                                                            id="first_name" 
@@ -49,8 +73,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="last_name" class="required">Apellido</label>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="last_name" class="required">Apellido</label>
                                                     <input type="text" 
                                                            class="form-control @error('last_name') is-invalid @enderror" 
                                                            id="last_name" 
@@ -64,8 +88,8 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="form-group">
-                                            <label for="email" class="required">Correo Electrónico</label>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="email" class="required">Correo Electrónico</label>
                                             <input type="email" 
                                                    class="form-control @error('email') is-invalid @enderror" 
                                                    id="email" 
@@ -77,8 +101,8 @@
                                             @enderror
                                         </div>
                                         
-                                        <div class="form-group">
-                                            <label for="phone">Teléfono</label>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="phone">Teléfono</label>
                                             <input type="text" 
                                                    class="form-control @error('phone') is-invalid @enderror" 
                                                    id="phone" 
@@ -91,25 +115,28 @@
                                         
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="password">Nueva Contraseña</label>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="password" class="form-label">Nueva Contraseña</label>
                                                     <input type="password" 
                                                            class="form-control @error('password') is-invalid @enderror" 
                                                            id="password" 
                                                            name="password">
-                                                    <small class="form-text text-muted">Déjalo en blanco para mantener la contraseña actual</small>
+                                                    <div class="form-text">Déjalo en blanco para mantener la contraseña actual</div>
                                                     @error('password')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="password_confirmation">Confirmar Nueva Contraseña</label>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="password_confirmation" class="form-label">Confirmar Nueva Contraseña</label>
                                                     <input type="password" 
-                                                           class="form-control" 
+                                                           class="form-control @error('password_confirmation') is-invalid @enderror" 
                                                            id="password_confirmation" 
                                                            name="password_confirmation">
+                                                    @error('password_confirmation')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -123,7 +150,7 @@
                                                            name="is_active" 
                                                            value="1" 
                                                            {{ old('is_active', $user->is_active) ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="is_active">
+                                                    <label class="form-label" class="form-check-label" for="is_active">
                                                         Usuario Activo
                                                     </label>
                                                 </div>
@@ -136,7 +163,7 @@
                                                            name="is_verified" 
                                                            value="1" 
                                                            {{ old('is_verified', $user->is_verified) ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="is_verified">
+                                                    <label class="form-label" class="form-check-label" for="is_verified">
                                                         Usuario Verificado
                                                     </label>
                                                 </div>
@@ -155,8 +182,8 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="date_of_birth">Fecha de Nacimiento</label>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="date_of_birth">Fecha de Nacimiento</label>
                                                     <input type="date" 
                                                            class="form-control @error('date_of_birth') is-invalid @enderror" 
                                                            id="date_of_birth" 
@@ -168,8 +195,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="gender">Género</label>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="gender">Género</label>
                                                     <select class="form-control @error('gender') is-invalid @enderror" 
                                                             id="gender" 
                                                             name="gender">
@@ -186,8 +213,8 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="form-group">
-                                            <label for="bio">Biografía</label>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="bio">Biografía</label>
                                             <textarea class="form-control @error('bio') is-invalid @enderror" 
                                                       id="bio" 
                                                       name="bio" 
@@ -198,8 +225,8 @@
                                             @enderror
                                         </div>
                                         
-                                        <div class="form-group">
-                                            <label for="address">Dirección</label>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="address">Dirección</label>
                                             <input type="text" 
                                                    class="form-control @error('address') is-invalid @enderror" 
                                                    id="address" 
@@ -213,8 +240,8 @@
                                         
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="city">Ciudad</label>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="city">Ciudad</label>
                                                     <input type="text" 
                                                            class="form-control @error('city') is-invalid @enderror" 
                                                            id="city" 
@@ -226,8 +253,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="state">Estado / Provincia</label>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="state">Estado / Provincia</label>
                                                     <input type="text" 
                                                            class="form-control @error('state') is-invalid @enderror" 
                                                            id="state" 
@@ -239,8 +266,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="postal_code">Código Postal</label>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="postal_code">Código Postal</label>
                                                     <input type="text" 
                                                            class="form-control @error('postal_code') is-invalid @enderror" 
                                                            id="postal_code" 
@@ -253,8 +280,8 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="form-group">
-                                            <label for="country">País</label>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="country">País</label>
                                             <input type="text" 
                                                    class="form-control @error('country') is-invalid @enderror" 
                                                    id="country" 
@@ -279,8 +306,8 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="emergency_contact_name">Nombre del Contacto</label>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="emergency_contact_name">Nombre del Contacto</label>
                                                     <input type="text" 
                                                            class="form-control @error('emergency_contact_name') is-invalid @enderror" 
                                                            id="emergency_contact_name" 
@@ -292,8 +319,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="emergency_contact_phone">Teléfono del Contacto</label>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="emergency_contact_phone">Teléfono del Contacto</label>
                                                     <input type="text" 
                                                            class="form-control @error('emergency_contact_phone') is-invalid @enderror" 
                                                            id="emergency_contact_phone" 
@@ -305,8 +332,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="emergency_contact_relationship">Relación</label>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="emergency_contact_relationship">Relación</label>
                                                     <input type="text" 
                                                            class="form-control @error('emergency_contact_relationship') is-invalid @enderror" 
                                                            id="emergency_contact_relationship" 
@@ -331,8 +358,8 @@
                                         <h5 class="card-title mb-0">Roles del Usuario</h5>
                                     </div>
                                     <div class="card-body">
-                                        <div class="form-group">
-                                            <label class="required">Asignar Roles</label>
+                                        <div class="mb-3">
+                                            <label class="form-label" class="required">Asignar Roles</label>
                                             <div class="row">
                                                 @foreach($roles as $role)
                                                     <div class="col-md-3">
@@ -343,7 +370,7 @@
                                                                    name="roles[]" 
                                                                    value="{{ $role->id }}"
                                                                    {{ in_array($role->id, old('roles', $user->roles->pluck('id')->toArray())) ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="role_{{ $role->id }}">
+                                                            <label class="form-label" class="form-check-label" for="role_{{ $role->id }}">
                                                                 <strong>{{ $role->name }}</strong>
                                                                 @if($role->description)
                                                                     <br><small class="text-muted">{{ $role->description }}</small>
@@ -363,14 +390,16 @@
                         </div>
                         
                         <!-- Botones -->
-                        <div class="row mt-4">
-                            <div class="col-12">
-                                <div class="d-flex justify-content-end">
-                                    <a href="{{ route('users.index') }}" class="btn btn-secondary me-2">Cancelar</a>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save"></i> Actualizar Usuario
-                                    </button>
-                                </div>
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-end">
+                                <a href="{{ route('users.index') }}" class="btn btn-outline-secondary me-2 custom">
+                                    <i class="fas fa-times me-1"></i>
+                                    Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-primary custom">
+                                    <i class="fas fa-save me-1"></i>
+                                    Actualizar Usuario
+                                </button>
                             </div>
                         </div>
                     </form>

@@ -1,8 +1,18 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
+
+@section('title', 'Administrar Proyectos')
+@section('page-title', 'Administrar Proyectos')
+@section('page-description', 'Gestiona qué proyectos aparecen en la página principal')
 
 @section('content')
-<div class="container-fluid">
-    <h3>ADMINISTRAR PROYECTOS</h3>
+<div class="container-xl">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Proyectos en Página Principal</h3>
+                </div>
+                <div class="card-body">
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>

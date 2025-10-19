@@ -56,24 +56,26 @@
                         <div class="dropdown">
                             <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Activos</a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item active" href="#">Activos</a>
-                                <a class="dropdown-item" href="#">Todos</a>
+                                <a class="dropdown-item active" href="#" onclick="updateBeneficiariesCard('active')">Activos</a>
+                                <a class="dropdown-item" href="#" onclick="updateBeneficiariesCard('total')">Todos</a>
+                                <a class="dropdown-item" href="#" onclick="updateBeneficiariesCard('children')">Niños</a>
+                                <a class="dropdown-item" href="#" onclick="updateBeneficiariesCard('adults')">Adultos</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="h1 mb-3">{{ $stats['active_beneficiaries'] ?? 0 }}</div>
+                <div class="h1 mb-3" id="beneficiaries-count">{{ $stats['active_beneficiaries'] ?? 0 }}</div>
                 <div class="d-flex mb-2">
-                    <div>Beneficiarios activos</div>
+                    <div id="beneficiaries-label">Beneficiarios activos</div>
                     <div class="ms-auto">
                         <span class="text-blue d-inline-flex align-items-center lh-1">
                             <i class="fas fa-arrow-up me-1"></i>
-                            {{ $stats['total_beneficiaries'] > 0 ? round(($stats['active_beneficiaries'] / $stats['total_beneficiaries']) * 100, 1) : 0 }}%
+                            <span id="beneficiaries-percentage">{{ $stats['total_beneficiaries'] > 0 ? round(($stats['active_beneficiaries'] / $stats['total_beneficiaries']) * 100, 1) : 0 }}%</span>
                         </span>
                     </div>
                 </div>
                 <div class="progress progress-sm">
-                    <div class="progress-bar bg-info" style="width: {{ $stats['total_beneficiaries'] > 0 ? round(($stats['active_beneficiaries'] / $stats['total_beneficiaries']) * 100) : 0 }}%" role="progressbar"></div>
+                    <div class="progress-bar bg-info" id="beneficiaries-progress" style="width: {{ $stats['total_beneficiaries'] > 0 ? round(($stats['active_beneficiaries'] / $stats['total_beneficiaries']) * 100) : 0 }}%" role="progressbar"></div>
                 </div>
             </div>
         </div>
@@ -149,6 +151,118 @@
     </div>
 </div>
 
+<!-- Segunda fila de estadísticas -->
+<div class="row row-deck row-cards mt-4">
+    <div class="col-sm-6 col-lg-3">
+        <div class="card stats-card border-primary">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="subheader text-primary">
+                        <i class="fas fa-handshake me-2"></i>Patrocinadores
+                    </div>
+                    <div class="ms-auto lh-1">
+                        <div class="dropdown">
+                            <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Activos</a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item active" href="#">Activos</a>
+                                <a class="dropdown-item" href="#">Todos</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="h1 mb-3">{{ $stats['active_sponsors'] ?? 0 }}</div>
+                <div class="d-flex mb-2">
+                    <div>Patrocinadores activos</div>
+                    <div class="ms-auto">
+                        <span class="text-blue d-inline-flex align-items-center lh-1">
+                            <i class="fas fa-arrow-up me-1"></i>
+                            {{ $stats['total_sponsors'] > 0 ? round(($stats['active_sponsors'] / $stats['total_sponsors']) * 100, 1) : 0 }}%
+                        </span>
+                    </div>
+                </div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-primary" style="width: {{ $stats['total_sponsors'] > 0 ? round(($stats['active_sponsors'] / $stats['total_sponsors']) * 100) : 0 }}%" role="progressbar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="card stats-card border-success">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="subheader text-success">
+                        <i class="fas fa-check-circle me-2"></i>Donaciones Confirmadas
+                    </div>
+                </div>
+                <div class="h1 mb-3">{{ $stats['confirmed_donations'] ?? 0 }}</div>
+                <div class="d-flex mb-2">
+                    <div>Donaciones confirmadas</div>
+                    <div class="ms-auto">
+                        <span class="text-green d-inline-flex align-items-center lh-1">
+                            <i class="fas fa-check me-1"></i>
+                            Q{{ number_format($stats['total_donation_amount'] ?? 0, 2) }}
+                        </span>
+                    </div>
+                </div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-success" style="width: {{ $stats['total_donations'] > 0 ? round(($stats['confirmed_donations'] / $stats['total_donations']) * 100) : 0 }}%" role="progressbar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="card stats-card border-warning">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="subheader text-warning">
+                        <i class="fas fa-clock me-2"></i>Donaciones Pendientes
+                    </div>
+                </div>
+                <div class="h1 mb-3">{{ $stats['pending_donations'] ?? 0 }}</div>
+                <div class="d-flex mb-2">
+                    <div>Donaciones pendientes</div>
+                    <div class="ms-auto">
+                        <span class="text-warning d-inline-flex align-items-center lh-1">
+                            <i class="fas fa-exclamation-triangle me-1"></i>
+                            Requieren atención
+                        </span>
+                    </div>
+                </div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-warning" style="width: {{ $stats['total_donations'] > 0 ? round(($stats['pending_donations'] / $stats['total_donations']) * 100) : 0 }}%" role="progressbar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="card stats-card border-info">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="subheader text-info">
+                        <i class="fas fa-calendar-alt me-2"></i>Eventos Próximos
+                    </div>
+                </div>
+                <div class="h1 mb-3">{{ $stats['upcoming_events'] ?? 0 }}</div>
+                <div class="d-flex mb-2">
+                    <div>Eventos próximos</div>
+                    <div class="ms-auto">
+                        <span class="text-blue d-inline-flex align-items-center lh-1">
+                            <i class="fas fa-calendar me-1"></i>
+                            {{ $stats['total_events'] ?? 0 }} total
+                        </span>
+                    </div>
+                </div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-info" style="width: {{ $stats['total_events'] > 0 ? round(($stats['upcoming_events'] / $stats['total_events']) * 100) : 0 }}%" role="progressbar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row row-deck row-cards mt-4">
     <!-- Acciones Rápidas -->
     <div class="col-12">
@@ -182,7 +296,7 @@
 
                     @permission('donations.create')
                     <div class="col-md-6 col-lg-4 mb-3">
-                        <a href="#" class="btn btn-outline-warning w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
+                        <a href="{{ route('donations.create') }}" class="btn btn-outline-warning w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
                             <i class="fas fa-hand-holding-heart fa-2x mb-2"></i>
                             <strong>Registrar Donación</strong>
                             <small class="text-muted">Nueva donación recibida</small>
@@ -202,7 +316,7 @@
 
                     @permission('reports.view')
                     <div class="col-md-6 col-lg-4 mb-3">
-                        <a href="#" class="btn btn-outline-secondary w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
+                        <a href="{{ route('donations.reports') }}" class="btn btn-outline-secondary w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
                             <i class="fas fa-chart-bar fa-2x mb-2"></i>
                             <strong>Ver Reportes</strong>
                             <small class="text-muted">Estadísticas e informes</small>
@@ -210,12 +324,42 @@
                     </div>
                     @endpermission
 
-                    @permission('activities.register-attendance')
+                    @permission('sponsors.create')
                     <div class="col-md-6 col-lg-4 mb-3">
-                        <a href="#" class="btn btn-outline-dark w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
-                            <i class="fas fa-clipboard-check fa-2x mb-2"></i>
-                            <strong>Registrar Asistencia</strong>
-                            <small class="text-muted">Control de asistencia</small>
+                        <a href="{{ route('sponsors.create') }}" class="btn btn-outline-primary w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
+                            <i class="fas fa-handshake fa-2x mb-2"></i>
+                            <strong>Registrar Patrocinador</strong>
+                            <small class="text-muted">Nuevo patrocinador</small>
+                        </a>
+                    </div>
+                    @endpermission
+
+                    @permission('events.create')
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <a href="{{ route('events.create') }}" class="btn btn-outline-info w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
+                            <i class="fas fa-calendar-plus fa-2x mb-2"></i>
+                            <strong>Crear Evento</strong>
+                            <small class="text-muted">Nuevo evento</small>
+                        </a>
+                    </div>
+                    @endpermission
+
+                    @permission('locations.create')
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <a href="{{ route('locations.create') }}" class="btn btn-outline-success w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
+                            <i class="fas fa-map-marker-alt fa-2x mb-2"></i>
+                            <strong>Agregar Ubicación</strong>
+                            <small class="text-muted">Nueva ubicación</small>
+                        </a>
+                    </div>
+                    @endpermission
+
+                    @permission('products.create')
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <a href="{{ route('products.create') }}" class="btn btn-outline-warning w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
+                            <i class="fas fa-box fa-2x mb-2"></i>
+                            <strong>Agregar Producto</strong>
+                            <small class="text-muted">Nuevo producto</small>
                         </a>
                     </div>
                     @endpermission
@@ -356,6 +500,97 @@
     </div>
 </div>
 @endpermission
+
+<!-- Beneficiarios Recientes -->
+@permission('beneficiaries.view')
+<div class="row row-deck row-cards mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-users me-2"></i>Beneficiarios Recientes
+                </h3>
+                <div class="card-actions">
+                    <a href="{{ route('beneficiaries.index') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-eye me-1"></i>Ver Todos
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                @if(isset($recent_beneficiaries) && $recent_beneficiaries->count() > 0)
+                    <div class="table-responsive">
+                        <table class="table table-vcenter card-table">
+                            <thead>
+                                <tr>
+                                    <th>Beneficiario</th>
+                                    <th>Edad</th>
+                                    <th>Género</th>
+                                    <th>Estado</th>
+                                    <th>Fecha Registro</th>
+                                    <th class="w-1">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($recent_beneficiaries as $beneficiary)
+                                <tr>
+                                    <td>
+                                        <div class="d-flex py-1 align-items-center">
+                                            <div class="flex-fill">
+                                                <div class="font-weight-medium">{{ $beneficiary->first_name }} {{ $beneficiary->last_name }}</div>
+                                                <div class="text-muted">{{ $beneficiary->email ?? 'Sin email' }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-muted">{{ $beneficiary->age ?? 'N/A' }} años</td>
+                                    <td>
+                                        <span class="badge bg-{{ $beneficiary->gender === 'male' ? 'primary' : 'pink' }}">
+                                            {{ $beneficiary->gender === 'male' ? 'Masculino' : 'Femenino' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ $beneficiary->is_active ? 'success' : 'secondary' }}">
+                                            {{ $beneficiary->is_active ? 'Activo' : 'Inactivo' }}
+                                        </span>
+                                    </td>
+                                    <td class="text-muted">{{ $beneficiary->created_at->format('d/m/Y') }}</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ route('beneficiaries.show', $beneficiary) }}" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            @permission('beneficiaries.edit')
+                                            <a href="{{ route('beneficiaries.edit', $beneficiary) }}" class="btn btn-sm btn-outline-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            @endpermission
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <div class="empty">
+                        <div class="empty-icon">
+                            <i class="fas fa-users fa-3x text-muted"></i>
+                        </div>
+                        <p class="empty-title">No hay beneficiarios recientes</p>
+                        <p class="empty-subtitle text-muted">Comienza registrando tu primer beneficiario</p>
+                        @permission('beneficiaries.create')
+                        <div class="empty-action">
+                            <a href="{{ route('beneficiaries.create') }}" class="btn btn-primary">
+                                <i class="fas fa-plus me-1"></i>Registrar Primer Beneficiario
+                            </a>
+                        </div>
+                        @endpermission
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+@endpermission
 @endsection
 
 @push('styles')
@@ -415,4 +650,66 @@
         margin-top: 1rem;
     }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+// Datos de beneficiarios para el card interactivo
+const beneficiariesData = {
+    active: {
+        count: {{ $stats['active_beneficiaries'] ?? 0 }},
+        label: 'Beneficiarios activos',
+        percentage: {{ $stats['total_beneficiaries'] > 0 ? round(($stats['active_beneficiaries'] / $stats['total_beneficiaries']) * 100, 1) : 0 }},
+        total: {{ $stats['total_beneficiaries'] ?? 0 }}
+    },
+    total: {
+        count: {{ $stats['total_beneficiaries'] ?? 0 }},
+        label: 'Total de beneficiarios',
+        percentage: 100,
+        total: {{ $stats['total_beneficiaries'] ?? 0 }}
+    },
+    children: {
+        count: {{ $stats['child_beneficiaries'] ?? 0 }},
+        label: 'Beneficiarios niños',
+        percentage: {{ $stats['total_beneficiaries'] > 0 ? round(($stats['child_beneficiaries'] / $stats['total_beneficiaries']) * 100, 1) : 0 }},
+        total: {{ $stats['total_beneficiaries'] ?? 0 }}
+    },
+    adults: {
+        count: {{ $stats['adult_beneficiaries'] ?? 0 }},
+        label: 'Beneficiarios adultos',
+        percentage: {{ $stats['total_beneficiaries'] > 0 ? round(($stats['adult_beneficiaries'] / $stats['total_beneficiaries']) * 100, 1) : 0 }},
+        total: {{ $stats['total_beneficiaries'] ?? 0 }}
+    }
+};
+
+function updateBeneficiariesCard(type) {
+    const data = beneficiariesData[type];
+    if (!data) return;
+    
+    // Actualizar elementos del DOM
+    document.getElementById('beneficiaries-count').textContent = data.count;
+    document.getElementById('beneficiaries-label').textContent = data.label;
+    document.getElementById('beneficiaries-percentage').textContent = data.percentage + '%';
+    document.getElementById('beneficiaries-progress').style.width = data.percentage + '%';
+    
+    // Actualizar dropdown activo
+    const dropdownItems = document.querySelectorAll('.dropdown-menu a[onclick*="updateBeneficiariesCard"]');
+    dropdownItems.forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('onclick').includes(`'${type}'`)) {
+            item.classList.add('active');
+        }
+    });
+    
+    // Actualizar texto del dropdown toggle
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    dropdownToggle.textContent = data.label.split(' ')[0]; // Tomar primera palabra
+}
+
+// Inicializar al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    // Hacer funcional el dropdown de beneficiarios
+    updateBeneficiariesCard('active');
+});
+</script>
 @endpush

@@ -122,6 +122,41 @@
                 {{-- ========================================== --}}
                 @hasanyrole('super-admin', 'admin', 'project-coordinator', 'beneficiary-coordinator', 'volunteer', 'consultant')
                 
+                    <!-- ========================================== -->
+                    <!-- MENÚ DE SECCIONES -->
+                    <!-- ========================================== -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-sections" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                <i class="fas fa-th-large"></i>
+                            </span>
+                            <span class="nav-link-title">Secciones</span>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{{ route('admin.hero.index') }}">
+                                <i class="fas fa-star me-2"></i>Hero
+                            </a>
+                            <a class="dropdown-item" href="{{ route('admin.about.index') }}">
+                                <i class="fas fa-info-circle me-2"></i>Sobre Nosotros
+                            </a>
+                            <a class="dropdown-item" href="{{ route('admin.events.index.edit') }}">
+                                <i class="fas fa-calendar-alt me-2"></i>Eventos
+                            </a>
+                            <a class="dropdown-item" href="{{ route('admin.projects.index') }}">
+                                <i class="fas fa-briefcase me-2"></i>Proyectos
+                            </a>
+                            <a class="dropdown-item" href="{{ route('admin.beneficiaries.index') }}">
+                                <i class="fas fa-users me-2"></i>Beneficiarios
+                            </a>
+                            <a class="dropdown-item" href="{{ route('admin.sponsors.index') }}">
+                                <i class="fas fa-handshake me-2"></i>Patrocinadores
+                            </a>
+                            <a class="dropdown-item" href="{{ route('admin.donations.index') }}">
+                                <i class="fas fa-donate me-2"></i>Donadores
+                            </a>
+                        </div>
+                    </li>
+
                     <!-- Gestión de Usuarios -->
                     @permission('users.view')
                     <li class="nav-item dropdown">

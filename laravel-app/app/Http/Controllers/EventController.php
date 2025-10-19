@@ -63,7 +63,7 @@ class EventController extends Controller
         $events = $query->paginate(12);
 
         // Obtener datos para filtros
-        $projects = Project::where('estado', '!=', 'completado')->get();
+        $projects = Project::where('estado', '!=', 'finalizado')->get();
         $eventTypes = [
             'fundraising' => 'Recaudación de Fondos',
             'volunteer' => 'Voluntariado',
@@ -90,7 +90,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        $projects = Project::where('estado', '!=', 'completado')->get();
+        $projects = Project::where('estado', '!=', 'finalizado')->get();
         $eventTypes = [
             'fundraising' => 'Recaudación de Fondos',
             'volunteer' => 'Voluntariado',
@@ -128,7 +128,7 @@ class EventController extends Controller
             'contact_email' => 'nullable|email',
             'contact_phone' => 'nullable|string|max:20',
             'requirements' => 'nullable|string',
-            'project_id' => 'nullable|exists:projects,id',
+            'project_id' => 'nullable|exists:ng_projects,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -163,7 +163,7 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
-        $projects = Project::where('estado', '!=', 'completado')->get();
+        $projects = Project::where('estado', '!=', 'finalizado')->get();
         $eventTypes = [
             'fundraising' => 'Recaudación de Fondos',
             'volunteer' => 'Voluntariado',
@@ -201,7 +201,7 @@ class EventController extends Controller
             'contact_email' => 'nullable|email',
             'contact_phone' => 'nullable|string|max:20',
             'requirements' => 'nullable|string',
-            'project_id' => 'nullable|exists:projects,id',
+            'project_id' => 'nullable|exists:ng_projects,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 

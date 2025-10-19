@@ -1,51 +1,57 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'Administrar Sección Hero')
+@section('page-title', 'Administrar Sección Hero')
+@section('page-description', 'Gestiona el contenido de la sección principal del sitio web')
 
 @section('content')
-<div class="container">
-    <h3 class="mb-4">Administrar Sección "Hero"</h3>
+<div class="container-xl">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Sección "Hero"</h3>
+                </div>
+                <div class="card-body">
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+                    @if(session('success'))
+                        <div class="alert alert-success">{{ session('success') }}</div>
+                    @endif
 
-    {{-- Si existe $hero -> edita; si no, crea --}}
-    @if($hero)
-        <form action="{{ route('admin.hero.update', $hero->id) }}" method="POST" enctype="multipart/form-data" class="card p-3">
-            @csrf
-            @method('PUT')
-    @else
-        <form action="{{ route('admin.hero.store') }}" method="POST" enctype="multipart/form-data" class="card p-3">
-            @csrf
-    @endif
+                    {{-- Si existe $hero -> edita; si no, crea --}}
+                    @if($hero)
+                        <form action="{{ route('admin.hero.update', $hero->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                    @else
+                        <form action="{{ route('admin.hero.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                    @endif
 
-        {{-- Subtítulo --}}
-        <div class="mb-3">
-            <label class="form-label">Subtítulo</label>
-            <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', optional($hero)->subtitle) }}">
-            @error('subtitle') <small class="text-danger">{{ $message }}</small> @enderror
-        </div>
+                        {{-- Subtítulo --}}
+                        <div class="mb-3">
+                            <label class="form-label">Subtítulo</label>
+                            <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', optional($hero)->subtitle) }}">
+                            @error('subtitle') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
 
-        {{-- Título principal --}}
-        <div class="mb-3">
-            <label class="form-label">Título principal</label>
-            <input type="text" name="title" class="form-control" value="{{ old('title', optional($hero)->title) }}">
-            @error('title') <small class="text-danger">{{ $message }}</small> @enderror
-        </div>
+                        {{-- Título principal --}}
+                        <div class="mb-3">
+                            <label class="form-label">Título principal</label>
+                            <input type="text" name="title" class="form-control" value="{{ old('title', optional($hero)->title) }}">
+                            @error('title') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
 
-        {{-- Descripción --}}
-        <div class="mb-3">
-            <label class="form-label">Descripción</label>
-            <textarea name="description" class="form-control" rows="3">{{ old('description', optional($hero)->description) }}</textarea>
-            @error('description') <small class="text-danger">{{ $message }}</small> @enderror
-        </div>
+                        {{-- Descripción --}}
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <textarea name="description" class="form-control" rows="3">{{ old('description', optional($hero)->description) }}</textarea>
+                            @error('description') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
 
-        <hr class="my-4">
+                        <div class="hr-text">Botones</div>
 
-        {{-- Botones --}}
-        <h5 class="mb-3">Botones</h5>
-        <div class="row g-3">
+                        <div class="row">
             <div class="col-md-6">
                 <label class="form-label">Texto botón principal</label>
                 <input type="text" name="button_primary_text" class="form-control" value="{{ old('button_primary_text', optional($hero)->button_primary_text) }}">

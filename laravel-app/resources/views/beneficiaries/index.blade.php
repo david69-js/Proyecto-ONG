@@ -29,11 +29,7 @@
         <h3 class="card-title">
             <i class="fas fa-filter"></i> Filtros de Búsqueda
         </h3>
-        <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-            </button>
-        </div>
+        
     </div>
     <div class="card-body">
         <form method="GET" action="{{ route('beneficiaries.index') }}">

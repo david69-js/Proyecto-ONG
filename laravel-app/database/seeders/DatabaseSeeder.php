@@ -38,7 +38,13 @@ class DatabaseSeeder extends Seeder
             // 8. Crear inscripciones de eventos
             EventRegistrationSeeder::class,
             
-            // 9. Finalmente crear beneficiarios
+            // 9. Crear productos
+            ProductSeeder::class,
+            
+            // 10. Crear donaciones
+            DonationSeeder::class,
+            
+            // 11. Finalmente crear beneficiarios
             BeneficiarySeeder::class,
         ]);
     }

@@ -27,6 +27,9 @@
     
     <!-- Blue Theme CSS -->
     <link href="{{ asset('assets/css/blue-theme.css') }}" rel="stylesheet">
+    
+    <!-- Custom Button Styles -->
+    <link href="{{ asset('assets/css/button-custom.css') }}" rel="stylesheet">
 
     @stack('styles')
 </head>

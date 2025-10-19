@@ -1,39 +1,46 @@
 
-@extends('layouts.app')
+@extends('layouts.tabler')
+
+@section('title', 'Administrar Sección Sobre Nosotros')
+@section('page-title', 'Administrar Sección Sobre Nosotros')
+@section('page-description', 'Gestiona el contenido de la sección sobre nosotros del sitio web')
 
 @section('content')
-<div class="container">
-    <h3 class="mb-4">Editar Sección "Sobre Nosotros"</h3>
+<div class="container-xl">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Sección "Sobre Nosotros"</h3>
+                </div>
+                <div class="card-body">
+                    @if(session('success'))
+                        <div class="alert alert-success">{{ session('success') }}</div>
+                    @endif
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+                    <form action="{{ route('admin.about.update', $about->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
 
-    <form action="{{ route('admin.about.update', $about->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
+                        <!-- Título y descripciones -->
+                        <div class="mb-3">
+                            <label class="form-label">Título</label>
+                            <input type="text" name="titulo" class="form-control" value="{{ old('titulo', $about->titulo) }}">
+                        </div>
 
-        <!-- Título y descripciones -->
-        <div class="mb-3">
-            <label>Título</label>
-            <input type="text" name="titulo" class="form-control" value="{{ old('titulo', $about->titulo) }}">
-        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción principal</label>
+                            <textarea name="descripcion_principal" class="form-control" rows="3">{{ old('descripcion_principal', $about->descripcion_principal) }}</textarea>
+                        </div>
 
-        <div class="mb-3">
-            <label>Descripción principal</label>
-            <textarea name="descripcion_principal" class="form-control" rows="3">{{ old('descripcion_principal', $about->descripcion_principal) }}</textarea>
-        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción secundaria</label>
+                            <textarea name="descripcion_secundaria" class="form-control" rows="3">{{ old('descripcion_secundaria', $about->descripcion_secundaria) }}</textarea>
+                        </div>
 
-        <div class="mb-3">
-            <label>Descripción secundaria</label>
-            <textarea name="descripcion_secundaria" class="form-control" rows="3">{{ old('descripcion_secundaria', $about->descripcion_secundaria) }}</textarea>
-        </div>
+                        <div class="hr-text">Logros</div>
 
-        <hr class="my-4">
-
-        <!-- Logros numéricos -->
-        <h4>Logros</h4>
-        <div class="row g-3">
+                        <div class="row">
             @foreach(['anios_servicio' => 'Años de servicio', 'hogares_construidos' => 'Hogares construidos', 'compromiso_social' => 'Compromiso social', 'colaboradores_activos' => 'Colaboradores activos'] as $field => $label)
             <div class="col-md-3">
                 <label>{{ $label }}</label>

@@ -208,12 +208,13 @@ Route::prefix('products')->name('products.')->middleware('auth')->group(function
 
 
 // About Section Management Routes
-Route::prefix('admin')->name('admin.')->group(function() {
-    Route::get('about', [AboutSectionController::class, 'index'])->name('about.index');
-    Route::put('about/{id}', [AboutSectionController::class, 'update'])->name('about.update');
-    Route::get('admin/about', [AboutSectionController::class, 'index'])->name('admin.about.index');
-
-});
+Route::middleware(['auth'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function() {
+        Route::get('about', [AboutSectionController::class, 'index'])->name('about.index');
+        Route::put('about/{id}', [AboutSectionController::class, 'update'])->name('about.update');
+    });
 
 
 // Admin - Hero
@@ -225,23 +226,76 @@ Route::middleware(['auth'])
         Route::post('hero', [HeroSectionController::class, 'store'])->name('hero.store');      
         Route::put('hero/{id}', [HeroSectionController::class, 'update'])->name('hero.update');
     });
-Route::get('/', function () {
-    return view('index'); 
-});
 
 
 
 // Event Index Management Routes
-Route::prefix('admin')->name('admin.')->group(function() {
-    Route::get('events/index', [EventIndexController::class, 'edit'])->name('events.index.edit');
-    Route::patch('events/index/{event}/toggle', [EventIndexController::class, 'toggle'])->name('events.toggle_index');
-     Route::patch('events/{event}/unpublish', [EventIndexController::class, 'unpublish'])->name('events.unpublish');
-    Route::patch('events/index/{event}/toggle-featured', [EventIndexController::class, 'toggleFeatured'])->name('events.toggle_featured');
-});
+Route::middleware(['auth'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function() {
+        Route::get('events/index', [EventIndexController::class, 'edit'])->name('events.index.edit');
+        Route::patch('events/index/{event}/toggle', [EventIndexController::class, 'toggle'])->name('events.toggle_index');
+        Route::patch('events/{event}/unpublish', [EventIndexController::class, 'unpublish'])->name('events.unpublish');
+        Route::patch('events/index/{event}/toggle-featured', [EventIndexController::class, 'toggleFeatured'])->name('events.toggle_featured');
+    });
 
 // Project Index Management Routes
-Route::prefix('admin/projects')->name('admin.projects.')->group(function() {
-    Route::get('/', [ProjectIndexController::class, 'indexAdmin'])->name('index');
-    Route::patch('{project}/toggle', [ProjectIndexController::class, 'toggle'])->name('toggle');
-    Route::delete('{project}', [ProjectIndexController::class, 'destroy'])->name('destroy');
-});
+Route::middleware(['auth'])
+    ->prefix('admin/projects')
+    ->name('admin.projects.')
+    ->group(function() {
+        Route::get('/', [ProjectIndexController::class, 'indexAdmin'])->name('index');
+        Route::patch('{project}/toggle', [ProjectIndexController::class, 'toggle'])->name('toggle');
+        Route::delete('{project}', [ProjectIndexController::class, 'destroy'])->name('destroy');
+    });
+
+// Admin - Beneficiaries Management Routes
+Route::middleware(['auth'])
+    ->prefix('admin/beneficiaries')
+    ->name('admin.beneficiaries.')
+    ->group(function () {
+        Route::get('/', [BeneficiaryController::class, 'index'])->name('index');
+        Route::get('/create', [BeneficiaryController::class, 'create'])->name('create');
+        Route::post('/', [BeneficiaryController::class, 'store'])->name('store');
+        Route::get('/{beneficiary}', [BeneficiaryController::class, 'show'])->name('show');
+        Route::get('/{beneficiary}/edit', [BeneficiaryController::class, 'edit'])->name('edit');
+        Route::put('/{beneficiary}', [BeneficiaryController::class, 'update'])->name('update');
+        Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('destroy');
+    });
+
+// Admin - Sponsors Management Routes
+Route::middleware(['auth'])
+    ->prefix('admin/sponsors')
+    ->name('admin.sponsors.')
+    ->group(function () {
+        Route::get('/', [SponsorController::class, 'index'])->name('index');
+        Route::get('/create', [SponsorController::class, 'create'])->name('create');
+        Route::post('/', [SponsorController::class, 'store'])->name('store');
+        Route::get('/{sponsor}', [SponsorController::class, 'show'])->name('show');
+        Route::get('/{sponsor}/edit', [SponsorController::class, 'edit'])->name('edit');
+        Route::put('/{sponsor}', [SponsorController::class, 'update'])->name('update');
+        Route::delete('/{sponsor}', [SponsorController::class, 'destroy'])->name('destroy');
+        Route::patch('/{sponsor}/toggle-featured', [SponsorController::class, 'toggleFeatured'])->name('toggle-featured');
+        Route::patch('/{sponsor}/toggle-status', [SponsorController::class, 'toggleStatus'])->name('toggle-status');
+    });
+
+// Admin - Donations Management Routes
+Route::middleware(['auth'])
+    ->prefix('admin/donations')
+    ->name('admin.donations.')
+    ->group(function () {
+        Route::get('/', [DonationController::class, 'index'])->name('index');
+        Route::get('/create', [DonationController::class, 'create'])->name('create');
+        Route::post('/', [DonationController::class, 'store'])->name('store');
+        Route::get('/{donation}', [DonationController::class, 'show'])->name('show');
+        Route::get('/{donation}/edit', [DonationController::class, 'edit'])->name('edit');
+        Route::put('/{donation}', [DonationController::class, 'update'])->name('update');
+        Route::delete('/{donation}', [DonationController::class, 'destroy'])->name('destroy');
+        Route::patch('/{donation}/confirm', [DonationController::class, 'confirm'])->name('confirm');
+        Route::patch('/{donation}/process', [DonationController::class, 'process'])->name('process');
+        Route::patch('/{donation}/reject', [DonationController::class, 'reject'])->name('reject');
+        Route::patch('/{donation}/cancel', [DonationController::class, 'cancel'])->name('cancel');
+        Route::get('/reports/statistics', [DonationController::class, 'reports'])->name('reports');
+        Route::get('/export/data', [DonationController::class, 'export'])->name('export');
+    });

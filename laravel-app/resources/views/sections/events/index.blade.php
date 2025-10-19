@@ -1,10 +1,18 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'Publicar Eventos en el Index')
-@section('header', 'Publicar Eventos en el Index')
+@section('page-title', 'Publicar Eventos en el Index')
+@section('page-description', 'Gestiona qué eventos aparecen en la página principal')
 
 @section('content')
-<div class="container">
+<div class="container-xl">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Eventos en Página Principal</h3>
+                </div>
+                <div class="card-body">
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
