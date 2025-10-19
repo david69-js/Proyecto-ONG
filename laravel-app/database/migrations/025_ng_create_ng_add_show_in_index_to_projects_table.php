@@ -6,21 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-public function up(): void
-{
-    Schema::table('ng_projects', function (Blueprint $table) {
-        $table->boolean('show_in_index')->default(false)->after('id');
-    });
-}
+    public function up(): void
+    {
+        Schema::table('ng_projects', function (Blueprint $table) {
+            $table->boolean('show_in_index')->default(true);
+        });
+    }
 
-public function down(): void
-{
-    Schema::table('ng_projects', function (Blueprint $table) {
-        $table->dropColumn('show_in_index');
-    });
-}
-
+    public function down(): void
+    {
+        // Verificar que la tabla existe antes de intentar modificarla
+        if (Schema::hasTable('ng_projects') && Schema::hasColumn('ng_projects', 'show_in_index')) {
+            Schema::table('ng_projects', function (Blueprint $table) {
+                $table->dropColumn('show_in_index');
+            });
+        }
+    }
 };

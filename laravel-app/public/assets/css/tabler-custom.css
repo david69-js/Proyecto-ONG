@@ -8,11 +8,6 @@
     display: block !important;
 }
 
-/* Ajustar el contenido principal para el sidebar */
-.page-wrapper {
-    margin-left: 250px;
-}
-
 /* Forzar visibilidad del sidebar */
 #sidebar-menu {
     display: block !important;
