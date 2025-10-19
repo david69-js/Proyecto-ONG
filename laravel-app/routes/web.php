@@ -14,6 +14,9 @@ use App\Http\Controllers\HeroSectionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventIndexController;
 use App\Http\Controllers\ProjectIndexController;
+use App\Http\Controllers\BeneficiaryTestimonialController;
+use App\Http\Controllers\SponsorHighlightController;
+use App\Http\Controllers\DonorHighlightController;
 
 
 Route::get('/', function () {
@@ -199,23 +202,92 @@ Route::prefix('admin')->name('admin.')->group(function() {
 
 
 // Hero Section Management Routes
-Route::prefix('admin')->name('admin.')->group(function() {
-    Route::get('hero', [HeroSectionController::class, 'index'])->name('hero.index');
-    Route::put('hero/{id}', [HeroSectionController::class, 'update'])->name('hero.update');
-    Route::get('admin/hero', [HeroSectionController::class, 'index'])->name('admin.hero.index');
-});
+Route::middleware(['auth'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('hero', [HeroSectionController::class, 'index'])->name('hero.index');
+        Route::put('hero/{hero}', [HeroSectionController::class, 'update'])->name('hero.update');
+    });
 
 // Event Index Management Routes
-Route::prefix('admin')->name('admin.')->group(function() {
-    Route::get('events/index', [EventIndexController::class, 'edit'])->name('events.index.edit');
-    Route::patch('events/index/{event}/toggle', [EventIndexController::class, 'toggle'])->name('events.toggle_index');
-     Route::patch('events/{event}/unpublish', [EventIndexController::class, 'unpublish'])->name('events.unpublish');
-    Route::patch('events/index/{event}/toggle-featured', [EventIndexController::class, 'toggleFeatured'])->name('events.toggle_featured');
-});
+Route::middleware(['auth'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('events', [EventController::class,'index'])->name('events.index');
+        Route::post('events', [EventController::class,'store'])->name('events.store');
+        Route::put('events/{event}', [EventController::class,'update'])->name('events.update');
+        Route::delete('events/{event}', [EventController::class,'destroy'])->name('events.destroy');
 
+        Route::post('events/{event}/toggle-featured', [EventController::class,'toggleFeatured'])->name('events.toggle-featured');
+        Route::post('events/{event}/change-status', [EventController::class,'changeStatus'])->name('events.change-status');
+
+        // Registros a eventos (si los gestionas desde admin)
+        Route::post('events/{event}/register', [EventController::class,'register'])->name('events.register');
+        Route::post('registrations/{registration}/status', [EventController::class,'updateRegistrationStatus'])->name('registrations.update-status');
+        Route::delete('registrations/{registration}', [EventController::class,'deleteRegistration'])->name('registrations.destroy');
+    });
+
+    // Página pública de eventos
+Route::get('/eventos/{event}', [EventController::class, 'showPublic'])
+    ->name('events.public.show');
+
+
+    
 // Project Index Management Routes
 Route::prefix('admin/projects')->name('admin.projects.')->group(function() {
     Route::get('/', [ProjectIndexController::class, 'indexAdmin'])->name('index');
     Route::patch('{project}/toggle', [ProjectIndexController::class, 'toggle'])->name('toggle');
     Route::delete('{project}', [ProjectIndexController::class, 'destroy'])->name('destroy');
 });
+
+
+
+//Beneficiary Testimonials Management Routes
+Route::middleware(['auth']) 
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('testimonials', [BeneficiaryTestimonialController::class, 'index'])
+            ->name('testimonials.index');
+        Route::post('testimonials', [BeneficiaryTestimonialController::class, 'store'])
+            ->name('testimonials.store');
+        Route::put('testimonials/{testimonial}', [BeneficiaryTestimonialController::class, 'update'])
+            ->name('testimonials.update');
+        Route::delete('testimonials/{testimonial}', [BeneficiaryTestimonialController::class, 'destroy'])
+            ->name('testimonials.destroy');
+        Route::post('testimonials/{testimonial}/toggle-publish', [BeneficiaryTestimonialController::class, 'togglePublish'])
+            ->name('testimonials.toggle-publish');
+    });
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+
+
+// Sponsor Highlights Management Routes
+Route::middleware(['auth'])
+    ->prefix('admin')       
+    ->name('admin.')         
+    ->group(function () {
+        Route::get('sponsors', [SponsorHighlightController::class,'index'])->name('sponsors.index');
+        Route::post('sponsors', [SponsorHighlightController::class,'store'])->name('sponsors.store');
+        Route::put('sponsors/{highlight}', [SponsorHighlightController::class,'update'])->name('sponsors.update');
+        Route::delete('sponsors/{highlight}', [SponsorHighlightController::class,'destroy'])->name('sponsors.destroy');
+        Route::post('sponsors/{highlight}/toggle-publish', [SponsorHighlightController::class,'togglePublish'])->name('sponsors.toggle-publish');
+    });
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+
+
+
+// Donor Highlights Management Routes
+Route::middleware(['auth'])
+    ->prefix('admin')       
+    ->name('admin.')        
+    ->group(function () {
+        Route::get('donors', [DonorHighlightController::class,'index'])->name('donors.index');
+        Route::post('donors', [DonorHighlightController::class,'store'])->name('donors.store');
+        Route::put('donors/{highlight}', [DonorHighlightController::class,'update'])->name('donors.update');
+        Route::delete('donors/{highlight}', [DonorHighlightController::class,'destroy'])->name('donors.destroy');
+        Route::post('donors/{highlight}/toggle-publish', [DonorHighlightController::class,'togglePublish'])->name('donors.toggle-publish');
+    });
+

@@ -432,7 +432,7 @@
 
 
 <li class="nav-item">
-    <a href="{{ route('admin.events.index.edit') }}" class="nav-link">
+<a href="{{ route('admin.events.index') }}" class="nav-link">
         <i class="fas fa-calendar-alt nav-icon"></i>
         <p>Eventos</p>
     </a>

@@ -24,14 +24,14 @@
                             </a>
 
                             <!-- Destacar -->
-                            <form action="{{ route('admin.events.toggle_featured', $event) }}" method="POST">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" 
-                                        class="btn btn-sm {{ $event->featured ? 'btn-warning' : 'btn-outline-warning' }}">
-                                    <i class="fas fa-star"></i> {{ $event->featured ? 'Quitar Destacado' : 'Destacar' }}
-                                </button>
-                            </form>
+                           <form action="{{ route('admin.events.toggle-featured', $event) }}" method="POST">
+  @csrf
+  <button type="submit"
+          class="btn btn-sm {{ $event->featured ? 'btn-warning' : 'btn-outline-warning' }}">
+    <i class="fas fa-star"></i> {{ $event->featured ? 'Quitar Destacado' : 'Destacar' }}
+  </button>
+</form>
+
                         </div>
 
                         <div class="mt-1 d-flex flex-wrap gap-1">

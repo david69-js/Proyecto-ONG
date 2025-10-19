@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\SponsorHighlight;
 
 class Sponsor extends Model
 {
     use HasFactory;
 
     protected $table = 'ng_sponsors';
+    protected $guarded = [];
 
     protected $fillable = [
         'name',
@@ -166,4 +168,11 @@ class Sponsor extends Model
     {
         return $this->projects()->sum('rel_sponsor_projects.contribution_amount') + $this->contribution_amount;
     }
+
+     public function highlights()
+    {
+        return $this->hasMany(SponsorHighlight::class, 'sponsor_id');
+    }
 }
+
+
