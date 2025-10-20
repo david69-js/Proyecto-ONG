@@ -2,3 +2,9 @@
     .env.testing
     .env.testing.local
     .env.local
+    ssl/
+    *.pem
+    *.key
+    *.crt
+    *.csr
+    *.p12
