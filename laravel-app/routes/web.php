@@ -291,3 +291,9 @@ Route::middleware(['auth'])
         Route::post('donors/{highlight}/toggle-publish', [DonorHighlightController::class,'togglePublish'])->name('donors.toggle-publish');
     });
 
+
+
+Route::post('/paypal/order', [DonationController::class, 'createOrder'])->name('paypal.order');
+Route::post('/paypal/capture', [DonationController::class, 'captureOrder'])->name('paypal.capture');
+
+

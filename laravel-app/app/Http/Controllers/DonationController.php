@@ -499,4 +499,165 @@ class DonationController extends Controller
 
         return response()->stream($callback, 200, $headers);
     }
+    private function paypalBaseUrl(): string
+{
+    $mode = env('PAYPAL_MODE', 'sandbox');
+    return $mode === 'live' ? 'https://api-m.paypal.com' : 'https://api-m.sandbox.paypal.com';
+}
+
+private function paypalAccessToken()
+{
+    $resp = Http::asForm()
+        ->withBasicAuth(env('PAYPAL_CLIENT_ID'), env('PAYPAL_SECRET'))
+        ->post($this->paypalBaseUrl() . '/v1/oauth2/token', [
+            'grant_type' => 'client_credentials',
+        ]);
+
+    if (!$resp->successful()) {
+        return response()->json(['error' => 'paypal_oauth_error', 'details' => $resp->json()], 500);
+    }
+    return $resp->json()['access_token'];
+}
+
+/**
+ * Crear orden PayPal y crear Donation (pending)
+ */
+public function createPaypalOrder(Request $request)
+{
+    $validated = $request->validate([
+        'amount'      => 'required|numeric|min:1',
+        'donor_name'  => 'nullable|string|max:255',
+        'donor_email' => 'nullable|email|max:255',
+        'project_id'  => 'nullable|exists:ng_projects,id',
+        'notes'       => 'nullable|string|max:500',
+        'currency'    => 'nullable|string|size:3', // usaremos PAYPAL_CURRENCY por defecto
+    ]);
+
+    $amount   = number_format($validated['amount'], 2, '.', '');
+    $currency = strtoupper($validated['currency'] ?? env('PAYPAL_CURRENCY', 'USD'));
+
+    // 1) Crear la orden en PayPal
+    $token = $this->paypalAccessToken();
+    if (is_object($token)) return $token; // error json
+
+    $payload = [
+        'intent' => 'CAPTURE',
+        'purchase_units' => [[
+            'amount' => [
+                'currency_code' => $currency,
+                'value' => $amount,
+            ],
+            'description' => 'Donación ONG',
+        ]],
+        'application_context' => [
+            'shipping_preference' => 'NO_SHIPPING',
+            'user_action' => 'PAY_NOW',
+        ],
+    ];
+
+    $resp = Http::withToken($token)->post($this->paypalBaseUrl() . '/v2/checkout/orders', $payload);
+
+    if (!$resp->successful()) {
+        return response()->json(['error' => 'paypal_create_error', 'details' => $resp->json()], 500);
+    }
+
+    $order = $resp->json(); // contiene id, links, etc.
+    $orderId = $order['id'] ?? null;
+
+    // 2) Crear Donation en tu BD (pending)
+    $donationData = [
+        'donation_type'   => 'monetary',
+        'amount'          => $amount,
+        'currency'        => $currency,      // Para PayPal
+        'description'     => 'Donación vía PayPal',
+        'donor_name'      => $validated['donor_name'] ?? 'Donante',
+        'donor_email'     => $validated['donor_email'] ?? null,
+        'donor_type'      => 'individual',
+        'is_anonymous'    => false,
+        'user_id'         => auth()->id() ?: null,
+        'project_id'      => $validated['project_id'] ?? null,
+        'payment_method'  => 'paypal',
+        'payment_reference' => $orderId,     // guardamos el orderId
+        'payment_notes'   => $validated['notes'] ?? null,
+        'status'          => 'pending',
+        'created_by'      => auth()->id() ?: null,
+        'updated_by'      => auth()->id() ?: null,
+        'metadata'        => [
+            'paypal_order' => $order,
+        ],
+    ];
+
+    $donation = \App\Models\Donation::create($donationData);
+
+    return response()->json([
+        'id' => $orderId,
+        'donation_id' => $donation->id,
+        'links' => $order['links'] ?? [],
+    ]);
+}
+
+/**
+ * Capturar orden PayPal y actualizar Donation
+ */
+public function capturePaypalOrder(Request $request)
+{
+    $validated = $request->validate([
+        'orderID'     => 'required|string',
+        'donation_id' => 'nullable|integer', // opcional
+    ]);
+
+    $token = $this->paypalAccessToken();
+    if (is_object($token)) return $token; // error json
+
+    $orderId = $validated['orderID'];
+
+    $resp = Http::withToken($token)
+        ->post($this->paypalBaseUrl() . "/v2/checkout/orders/{$orderId}/capture", []);
+
+    if (!$resp->successful()) {
+        return response()->json(['error' => 'paypal_capture_error', 'details' => $resp->json()], 500);
+    }
+
+    $capture = $resp->json();
+
+    // Localizar la Donation por donation_id o por payment_reference (orderId)
+    $donation = null;
+    if (!empty($validated['donation_id'])) {
+        $donation = \App\Models\Donation::find($validated['donation_id']);
+    }
+    if (!$donation) {
+        $donation = \App\Models\Donation::where('payment_reference', $orderId)->first();
+    }
+
+    if ($donation) {
+        // Extraer datos útiles
+        $payer = $capture['payer'] ?? [];
+        $captures = $capture['purchase_units'][0]['payments']['captures'] ?? [];
+        $firstCap = $captures[0] ?? [];
+        $captureId = $firstCap['id'] ?? null;
+        $status = strtolower($firstCap['status'] ?? ($capture['status'] ?? 'COMPLETED'));
+
+        // Mapear estados PayPal -> tus estados
+        // COMPLETED -> processed (o confirmed si prefieres revisarla)
+        $toStatus = ($status === 'completed') ? 'processed' : 'confirmed';
+
+        $donation->update([
+            'status'         => $toStatus,
+            'processed_at'   => now(),
+            'processed_by'   => auth()->id() ?: null,
+            'status_notes'   => 'Pago PayPal ' . strtoupper($status),
+            'updated_by'     => auth()->id() ?: null,
+            'payment_reference' => $captureId ?: $orderId, // ahora guardamos captureId si existe
+            'metadata'       => array_merge($donation->metadata ?? [], [
+                'paypal_capture' => $capture,
+                'paypal_payer'   => $payer,
+            ]),
+            // si quieres actualizar datos de donante desde PayPal:
+            'donor_email'    => $donation->donor_email ?: ($payer['email_address'] ?? null),
+            'donor_name'     => $donation->donor_name  ?: (($payer['name']['given_name'] ?? '').' '.($payer['name']['surname'] ?? '')),
+        ]);
+    }
+
+    return response()->json($capture);
+}
 }
