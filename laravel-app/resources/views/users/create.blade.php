@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('title', 'Crear Nuevo Usuario')
@@ -5,6 +6,17 @@
 @section('page-description', 'Registrar un nuevo usuario en el sistema')
 
 @section('content')
+=======
+@extends('layouts.app')
+
+@section('title', 'Crear Nuevo Usuario')
+
+@section('content')
+<div class="container-fluid">
+    <!-- Navegación -->
+    <x-head-admin />
+    <!-- Fin Navegación -->
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
     <div class="row">
         <div class="col-12">

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('title', 'Detalles del Patrocinador')
@@ -6,12 +7,22 @@
 
 @section('content')
 <div class="container-xl">
+=======
+@extends('layouts.app')
+
+@section('title', 'Detalles del Patrocinador')
+@section('header', 'Detalles del Patrocinador')
+
+@section('content')
+<div class="container-fluid">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
     <div class="row">
         <div class="col-12">
             <!-- Card principal -->
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
+<<<<<<< HEAD
                         <i class="fas fa-handshake me-2"></i>
                         {{ $sponsor->name }}
                     </h3>
@@ -25,11 +36,25 @@
                         <a href="{{ route('sponsors.index') }}" class="btn btn-outline-secondary" title="Volver a la lista">
                             <i class="fas fa-arrow-left me-1"></i>
                             Volver
+=======
+                        <i class="fas fa-handshake mr-2"></i>
+                        {{ $sponsor->name }}
+                    </h3>
+                    <div class="card-tools">
+                        @permission('sponsors.edit')
+                        <a href="{{ route('sponsors.edit', $sponsor) }}" class="btn btn-tool" data-toggle="tooltip" title="Editar patrocinador">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        @endpermission
+                        <a href="{{ route('sponsors.index') }}" class="btn btn-tool" data-toggle="tooltip" title="Volver a la lista">
+                            <i class="fas fa-arrow-left"></i>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                         </a>
                     </div>
                 </div>
 
                 <div class="card-body">
+<<<<<<< HEAD
                     <!-- Información Principal -->
                     <div class="row g-4">
                         <div class="col-12">
@@ -38,10 +63,21 @@
                                 <div class="card-header">
                                     <h3 class="card-title">
                                         <i class="fas fa-info-circle me-2"></i>
+=======
+                    <div class="row">
+                        <!-- Información Principal -->
+                        <div class="col-12 col-lg-8">
+                            <!-- Información Básica -->
+                            <div class="card card-primary card-outline">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="fas fa-info-circle mr-2"></i>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                         Información Básica
                                     </h3>
                                 </div>
                                 <div class="card-body">
+<<<<<<< HEAD
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <div class="row g-3">
@@ -249,6 +285,104 @@
                                     </div>
                                 </div>
                             </div>
+=======
+                                    <!-- Vista de escritorio -->
+                                    <div class="d-none d-md-block">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <table class="table table-borderless">
+                                                    <tr>
+                                                        <td class="text-muted"><strong>Nombre:</strong></td>
+                                                        <td>{{ $sponsor->name }}</td>
+                                                    </tr>
+                                                        @if($sponsor->company_name)
+                                                    <tr>
+                                                        <td class="text-muted"><strong>Empresa:</strong></td>
+                                                        <td>{{ $sponsor->company_name }}</td>
+                                                    </tr>
+                                                    @endif
+                                                    @if($sponsor->contact_person)
+                                                    <tr>
+                                                        <td class="text-muted"><strong>Contacto:</strong></td>
+                                                        <td>{{ $sponsor->contact_person }}</td>
+                                                    </tr>
+                                                    @endif
+                                                    <tr>
+                                                        <td class="text-muted"><strong>Email:</strong></td>
+                                                        <td>
+                                                            <a href="mailto:{{ $sponsor->email }}" class="text-decoration-none">
+                                                                {{ $sponsor->email }}
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    @if($sponsor->phone)
+                                                    <tr>
+                                                        <td class="text-muted"><strong>Teléfono:</strong></td>
+                                                        <td>
+                                                            <a href="tel:{{ $sponsor->phone }}" class="text-decoration-none">
+                                                                {{ $sponsor->phone }}
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    @endif
+                                                </table>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <table class="table table-borderless">
+                                                    <tr>
+                                                        <td class="text-muted"><strong>Tipo:</strong></td>
+                                                        <td>
+                                                            <span class="badge badge-info">{{ $sponsor->sponsor_type_formatted }}</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-muted"><strong>Estado:</strong></td>
+                                                        <td>
+                                                            @php
+                                                                $statusClasses = [
+                                                                    'active' => 'badge-success',
+                                                                    'inactive' => 'badge-secondary',
+                                                                    'pending' => 'badge-warning',
+                                                                    'suspended' => 'badge-danger'
+                                                                ];
+                                                            @endphp
+                                                            <span class="badge {{ $statusClasses[$sponsor->status] ?? 'badge-secondary' }}">
+                                                                {{ $sponsor->status_formatted }}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-muted"><strong>Prioridad:</strong></td>
+                                                        <td>
+                                                            <span class="badge badge-primary">{{ $sponsor->priority_level }}</span>
+                                                        </td>
+                                                    </tr>
+                                                    @if($sponsor->is_featured)
+                                                    <tr>
+                                                        <td class="text-muted"><strong>Destacado:</strong></td>
+                                                        <td>
+                                                            <span class="badge badge-warning">
+                                                                <i class="fas fa-star"></i> Sí
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    @endif
+                                                    @if($sponsor->website)
+                                                    <tr>
+                                                        <td class="text-muted"><strong>Sitio Web:</strong></td>
+                                                        <td>
+                                                            <a href="{{ $sponsor->website }}" target="_blank" rel="noopener" class="text-decoration-none">
+                                                                {{ $sponsor->website }}
+                                                                <i class="fas fa-external-link-alt"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    @endif
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
                                     <!-- Vista móvil -->
                                     <div class="d-md-none">
@@ -317,7 +451,11 @@
                                                     <div>
                                                         <h6 class="mb-1 text-primary">Tipo</h6>
                                                     </div>
+<<<<<<< HEAD
                                                     <span class="badge bg-info">{{ $sponsor->sponsor_type_formatted }}</span>
+=======
+                                                    <span class="badge badge-info">{{ $sponsor->sponsor_type_formatted }}</span>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                 </div>
                                             </div>
 
@@ -326,7 +464,11 @@
                                                     <div>
                                                         <h6 class="mb-1 text-primary">Estado</h6>
                                                     </div>
+<<<<<<< HEAD
                                                     <span class="badge {{ $statusClasses[$sponsor->status] ?? 'bg-secondary' }}">
+=======
+                                                    <span class="badge {{ $statusClasses[$sponsor->status] ?? 'badge-secondary' }}">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         {{ $sponsor->status_formatted }}
                                                     </span>
                                                 </div>
@@ -337,7 +479,11 @@
                                                     <div>
                                                         <h6 class="mb-1 text-primary">Prioridad</h6>
                                                     </div>
+<<<<<<< HEAD
                                                     <span class="badge bg-primary">{{ $sponsor->priority_level }}</span>
+=======
+                                                    <span class="badge badge-primary">{{ $sponsor->priority_level }}</span>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                 </div>
                                             </div>
 
@@ -347,7 +493,11 @@
                                                     <div>
                                                         <h6 class="mb-1 text-primary">Destacado</h6>
                                                     </div>
+<<<<<<< HEAD
                                                     <span class="badge bg-warning">
+=======
+                                                    <span class="badge badge-warning">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         <i class="fas fa-star"></i> Sí
                                                     </span>
                                                 </div>
@@ -403,7 +553,11 @@
                                                     <tr>
                                                         <td class="text-muted"><strong>Tipo de Contribución:</strong></td>
                                                         <td>
+<<<<<<< HEAD
                                                             <span class="badge bg-success">{{ $sponsor->contribution_type_formatted }}</span>
+=======
+                                                            <span class="badge badge-success">{{ $sponsor->contribution_type_formatted }}</span>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         </td>
                                                     </tr>
                                                     @if($sponsor->contribution_amount)
@@ -445,7 +599,11 @@
                                                     <div>
                                                         <h6 class="mb-1 text-success">Tipo de Contribución</h6>
                                                     </div>
+<<<<<<< HEAD
                                                     <span class="badge bg-success">{{ $sponsor->contribution_type_formatted }}</span>
+=======
+                                                    <span class="badge badge-success">{{ $sponsor->contribution_type_formatted }}</span>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                 </div>
                                             </div>
 
@@ -528,7 +686,11 @@
                                                             </a>
                                                         </td>
                                                         <td>
+<<<<<<< HEAD
                                                             <span class="badge bg-info">
+=======
+                                                            <span class="badge badge-info">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                                 @php
                                                                     $contributionTypes = [
                                                                         'monetary' => 'Monetaria',
@@ -579,7 +741,11 @@
                                                             <small class="text-muted font-weight-bold d-block mb-2">Tipo de Contribución:</small>
                                                         </div>
                                                         <div class="col-12">
+<<<<<<< HEAD
                                                             <span class="badge bg-info d-block text-center" style="max-width: 100%;">
+=======
+                                                            <span class="badge badge-info d-block text-center" style="max-width: 100%;">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                                 @php
                                                                     $contributionTypes = [
                                                                         'monetary' => 'Monetaria',
@@ -698,7 +864,11 @@
                                 <div class="card-body">
                                     <div class="d-grid gap-2">
                                         @permission('sponsors.edit')
+<<<<<<< HEAD
                                         <a href="{{ route('sponsors.edit', $sponsor) }}" class="btn btn-warning btn-lg custom">
+=======
+                                        <a href="{{ route('sponsors.edit', $sponsor) }}" class="btn btn-warning btn-lg">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <i class="fas fa-edit mr-2"></i>
                                             Editar Patrocinador
                                         </a>
@@ -706,7 +876,11 @@
                                         <form method="POST" action="{{ route('sponsors.toggle-featured', $sponsor) }}" class="d-inline">
                                             @csrf
                                             @method('PATCH')
+<<<<<<< HEAD
                                             <button type="submit" class="btn {{ $sponsor->is_featured ? 'btn-outline-warning' : 'btn-warning' }} btn-lg w-100 custom">
+=======
+                                            <button type="submit" class="btn {{ $sponsor->is_featured ? 'btn-outline-warning' : 'btn-warning' }} btn-lg w-100">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                 <i class="fas fa-star mr-2"></i> 
                                                 {{ $sponsor->is_featured ? 'Quitar Destacado' : 'Marcar Destacado' }}
                                             </button>
@@ -715,7 +889,11 @@
                                         <form method="POST" action="{{ route('sponsors.toggle-status', $sponsor) }}" class="d-inline">
                                             @csrf
                                             @method('PATCH')
+<<<<<<< HEAD
                                             <button type="submit" class="btn {{ $sponsor->status === 'active' ? 'btn-outline-success' : 'btn-success' }} btn-lg w-100 custom">
+=======
+                                            <button type="submit" class="btn {{ $sponsor->status === 'active' ? 'btn-outline-success' : 'btn-success' }} btn-lg w-100">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                 <i class="fas fa-power-off mr-2"></i> 
                                                 {{ $sponsor->status === 'active' ? 'Desactivar' : 'Activar' }}
                                             </button>
@@ -727,14 +905,22 @@
                                               onsubmit="return confirm('¿Estás seguro de eliminar este patrocinador?')">
                                             @csrf
                                             @method('DELETE')
+<<<<<<< HEAD
                                             <button type="submit" class="btn btn-danger btn-lg w-100 custom">
+=======
+                                            <button type="submit" class="btn btn-danger btn-lg w-100">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                 <i class="fas fa-trash mr-2"></i> 
                                                 Eliminar Patrocinador
                                             </button>
                                         </form>
                                         @endpermission
 
+<<<<<<< HEAD
                                         <a href="{{ route('sponsors.index') }}" class="btn btn-secondary btn-lg custom">
+=======
+                                        <a href="{{ route('sponsors.index') }}" class="btn btn-secondary btn-lg">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <i class="fas fa-arrow-left mr-2"></i>
                                             Volver a la Lista
                                         </a>

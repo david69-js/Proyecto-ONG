@@ -1,8 +1,15 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('title', 'Beneficiarios')
 @section('page-title', 'Gestión de Beneficiarios')
 @section('page-description', 'Administrar beneficiarios del sistema')
+=======
+@extends('layouts.app')
+
+@section('title', 'Beneficiarios')
+@section('header', 'Gestión de Beneficiarios')
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
 @section('content')
 @if(session('success'))
@@ -29,7 +36,15 @@
         <h3 class="card-title">
             <i class="fas fa-filter"></i> Filtros de Búsqueda
         </h3>
+<<<<<<< HEAD
         
+=======
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
     </div>
     <div class="card-body">
         <form method="GET" action="{{ route('beneficiaries.index') }}">

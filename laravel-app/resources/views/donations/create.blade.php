@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('title', 'Crear Donación')
@@ -6,11 +7,20 @@
 
 @section('content')
 <div class="container-xl">
+=======
+@extends('layouts.app')
+
+@section('title', 'Nueva Donación')
+
+@section('content')
+<div class="container-fluid">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
+<<<<<<< HEAD
                         <i class="fas fa-heart text-danger me-2"></i>
                         Nueva Donación
                     </h3>
@@ -45,16 +55,30 @@
                         </div>
                     @endif
 
+=======
+                        <i class="fas fa-heart text-danger"></i>
+                        Nueva Donación
+                    </h3>
+                </div>
+
+                <div class="card-body">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                     <form method="POST" action="{{ route('donations.store') }}" enctype="multipart/form-data">
                         @csrf
                         
                         <div class="row">
                             <!-- Información de la Donación -->
                             <div class="col-md-6">
+<<<<<<< HEAD
                                 <div class="hr-text">
                                     <i class="fas fa-gift me-2"></i>
                                     Información de la Donación
                                 </div>
+=======
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-gift"></i> Información de la Donación
+                                </h5>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                 
                                 <div class="mb-3">
                                     <label for="donation_type" class="form-label">Tipo de Donación *</label>
@@ -138,10 +162,16 @@
 
                             <!-- Información del Donante -->
                             <div class="col-md-6">
+<<<<<<< HEAD
                                 <div class="hr-text">
                                     <i class="fas fa-user me-2"></i>
                                     Información del Donante
                                 </div>
+=======
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-user"></i> Información del Donante
+                                </h5>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
                                 <div class="mb-3">
                                     <label for="donor_type" class="form-label">Tipo de Donante *</label>
@@ -212,10 +242,16 @@
                         <!-- Información de Pago -->
                         <div class="row">
                             <div class="col-md-6">
+<<<<<<< HEAD
                                 <div class="hr-text">
                                     <i class="fas fa-credit-card me-2"></i>
                                     Información de Pago
                                 </div>
+=======
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-credit-card"></i> Información de Pago
+                                </h5>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
                                 <div class="mb-3">
                                     <label for="payment_method" class="form-label">Método de Pago *</label>
@@ -253,10 +289,16 @@
                             </div>
 
                             <div class="col-md-6">
+<<<<<<< HEAD
                                 <div class="hr-text">
                                     <i class="fas fa-file-alt me-2"></i>
                                     Documentos
                                 </div>
+=======
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-file-alt"></i> Documentos
+                                </h5>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
                                 <div class="mb-3">
                                     <label for="receipt" class="form-label">Comprobante</label>
@@ -289,6 +331,7 @@
                             </div>
                         </div>
 
+<<<<<<< HEAD
                         <div class="card-footer">
                             <div class="d-flex justify-content-between">
                                 <a href="{{ route('donations.index') }}" class="btn btn-outline-secondary custom">
@@ -300,6 +343,15 @@
                                     Crear Donación
                                 </button>
                             </div>
+=======
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ route('donations.index') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Crear Donación
+                            </button>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                         </div>
                     </form>
                 </div>
@@ -307,9 +359,13 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
 @endsection
 
 @push('scripts')
+=======
+
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const donationTypeSelect = document.getElementById('donation_type');
@@ -332,4 +388,8 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleAmountField(); // Ejecutar al cargar la página
 });
 </script>
+<<<<<<< HEAD
 @endpush
+=======
+@endsection
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205

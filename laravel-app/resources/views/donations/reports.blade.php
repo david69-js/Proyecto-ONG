@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('title', 'Reportes de Donaciones')
@@ -14,6 +15,23 @@
                     Reportes de Donaciones
                 </h3>
             </div>
+=======
+@extends('layouts.app')
+
+@section('title', 'Reportes de Donaciones')
+
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-chart-bar text-primary"></i>
+                        Reportes de Donaciones
+                    </h3>
+                </div>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
                 <div class="card-body">
                     <!-- Filtros -->
@@ -172,7 +190,11 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
+<<<<<<< HEAD
                                         <table class="table table-vcenter card-table">
+=======
+                                        <table class="table table-striped">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <thead>
                                                 <tr>
                                                     <th>Métrica</th>

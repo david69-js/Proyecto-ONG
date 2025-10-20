@@ -354,7 +354,10 @@
                 </li>
                 @endanypermission
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                 <!-- Auditoría -->
                 @anypermission(['audit.view-history', 'audit.view-logs'])
                 <li class="nav-item has-treeview">

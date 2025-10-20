@@ -1,7 +1,11 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('page-title', 'Gestión de Patrocinadores')
 @section('page-description', 'Administrar patrocinadores del sistema')
+=======
+@extends('layouts.app')
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
 @section('title', 'Patrocinadores y Colaboradores')
 
@@ -10,6 +14,7 @@
 @section('content')
             
             @if(session('success'))
+<<<<<<< HEAD
                 <div class="alert alert-success alert-dismissible" role="alert">
                     <div class="d-flex">
                         <div>
@@ -39,6 +44,21 @@
                         </div>
                     </div>
                     <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+=======
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                 </div>
             @endif
 
@@ -48,6 +68,14 @@
                     <h3 class="card-title">
                         <i class="fas fa-filter"></i> Filtros de Búsqueda
                     </h3>
+<<<<<<< HEAD
+=======
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                 </div>
                 <div class="card-body">
                     <form method="GET" action="{{ route('sponsors.index') }}">
@@ -174,11 +202,19 @@
                                             </div>
                                         </td>
                                         <td>
+<<<<<<< HEAD
                                             <span class="badge bg-info">{{ $sponsor->sponsor_type_formatted }}</span>
                                         </td>
                                         <td>
                                             <div>
                                                 <span class="badge bg-success">{{ $sponsor->contribution_type_formatted }}</span>
+=======
+                                            <span class="badge badge-info">{{ $sponsor->sponsor_type_formatted }}</span>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <span class="badge badge-success">{{ $sponsor->contribution_type_formatted }}</span>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                 @if($sponsor->contribution_amount)
                                                     <br><small class="text-muted">Q{{ number_format($sponsor->contribution_amount, 2) }}</small>
                                                 @endif
@@ -187,6 +223,7 @@
                                         <td>
                                             @php
                                                 $statusClasses = [
+<<<<<<< HEAD
                                                     'active' => 'bg-success',
                                                     'inactive' => 'bg-secondary',
                                                     'pending' => 'bg-warning',
@@ -194,15 +231,32 @@
                                                 ];
                                             @endphp
                                             <span class="badge {{ $statusClasses[$sponsor->status] ?? 'bg-secondary' }}">
+=======
+                                                    'active' => 'badge-success',
+                                                    'inactive' => 'badge-secondary',
+                                                    'pending' => 'badge-warning',
+                                                    'suspended' => 'badge-danger'
+                                                ];
+                                            @endphp
+                                            <span class="badge {{ $statusClasses[$sponsor->status] ?? 'badge-secondary' }}">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                 {{ $sponsor->status_formatted }}
                                             </span>
                                         </td>
                                         <td>
+<<<<<<< HEAD
                                             <span class="badge bg-primary">{{ $sponsor->priority_level }}</span>
                                         </td>
                                         <td>
                                             @if($sponsor->is_featured)
                                                 <span class="badge bg-warning">
+=======
+                                            <span class="badge badge-primary">{{ $sponsor->priority_level }}</span>
+                                        </td>
+                                        <td>
+                                            @if($sponsor->is_featured)
+                                                <span class="badge badge-warning">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                     <i class="fas fa-star"></i> Destacado
                                                 </span>
                                             @else
@@ -211,17 +265,29 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
+<<<<<<< HEAD
                                                 <a href="{{ route('sponsors.show', $sponsor) }}" class="btn btn-outline-info btn-sm" title="Ver">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                                 @permission('sponsors.edit')
                                                 <a href="{{ route('sponsors.edit', $sponsor) }}" class="btn btn-outline-warning btn-sm" title="Editar">
+=======
+                                                <a href="{{ route('sponsors.show', $sponsor) }}" class="btn btn-info btn-sm" title="Ver">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                @permission('sponsors.edit')
+                                                <a href="{{ route('sponsors.edit', $sponsor) }}" class="btn btn-warning btn-sm" title="Editar">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 <form method="POST" action="{{ route('sponsors.toggle-featured', $sponsor) }}" class="d-inline">
                                                     @csrf
                                                     @method('PATCH')
+<<<<<<< HEAD
                                                     <button type="submit" class="btn btn-sm {{ $sponsor->is_featured ? 'btn-warning' : 'btn-outline-warning' }}" 
+=======
+                                                    <button type="submit" class="btn btn-sm {{ $sponsor->is_featured ? 'btn-outline-warning' : 'btn-warning' }}" 
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                             title="{{ $sponsor->is_featured ? 'Quitar destacado' : 'Marcar destacado' }}">
                                                         <i class="fas fa-star"></i>
                                                     </button>
@@ -229,7 +295,11 @@
                                                 <form method="POST" action="{{ route('sponsors.toggle-status', $sponsor) }}" class="d-inline">
                                                     @csrf
                                                     @method('PATCH')
+<<<<<<< HEAD
                                                     <button type="submit" class="btn btn-sm {{ $sponsor->status === 'active' ? 'btn-success' : 'btn-outline-success' }}" 
+=======
+                                                    <button type="submit" class="btn btn-sm {{ $sponsor->status === 'active' ? 'btn-outline-success' : 'btn-success' }}" 
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                             title="{{ $sponsor->status === 'active' ? 'Desactivar' : 'Activar' }}">
                                                         <i class="fas fa-power-off"></i>
                                                     </button>
@@ -240,7 +310,11 @@
                                                       onsubmit="return confirm('¿Estás seguro de eliminar este patrocinador?')">
                                                     @csrf
                                                     @method('DELETE')
+<<<<<<< HEAD
                                                     <button type="submit" class="btn btn-outline-danger btn-sm" title="Eliminar">
+=======
+                                                    <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>

@@ -75,7 +75,11 @@ class DonationController extends Controller
      */
     public function create()
     {
+<<<<<<< HEAD
         $projects = Project::where('estado', '!=', 'finalizado')->get();
+=======
+        $projects = Project::where('estado', '!=', 'cancelado')->get();
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
         $sponsors = Sponsor::where('status', 'active')->get();
         $users = User::where('is_active', true)->get();
 
@@ -153,7 +157,11 @@ class DonationController extends Controller
      */
     public function edit(Donation $donation)
     {
+<<<<<<< HEAD
         $projects = Project::where('estado', '!=', 'finalizado')->get();
+=======
+        $projects = Project::where('estado', '!=', 'cancelado')->get();
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
         $sponsors = Sponsor::where('status', 'active')->get();
         $users = User::where('is_active', true)->get();
 
@@ -389,12 +397,16 @@ class DonationController extends Controller
             ->groupBy('status')
             ->get();
 
+<<<<<<< HEAD
         // Usar función compatible con SQLite para formatear fechas
         $dateFormat = config('database.default') === 'sqlite' 
             ? 'strftime("%Y-%m", created_at)' 
             : 'DATE_FORMAT(created_at, "%Y-%m")';
             
         $monthlyDonations = Donation::selectRaw("{$dateFormat} as month, SUM(amount) as total")
+=======
+        $monthlyDonations = Donation::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, SUM(amount) as total')
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
             ->where('donation_type', 'monetary')
             ->when($request->filled('date_from'), function ($query) use ($request) {
                 return $query->where('created_at', '>=', $request->date_from);

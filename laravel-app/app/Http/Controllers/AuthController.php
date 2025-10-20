@@ -23,6 +23,7 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+<<<<<<< HEAD
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -66,6 +67,40 @@ class AuthController extends Controller
     }
 
 
+=======
+        try {
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required',
+            ]);
+
+            $credentials = $request->only('email', 'password');
+            $remember = $request->has('remember') && $request->remember == '1';
+
+            if (Auth::attempt($credentials, $remember)) {
+                $request->session()->regenerate();
+
+                // Actualizar último login
+                Auth::user()->update([
+                    'last_login_at' => now(),
+                    'last_login_ip' => $request->ip(),
+                ]);
+
+                return redirect()->intended('/users');
+            }
+
+            return back()->withErrors([
+                'email' => 'Las credenciales proporcionadas no coinciden con nuestros registros.',
+            ])->withInput($request->except('password'));
+
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'email' => 'Error al procesar el login. Intenta nuevamente.',
+            ])->withInput($request->except('password'));
+        }
+    }
+
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
     /**
      * Show the registration form.
      */

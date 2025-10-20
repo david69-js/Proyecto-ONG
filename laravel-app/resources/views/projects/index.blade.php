@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('title', 'Proyectos')
@@ -13,6 +14,19 @@
 @endsection
 
 @section('content')
+=======
+@extends('layouts.app')
+
+@section('content')
+<div class="container-fluid">
+    <h3 class="mb-4">Proyectos</h3>
+    
+    @permission('projects.create')
+    <a href="{{ route('projects.create') }}" class="btn btn-primary mb-3">
+        <i class="fas fa-plus"></i> Nuevo Proyecto
+    </a>
+    @endpermission
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
     @role('beneficiary')
     <div class="alert alert-info">

@@ -155,7 +155,11 @@ class Product extends Model
 
     public function scopeByCondition($query, $condition)
     {
+<<<<<<< HEAD
         return $query->whereRaw('`condition` = ?', [$condition]);
+=======
+        return $query->where('condition', $condition);
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
     }
 
     public function scopeSearch($query, $search)

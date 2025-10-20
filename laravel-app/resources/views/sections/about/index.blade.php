@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 @extends('layouts.tabler')
 
@@ -41,6 +42,43 @@
                         <div class="hr-text">Logros</div>
 
                         <div class="row">
+=======
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <h3 class="mb-4">Editar Sección "Sobre Nosotros"</h3>
+
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <form action="{{ route('admin.about.update', $about->id) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
+
+        <!-- Título y descripciones -->
+        <div class="mb-3">
+            <label>Título</label>
+            <input type="text" name="titulo" class="form-control" value="{{ old('titulo', $about->titulo) }}">
+        </div>
+
+        <div class="mb-3">
+            <label>Descripción principal</label>
+            <textarea name="descripcion_principal" class="form-control" rows="3">{{ old('descripcion_principal', $about->descripcion_principal) }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label>Descripción secundaria</label>
+            <textarea name="descripcion_secundaria" class="form-control" rows="3">{{ old('descripcion_secundaria', $about->descripcion_secundaria) }}</textarea>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Logros numéricos -->
+        <h4>Logros</h4>
+        <div class="row g-3">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
             @foreach(['anios_servicio' => 'Años de servicio', 'hogares_construidos' => 'Hogares construidos', 'compromiso_social' => 'Compromiso social', 'colaboradores_activos' => 'Colaboradores activos'] as $field => $label)
             <div class="col-md-3">
                 <label>{{ $label }}</label>

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\AboutSection;
 use Illuminate\Http\Request;
+<<<<<<< HEAD
 use Illuminate\Support\Facades\Storage;
+=======
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
 class AboutSectionController extends Controller
 {
@@ -44,7 +47,11 @@ class AboutSectionController extends Controller
     {
         $about = AboutSection::findOrFail($id);
 
+<<<<<<< HEAD
         // Validar datos
+=======
+        // Validar datos básicos (opcional)
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
         $request->validate([
             'titulo' => 'required|string|max:255',
             'descripcion_principal' => 'nullable|string',
@@ -74,6 +81,7 @@ class AboutSectionController extends Controller
             'link_conoce_mas',
         ]));
 
+<<<<<<< HEAD
         // Manejo de imágenes generales y badges
         $imagenes = array_merge(
             ['imagen_principal', 'imagen_secundaria', 'imagen_extra'],
@@ -88,11 +96,27 @@ class AboutSectionController extends Controller
                 }
 
                 // Guardar nueva imagen
+=======
+        // Manejo de imágenes generales
+        foreach (['imagen_principal', 'imagen_secundaria', 'imagen_extra'] as $img) {
+            if ($request->hasFile($img)) {
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                 $path = $request->file($img)->store('about', 'public');
                 $about->$img = $path;
             }
         }
 
+<<<<<<< HEAD
+=======
+        // Manejo de badges de Alianzas y Reconocimientos
+        foreach (['badge_1', 'badge_2', 'badge_3'] as $badge) {
+            if ($request->hasFile($badge)) {
+                $path = $request->file($badge)->store('about', 'public');
+                $about->$badge = $path;
+            }
+        }
+
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
         $about->save();
 
         return redirect()->route('admin.about.index')

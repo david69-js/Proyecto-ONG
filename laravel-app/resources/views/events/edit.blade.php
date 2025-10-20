@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('title', 'Editar Evento - ' . $event->title)
@@ -6,11 +7,22 @@
 
 @section('content')
 <div class="container-xl">
+=======
+@extends('layouts.app')
+
+@section('title', 'Editar Evento')
+
+@section('header', 'Editar Evento')
+
+@section('content')
+<div class="container-fluid">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
+<<<<<<< HEAD
                         <i class="fas fa-edit me-2"></i>
                         Editar Evento: {{ $event->title }}
                     </h3>
@@ -20,12 +32,18 @@
                             Volver a Eventos
                         </a>
                     </div>
+=======
+                        <i class="fas fa-edit"></i>
+                        Editar Evento: {{ $event->title }}
+                    </h3>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                 </div>
                 <div class="card-body">
                     <form action="{{ route('events.update', $event) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         
+<<<<<<< HEAD
                         @if($errors->any())
                             <div class="alert alert-danger alert-dismissible" role="alert">
                                 <div class="d-flex">
@@ -45,6 +63,40 @@
                                     </div>
                                 </div>
                                 <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+=======
+                        <!-- Modal de Errores -->
+                        @if($errors->any())
+                            <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title" id="errorModalLabel">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                                Errores de Validación
+                                            </h5>
+                                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="alert alert-danger">
+                                                <h6><i class="fas fa-info-circle"></i> Por favor corrige los siguientes errores:</h6>
+                                                <ul class="mb-0">
+                                                    @foreach($errors->all() as $error)
+                                                        <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                <i class="fas fa-times"></i>
+                                                Cerrar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                             </div>
                         @endif
                         
@@ -61,8 +113,13 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="title">
+=======
+                                                <div class="form-group">
+                                                    <label for="title">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         <i class="fas fa-heading"></i>
                                                         Título del Evento 
                                                         <span class="text-danger font-weight-bold">*</span>
@@ -80,8 +137,13 @@
                                             </div>
                                             
                                             <div class="col-12">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="description">
+=======
+                                                <div class="form-group">
+                                                    <label for="description">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         <i class="fas fa-align-left"></i>
                                                         Descripción
                                                     </label>
@@ -96,8 +158,13 @@
                                             </div>
                                             
                                             <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="event_type">
+=======
+                                                <div class="form-group">
+                                                    <label for="event_type">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         <i class="fas fa-tags"></i>
                                                         Tipo de Evento 
                                                         <span class="text-danger font-weight-bold">*</span>
@@ -120,8 +187,13 @@
                                             </div>
                                             
                                             <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="status">
+=======
+                                                <div class="form-group">
+                                                    <label for="status">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         <i class="fas fa-flag"></i>
                                                         Estado 
                                                         <span class="text-danger font-weight-bold">*</span>
@@ -156,8 +228,13 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="start_date">
+=======
+                                                <div class="form-group">
+                                                    <label for="start_date">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         <i class="fas fa-play"></i>
                                                         Fecha de Inicio 
                                                         <span class="text-danger font-weight-bold">*</span>
@@ -175,8 +252,13 @@
                                             </div>
                                             
                                             <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="end_date">
+=======
+                                                <div class="form-group">
+                                                    <label for="end_date">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         <i class="fas fa-stop"></i>
                                                         Fecha de Fin
                                                     </label>
@@ -192,8 +274,13 @@
                                             </div>
                                             
                                             <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="location">
+=======
+                                                <div class="form-group">
+                                                    <label for="location">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         <i class="fas fa-map-marker-alt"></i>
                                                         Ubicación
                                                     </label>
@@ -210,8 +297,13 @@
                                             </div>
                                             
                                             <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="cost">
+=======
+                                                <div class="form-group">
+                                                    <label for="cost">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         <i class="fas fa-coins"></i>
                                                         Costo (Q)
                                                     </label>
@@ -234,8 +326,13 @@
                                             </div>
                                             
                                             <div class="col-12">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="address">
+=======
+                                                <div class="form-group">
+                                                    <label for="address">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         <i class="fas fa-map"></i>
                                                         Dirección Completa
                                                     </label>
@@ -265,8 +362,13 @@
                                         </h5>
                                     </div>
                                     <div class="card-body">
+<<<<<<< HEAD
                                         <div class="mb-3">
                                             <label class="form-label" for="max_participants">
+=======
+                                        <div class="form-group">
+                                            <label for="max_participants">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                 <i class="fas fa-user-plus"></i>
                                                 Máximo de Participantes
                                             </label>
@@ -281,7 +383,11 @@
                                             @enderror
                                         </div>
                                         
+<<<<<<< HEAD
                                         <div class="mb-3">
+=======
+                                        <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <div class="form-check">
                                                 <input type="checkbox" 
                                                        class="form-check-input" 
@@ -295,8 +401,13 @@
                                             </div>
                                         </div>
                                         
+<<<<<<< HEAD
                                         <div class="mb-3" id="registration_deadline_group" style="display: {{ old('registration_required', $event->registration_required) ? 'block' : 'none' }};">
                                             <label class="form-label" for="registration_deadline">
+=======
+                                        <div class="form-group" id="registration_deadline_group" style="display: {{ old('registration_required', $event->registration_required) ? 'block' : 'none' }};">
+                                            <label for="registration_deadline">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                 <i class="fas fa-clock"></i>
                                                 Fecha Límite de Registro
                                             </label>
@@ -321,8 +432,13 @@
                                         </h5>
                                     </div>
                                     <div class="card-body">
+<<<<<<< HEAD
                                         <div class="mb-3">
                                             <label class="form-label" for="project_id">
+=======
+                                        <div class="form-group">
+                                            <label for="project_id">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                 <i class="fas fa-folder"></i>
                                                 Proyecto
                                             </label>
@@ -352,7 +468,11 @@
                                         </h5>
                                     </div>
                                     <div class="card-body">
+<<<<<<< HEAD
                                         <div class="mb-3">
+=======
+                                        <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <div class="form-check">
                                                 <input type="checkbox" 
                                                        class="form-check-input" 
@@ -366,8 +486,13 @@
                                             </div>
                                         </div>
                                         
+<<<<<<< HEAD
                                         <div class="mb-3">
                                             <label class="form-label" for="image">
+=======
+                                        <div class="form-group">
+                                            <label for="image">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                 <i class="fas fa-image"></i>
                                                 Imagen del Evento
                                             </label>
@@ -407,8 +532,13 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="contact_email">
+=======
+                                                <div class="form-group">
+                                                    <label for="contact_email">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         <i class="fas fa-envelope"></i>
                                                         Email de Contacto
                                                     </label>
@@ -425,8 +555,13 @@
                                             </div>
                                             
                                             <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="contact_phone">
+=======
+                                                <div class="form-group">
+                                                    <label for="contact_phone">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         <i class="fas fa-phone"></i>
                                                         Teléfono de Contacto
                                                     </label>
@@ -443,8 +578,13 @@
                                             </div>
                                             
                                             <div class="col-12">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="requirements">
+=======
+                                                <div class="form-group">
+                                                    <label for="requirements">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         <i class="fas fa-list-check"></i>
                                                         Requisitos
                                                     </label>
@@ -484,6 +624,7 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body text-center">
+<<<<<<< HEAD
                                         <a href="{{ route('events.show', $event) }}" class="btn btn-outline-info me-2 custom">
                                             <i class="fas fa-eye me-1"></i>
                                             Ver Evento
@@ -494,6 +635,18 @@
                                         </a>
                                         <button type="submit" class="btn btn-primary custom">
                                             <i class="fas fa-save me-1"></i>
+=======
+                                        <a href="{{ route('events.show', $event) }}" class="btn btn-secondary mr-2">
+                                            <i class="fas fa-eye"></i>
+                                            Ver Evento
+                                        </a>
+                                        <a href="{{ route('events.index') }}" class="btn btn-outline-secondary mr-2">
+                                            <i class="fas fa-arrow-left"></i>
+                                            Cancelar
+                                        </a>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save"></i>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             Actualizar Evento
                                         </button>
                                     </div>
@@ -507,9 +660,19 @@
     </div>
 </div>
 
+<<<<<<< HEAD
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+=======
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Mostrar modal de errores automáticamente si hay errores
+    const errorModal = document.getElementById('errorModal');
+    if (errorModal) {
+        $(errorModal).modal('show');
+    }
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
     
     // Manejar campo de registro requerido
     const registrationRequired = document.getElementById('registration_required');
@@ -553,5 +716,8 @@ document.addEventListener('DOMContentLoaded', function() {
     registrationDeadlineInput.addEventListener('change', validateDates);
 });
 </script>
+<<<<<<< HEAD
 @endpush
+=======
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 @endsection

@@ -171,11 +171,19 @@ class UserController extends Controller
         // Verificar autorización
         $this->authorize('update', $user);
 
+<<<<<<< HEAD
         $validationRules = [
+=======
+        $request->validate([
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
             'email' => ['required', 'email', Rule::unique('sys_users')->ignore($user->id)],
             'phone' => 'nullable|string|max:20',
+<<<<<<< HEAD
+=======
+            'password' => 'required|min:5|confirmed',
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
             'roles' => 'required|array|min:1',
             'roles.*' => 'exists:cfg_roles,id',
             'is_active' => 'boolean',
@@ -193,6 +201,7 @@ class UserController extends Controller
             'emergency_contact_name' => 'nullable|string|max:100',
             'emergency_contact_phone' => 'nullable|string|max:20',
             'emergency_contact_relationship' => 'nullable|string|max:100',
+<<<<<<< HEAD
         ];
 
         // Solo validar contraseña si se proporciona
@@ -201,6 +210,9 @@ class UserController extends Controller
         }
 
         $request->validate($validationRules);
+=======
+        ]);
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
         DB::transaction(function () use ($request, $user) {
             // Update user

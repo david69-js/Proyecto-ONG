@@ -1,7 +1,11 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('page-title', 'Gestión de Donaciones')
 @section('page-description', 'Administrar donaciones del sistema')
+=======
+@extends('layouts.app')
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
 @section('title', 'Gestión de Donaciones')
 
@@ -108,7 +112,11 @@
                                         <code>{{ $donation->donation_code }}</code>
                                     </td>
                                     <td>
+<<<<<<< HEAD
                                         <span class="badge bg-info custom-badge">{{ $donation->donation_type_formatted }}</span>
+=======
+                                        <span class="badge bg-info">{{ $donation->donation_type_formatted }}</span>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                     </td>
                                     <td>
                                         <div>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('title', 'Editar Donación')
@@ -14,6 +15,23 @@
                     Editar Donación: {{ $donation->donation_code }}
                 </h3>
             </div>
+=======
+@extends('layouts.app')
+
+@section('title', 'Editar Donación')
+
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-edit text-primary"></i>
+                        Editar Donación: {{ $donation->donation_code }}
+                    </h3>
+                </div>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('donations.update', $donation) }}" enctype="multipart/form-data">

@@ -1,7 +1,11 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('page-title', 'Gestión de Eventos')
 @section('page-description', 'Administrar eventos del sistema')
+=======
+@extends('layouts.app')
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
 @section('title', 'Eventos')
 @section('header', 'Gestión de Eventos')

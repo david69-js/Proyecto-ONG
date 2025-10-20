@@ -1,7 +1,11 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('page-title', 'Detalles del Beneficiario')
 @section('page-description', 'Información completa del beneficiario')
+=======
+@extends('layouts.app')
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
 @section('title', 'Detalles del Beneficiario')
 @section('header', 'Detalles del Beneficiario')
@@ -225,7 +229,11 @@
                                 <div class="card-body">
                                     <div class="d-grid gap-2">
                                         @can('update', $beneficiary)
+<<<<<<< HEAD
                                         <a href="{{ route('beneficiaries.edit', $beneficiary) }}" class="btn btn-warning">
+=======
+                                        <a href="{{ route('beneficiaries.edit', $beneficiary) }}" class="btn btn-warning btn-lg">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <i class="fas fa-edit mr-2"></i>
                                             Editar Beneficiario
                                         </a>
@@ -236,14 +244,22 @@
                                               class="d-inline" onsubmit="return confirm('¿Estás seguro de eliminar este beneficiario?')">
                                             @csrf
                                             @method('DELETE')
+<<<<<<< HEAD
                                             <button type="submit" class="btn btn-danger w-100">
+=======
+                                            <button type="submit" class="btn btn-danger btn-lg w-100">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                 <i class="fas fa-trash mr-2"></i>
                                                 Eliminar Beneficiario
                                             </button>
                                         </form>
                                         @endcan
 
+<<<<<<< HEAD
                                         <a href="{{ route('beneficiaries.index') }}" class="btn btn-secondary">
+=======
+                                        <a href="{{ route('beneficiaries.index') }}" class="btn btn-secondary btn-lg">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <i class="fas fa-arrow-left mr-2"></i>
                                             Volver a la Lista
                                         </a>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('title', 'Editar Usuario - ' . $user->full_name)
@@ -45,6 +46,29 @@
                         </div>
                     @endif
 
+=======
+@extends('layouts.app')
+
+@section('title', 'Editar Usuario - ' . $user->full_name)
+
+@section('content')
+<div class="container-fluid">
+    <!-- Navegación -->
+    <x-head-admin />
+
+    <!-- Fin Navegación -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">Editar Usuario: {{ $user->full_name }}</h3>
+                    <a href="{{ route('users.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver a Usuarios
+                    </a>
+                </div>
+                
+                <div class="card-body">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                     <form action="{{ route('users.update', $user) }}" method="POST">
                         @csrf
                         @method('PUT')
@@ -59,8 +83,13 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-6">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="first_name" class="required">Nombre</label>
+=======
+                                                <div class="form-group">
+                                                    <label for="first_name" class="required">Nombre</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                     <input type="text" 
                                                            class="form-control @error('first_name') is-invalid @enderror" 
                                                            id="first_name" 
@@ -73,8 +102,13 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="last_name" class="required">Apellido</label>
+=======
+                                                <div class="form-group">
+                                                    <label for="last_name" class="required">Apellido</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                     <input type="text" 
                                                            class="form-control @error('last_name') is-invalid @enderror" 
                                                            id="last_name" 
@@ -88,8 +122,13 @@
                                             </div>
                                         </div>
                                         
+<<<<<<< HEAD
                                         <div class="mb-3">
                                             <label class="form-label" for="email" class="required">Correo Electrónico</label>
+=======
+                                        <div class="form-group">
+                                            <label for="email" class="required">Correo Electrónico</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <input type="email" 
                                                    class="form-control @error('email') is-invalid @enderror" 
                                                    id="email" 
@@ -101,8 +140,13 @@
                                             @enderror
                                         </div>
                                         
+<<<<<<< HEAD
                                         <div class="mb-3">
                                             <label class="form-label" for="phone">Teléfono</label>
+=======
+                                        <div class="form-group">
+                                            <label for="phone">Teléfono</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <input type="text" 
                                                    class="form-control @error('phone') is-invalid @enderror" 
                                                    id="phone" 
@@ -115,19 +159,29 @@
                                         
                                         <div class="row">
                                             <div class="col-md-6">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="password" class="form-label">Nueva Contraseña</label>
+=======
+                                                <div class="form-group">
+                                                    <label for="password">Nueva Contraseña</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                     <input type="password" 
                                                            class="form-control @error('password') is-invalid @enderror" 
                                                            id="password" 
                                                            name="password">
+<<<<<<< HEAD
                                                     <div class="form-text">Déjalo en blanco para mantener la contraseña actual</div>
+=======
+                                                    <small class="form-text text-muted">Déjalo en blanco para mantener la contraseña actual</small>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                     @error('password')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="password_confirmation" class="form-label">Confirmar Nueva Contraseña</label>
                                                     <input type="password" 
@@ -137,6 +191,14 @@
                                                     @error('password_confirmation')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
+=======
+                                                <div class="form-group">
+                                                    <label for="password_confirmation">Confirmar Nueva Contraseña</label>
+                                                    <input type="password" 
+                                                           class="form-control" 
+                                                           id="password_confirmation" 
+                                                           name="password_confirmation">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                 </div>
                                             </div>
                                         </div>
@@ -150,7 +212,11 @@
                                                            name="is_active" 
                                                            value="1" 
                                                            {{ old('is_active', $user->is_active) ? 'checked' : '' }}>
+<<<<<<< HEAD
                                                     <label class="form-label" class="form-check-label" for="is_active">
+=======
+                                                    <label class="form-check-label" for="is_active">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         Usuario Activo
                                                     </label>
                                                 </div>
@@ -163,7 +229,11 @@
                                                            name="is_verified" 
                                                            value="1" 
                                                            {{ old('is_verified', $user->is_verified) ? 'checked' : '' }}>
+<<<<<<< HEAD
                                                     <label class="form-label" class="form-check-label" for="is_verified">
+=======
+                                                    <label class="form-check-label" for="is_verified">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                         Usuario Verificado
                                                     </label>
                                                 </div>
@@ -182,8 +252,13 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-6">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="date_of_birth">Fecha de Nacimiento</label>
+=======
+                                                <div class="form-group">
+                                                    <label for="date_of_birth">Fecha de Nacimiento</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                     <input type="date" 
                                                            class="form-control @error('date_of_birth') is-invalid @enderror" 
                                                            id="date_of_birth" 
@@ -195,8 +270,13 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="gender">Género</label>
+=======
+                                                <div class="form-group">
+                                                    <label for="gender">Género</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                     <select class="form-control @error('gender') is-invalid @enderror" 
                                                             id="gender" 
                                                             name="gender">
@@ -213,8 +293,13 @@
                                             </div>
                                         </div>
                                         
+<<<<<<< HEAD
                                         <div class="mb-3">
                                             <label class="form-label" for="bio">Biografía</label>
+=======
+                                        <div class="form-group">
+                                            <label for="bio">Biografía</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <textarea class="form-control @error('bio') is-invalid @enderror" 
                                                       id="bio" 
                                                       name="bio" 
@@ -225,8 +310,13 @@
                                             @enderror
                                         </div>
                                         
+<<<<<<< HEAD
                                         <div class="mb-3">
                                             <label class="form-label" for="address">Dirección</label>
+=======
+                                        <div class="form-group">
+                                            <label for="address">Dirección</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <input type="text" 
                                                    class="form-control @error('address') is-invalid @enderror" 
                                                    id="address" 
@@ -240,8 +330,13 @@
                                         
                                         <div class="row">
                                             <div class="col-md-4">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="city">Ciudad</label>
+=======
+                                                <div class="form-group">
+                                                    <label for="city">Ciudad</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                     <input type="text" 
                                                            class="form-control @error('city') is-invalid @enderror" 
                                                            id="city" 
@@ -253,8 +348,13 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="state">Estado / Provincia</label>
+=======
+                                                <div class="form-group">
+                                                    <label for="state">Estado / Provincia</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                     <input type="text" 
                                                            class="form-control @error('state') is-invalid @enderror" 
                                                            id="state" 
@@ -266,8 +366,13 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="postal_code">Código Postal</label>
+=======
+                                                <div class="form-group">
+                                                    <label for="postal_code">Código Postal</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                     <input type="text" 
                                                            class="form-control @error('postal_code') is-invalid @enderror" 
                                                            id="postal_code" 
@@ -280,8 +385,13 @@
                                             </div>
                                         </div>
                                         
+<<<<<<< HEAD
                                         <div class="mb-3">
                                             <label class="form-label" for="country">País</label>
+=======
+                                        <div class="form-group">
+                                            <label for="country">País</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <input type="text" 
                                                    class="form-control @error('country') is-invalid @enderror" 
                                                    id="country" 
@@ -306,8 +416,13 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-4">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="emergency_contact_name">Nombre del Contacto</label>
+=======
+                                                <div class="form-group">
+                                                    <label for="emergency_contact_name">Nombre del Contacto</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                     <input type="text" 
                                                            class="form-control @error('emergency_contact_name') is-invalid @enderror" 
                                                            id="emergency_contact_name" 
@@ -319,8 +434,13 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="emergency_contact_phone">Teléfono del Contacto</label>
+=======
+                                                <div class="form-group">
+                                                    <label for="emergency_contact_phone">Teléfono del Contacto</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                     <input type="text" 
                                                            class="form-control @error('emergency_contact_phone') is-invalid @enderror" 
                                                            id="emergency_contact_phone" 
@@ -332,8 +452,13 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
+<<<<<<< HEAD
                                                 <div class="mb-3">
                                                     <label class="form-label" for="emergency_contact_relationship">Relación</label>
+=======
+                                                <div class="form-group">
+                                                    <label for="emergency_contact_relationship">Relación</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                     <input type="text" 
                                                            class="form-control @error('emergency_contact_relationship') is-invalid @enderror" 
                                                            id="emergency_contact_relationship" 
@@ -358,8 +483,13 @@
                                         <h5 class="card-title mb-0">Roles del Usuario</h5>
                                     </div>
                                     <div class="card-body">
+<<<<<<< HEAD
                                         <div class="mb-3">
                                             <label class="form-label" class="required">Asignar Roles</label>
+=======
+                                        <div class="form-group">
+                                            <label class="required">Asignar Roles</label>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <div class="row">
                                                 @foreach($roles as $role)
                                                     <div class="col-md-3">
@@ -370,7 +500,11 @@
                                                                    name="roles[]" 
                                                                    value="{{ $role->id }}"
                                                                    {{ in_array($role->id, old('roles', $user->roles->pluck('id')->toArray())) ? 'checked' : '' }}>
+<<<<<<< HEAD
                                                             <label class="form-label" class="form-check-label" for="role_{{ $role->id }}">
+=======
+                                                            <label class="form-check-label" for="role_{{ $role->id }}">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                                                 <strong>{{ $role->name }}</strong>
                                                                 @if($role->description)
                                                                     <br><small class="text-muted">{{ $role->description }}</small>
@@ -390,6 +524,7 @@
                         </div>
                         
                         <!-- Botones -->
+<<<<<<< HEAD
                         <div class="card-footer">
                             <div class="d-flex justify-content-end">
                                 <a href="{{ route('users.index') }}" class="btn btn-outline-secondary me-2 custom">
@@ -400,6 +535,16 @@
                                     <i class="fas fa-save me-1"></i>
                                     Actualizar Usuario
                                 </button>
+=======
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-end">
+                                    <a href="{{ route('users.index') }}" class="btn btn-secondary me-2">Cancelar</a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Actualizar Usuario
+                                    </button>
+                                </div>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                             </div>
                         </div>
                     </form>

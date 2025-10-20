@@ -10,16 +10,20 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AboutSectionController;
+<<<<<<< HEAD
 use App\Http\Controllers\HeroSectionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventIndexController;
 use App\Http\Controllers\ProjectIndexController;
+=======
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
 
 Route::get('/', function () {
     return view('index');
 });
 
+<<<<<<< HEAD
 // Ruta temporal para probar Tabler
 Route::get('/dashboard-tabler', function () {
     return view('dashboard-tabler');
@@ -40,6 +44,8 @@ Route::get('/test-sidebar-debug', function () {
     return view('test-sidebar-debug');
 })->middleware('auth');
 
+=======
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
 Route::get('/about', function () {
     return view('about');
@@ -65,7 +71,13 @@ Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->
 Route::middleware(['auth'])->group(function () {
     
     // Dashboard
+<<<<<<< HEAD
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+=======
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
     // ============================================
     // User Management Routes
@@ -138,6 +150,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
   // ============================================
+<<<<<<< HEAD
 // Events Management Routes (ADMIN)
 // ============================================
 Route::middleware(['auth'])
@@ -170,6 +183,24 @@ Route::middleware(['auth'])
             ->name('registrations.destroy');
     });
 Route::get('/eventos/{event}', [EventController::class, 'showPublic'])->name('events.public.show');
+=======
+    // Events Management Routes
+    // ============================================
+    Route::prefix('events')->name('events.')->middleware('any.permission:events.view')->group(function () {
+        Route::get('/', [EventController::class, 'index'])->name('index');
+        Route::get('/create', [EventController::class, 'create'])->name('create')->middleware('permission:events.create');
+        Route::post('/', [EventController::class, 'store'])->name('store')->middleware('permission:events.create');
+        Route::get('/{event}', [EventController::class, 'show'])->name('show');
+        Route::get('/{event}/edit', [EventController::class, 'edit'])->name('edit')->middleware('permission:events.edit');
+        Route::put('/{event}', [EventController::class, 'update'])->name('update')->middleware('permission:events.edit');
+        Route::delete('/{event}', [EventController::class, 'destroy'])->name('destroy')->middleware('permission:events.delete');
+        Route::patch('/{event}/toggle-featured', [EventController::class, 'toggleFeatured'])->name('toggle-featured')->middleware('permission:events.edit');
+        Route::patch('/{event}/change-status', [EventController::class, 'changeStatus'])->name('change-status')->middleware('permission:events.edit');
+        Route::post('/{event}/register', [EventController::class, 'register'])->name('register');
+        Route::patch('/registrations/{registration}/status', [EventController::class, 'updateRegistrationStatus'])->name('registration.status')->middleware('permission:events.edit');
+        Route::delete('/registrations/{registration}', [EventController::class, 'deleteRegistration'])->name('registration.delete')->middleware('permission:events.edit');
+    });
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
     // ============================================
     // Donations Management Routes
@@ -222,6 +253,7 @@ Route::prefix('products')->name('products.')->middleware('auth')->group(function
     Route::get('/{product}', [ProductController::class, 'show'])->name('show')->middleware('permission:products.view');
 });
 
+<<<<<<< HEAD
 
 // About Section Management Routes
 Route::middleware(['auth'])
@@ -315,3 +347,10 @@ Route::middleware(['auth'])
         Route::get('/reports/statistics', [DonationController::class, 'reports'])->name('reports');
         Route::get('/export/data', [DonationController::class, 'export'])->name('export');
     });
+=======
+// About Section Management Routes
+Route::prefix('admin/about')->name('admin.about.')->group(function () {
+    Route::get('/', [AboutSectionController::class, 'index'])->name('index');
+    Route::put('/{id}', [AboutSectionController::class, 'update'])->name('update');
+});
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205

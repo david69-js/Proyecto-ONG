@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('title', 'Crear Patrocinador')
@@ -57,6 +58,45 @@
                         </div>
                     </div>
                     <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+=======
+@extends('layouts.app')
+
+@section('title', 'Crear Patrocinador')
+
+@section('header', 'Crear Patrocinador')
+
+@section('content')
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-plus"></i> Crear Nuevo Patrocinador
+                </h3>
+                <div class="card-tools">
+                    <a href="{{ route('sponsors.index') }}" class="btn btn-tool">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <strong>Corrige los siguientes errores:</strong>
+                    <ul class="mb-0 mt-2">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                 </div>
             @endif
             <form action="{{ route('sponsors.store') }}" method="POST" enctype="multipart/form-data">
@@ -74,9 +114,15 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                         <div class="mb-3">
                                             <label for="name" class="form-label required">
                                                 <i class="fas fa-user me-1"></i> Nombre
+=======
+                                        <div class="form-group">
+                                            <label for="name">
+                                                <i class="fas fa-user"></i> Nombre *
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             </label>
                                             <input type="text" class="form-control @error('name') is-invalid @enderror" 
                                                    id="name" name="name" value="{{ old('name') }}" required>
@@ -86,7 +132,11 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                         <div class="mb-3">
+=======
+                                        <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <label for="company_name">
                                                 <i class="fas fa-building"></i> Empresa
                                             </label>
@@ -101,7 +151,11 @@
 
                                 <div class="row">
                                     <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                         <div class="mb-3">
+=======
+                                        <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <label for="contact_person">
                                                 <i class="fas fa-user-tie"></i> Persona de Contacto
                                             </label>
@@ -113,7 +167,11 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                         <div class="mb-3">
+=======
+                                        <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <label for="email">
                                                 <i class="fas fa-envelope"></i> Email *
                                             </label>
@@ -128,7 +186,11 @@
 
                                 <div class="row">
                                     <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                         <div class="mb-3">
+=======
+                                        <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <label for="phone">
                                                 <i class="fas fa-phone"></i> Teléfono
                                             </label>
@@ -140,7 +202,11 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                         <div class="mb-3">
+=======
+                                        <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <label for="website">
                                                 <i class="fas fa-globe"></i> Sitio Web
                                             </label>
@@ -153,7 +219,11 @@
                                     </div>
                                 </div>
 
+<<<<<<< HEAD
                                 <div class="mb-3">
+=======
+                                <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                     <label for="address">
                                         <i class="fas fa-map-marker-alt"></i> Dirección
                                     </label>
@@ -176,7 +246,11 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                         <div class="mb-3">
+=======
+                                        <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <label for="sponsor_type">
                                                 <i class="fas fa-tag"></i> Tipo de Patrocinador *
                                             </label>
@@ -196,7 +270,11 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                         <div class="mb-3">
+=======
+                                        <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <label for="contribution_type">
                                                 <i class="fas fa-gift"></i> Tipo de Contribución *
                                             </label>
@@ -218,7 +296,11 @@
 
                                 <div class="row">
                                     <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                         <div class="mb-3">
+=======
+                                        <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <label for="contribution_amount">
                                                 <i class="fas fa-coins"></i> Monto de Contribución
                                             </label>
@@ -236,7 +318,11 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
+<<<<<<< HEAD
                                         <div class="mb-3">
+=======
+                                        <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <label for="priority_level">
                                                 <i class="fas fa-star"></i> Nivel de Prioridad *
                                             </label>
@@ -255,7 +341,11 @@
                                     </div>
                                 </div>
 
+<<<<<<< HEAD
                                 <div class="mb-3">
+=======
+                                <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                     <label for="contribution_description">
                                         <i class="fas fa-align-left"></i> Descripción de la Contribución
                                     </label>
@@ -269,6 +359,7 @@
                             </div>
                         </div>
 
+<<<<<<< HEAD
                         <!-- Logo del Patrocinador -->
                         <div class="card">
                             <div class="card-header">
@@ -303,6 +394,8 @@
                             </div>
                         </div>
 
+=======
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                         <!-- Proyectos Asociados -->
                         @if($projects->count() > 0)
                         <div class="card">
@@ -312,7 +405,11 @@
                                 </h3>
                             </div>
                             <div class="card-body">
+<<<<<<< HEAD
                                 <div class="mb-3">
+=======
+                                <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                     <label>
                                         <i class="fas fa-check-square"></i> Seleccionar Proyectos
                                     </label>
@@ -371,6 +468,35 @@
 
                     <!-- Panel Lateral -->
                     <div class="col-12 col-lg-4">
+<<<<<<< HEAD
+=======
+                        <!-- Logo -->
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-image"></i> Logo
+                                </h3>
+                            </div>
+                            <div class="card-body text-center">
+                                <div class="form-group">
+                                    <label for="logo">
+                                        <i class="fas fa-upload"></i> Subir Logo
+                                    </label>
+                                    <input type="file" class="form-control-file @error('logo') is-invalid @enderror" 
+                                           id="logo" name="logo" accept="image/*">
+                                    @error('logo')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <small class="form-text text-muted">
+                                        <i class="fas fa-info-circle"></i> Formatos: JPG, PNG, GIF, SVG. Máximo 2MB.
+                                    </small>
+                                </div>
+                                <div id="logo-preview" class="mt-3" style="display: none;">
+                                    <img id="preview-img" src="" alt="Preview" class="img-fluid rounded shadow-sm" style="max-height: 150px;">
+                                </div>
+                            </div>
+                        </div>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
                         <!-- Estado y Configuración -->
                         <div class="card mb-3">
@@ -380,7 +506,11 @@
                                 </h3>
                             </div>
                             <div class="card-body">
+<<<<<<< HEAD
                                 <div class="mb-3">
+=======
+                                <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                     <label for="status">
                                         <i class="fas fa-toggle-on"></i> Estado *
                                     </label>
@@ -396,7 +526,11 @@
                                     @enderror
                                 </div>
 
+<<<<<<< HEAD
                                 <div class="mb-3">
+=======
+                                <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured" 
                                                value="1" {{ old('is_featured') ? 'checked' : '' }}>
@@ -408,7 +542,11 @@
 
                                 <div class="row">
                                     <div class="col-12 col-sm-6">
+<<<<<<< HEAD
                                         <div class="mb-3">
+=======
+                                        <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <label for="partnership_start_date">
                                                 <i class="fas fa-calendar-plus"></i> Fecha de Inicio
                                             </label>
@@ -421,7 +559,11 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-sm-6">
+<<<<<<< HEAD
                                         <div class="mb-3">
+=======
+                                        <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <label for="partnership_end_date">
                                                 <i class="fas fa-calendar-minus"></i> Fecha de Fin
                                             </label>
@@ -445,7 +587,11 @@
                                 </h3>
                             </div>
                             <div class="card-body">
+<<<<<<< HEAD
                                 <div class="mb-3">
+=======
+                                <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                     <label for="description">
                                         <i class="fas fa-align-left"></i> Descripción
                                     </label>
@@ -457,7 +603,11 @@
                                     @enderror
                                 </div>
 
+<<<<<<< HEAD
                                 <div class="mb-3">
+=======
+                                <div class="form-group">
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                     <label for="notes">
                                         <i class="fas fa-clipboard"></i> Notas Internas
                                     </label>
@@ -480,14 +630,24 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 col-sm-6 mb-2 mb-sm-0">
+<<<<<<< HEAD
                                         <a href="{{ route('sponsors.index') }}" class="btn btn-outline-secondary w-100 custom">
                                             <i class="fas fa-arrow-left me-1"></i> 
+=======
+                                        <a href="{{ route('sponsors.index') }}" class="btn btn-secondary btn-block">
+                                            <i class="fas fa-arrow-left"></i> 
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <span class="d-none d-sm-inline">Cancelar</span>
                                         </a>
                                     </div>
                                     <div class="col-12 col-sm-6">
+<<<<<<< HEAD
                                         <button type="submit" class="btn btn-primary w-100 custom">
                                             <i class="fas fa-save me-1"></i> 
+=======
+                                        <button type="submit" class="btn btn-primary btn-block">
+                                            <i class="fas fa-save"></i> 
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                             <span class="d-none d-sm-inline">Crear Patrocinador</span>
                                             <span class="d-sm-none">Crear</span>
                                         </button>
@@ -537,6 +697,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+<<<<<<< HEAD
 
     // Vista previa del logo
     const logoInput = document.getElementById('logo');
@@ -560,6 +721,9 @@ function removeLogo() {
     document.getElementById('logo').value = '';
     document.getElementById('logo-preview').style.display = 'none';
 }
+=======
+});
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 </script>
 @endpush
 @endsection

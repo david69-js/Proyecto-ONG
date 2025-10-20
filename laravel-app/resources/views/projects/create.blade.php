@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('title', 'Crear Proyecto')
@@ -12,6 +13,13 @@
                 <h3 class="card-title">Información del Proyecto</h3>
             </div>
             <div class="card-body">
+=======
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <h3>Crear Proyecto</h3>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
     <form action="{{ route('projects.store') }}" method="POST">
         @csrf

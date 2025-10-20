@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('title', 'Detalle de Donación')
@@ -13,6 +14,22 @@
                     <i class="fas fa-heart text-danger me-2"></i>
                     Donación: {{ $donation->donation_code }}
                 </h3>
+=======
+@extends('layouts.app')
+
+@section('title', 'Detalle de Donación')
+
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">
+                        <i class="fas fa-heart text-danger"></i>
+                        Donación: {{ $donation->donation_code }}
+                    </h3>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                     <div>
                         @permission('donations.edit')
                         <a href="{{ route('donations.edit', $donation) }}" class="btn btn-outline-primary">

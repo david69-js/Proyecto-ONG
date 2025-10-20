@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('title', 'Dashboard - Sistema ONG')
@@ -41,10 +42,38 @@
                 <div class="progress progress-sm">
                     <div class="progress-bar bg-primary" style="width: {{ $stats['total_projects'] > 0 ? round(($stats['active_projects'] / $stats['total_projects']) * 100) : 0 }}%" role="progressbar"></div>
                 </div>
+=======
+@extends('layouts.app')
+
+@section('title', 'Dashboard - Sistema ONG')
+@section('header', 'Panel Principal')
+
+@section('content')
+<div class="row">
+    <!-- Tarjetas de Estadísticas -->
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ $stats['total_projects'] ?? 0 }}</h4>
+                        <p class="card-text">Proyectos Activos</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-project-diagram fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ route('projects.index') }}" class="text-white text-decoration-none">
+                    Ver detalles <i class="fas fa-arrow-circle-right"></i>
+                </a>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
             </div>
         </div>
     </div>
 
+<<<<<<< HEAD
     <div class="col-sm-6 col-lg-3">
         <div class="card stats-card border-info">
             <div class="card-body">
@@ -77,10 +106,30 @@
                 <div class="progress progress-sm">
                     <div class="progress-bar bg-info" id="beneficiaries-progress" style="width: {{ $stats['total_beneficiaries'] > 0 ? round(($stats['active_beneficiaries'] / $stats['total_beneficiaries']) * 100) : 0 }}%" role="progressbar"></div>
                 </div>
+=======
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ $stats['total_beneficiaries'] ?? 0 }}</h4>
+                        <p class="card-text">Beneficiarios</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ route('beneficiaries.index') }}" class="text-white text-decoration-none">
+                    Ver detalles <i class="fas fa-arrow-circle-right"></i>
+                </a>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
             </div>
         </div>
     </div>
 
+<<<<<<< HEAD
     <div class="col-sm-6 col-lg-3">
         <div class="card stats-card border-success">
             <div class="card-body">
@@ -112,10 +161,30 @@
                 <div class="progress progress-sm">
                     <div class="progress-bar bg-primary" style="width: {{ $stats['total_donations'] > 0 ? round(($stats['donations_this_month'] / $stats['total_donations']) * 100) : 0 }}%" role="progressbar"></div>
                 </div>
+=======
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card bg-warning text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ $stats['total_donations'] ?? 0 }}</h4>
+                        <p class="card-text">Donaciones</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-hand-holding-heart fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="text-white text-decoration-none">
+                    Ver detalles <i class="fas fa-arrow-circle-right"></i>
+                </a>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
             </div>
         </div>
     </div>
 
+<<<<<<< HEAD
     <div class="col-sm-6 col-lg-3">
         <div class="card stats-card border-warning">
             <div class="card-body">
@@ -146,11 +215,31 @@
                 <div class="progress progress-sm">
                     <div class="progress-bar bg-warning" style="width: {{ $stats['total_products'] > 0 ? round(($stats['available_products'] / $stats['total_products']) * 100) : 0 }}%" role="progressbar"></div>
                 </div>
+=======
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card bg-info text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ $stats['total_volunteers'] ?? 0 }}</h4>
+                        <p class="card-text">Voluntarios</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-hands-helping fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ route('users.index') }}" class="text-white text-decoration-none">
+                    Ver detalles <i class="fas fa-arrow-circle-right"></i>
+                </a>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
             </div>
         </div>
     </div>
 </div>
 
+<<<<<<< HEAD
 <!-- Segunda fila de estadísticas -->
 <div class="row row-deck row-cards mt-4">
     <div class="col-sm-6 col-lg-3">
@@ -271,59 +360,110 @@
                 <h3 class="card-title">
                     <i class="fas fa-bolt me-2"></i>Acciones Rápidas
                 </h3>
+=======
+<div class="row">
+    <!-- Acciones Rápidas -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-bolt"></i> Acciones Rápidas
+                </h5>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
             </div>
             <div class="card-body">
                 <div class="row">
                     @permission('projects.create')
+<<<<<<< HEAD
                     <div class="col-md-6 col-lg-4 mb-3">
                         <a href="{{ route('projects.create') }}" class="btn btn-outline-primary w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
                             <i class="fas fa-plus-circle fa-2x mb-2"></i>
                             <strong>Crear Proyecto</strong>
                             <small class="text-muted">Iniciar un nuevo proyecto</small>
+=======
+                    <div class="col-md-6 mb-3">
+                        <a href="{{ route('projects.create') }}" class="btn btn-outline-primary w-100 p-3">
+                            <i class="fas fa-plus-circle fa-2x mb-2"></i><br>
+                            <strong>Crear Proyecto</strong><br>
+                            <small>Iniciar un nuevo proyecto</small>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                         </a>
                     </div>
                     @endpermission
 
                     @permission('beneficiaries.create')
+<<<<<<< HEAD
                     <div class="col-md-6 col-lg-4 mb-3">
                         <a href="{{ route('beneficiaries.create') }}" class="btn btn-outline-success w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
                             <i class="fas fa-user-plus fa-2x mb-2"></i>
                             <strong>Registrar Beneficiario</strong>
                             <small class="text-muted">Agregar nueva persona</small>
+=======
+                    <div class="col-md-6 mb-3">
+                        <a href="{{ route('beneficiaries.create') }}" class="btn btn-outline-success w-100 p-3">
+                            <i class="fas fa-user-plus fa-2x mb-2"></i><br>
+                            <strong>Registrar Beneficiario</strong><br>
+                            <small>Agregar nueva persona</small>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                         </a>
                     </div>
                     @endpermission
 
                     @permission('donations.create')
+<<<<<<< HEAD
                     <div class="col-md-6 col-lg-4 mb-3">
                         <a href="{{ route('donations.create') }}" class="btn btn-outline-warning w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
                             <i class="fas fa-hand-holding-heart fa-2x mb-2"></i>
                             <strong>Registrar Donación</strong>
                             <small class="text-muted">Nueva donación recibida</small>
+=======
+                    <div class="col-md-6 mb-3">
+                        <a href="#" class="btn btn-outline-warning w-100 p-3">
+                            <i class="fas fa-hand-holding-heart fa-2x mb-2"></i><br>
+                            <strong>Registrar Donación</strong><br>
+                            <small>Nueva donación recibida</small>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                         </a>
                     </div>
                     @endpermission
 
                     @permission('users.create')
+<<<<<<< HEAD
                     <div class="col-md-6 col-lg-4 mb-3">
                         <a href="{{ route('users.create') }}" class="btn btn-outline-info w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
                             <i class="fas fa-user-plus fa-2x mb-2"></i>
                             <strong>Crear Usuario</strong>
                             <small class="text-muted">Agregar nuevo usuario</small>
+=======
+                    <div class="col-md-6 mb-3">
+                        <a href="{{ route('users.create') }}" class="btn btn-outline-info w-100 p-3">
+                            <i class="fas fa-user-plus fa-2x mb-2"></i><br>
+                            <strong>Crear Usuario</strong><br>
+                            <small>Agregar nuevo usuario</small>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                         </a>
                     </div>
                     @endpermission
 
                     @permission('reports.view')
+<<<<<<< HEAD
                     <div class="col-md-6 col-lg-4 mb-3">
                         <a href="{{ route('donations.reports') }}" class="btn btn-outline-secondary w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
                             <i class="fas fa-chart-bar fa-2x mb-2"></i>
                             <strong>Ver Reportes</strong>
                             <small class="text-muted">Estadísticas e informes</small>
+=======
+                    <div class="col-md-6 mb-3">
+                        <a href="#" class="btn btn-outline-secondary w-100 p-3">
+                            <i class="fas fa-chart-bar fa-2x mb-2"></i><br>
+                            <strong>Ver Reportes</strong><br>
+                            <small>Estadísticas e informes</small>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                         </a>
                     </div>
                     @endpermission
 
+<<<<<<< HEAD
                     @permission('sponsors.create')
                     <div class="col-md-6 col-lg-4 mb-3">
                         <a href="{{ route('sponsors.create') }}" class="btn btn-outline-primary w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
@@ -360,6 +500,14 @@
                             <i class="fas fa-box fa-2x mb-2"></i>
                             <strong>Agregar Producto</strong>
                             <small class="text-muted">Nuevo producto</small>
+=======
+                    @permission('activities.register-attendance')
+                    <div class="col-md-6 mb-3">
+                        <a href="#" class="btn btn-outline-dark w-100 p-3">
+                            <i class="fas fa-clipboard-check fa-2x mb-2"></i><br>
+                            <strong>Registrar Asistencia</strong><br>
+                            <small>Control de asistencia</small>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                         </a>
                     </div>
                     @endpermission
@@ -369,6 +517,7 @@
     </div>
 
     <!-- Información del Usuario -->
+<<<<<<< HEAD
     <div class="col-12">
         <div class="card">
             <div class="card-header">
@@ -410,6 +559,52 @@
                             @endcan
                         </div>
                     </div>
+=======
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-user"></i> Mi Perfil
+                </h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    @if(auth()->user()->avatar)
+                        <img src="{{ asset('storage/' . auth()->user()->avatar) }}" 
+                             class="rounded-circle" 
+                             width="80" 
+                             height="80" 
+                             alt="Avatar">
+                    @else
+                        <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center" 
+                             style="width: 80px; height: 80px;">
+                            <i class="fas fa-user fa-2x text-white"></i>
+                        </div>
+                    @endif
+                </div>
+                
+                <h6 class="card-title">{{ auth()->user()->full_name }}</h6>
+                <p class="text-muted">{{ auth()->user()->email }}</p>
+                
+                <div class="mb-3">
+                    @foreach(auth()->user()->roles as $role)
+                        <span class="badge bg-primary me-1">{{ $role->name }}</span>
+                    @endforeach
+                </div>
+
+                <div class="d-grid gap-2">
+                @can('update', auth()->user())
+                <a href="{{ route('users.permissions', auth()->user()) }}"  class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-edit"></i> Editar Perfil
+                    </a>
+                @endcan
+                @can('update', auth()->user())
+                    <a href="{{ route('users.edit', auth()->user()) }}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-cog"></i> Configuración
+                    </a>
+                @endcan
+               
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                 </div>
             </div>
         </div>
@@ -418,6 +613,7 @@
 
 <!-- Proyectos Recientes -->
 @permission('projects.view')
+<<<<<<< HEAD
 <div class="row row-deck row-cards mt-4">
     <div class="col-12">
         <div class="card">
@@ -430,10 +626,20 @@
                         <i class="fas fa-eye me-1"></i>Ver Todos
                     </a>
                 </div>
+=======
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-project-diagram"></i> Proyectos Recientes
+                </h5>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
             </div>
             <div class="card-body">
                 @if(isset($recent_projects) && $recent_projects->count() > 0)
                     <div class="table-responsive">
+<<<<<<< HEAD
                         <table class="table table-vcenter card-table">
                             <thead>
                                 <tr>
@@ -442,12 +648,23 @@
                                     <th>Beneficiarios</th>
                                     <th>Fecha Inicio</th>
                                     <th class="w-1">Acciones</th>
+=======
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Estado</th>
+                                    <th>Beneficiarios</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Acciones</th>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($recent_projects as $project)
                                 <tr>
                                     <td>
+<<<<<<< HEAD
                                         <div class="d-flex py-1 align-items-center">
                                             <div class="flex-fill">
                                                 <div class="font-weight-medium">{{ $project->nombre }}</div>
@@ -473,6 +690,27 @@
                                             </a>
                                             @endpermission
                                         </div>
+=======
+                                        <strong>{{ $project->name }}</strong><br>
+                                        <small class="text-muted">{{ Str::limit($project->description, 50) }}</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ $project->status === 'active' ? 'success' : 'secondary' }}">
+                                            {{ ucfirst($project->status) }}
+                                        </span>
+                                    </td>
+                                    <td>{{ $project->beneficiaries_count ?? 0 }}</td>
+                                    <td>{{ $project->start_date ? $project->start_date->format('d/m/Y') : 'N/A' }}</td>
+                                    <td>
+                                        <a href="{{ route('projects.show', $project) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        @permission('projects.edit')
+                                        <a href="{{ route('projects.edit', $project) }}" class="btn btn-sm btn-outline-secondary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        @endpermission
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                                     </td>
                                 </tr>
                                 @endforeach
@@ -480,6 +718,7 @@
                         </table>
                     </div>
                 @else
+<<<<<<< HEAD
                     <div class="empty">
                         <div class="empty-icon">
                             <i class="fas fa-project-diagram fa-3x text-muted"></i>
@@ -583,6 +822,15 @@
                                 <i class="fas fa-plus me-1"></i>Registrar Primer Beneficiario
                             </a>
                         </div>
+=======
+                    <div class="text-center py-4">
+                        <i class="fas fa-project-diagram fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No hay proyectos recientes</p>
+                        @permission('projects.create')
+                        <a href="{{ route('projects.create') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Crear Primer Proyecto
+                        </a>
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
                         @endpermission
                     </div>
                 @endif
@@ -596,13 +844,23 @@
 @push('styles')
 <style>
     .card {
+<<<<<<< HEAD
         border: 1px solid rgba(0, 0, 0, 0.05);
         box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
         transition: box-shadow 0.15s ease-in-out;
+=======
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        transition: all 0.3s ease;
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
     }
     
     .card:hover {
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+<<<<<<< HEAD
+=======
+        transform: translateY(-2px);
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
     }
     
     .btn-outline-primary:hover,
@@ -613,6 +871,7 @@
     .btn-outline-dark:hover {
         transform: translateY(-1px);
     }
+<<<<<<< HEAD
     
     .avatar {
         border-radius: 50%;
@@ -713,3 +972,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endpush
+=======
+</style>
+@endpush
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205

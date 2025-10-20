@@ -1,7 +1,11 @@
+<<<<<<< HEAD
 @extends('layouts.tabler')
 
 @section('page-title', 'Crear Beneficiario')
 @section('page-description', 'Registrar un nuevo beneficiario')
+=======
+@extends('layouts.app')
+>>>>>>> e01843ec9f377deb58012498fa849d92f4995205
 
 @section('title', 'Crear Beneficiario')
 @section('header', 'Crear Nuevo Beneficiario')
