@@ -201,7 +201,7 @@
             <div class="card-header">
                 <h3 class="card-title">Donaciones Recientes</h3>
                 <div class="card-actions">
-                    <a href="{{ route('donations.index') }}" class="btn btn-primary btn-sm">
+                    <a href="{{ route('admin.donations.index') }}" class="btn btn-primary btn-sm">
                         <i class="fas fa-eye me-1"></i>Ver Todas
                     </a>
                 </div>

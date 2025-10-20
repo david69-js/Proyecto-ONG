@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 class EventController extends Controller
 {
     /**
-     * Panel admin (única vista)
+     * Listado + panel admin en una sola vista
      */
     public function index(Request $request)
     {
@@ -62,8 +62,8 @@ class EventController extends Controller
 
         $events = $query->paginate(12)->withQueryString();
 
-        // Datos para filtros (tu tabla de proyectos es ng_projects)
-        $projects = Project::where('estado', '!=', 'finalizado')->get();
+        // Datos para filtros (nota: tu tabla de proyectos es ng_projects)
+        $projects = Project::where('estado', '!=', 'completado')->get();
 
         $eventTypes = [
             'fundraising' => 'Recaudación de Fondos',
@@ -89,20 +89,7 @@ class EventController extends Controller
     }
 
     /**
-     * Aliases para no romper links antiguos (redirigen al index único)
-     */
-    public function create()
-    {
-        return redirect()->route('admin.events.index');
-    }
-
-    public function edit(Event $event)
-    {
-        return redirect()->route('admin.events.index');
-    }
-
-    /**
-     * Crear (desde el index único)
+     * Crear (desde la misma vista index)
      */
     public function store(Request $request)
     {
@@ -121,7 +108,7 @@ class EventController extends Controller
             'contact_email'          => 'nullable|email',
             'contact_phone'          => 'nullable|string|max:20',
             'requirements'           => 'nullable|string',
-            'project_id'             => 'nullable|exists:ng_projects,id',
+            'project_id'             => 'nullable|exists:ng_projects,id', // <--
             'image'                  => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'status'                 => 'nullable|in:draft,published,cancelled,completed',
             'featured'               => 'nullable|boolean',
@@ -140,24 +127,12 @@ class EventController extends Controller
         Event::create($data);
 
         cache()->forget('home:events');
-        return redirect()->route('admin.events.index')->with('success', 'Evento creado exitosamente.');
+
+        return back()->with('success', 'Evento creado exitosamente.');
     }
 
     /**
-     * Detalle público
-     */
-    public function showPublic(Event $event)
-    {
-        // Solo mostrar publicados
-        if ($event->status !== 'published') {
-            abort(404);
-        }
-        $event->load(['creator', 'project']);
-        return view('events.public_show', compact('event'));
-    }
-
-    /**
-     * (Opcional) Detalle interno si lo usas
+     * Mostrar detalle público (si lo usas)
      */
     public function show(Event $event)
     {
@@ -166,7 +141,7 @@ class EventController extends Controller
     }
 
     /**
-     * Actualizar (desde el index único)
+     * Actualizar (desde modal/inline en la misma vista)
      */
     public function update(Request $request, Event $event)
     {
@@ -185,7 +160,7 @@ class EventController extends Controller
             'contact_email'          => 'nullable|email',
             'contact_phone'          => 'nullable|string|max:20',
             'requirements'           => 'nullable|string',
-            'project_id'             => 'nullable|exists:ng_projects,id',
+            'project_id'             => 'nullable|exists:ng_projects,id', // <--
             'image'                  => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'status'                 => 'nullable|in:draft,published,cancelled,completed',
             'featured'               => 'nullable|boolean',
@@ -206,7 +181,8 @@ class EventController extends Controller
         $event->update($data);
 
         cache()->forget('home:events');
-        return redirect()->route('admin.events.index')->with('success', 'Evento actualizado exitosamente.');
+
+        return back()->with('success', 'Evento actualizado exitosamente.');
     }
 
     /**
@@ -221,7 +197,8 @@ class EventController extends Controller
         $event->delete();
 
         cache()->forget('home:events');
-        return redirect()->route('admin.events.index')->with('success', 'Evento eliminado exitosamente.');
+
+        return back()->with('success', 'Evento eliminado exitosamente.');
     }
 
     /**
@@ -232,9 +209,9 @@ class EventController extends Controller
         $event->update(['featured' => !$event->featured]);
 
         cache()->forget('home:events');
-        $status = $event->featured ? 'destacado' : 'removido de destacados';
 
-        return redirect()->back()->with('success', "Evento {$status} exitosamente.");
+        $status = $event->featured ? 'destacado' : 'removido de destacados';
+        return back()->with('success', "Evento {$status} exitosamente.");
     }
 
     /**
@@ -249,16 +226,17 @@ class EventController extends Controller
         $event->update(['status' => $request->status]);
 
         cache()->forget('home:events');
-        return redirect()->back()->with('success', 'Estado del evento actualizado exitosamente.');
+
+        return back()->with('success', 'Estado del evento actualizado exitosamente.');
     }
 
     /**
-     * Registro público a evento
+     * Registro a evento (público)
      */
     public function register(Request $request, Event $event)
     {
         if (!$event->is_registration_open) {
-            return redirect()->back()->with('error', 'El registro para este evento no está disponible.');
+            return back()->with('error', 'El registro para este evento no está disponible.');
         }
 
         $request->validate([
@@ -274,7 +252,7 @@ class EventController extends Controller
             ->exists();
 
         if ($exists) {
-            return redirect()->back()->with('error', 'Ya estás registrado en este evento.');
+            return back()->with('error', 'Ya estás registrado en este evento.');
         }
 
         EventRegistration::create([
@@ -287,7 +265,7 @@ class EventController extends Controller
 
         $event->updateParticipantsCount();
 
-        return redirect()->back()->with('success', 'Te has registrado exitosamente en el evento.');
+        return back()->with('success', 'Te has registrado exitosamente en el evento.');
     }
 
     /**
@@ -302,7 +280,7 @@ class EventController extends Controller
         $registration->update(['status' => $request->status]);
         $registration->event->updateParticipantsCount();
 
-        return redirect()->back()->with('success', 'Estado del registro actualizado exitosamente.');
+        return back()->with('success', 'Estado del registro actualizado exitosamente.');
     }
 
     /**
@@ -313,6 +291,17 @@ class EventController extends Controller
         $registration->delete();
         $registration->event->updateParticipantsCount();
 
-        return redirect()->back()->with('success', 'Registro eliminado exitosamente.');
+        return back()->with('success', 'Registro eliminado exitosamente.');
     }
+    public function showPublic(Event $event)
+{
+    // Solo mostrar eventos publicados
+    if ($event->status !== 'published') {
+        abort(404);
+    }
+
+    $event->load(['creator', 'project']); // Relaciones útiles
+    return view('events.public_show', compact('event'));
+}
+
 }

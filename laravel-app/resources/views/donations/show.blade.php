@@ -20,7 +20,7 @@
                         </a>
                         @endpermission
                         
-                        <a href="{{ route('donations.index') }}" class="btn btn-secondary">
+                        <a href="{{ route('admin.donations.index') }}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> Volver
                         </a>
                     </div>

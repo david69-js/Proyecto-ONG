@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Carbon\Carbon;
 
 class Event extends Model
 {
@@ -36,12 +35,12 @@ class Event extends Model
     ];
 
     protected $casts = [
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
+        'start_date'            => 'datetime',
+        'end_date'              => 'datetime',
         'registration_deadline' => 'datetime',
-        'cost' => 'decimal:2',
+        'cost'                  => 'decimal:2',
         'registration_required' => 'boolean',
-        'featured' => 'boolean',
+        'featured'              => 'boolean',
     ];
 
     /**
@@ -57,7 +56,7 @@ class Event extends Model
      */
     public function project()
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
     /**
@@ -65,7 +64,7 @@ class Event extends Model
      */
     public function registrations()
     {
-        return $this->hasMany(EventRegistration::class);
+        return $this->hasMany(EventRegistration::class, 'event_id');
     }
 
     /**
@@ -107,11 +106,11 @@ class Event extends Model
     {
         $types = [
             'fundraising' => 'Recaudación de Fondos',
-            'volunteer' => 'Voluntariado',
-            'awareness' => 'Concientización',
-            'community' => 'Comunitario',
-            'training' => 'Capacitación',
-            'other' => 'Otro',
+            'volunteer'   => 'Voluntariado',
+            'awareness'   => 'Concientización',
+            'community'   => 'Comunitario',
+            'training'    => 'Capacitación',
+            'other'       => 'Otro',
         ];
 
         return $types[$this->event_type] ?? $this->event_type;
@@ -123,7 +122,7 @@ class Event extends Model
     public function getStatusFormattedAttribute()
     {
         $statuses = [
-            'draft' => 'Borrador',
+            'draft'     => 'Borrador',
             'published' => 'Publicado',
             'cancelled' => 'Cancelado',
             'completed' => 'Completado',
@@ -187,11 +186,11 @@ class Event extends Model
         if (!$this->registration_required) {
             return false;
         }
-        
+
         if ($this->registration_deadline && $this->registration_deadline < now()) {
             return false;
         }
-        
+
         return $this->has_available_spots;
     }
 
@@ -202,11 +201,11 @@ class Event extends Model
     {
         $colors = [
             'fundraising' => 'danger',
-            'volunteer' => 'success',
-            'awareness' => 'info',
-            'community' => 'warning',
-            'training' => 'primary',
-            'other' => 'secondary',
+            'volunteer'   => 'success',
+            'awareness'   => 'info',
+            'community'   => 'warning',
+            'training'    => 'primary',
+            'other'       => 'secondary',
         ];
 
         return $colors[$this->event_type] ?? 'secondary';
@@ -218,7 +217,7 @@ class Event extends Model
     public function getStatusColorAttribute()
     {
         $colors = [
-            'draft' => 'secondary',
+            'draft'     => 'secondary',
             'published' => 'success',
             'cancelled' => 'danger',
             'completed' => 'info',
@@ -232,7 +231,10 @@ class Event extends Model
      */
     public function updateParticipantsCount()
     {
-        $this->current_participants = $this->registrations()->where('status', '!=', 'cancelled')->count();
+        $this->current_participants = $this->registrations()
+            ->where('status', '!=', 'cancelled')
+            ->count();
+
         $this->save();
     }
 }

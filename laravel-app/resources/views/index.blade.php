@@ -220,9 +220,12 @@
                 <span><i class="bi bi-clock-history"></i> {{ $event->end_date->format('d/m/Y H:i') }}</span>
               @endif
             </div>
-            <a href="{{ route('events.public.show', $event) }}" class="service-link">
-              Ver más <i class="bi bi-arrow-right"></i>
-            </a>
+    <a href="{{ route('events.public.show', ['event' => $event->id]) }}" class="service-link">
+  Ver más <i class="bi bi-arrow-right"></i>
+</a>
+
+
+
           </div>
         </div>
       @empty
@@ -328,8 +331,14 @@
   object-fit: contain;
 }
 </style>
-
-<!-- Beneficiarios Section -->
+<!-- Sección de Beneficiarios -->
+ <section id="projects" class="projects section">
+  <div class="container section-title">
+    <h2>Beneficiarios</h2>
+    <p>Transformamos vidas a través de la construcción de viviendas seguras y comunidades sostenibles.</p>
+  </div>
+{{-- Beneficiarios Section --}}
+@if(($testimonials ?? collect())->count())
 <section id="beneficiarios" class="beneficiarios section">
   <div class="container" data-aos="fade-up" data-aos-delay="100">
     <div class="beneficiarios-slider swiper init-swiper">
@@ -344,99 +353,61 @@
           "navigation": {"nextEl": ".swiper-button-next","prevEl": ".swiper-button-prev"}
         }
       </script>
+
       <div class="swiper-wrapper">
-
-        <div class="swiper-slide">
-          <div class="beneficiario-slide" data-aos="fade-up" data-aos-delay="200">
-            <div class="beneficiario-header">
-              <div class="stars-rating">
-                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-              </div>
-              <div class="quote-icon"><i class="bi bi-quote"></i></div>
-            </div>
-            <div class="beneficiario-body">
-              <p>"Gracias a la ayuda recibida, ahora nuestra familia cuenta con un hogar seguro y digno. Este apoyo ha transformado nuestra vida y la de nuestros hijos."</p>
-            </div>
-            <div class="beneficiario-footer">
-              <div class="author-info">
-                <img src="assets/img/person/person-f-12.webp" alt="Beneficiario" class="author-avatar">
-                <div class="author-details">
-                  <h4>María González</h4>
-                  <span class="role">Madre de Familia</span>
-                  <span class="company">Comunidad Villa Esperanza</span>
-                </div>
-              </div>
+  @forelse($testimonials as $t)
+    <div class="swiper-slide">
+      <div class="beneficiario-slide" data-aos="fade-up" data-aos-delay="200">
+        <div class="beneficiario-header">
+          <div class="stars-rating">
+            @for($i=1; $i<=5; $i++)
+              <i class="bi {{ $i <= ($t->rating ?? 5) ? 'bi-star-fill' : 'bi-star' }}"></i>
+            @endfor
+          </div>
+          <div class="quote-icon"><i class="bi bi-quote"></i></div>
+        </div>
+        <div class="beneficiario-body">
+          <p>{{ $t->body }}</p>
+        </div>
+        <div class="beneficiario-footer">
+          <div class="author-info">
+            @php
+              $avatar = $t->avatar_path ? asset('storage/'.$t->avatar_path) : asset('assets/img/person/person-f-12.webp');
+            @endphp
+            <img src="{{ $avatar }}" alt="Beneficiario" class="author-avatar">
+            <div class="author-details">
+              <h4>{{ $t->author_name ?? optional($t->beneficiary)->name }}</h4>
+              @if($t->role)<span class="role">{{ $t->role }}</span>@endif
+              @if($t->company)<span class="company">{{ $t->company }}</span>@endif
             </div>
           </div>
         </div>
-
-        <div class="swiper-slide">
-          <div class="beneficiario-slide" data-aos="fade-up" data-aos-delay="300">
-            <div class="beneficiario-header">
-              <div class="stars-rating">
-                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-              </div>
-              <div class="quote-icon"><i class="bi bi-quote"></i></div>
-            </div>
-            <div class="beneficiario-body">
-              <p>"El apoyo recibido nos permitió acceder a servicios básicos y educación para nuestros hijos, mejorando significativamente nuestra calidad de vida."</p>
-            </div>
-            <div class="beneficiario-footer">
-              <div class="author-info">
-                <img src="assets/img/person/person-m-14.webp" alt="Beneficiario" class="author-avatar">
-                <div class="author-details">
-                  <h4>Carlos Méndez</h4>
-                  <span class="role">Padre de Familia</span>
-                  <span class="company">Comunidad Los Pinos</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="swiper-slide">
-          <div class="beneficiario-slide" data-aos="fade-up" data-aos-delay="400">
-            <div class="beneficiario-header">
-              <div class="stars-rating">
-                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-              </div>
-              <div class="quote-icon"><i class="bi bi-quote"></i></div>
-            </div>
-            <div class="beneficiario-body">
-              <p>"Recibir esta ayuda nos ha dado la oportunidad de reconstruir nuestro hogar después del desastre. Estamos profundamente agradecidos con la organización."</p>
-            </div>
-            <div class="beneficiario-footer">
-              <div class="author-info">
-                <img src="assets/img/person/person-f-11.webp" alt="Beneficiario" class="author-avatar">
-                <div class="author-details">
-                  <h4>Juana López</h4>
-                  <span class="role">Madre Soltera</span>
-                  <span class="company">Barrio San Juan</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
+    </div>
+  @empty
+    <div class="swiper-slide">
+      <div class="beneficiario-slide">
+        <div class="beneficiario-body">
+          <p>Aún no hay testimonios publicados.</p>
+        </div>
+      </div>
+    </div>
+  @endforelse
+</div>
 
       <div class="swiper-navigation-wrapper">
         <div class="swiper-button-prev"></div>
         <div class="swiper-pagination"></div>
         <div class="swiper-button-next"></div>
       </div>
-
     </div>
   </div>
 </section>
+@endif
+<!-- fin Sección de Beneficiarios -->
 
-<!-- Patrocinadores Section -->
+
+<!-- Sección de Patroninadores -->
 <section id="patrocinadores" class="patrocinadores section">
   <div class="container section-title">
     <h2>Patrocinadores &amp; Colaboradores</h2>
@@ -444,85 +415,51 @@
   </div>
 
   <div class="container" data-aos="fade-up" data-aos-delay="100">
-    <div class="row align-items-center mb-5 content">
-      <div class="col-lg-6" data-aos="fade-right" data-aos-delay="200">
-        <h2>Excelencia y Reconocimiento</h2>
-        <p>Nuestros patrocinadores son reconocidos por su compromiso con la responsabilidad social, calidad y apoyo a proyectos comunitarios que transforman vidas.</p>
-      </div>
-      <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
-        <div class="badge-highlight">
-          <img src="assets/img/construction/badge-5.webp" alt="Sello de Excelencia" class="img-fluid">
-          <div class="badge-content">
-            <h4>Patrocinador Destacado</h4>
-            <p>Reconocido por su apoyo constante y contribución a proyectos comunitarios</p>
+
+    {{-- Bloque destacado (toma el primero con is_featured) --}}
+    @php
+      $featured = ($sponsors ?? collect())->firstWhere('is_featured', true);
+    @endphp
+
+    @if($featured)
+      <div class="row align-items-center mb-5 content">
+        <div class="col-lg-6" data-aos="fade-right" data-aos-delay="200">
+          <h2>{{ $featured->title ?? ($featured->sponsor?->name ?? 'Patrocinador Destacado') }}</h2>
+          <p>{{ $featured->description ?? 'Patrocinador con apoyo constante a proyectos comunitarios.' }}</p>
+        </div>
+        <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
+          <div class="badge-highlight">
+            <img src="{{ $featured->logo_path ? asset('storage/'.$featured->logo_path) : asset('assets/img/construction/badge-5.webp') }}"
+                 alt="Sello" class="img-fluid">
+            <div class="badge-content">
+              <h4>{{ $featured->category ?? 'Patrocinador Destacado' }}</h4>
+              <p>{{ $featured->sponsor?->name }}</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    @endif
 
+    {{-- Grid de tarjetas (todos los publicados; omite el destacado si quieres) --}}
     <div class="patrocinador-grid" data-aos="fade-up" data-aos-delay="400">
-      <div class="patro-card" data-aos="flip-left" data-aos-delay="100">
-        <div class="patro-icon">
-          <img src="assets/img/construction/badge-1.webp" alt="ISO 9001" class="img-fluid">
+      @forelse(($sponsors ?? collect()) as $sp)
+        <div class="patro-card" data-aos="flip-left" data-aos-delay="{{ 100 + ($loop->index % 6)*100 }}">
+          <div class="patro-icon">
+            <img src="{{ $sp->logo_path ? asset('storage/'.$sp->logo_path) : asset('assets/img/construction/badge-1.webp') }}"
+                 alt="{{ $sp->title ?? $sp->sponsor?->name }}" class="img-fluid">
+          </div>
+          <div class="patro-details">
+            <h5>{{ $sp->title ?? $sp->sponsor?->name }}</h5>
+            @if($sp->category)<span class="patro-category">{{ $sp->category }}</span>@endif
+            @if($sp->description)<p>{{ $sp->description }}</p>@endif
+          </div>
         </div>
-        <div class="patro-details">
-          <h5>Empresa A</h5>
-          <span class="patro-category">Gestión de Calidad</span>
-          <p>Contribuye activamente a proyectos de vivienda y desarrollo comunitario.</p>
-        </div>
-      </div>
-      <div class="patro-card" data-aos="flip-left" data-aos-delay="200">
-        <div class="patro-icon">
-          <img src="assets/img/construction/badge-2.webp" alt="OSHA" class="img-fluid">
-        </div>
-        <div class="patro-details">
-          <h5>Empresa B</h5>
-          <span class="patro-category">Seguridad y Salud</span>
-          <p>Apoya programas de seguridad en la construcción y formación de voluntarios.</p>
-        </div>
-      </div>
-      <div class="patro-card" data-aos="flip-left" data-aos-delay="300">
-        <div class="patro-icon">
-          <img src="assets/img/construction/badge-3.webp" alt="Licensed" class="img-fluid">
-        </div>
-        <div class="patro-details">
-          <h5>Empresa C</h5>
-          <span class="patro-category">Cumplimiento Legal</span>
-          <p>Garantiza la legalidad y transparencia en todas sus contribuciones y proyectos.</p>
-        </div>
-      </div>
-      <div class="patro-card" data-aos="flip-left" data-aos-delay="400">
-        <div class="patro-icon">
-          <img src="assets/img/construction/badge-4.webp" alt="Green Building" class="img-fluid">
-        </div>
-        <div class="patro-details">
-          <h5>Empresa D</h5>
-          <span class="patro-category">Construcción Sostenible</span>
-          <p>Promueve prácticas sostenibles y respetuosas con el medio ambiente en todos los proyectos.</p>
-        </div>
-      </div>
-      <div class="patro-card" data-aos="flip-left" data-aos-delay="500">
-        <div class="patro-icon">
-          <img src="assets/img/construction/badge-6.webp" alt="Insurance" class="img-fluid">
-        </div>
-        <div class="patro-details">
-          <h5>Empresa E</h5>
-          <span class="patro-category">Gestión de Riesgos</span>
-          <p>Proporciona seguros y cobertura para los proyectos que apoyan a la comunidad.</p>
-        </div>
-      </div>
-      <div class="patro-card" data-aos="flip-left" data-aos-delay="600">
-        <div class="patro-icon">
-          <img src="assets/img/construction/badge-7.webp" alt="Training" class="img-fluid">
-        </div>
-        <div class="patro-details">
-          <h5>Empresa F</h5>
-          <span class="patro-category">Capacitación Profesional</span>
-          <p>Imparte formación y habilidades técnicas para voluntarios y beneficiarios.</p>
-        </div>
-      </div>
+      @empty
+        <p class="text-center w-100">Pronto anunciaremos nuestros patrocinadores.</p>
+      @endforelse
     </div>
 
+    {{-- Mantén tu achievements-banner si gustas tal cual --}}
     <div class="achievements-banner" data-aos="zoom-in" data-aos-delay="700">
       <div class="row text-center">
         <div class="col-lg-3 col-sm-6">
@@ -558,6 +495,7 @@
 
   </div>
 </section>
+<!-- Fin Sección de Beneficiarios -->
 
 
 <!-- Donadores Section -->
@@ -733,119 +671,92 @@
   </style>
 
   <!-- Contenido de Donadores -->
-  <div class="container" data-aos="fade-up" data-aos-delay="100">
+   <section id="projects" class="projects section">
+  <div class="container section-title">
+    <h2>Donadores</h2>
+    <p>Transforma vidas a través de la construcción de viviendas seguras y comunidades sostenibles.</p>
+  </div>
+<div class="container" data-aos="fade-up" data-aos-delay="100">
+  <div class="row gy-4">
 
-    <div class="row gy-4">
-
-      <!-- Donador Destacado 1 -->
-      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+    {{-- Donadores Destacados (tarjetas grandes) --}}
+    @foreach(($donors ?? collect())->where('is_featured', true) as $d)
+      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="{{ 100 + ($loop->index*100) }}">
         <div class="donador-card featured">
           <div class="donador-header">
             <div class="donador-image">
-              <img src="assets/img/construction/team-1.webp" class="img-fluid" alt="">
-              <div class="experience-badge">15+ Años Apoyando</div>
+              <img src="{{ $d->avatar_path ? asset('storage/'.$d->avatar_path) : asset('assets/img/construction/team-1.webp') }}" class="img-fluid" alt="">
+              @if($d->badge_text)
+                <div class="experience-badge">{{ $d->badge_text }}</div>
+              @endif
             </div>
             <div class="donador-info">
-              <h4>Marcus Thompson</h4>
-              <span class="position">Donador Principal</span>
+              <h4>{{ $d->name }}</h4>
+              @if($d->position)<span class="position">{{ $d->position }}</span>@endif
               <div class="contact-info">
-                <a href="mailto:marcus@example.com"><i class="bi bi-envelope"></i> marcus@example.com</a>
-                <a href="tel:+1555123456"><i class="bi bi-telephone"></i> +1 (555) 123-456</a>
+                @if($d->email)<a href="mailto:{{ $d->email }}"><i class="bi bi-envelope"></i> {{ $d->email }}</a>@endif
+                @if($d->phone)<a href="tel:{{ $d->phone }}"><i class="bi bi-telephone"></i> {{ $d->phone }}</a>@endif
               </div>
             </div>
           </div>
           <div class="donador-details">
-            <p>Marcus ha contribuido generosamente a proyectos de vivienda y educación, impactando positivamente la vida de muchas familias.</p>
+            @if($d->bio)<p>{{ $d->bio }}</p>@endif
             <div class="credentials">
-              <div class="cred-item">
-                <i class="bi bi-award"></i>
-                <span>Reconocido por su compromiso social</span>
-              </div>
-              <div class="cred-item">
-                <i class="bi bi-shield-check"></i>
-                <span>Donador de Largo Plazo</span>
-              </div>
+              @foreach($d->skills_array as $skill)
+                <div class="cred-item">
+                  <i class="bi bi-award"></i>
+                  <span>{{ $skill }}</span>
+                </div>
+              @endforeach
             </div>
             <div class="social-links">
-              <a href="#"><i class="bi bi-linkedin"></i></a>
-              <a href="#"><i class="bi bi-twitter-x"></i></a>
-              <a href="#"><i class="bi bi-facebook"></i></a>
+              @if($d->linkedin_url)<a href="{{ $d->linkedin_url }}"><i class="bi bi-linkedin"></i></a>@endif
+              @if($d->twitter_url)<a href="{{ $d->twitter_url }}"><i class="bi bi-twitter-x"></i></a>@endif
+              @if($d->facebook_url)<a href="{{ $d->facebook_url }}"><i class="bi bi-facebook"></i></a>@endif
+              @if($d->instagram_url)<a href="{{ $d->instagram_url }}"><i class="bi bi-instagram"></i></a>@endif
+              @if($d->website_url)<a href="{{ $d->website_url }}"><i class="bi bi-globe2"></i></a>@endif
             </div>
           </div>
         </div>
       </div>
+    @endforeach
 
-      <!-- Donador Destacado 2 -->
-      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
-        <div class="donador-card featured">
-          <div class="donador-header">
-            <div class="donador-image">
-              <img src="assets/img/construction/team-2.webp" class="img-fluid" alt="">
-              <div class="experience-badge">12+ Años Apoyando</div>
-            </div>
-            <div class="donador-info">
-              <h4>Sarah Rodriguez</h4>
-              <span class="position">Donadora Principal</span>
-              <div class="contact-info">
-                <a href="mailto:sarah@example.com"><i class="bi bi-envelope"></i> sarah@example.com</a>
-                <a href="tel:+1555123457"><i class="bi bi-telephone"></i> +1 (555) 123-457</a>
-              </div>
-            </div>
-          </div>
-          <div class="donador-details">
-            <p>Sarah ha apoyado iniciativas de educación y salud, mejorando la calidad de vida de muchas familias en la comunidad.</p>
-            <div class="credentials">
-              <div class="cred-item">
-                <i class="bi bi-person-badge"></i>
-                <span>Donadora Reconocida</span>
-              </div>
-              <div class="cred-item">
-                <i class="bi bi-tools"></i>
-                <span>Apoyo a Proyectos Comunitarios</span>
-              </div>
-            </div>
-            <div class="social-links">
-              <a href="#"><i class="bi bi-linkedin"></i></a>
-              <a href="#"><i class="bi bi-twitter-x"></i></a>
-              <a href="#"><i class="bi bi-instagram"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Donadores Compactos -->
-      <!-- Repite según necesites -->
-      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+    {{-- Donadores “compactos” (tarjetas pequeñas) --}}
+    @foreach(($donors ?? collect())->where('is_featured', false) as $d)
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ 300 + ($loop->index%6)*100 }}">
         <div class="donador-card compact hover-animate">
           <div class="member-photo">
-            <img src="assets/img/construction/team-3.webp" class="img-fluid" alt="">
+            <img src="{{ $d->avatar_path ? asset('storage/'.$d->avatar_path) : asset('assets/img/construction/team-3.webp') }}" class="img-fluid" alt="">
             <div class="hover-overlay">
               <div class="overlay-content">
-                <h5>David Chen</h5>
-                <span>Donador Activo</span>
+                <h5>{{ $d->name }}</h5>
+                @if($d->position)<span>{{ $d->position }}</span>@endif
                 <div class="quick-contact">
-                  <a href="#"><i class="bi bi-envelope"></i></a>
-                  <a href="#"><i class="bi bi-telephone"></i></a>
-                  <a href="#"><i class="bi bi-linkedin"></i></a>
+                  @if($d->email)<a href="mailto:{{ $d->email }}"><i class="bi bi-envelope"></i></a>@endif
+                  @if($d->phone)<a href="tel:{{ $d->phone }}"><i class="bi bi-telephone"></i></a>@endif
+                  @if($d->linkedin_url)<a href="{{ $d->linkedin_url }}"><i class="bi bi-linkedin"></i></a>@endif
                 </div>
               </div>
             </div>
           </div>
           <div class="member-summary">
-            <h5>David Chen</h5>
-            <span>Donador Activo</span>
-            <div class="skills">
-              <span class="skill-tag">Educación</span>
-              <span class="skill-tag">Salud</span>
-            </div>
+            <h5>{{ $d->name }}</h5>
+            @if($d->position)<span>{{ $d->position }}</span>@endif
+            @if($d->skills_array)
+              <div class="skills">
+                @foreach($d->skills_array as $skill)
+                  <span class="skill-tag">{{ $skill }}</span>
+                @endforeach
+              </div>
+            @endif
           </div>
         </div>
       </div>
+    @endforeach
 
-      <!-- Repite para más donadores compactos -->
-    </div>
   </div>
-</section>
+</div>
+  <!-- FIN Contenido de Donadores -->
 <!-- Sección de Llamado a la Acción / Donaciones -->
 <section id="call-to-action" class="call-to-action section light-background">
 

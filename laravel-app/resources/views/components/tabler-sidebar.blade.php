@@ -95,7 +95,7 @@
                     <!-- Mis Donaciones -->
                     @permission('donations.view.own')
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('donations.index') }}">
+                        <a class="nav-link" href="{{ route('admin.donations.index') }}">
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
                                 <i class="fas fa-hand-holding-usd"></i>
                             </span>
@@ -107,7 +107,7 @@
                     <!-- Registrar Donación -->
                     @permission('donations.create')
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('donations.create') }}">
+                        <a class="nav-link" href="{{ route('admin.donations.create') }}">
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
                                 <i class="fas fa-plus-circle"></i>
                             </span>

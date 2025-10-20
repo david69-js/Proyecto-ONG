@@ -10,6 +10,8 @@ class Donation extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'donations';
+
     protected $fillable = [
         'donation_code',
         'donation_type',
@@ -45,307 +47,228 @@ class Donation extends Model
     ];
 
     protected $casts = [
-        'amount' => 'decimal:2',
-        'is_anonymous' => 'boolean',
+        'amount'            => 'decimal:2',
+        'is_anonymous'      => 'boolean',
         'is_tax_deductible' => 'boolean',
-        'confirmed_at' => 'datetime',
-        'processed_at' => 'datetime',
-        'metadata' => 'array',
+        'confirmed_at'      => 'datetime',
+        'processed_at'      => 'datetime',
+        'metadata'          => 'array',
     ];
 
     protected $attributes = [
         'currency' => 'GTQ',
     ];
 
-    /**
-     * Relación con el usuario donante (si está registrado)
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Relaciones
+    |--------------------------------------------------------------------------
+    */
+
+    // Si tu modelo User usa la tabla "sys_users", asegúrate de que ese modelo tenga: protected $table = 'sys_users';
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * Relación con el proyecto
-     */
+    // Debe existir un Project model con protected $table = 'ng_projects';
     public function project()
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
-    /**
-     * Relación con el patrocinador
-     */
+    // Ya tienes Sponsor con protected $table = 'ng_sponsors';
     public function sponsor()
     {
-        return $this->belongsTo(Sponsor::class);
+        return $this->belongsTo(Sponsor::class, 'sponsor_id');
     }
 
-    /**
-     * Usuario que confirmó la donación
-     */
     public function confirmedBy()
     {
         return $this->belongsTo(User::class, 'confirmed_by');
     }
 
-    /**
-     * Usuario que procesó la donación
-     */
     public function processedBy()
     {
         return $this->belongsTo(User::class, 'processed_by');
     }
 
-    /**
-     * Usuario que creó el registro
-     */
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    /**
-     * Usuario que actualizó el registro
-     */
     public function updatedBy()
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    /**
-     * Scope para donaciones por tipo
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes
+    |--------------------------------------------------------------------------
+    */
+
     public function scopeByType($query, $type)
     {
         return $query->where('donation_type', $type);
     }
 
-    /**
-     * Scope para donaciones por estado
-     */
     public function scopeByStatus($query, $status)
     {
         return $query->where('status', $status);
     }
 
-    /**
-     * Scope para donaciones monetarias
-     */
     public function scopeMonetary($query)
     {
         return $query->where('donation_type', 'monetary');
     }
 
-    /**
-     * Scope para donaciones confirmadas
-     */
     public function scopeConfirmed($query)
     {
         return $query->where('status', 'confirmed');
     }
 
-    /**
-     * Scope para donaciones procesadas
-     */
     public function scopeProcessed($query)
     {
         return $query->where('status', 'processed');
     }
 
-    /**
-     * Scope para donaciones pendientes
-     */
     public function scopePending($query)
     {
         return $query->where('status', 'pending');
     }
 
-    /**
-     * Scope para donaciones por proyecto
-     */
     public function scopeForProject($query, $projectId)
     {
         return $query->where('project_id', $projectId);
     }
 
-    /**
-     * Scope para donaciones por donante
-     */
     public function scopeByDonor($query, $donorEmail)
     {
         return $query->where('donor_email', $donorEmail);
     }
 
-    /**
-     * Scope para donaciones anónimas
-     */
     public function scopeAnonymous($query)
     {
         return $query->where('is_anonymous', true);
     }
 
-    /**
-     * Scope para donaciones no anónimas
-     */
     public function scopeNotAnonymous($query)
     {
         return $query->where('is_anonymous', false);
     }
 
-    /**
-     * Accessor para el tipo de donación formateado
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Accessors / Helpers
+    |--------------------------------------------------------------------------
+    */
+
     public function getDonationTypeFormattedAttribute()
     {
         $types = [
-            'monetary' => 'Monetaria',
+            'monetary'  => 'Monetaria',
             'materials' => 'Materiales',
-            'services' => 'Servicios',
+            'services'  => 'Servicios',
             'volunteer' => 'Voluntariado',
-            'mixed' => 'Mixta',
+            'mixed'     => 'Mixta',
         ];
-
         return $types[$this->donation_type] ?? $this->donation_type;
     }
 
-    /**
-     * Accessor para el tipo de donante formateado
-     */
     public function getDonorTypeFormattedAttribute()
     {
         $types = [
             'individual' => 'Individual',
-            'corporate' => 'Corporativo',
+            'corporate'  => 'Corporativo',
             'foundation' => 'Fundación',
-            'ngo' => 'ONG',
+            'ngo'        => 'ONG',
             'government' => 'Gobierno',
         ];
-
         return $types[$this->donor_type] ?? $this->donor_type;
     }
 
-    /**
-     * Accessor para el método de pago formateado
-     */
     public function getPaymentMethodFormattedAttribute()
     {
         $methods = [
             'transfer' => 'Transferencia',
-            'cash' => 'Efectivo',
-            'check' => 'Cheque',
-            'kind' => 'En Especie',
-            'other' => 'Otro',
+            'cash'     => 'Efectivo',
+            'check'    => 'Cheque',
+            'kind'     => 'En Especie',
+            'other'    => 'Otro',
         ];
-
         return $methods[$this->payment_method] ?? $this->payment_method;
     }
 
-    /**
-     * Accessor para el estado formateado
-     */
     public function getStatusFormattedAttribute()
     {
         $statuses = [
-            'pending' => 'Pendiente',
+            'pending'   => 'Pendiente',
             'confirmed' => 'Confirmada',
             'processed' => 'Procesada',
-            'rejected' => 'Rechazada',
+            'rejected'  => 'Rechazada',
             'cancelled' => 'Cancelada',
         ];
-
         return $statuses[$this->status] ?? $this->status;
     }
 
-    /**
-     * Accessor para el monto formateado
-     */
     public function getFormattedAmountAttribute()
     {
         if (!$this->amount) {
             return 'N/A';
         }
-
         $symbols = [
             'GTQ' => 'Q',
             'USD' => '$',
             'EUR' => '€',
             'MXN' => '$',
         ];
-
         $symbol = $symbols[$this->currency] ?? $this->currency;
         return $symbol . number_format($this->amount, 2);
     }
 
-    /**
-     * Accessor para el nombre del donante (considerando anonimato)
-     */
     public function getDonorDisplayNameAttribute()
     {
-        if ($this->is_anonymous) {
-            return 'Donante Anónimo';
-        }
-
-        return $this->donor_name;
+        return $this->is_anonymous ? 'Donante Anónimo' : $this->donor_name;
     }
 
-    /**
-     * Accessor para la URL del comprobante
-     */
     public function getReceiptUrlAttribute()
     {
-        if ($this->receipt_path) {
-            return asset('storage/' . $this->receipt_path);
-        }
-        return null;
+        return $this->receipt_path ? asset('storage/' . $this->receipt_path) : null;
     }
 
-    /**
-     * Accessor para la URL del recibo fiscal
-     */
     public function getTaxReceiptUrlAttribute()
     {
-        if ($this->tax_receipt_path) {
-            return asset('storage/' . $this->tax_receipt_path);
-        }
-        return null;
+        return $this->tax_receipt_path ? asset('storage/' . $this->tax_receipt_path) : null;
     }
 
-    /**
-     * Verificar si la donación está confirmada
-     */
     public function isConfirmed()
     {
         return $this->status === 'confirmed';
     }
 
-    /**
-     * Verificar si la donación está procesada
-     */
     public function isProcessed()
     {
         return $this->status === 'processed';
     }
 
-    /**
-     * Verificar si la donación está pendiente
-     */
     public function isPending()
     {
         return $this->status === 'pending';
     }
 
-    /**
-     * Verificar si la donación es monetaria
-     */
     public function isMonetary()
     {
         return $this->donation_type === 'monetary';
     }
 
-    /**
-     * Generar código único de donación
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Código / Boot
+    |--------------------------------------------------------------------------
+    */
+
     public static function generateDonationCode()
     {
         do {
@@ -355,10 +278,6 @@ class Donation extends Model
         return $code;
     }
 
-
-    /**
-     * Boot method para generar código automáticamente
-     */
     protected static function boot()
     {
         parent::boot();
@@ -370,36 +289,35 @@ class Donation extends Model
         });
     }
 
-    /**
-     * Obtener estadísticas de donaciones
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Estadísticas
+    |--------------------------------------------------------------------------
+    */
+
     public static function getStatistics($filters = [])
     {
         $query = self::query();
 
-        // Aplicar filtros
         if (isset($filters['project_id'])) {
             $query->where('project_id', $filters['project_id']);
         }
-
         if (isset($filters['date_from'])) {
             $query->where('created_at', '>=', $filters['date_from']);
         }
-
         if (isset($filters['date_to'])) {
             $query->where('created_at', '<=', $filters['date_to']);
         }
-
         if (isset($filters['status'])) {
             $query->where('status', $filters['status']);
         }
 
         return [
-            'total_donations' => $query->count(),
-            'total_amount' => $query->monetary()->sum('amount'),
-            'confirmed_donations' => (clone $query)->confirmed()->count(),
-            'processed_donations' => (clone $query)->processed()->count(),
-            'pending_donations' => (clone $query)->pending()->count(),
+            'total_donations'      => (clone $query)->count(),
+            'total_amount'         => (clone $query)->monetary()->sum('amount'),
+            'confirmed_donations'  => (clone $query)->confirmed()->count(),
+            'processed_donations'  => (clone $query)->processed()->count(),
+            'pending_donations'    => (clone $query)->pending()->count(),
         ];
     }
 }

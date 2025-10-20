@@ -15,7 +15,7 @@
                         Nueva Donación
                     </h3>
                     <div class="card-actions">
-                        <a href="{{ route('donations.index') }}" class="btn btn-outline-secondary custom">
+                        <a href="{{ route('admin.donations.index') }}" class="btn btn-outline-secondary custom">
                             <i class="fas fa-arrow-left me-1"></i>
                             Volver
                         </a>
@@ -291,7 +291,7 @@
 
                         <div class="card-footer">
                             <div class="d-flex justify-content-between">
-                                <a href="{{ route('donations.index') }}" class="btn btn-outline-secondary custom">
+                                <a href="{{ route('admin.donations.index') }}" class="btn btn-outline-secondary custom">
                                     <i class="fas fa-arrow-left me-1"></i>
                                     Cancelar
                                 </a>
