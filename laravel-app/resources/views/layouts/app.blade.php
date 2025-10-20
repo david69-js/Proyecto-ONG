@@ -11,29 +11,67 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
-    
+
+    {{-- FIX visual: empujar contenido cuando el sidebar/header son fixed --}}
+    <style>
+      :root { --sidebar-w: 250px; --header-h: 56px; }
+
+      /* Sidebar fijo */
+      .main-sidebar { position: fixed !important; top: 0; left: 0; width: var(--sidebar-w); height: 100vh; overflow-y: auto; }
+
+      /* Header fijo (si tu <x-header-admin/> genera un topbar en .main-header o <nav> superior) */
+      .main-header { position: fixed; top: 0; left: var(--sidebar-w); right: 0; z-index: 1030; }
+
+      /* Empujar contenido y footer */
+      .content-wrapper, .main-footer { margin-left: var(--sidebar-w); }
+
+      /* Evitar que el contenido quede debajo del header */
+      .content-wrapper { padding-top: var(--header-h); min-height: calc(100vh - var(--header-h)); }
+
+      /* Alto coherente del logo del sidebar */
+      .brand-link { height: 57px; display: flex; align-items: center; }
+
+      /* Evitar wraps feos en el menú */
+      [data-widget="treeview"] .nav-link { white-space: nowrap; }
+    </style>
+
     @stack('styles')
 </head>
-<body>
-    <div id="app">
-        <!-- Navigation -->
-        <x-head-admin />
-        <x-header-admin />
-        <!-- End Navigation -->
+<body class="hold-transition sidebar-mini layout-fixed">
+<div id="app" class="wrapper">
 
-        <!-- Main Content -->
-        <main class="py-4">
-            <div class="container">
-                
+    {{-- TOP BAR / HEADERS --}}
+    <x-head-admin />
+    <x-header-admin /> {{-- asegúrate que este contenedor use clase .main-header si es un nav fijo --}}
 
+    {{-- SIDEBAR (tu componente/blade con el <nav class="main-sidebar ...">) --}}
+    {{-- Usa el que tengas: <x-admin-navigation /> o @include('components.admin-navigation') --}}
+    @hasSection('sidebar')
+        @yield('sidebar')
+    @else
+        @includeIf('components.admin-navigation')
+    @endif
+
+    {{-- CONTENT --}}
+    <div class="content-wrapper">
+        {{-- Encabezado de página (opcional) --}}
+        <div class="content-header">
+            <div class="container-fluid">
+                <h4 class="m-0">@yield('header', 'Inicio')</h4>
+            </div>
+        </div>
+
+        {{-- Contenido principal --}}
+        <section class="content">
+            <div class="container-fluid">
                 @if(session('error'))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
@@ -55,29 +93,22 @@
                     </div>
                 @endif
 
-                <!-- Page Content -->
-                <div class="content-wrapper">
-                    <div class="content-header">
-                        <div class="container-fluid"><h4 class="m-0">@yield('header', 'Inicio')</h4></div>
-                    </div>
-                    <section class="content">
-                        <div class="container-fluid">@yield('content')</div>
-                    </section>
-
-                </div>
-
+                @yield('content')
             </div>
-        </main>
-        
-        <x-footer-admin />
+        </section>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Custom JS -->
-    <script src="{{ asset('assets/js/main.js') }}"></script>
-    
-    @stack('scripts')
+    {{-- FOOTER --}}
+    <x-footer-admin />
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom JS -->
+<script src="{{ asset('assets/js/main.js') }}"></script>
+
+@stack('scripts')
 </body>
 </html>

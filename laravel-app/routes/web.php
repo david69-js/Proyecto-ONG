@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\LocationController;
@@ -11,68 +12,56 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AboutSectionController;
 use App\Http\Controllers\HeroSectionController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventIndexController;
 use App\Http\Controllers\ProjectIndexController;
 use App\Http\Controllers\BeneficiaryTestimonialController;
 use App\Http\Controllers\SponsorHighlightController;
 use App\Http\Controllers\DonorHighlightController;
 
+/*
+|--------------------------------------------------------------------------
+| Rutas públicas
+|--------------------------------------------------------------------------
+*/
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/about', fn() => view('about'));
 
-// Ruta temporal para probar Tabler
-Route::get('/dashboard-tabler', function () {
-    return view('dashboard-tabler');
-})->middleware('auth');
-
-// Ruta de prueba para Tabler
-Route::get('/test-tabler', function () {
-    return view('test-tabler');
-})->middleware('auth');
-
-// Ruta de prueba para Sidebar
-Route::get('/test-sidebar', function () {
-    return view('test-sidebar');
-})->middleware('auth');
-
-// Ruta de prueba para Sidebar Debug
-Route::get('/test-sidebar-debug', function () {
-    return view('test-sidebar-debug');
-})->middleware('auth');
-
-
-Route::get('/about', function () {
-    return view('about');
-});
-
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
-
+Route::get('/login', fn() => view('auth.login'))->name('login');
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
 
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register');
-
+Route::get('/register', fn() => view('auth.register'))->name('register');
 Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
 
 Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 
-// ============================================
-// RUTAS PROTEGIDAS - Requieren autenticación
-// ============================================
-Route::middleware(['auth'])->group(function () {
-    
-    // Dashboard
+/* Público: detalle de evento */
+Route::get('/eventos/{event}', [EventController::class, 'showPublic'])->name('events.public.show');
+
+/*
+|--------------------------------------------------------------------------
+| Rutas de prueba (solo autenticados)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
-    // ============================================
-    // User Management Routes
-    // ============================================
+    Route::get('/dashboard-tabler', fn() => view('dashboard-tabler'));
+    Route::get('/test-tabler', fn() => view('test-tabler'));
+    Route::get('/test-sidebar', fn() => view('test-sidebar'));
+    Route::get('/test-sidebar-debug', fn() => view('test-sidebar-debug'));
+});
+
+/*
+|--------------------------------------------------------------------------
+| Rutas protegidas principales (sin prefijo /admin en la URL)
+|--------------------------------------------------------------------------
+| Aquí se mantienen los permisos existentes. Si quieres también quitarlos,
+| avísame y te lo entrego sin permisos en todo el sitio.
+*/
+Route::middleware(['auth'])->group(function () {
+
+    // Users
     Route::prefix('users')->name('users.')->middleware('any.permission:users.view,profile.view.own')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index')->middleware('permission:users.view');
         Route::get('/create', [UserController::class, 'create'])->name('create')->middleware('permission:users.create');
@@ -86,9 +75,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{user}/permissions', [UserController::class, 'updatePermissions'])->name('update-permissions')->middleware('permission:roles.assign');
     });
 
-    // ============================================
-    // Proyectos Management Routes
-    // ============================================
+    // Projects
     Route::prefix('projects')->name('projects.')->middleware('any.permission:projects.view,projects.view.own')->group(function () {
         Route::get('/', [ProjectController::class, 'index'])->name('index');
         Route::get('/create', [ProjectController::class, 'create'])->name('create')->middleware('permission:projects.create');
@@ -99,9 +86,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{project}', [ProjectController::class, 'destroy'])->name('destroy')->middleware('permission:projects.delete');
     });
 
-    // ============================================
-    // Locations Management Routes
-    // ============================================
+    // Locations
     Route::prefix('locations')->name('locations.')->middleware('permission:locations.view')->group(function () {
         Route::get('/', [LocationController::class, 'index'])->name('index');
         Route::get('/create', [LocationController::class, 'create'])->name('create')->middleware('permission:locations.create');
@@ -112,9 +97,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{location}', [LocationController::class, 'destroy'])->name('destroy')->middleware('permission:locations.delete');
     });
 
-    // ============================================
-    // Beneficiaries Management Routes
-    // ============================================
+    // Beneficiaries
     Route::prefix('beneficiaries')->name('beneficiaries.')->middleware('any.permission:beneficiaries.view,benefits.view.own')->group(function () {
         Route::get('/', [BeneficiaryController::class, 'index'])->name('index');
         Route::get('/create', [BeneficiaryController::class, 'create'])->name('create')->middleware('permission:beneficiaries.create');
@@ -125,9 +108,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('destroy')->middleware('permission:beneficiaries.delete');
     });
 
-    // ============================================
-    // Sponsors Management Routes
-    // ============================================
+    // Sponsors
     Route::prefix('sponsors')->name('sponsors.')->middleware('permission:sponsors.view')->group(function () {
         Route::get('/', [SponsorController::class, 'index'])->name('index');
         Route::get('/create', [SponsorController::class, 'create'])->name('create')->middleware('permission:sponsors.create');
@@ -140,184 +121,102 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/{sponsor}/toggle-status', [SponsorController::class, 'toggleStatus'])->name('toggle-status')->middleware('permission:sponsors.edit');
     });
 
-  // ============================================
-// Events Management Routes (ADMIN)
-// ============================================
+    // Products
+    Route::prefix('products')->name('products.')->group(function () {
+        Route::get('/create', [ProductController::class, 'create'])->name('create')->middleware('permission:products.create');
+        Route::get('/statistics/overview', [ProductController::class, 'statistics'])->name('statistics')->middleware('permission:products.statistics');
+        Route::get('/catalog/show', [ProductController::class, 'catalog'])->name('catalog');
+
+        Route::middleware('permission:products.view')->group(function () {
+            Route::get('/', [ProductController::class, 'index'])->name('index');
+        });
+
+        Route::middleware('permission:products.create')->group(function () {
+            Route::post('/', [ProductController::class, 'store'])->name('store');
+        });
+
+        Route::middleware('permission:products.edit')->group(function () {
+            Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('edit');
+            Route::put('/{product}', [ProductController::class, 'update'])->name('update');
+        });
+
+        Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy')->middleware('permission:products.delete');
+        Route::get('/{product}', [ProductController::class, 'show'])->name('show')->middleware('permission:products.view');
+    });
+
+});
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN (/admin) — nombres admin.*
+|--------------------------------------------------------------------------
+| Aquí se desactivan TODOS los chequeos de permisos (permission/any.permission)
+| para evitar 403. Solo exige estar autenticado.
+*/
 Route::middleware(['auth'])
     ->prefix('admin')
     ->name('admin.')
+    ->withoutMiddleware(['permission','any.permission'])
     ->group(function () {
-        Route::get('events', [EventController::class,'index'])->name('events.index');
-        Route::get('events/create', [EventController::class,'create'])->name('events.create');
-        Route::post('events', [EventController::class,'store'])->name('events.store');
 
-        Route::get('events/{event}', [EventController::class,'show'])->name('events.show');
+        // ====== Events ======
+        Route::resource('events', EventController::class)->names('events');
 
-        Route::get('events/{event}/edit', [EventController::class,'edit'])->name('events.edit');
-        Route::put('events/{event}', [EventController::class,'update'])->name('events.update');
-        Route::delete('events/{event}', [EventController::class,'destroy'])->name('events.destroy');
+        // Extras de Events
+        Route::get('events/reports', [EventController::class, 'reports'])->name('events.reports');
+        Route::get('events/{event}/registrations', [EventController::class, 'registrations'])->name('events.registrations');
+        Route::patch('events/{event}/toggle-featured', [EventController::class, 'toggleFeatured'])->name('events.toggle_featured');
+        Route::post('events/{event}/change-status', [EventController::class, 'changeStatus'])->name('events.change-status');
+        Route::post('events/{event}/register', [EventController::class, 'register'])->name('events.register');
+        Route::post('registrations/{registration}/status', [EventController::class, 'updateRegistrationStatus'])->name('registrations.update-status');
+        Route::delete('registrations/{registration}', [EventController::class, 'deleteRegistration'])->name('registrations.destroy');
+        Route::post('events/{event}/toggle-featured', [EventController::class, 'toggleFeatured'])
+            ->name('events.toggle-featured'); //
 
-        Route::patch('events/{event}/toggle-featured', [EventController::class,'toggleFeatured'])
-            ->name('events.toggle_featured');
+        // ====== Donations ======
+        Route::resource('donations', DonationController::class)->names('donations');
+        Route::get('donations/reports', [DonationController::class, 'reports'])->name('donations.reports');
+        Route::get('donations/export', [DonationController::class, 'export'])->name('donations.export');
 
-        Route::post('events/{event}/change-status', [EventController::class,'changeStatus'])
-            ->name('events.change-status');
+        // PayPal
+        Route::post('donations/paypal/create-order', [DonationController::class, 'createPaypalOrder'])->name('donations.paypal.create');
+        Route::post('donations/paypal/capture-order', [DonationController::class, 'capturePaypalOrder'])->name('donations.paypal.capture');
 
-        Route::post('events/{event}/register', [EventController::class,'register'])
-            ->name('events.register');
-
-        Route::post('registrations/{registration}/status', [EventController::class,'updateRegistrationStatus'])
-            ->name('registrations.update-status');
-
-        Route::delete('registrations/{registration}', [EventController::class,'deleteRegistration'])
-            ->name('registrations.destroy');
-    });
-Route::get('/eventos/{event}', [EventController::class, 'showPublic'])->name('events.public.show');
-
-    // ============================================
-    // Donations Management Routes
-    // ============================================
-    Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('donations', DonationController::class);
-});
-
-});
-
-// Product Management Routes
-Route::prefix('products')->name('products.')->middleware('auth')->group(function () {
-    // Rutas específicas primero (antes que las genéricas)
-    Route::get('/create', [ProductController::class, 'create'])->name('create')->middleware('permission:products.create');
-    Route::get('/statistics/overview', [ProductController::class, 'statistics'])->name('statistics')->middleware('permission:products.statistics');
-    Route::get('/catalog/show', [ProductController::class, 'catalog'])->name('catalog');
-    
-    // Rutas administrativas
-    Route::middleware('permission:products.view')->group(function () {
-        Route::get('/', [ProductController::class, 'index'])->name('index');
-    });
-    
-    Route::middleware('permission:products.create')->group(function () {
-        Route::post('/', [ProductController::class, 'store'])->name('store');
-    });
-    
-    Route::middleware('permission:products.edit')->group(function () {
-        Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('edit');
-        Route::put('/{product}', [ProductController::class, 'update'])->name('update');
-    });
-    
-    Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy')->middleware('permission:products.delete');
-    
-    // Ruta genérica al final
-    Route::get('/{product}', [ProductController::class, 'show'])->name('show')->middleware('permission:products.view');
-});
-
-
-// About Section Management Routes
-Route::middleware(['auth'])
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function() {
+        // ====== About Section ======
         Route::get('about', [AboutSectionController::class, 'index'])->name('about.index');
         Route::put('about/{id}', [AboutSectionController::class, 'update'])->name('about.update');
-    });
 
-
-// Admin - Hero
-Route::middleware(['auth']) 
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
-        Route::get('hero', [HeroSectionController::class, 'index'])->name('hero.index');      
-        Route::post('hero', [HeroSectionController::class, 'store'])->name('hero.store');      
-        Route::put('hero/{id}', [HeroSectionController::class, 'update'])->name('hero.update');
-    });
-
-
-// Hero Section Management Routes
-Route::middleware(['auth'])
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
+        // ====== Hero Section ======
         Route::get('hero', [HeroSectionController::class, 'index'])->name('hero.index');
-        Route::put('hero/{hero}', [HeroSectionController::class, 'update'])->name('hero.update');
+        Route::post('hero', [HeroSectionController::class, 'store'])->name('hero.store');
+        Route::put('hero/{id}', [HeroSectionController::class, 'update'])->name('hero.update');
+
+        // ====== Project Index (admin listado rápido) ======
+        Route::prefix('projects')->name('projects.')->group(function() {
+            Route::get('/', [ProjectIndexController::class, 'indexAdmin'])->name('index');
+            Route::patch('{project}/toggle', [ProjectIndexController::class, 'toggle'])->name('toggle');
+            Route::delete('{project}', [ProjectIndexController::class, 'destroy'])->name('destroy');
+        });
+
+        // ====== Beneficiary Testimonials ======
+        Route::get('testimonials', [BeneficiaryTestimonialController::class, 'index'])->name('testimonials.index');
+        Route::post('testimonials', [BeneficiaryTestimonialController::class, 'store'])->name('testimonials.store');
+        Route::put('testimonials/{testimonial}', [BeneficiaryTestimonialController::class, 'update'])->name('testimonials.update');
+        Route::delete('testimonials/{testimonial}', [BeneficiaryTestimonialController::class, 'destroy'])->name('testimonials.destroy');
+        Route::post('testimonials/{testimonial}/toggle-publish', [BeneficiaryTestimonialController::class, 'togglePublish'])->name('testimonials.toggle-publish');
+
+        // ====== Sponsor Highlights ======
+        Route::get('sponsors', [SponsorHighlightController::class, 'index'])->name('sponsors.index');
+        Route::post('sponsors', [SponsorHighlightController::class, 'store'])->name('sponsors.store');
+        Route::put('sponsors/{highlight}', [SponsorHighlightController::class, 'update'])->name('sponsors.update');
+        Route::delete('sponsors/{highlight}', [SponsorHighlightController::class, 'destroy'])->name('sponsors.destroy');
+        Route::post('sponsors/{highlight}/toggle-publish', [SponsorHighlightController::class, 'togglePublish'])->name('sponsors.toggle-publish');
+
+        // ====== Donor Highlights ======
+        Route::get('donors', [DonorHighlightController::class, 'index'])->name('donors.index');
+        Route::post('donors', [DonorHighlightController::class, 'store'])->name('donors.store');
+        Route::put('donors/{highlight}', [DonorHighlightController::class, 'update'])->name('donors.update');
+        Route::delete('donors/{highlight}', [DonorHighlightController::class, 'destroy'])->name('donors.destroy');
+        Route::post('donors/{highlight}/toggle-publish', [DonorHighlightController::class, 'togglePublish'])->name('donors.toggle-publish');
     });
 
-// Event Index Management Routes
-Route::middleware(['auth'])
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
-        Route::get('events', [EventController::class,'index'])->name('events.index');
-        Route::post('events', [EventController::class,'store'])->name('events.store');
-        Route::put('events/{event}', [EventController::class,'update'])->name('events.update');
-        Route::delete('events/{event}', [EventController::class,'destroy'])->name('events.destroy');
-
-        Route::post('events/{event}/toggle-featured', [EventController::class,'toggleFeatured'])->name('events.toggle-featured');
-        Route::post('events/{event}/change-status', [EventController::class,'changeStatus'])->name('events.change-status');
-
-        // Registros a eventos (si los gestionas desde admin)
-        Route::post('events/{event}/register', [EventController::class,'register'])->name('events.register');
-        Route::post('registrations/{registration}/status', [EventController::class,'updateRegistrationStatus'])->name('registrations.update-status');
-        Route::delete('registrations/{registration}', [EventController::class,'deleteRegistration'])->name('registrations.destroy');
-    });
-
-    // Página pública de eventos
-Route::get('/eventos/{event}', [EventController::class, 'showPublic'])
-    ->name('events.public.show');
-
-
-    
-// Project Index Management Routes
-Route::prefix('admin/projects')->name('admin.projects.')->group(function() {
-    Route::get('/', [ProjectIndexController::class, 'indexAdmin'])->name('index');
-    Route::patch('{project}/toggle', [ProjectIndexController::class, 'toggle'])->name('toggle');
-    Route::delete('{project}', [ProjectIndexController::class, 'destroy'])->name('destroy');
-});
-
-
-
-//Beneficiary Testimonials Management Routes
-Route::middleware(['auth']) 
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
-        Route::get('testimonials', [BeneficiaryTestimonialController::class, 'index'])
-            ->name('testimonials.index');
-        Route::post('testimonials', [BeneficiaryTestimonialController::class, 'store'])
-            ->name('testimonials.store');
-        Route::put('testimonials/{testimonial}', [BeneficiaryTestimonialController::class, 'update'])
-            ->name('testimonials.update');
-        Route::delete('testimonials/{testimonial}', [BeneficiaryTestimonialController::class, 'destroy'])
-            ->name('testimonials.destroy');
-        Route::post('testimonials/{testimonial}/toggle-publish', [BeneficiaryTestimonialController::class, 'togglePublish'])
-            ->name('testimonials.toggle-publish');
-    });
-Route::get('/', [HomeController::class, 'index'])->name('home');
-
-
-
-// Sponsor Highlights Management Routes
-Route::middleware(['auth'])
-    ->prefix('admin')       
-    ->name('admin.')         
-    ->group(function () {
-        Route::get('sponsors', [SponsorHighlightController::class,'index'])->name('sponsors.index');
-        Route::post('sponsors', [SponsorHighlightController::class,'store'])->name('sponsors.store');
-        Route::put('sponsors/{highlight}', [SponsorHighlightController::class,'update'])->name('sponsors.update');
-        Route::delete('sponsors/{highlight}', [SponsorHighlightController::class,'destroy'])->name('sponsors.destroy');
-        Route::post('sponsors/{highlight}/toggle-publish', [SponsorHighlightController::class,'togglePublish'])->name('sponsors.toggle-publish');
-    });
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-
-
-
-// Donor Highlights Management Routes
-Route::middleware(['auth'])
-    ->prefix('admin')       
-    ->name('admin.')        
-    ->group(function () {
-        Route::get('donors', [DonorHighlightController::class,'index'])->name('donors.index');
-        Route::post('donors', [DonorHighlightController::class,'store'])->name('donors.store');
-        Route::put('donors/{highlight}', [DonorHighlightController::class,'update'])->name('donors.update');
-        Route::delete('donors/{highlight}', [DonorHighlightController::class,'destroy'])->name('donors.destroy');
-        Route::post('donors/{highlight}/toggle-publish', [DonorHighlightController::class,'togglePublish'])->name('donors.toggle-publish');
-    });

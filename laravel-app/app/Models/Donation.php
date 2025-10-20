@@ -47,12 +47,12 @@ class Donation extends Model
     ];
 
     protected $casts = [
-        'amount'            => 'decimal:2',
-        'is_anonymous'      => 'boolean',
-        'is_tax_deductible' => 'boolean',
-        'confirmed_at'      => 'datetime',
-        'processed_at'      => 'datetime',
-        'metadata'          => 'array',
+        'metadata' => 'array',
+    'is_anonymous' => 'boolean',
+    'is_tax_deductible' => 'boolean',
+    'created_at' => 'datetime',
+    'confirmed_at' => 'datetime',
+    'processed_at' => 'datetime',
     ];
 
     protected $attributes = [

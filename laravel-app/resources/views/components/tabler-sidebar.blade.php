@@ -273,8 +273,12 @@
                         </div>
                     </li>
                     @endpermission
+<!-- Gestión de Eventos -->
+@php
+    $eventsIndex  = Route::has('admin.events.index')  ? 'admin.events.index'  : (Route::has('events.index')  ? 'events.index'  : null);
+    $eventsCreate = Route::has('admin.events.create') ? 'admin.events.create' : (Route::has('events.create') ? 'events.create' : null);
+@endphp
 
-                   <!-- Gestión de Eventos -->
 @permission('events.view')
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#navbar-events" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
@@ -285,20 +289,35 @@
     </a>
 
     <div class="dropdown-menu">
+
         @permission('events.view')
-        <a class="dropdown-item" href="{{ route('admin.events.index') }}">
-            <i class="fas fa-list me-2"></i> Listar Eventos
-        </a>
+            @if($eventsIndex)
+            <a class="dropdown-item" href="{{ route($eventsIndex) }}">
+                <i class="fas fa-list me-2"></i> Listar Eventos
+            </a>
+            @endif
         @endpermission
 
         @permission('events.create')
-        <a class="dropdown-item" href="{{ route('admin.events.create') }}">
-            <i class="fas fa-plus me-2"></i> Crear Evento
-        </a>
+            @if($eventsCreate)
+            <a class="dropdown-item" href="{{ route($eventsCreate) }}">
+                <i class="fas fa-plus me-2"></i> Crear Evento
+            </a>
+            @endif
         @endpermission
+
+        @permission('events.reports')
+            @if(Route::has('admin.events.reports'))
+            <a class="dropdown-item" href="{{ route('admin.events.reports') }}">
+                <i class="fas fa-chart-bar me-2"></i> Reportes de Eventos
+            </a>
+            @endif
+        @endpermission
+
     </div>
 </li>
 @endpermission
+
 
 
                     <!-- Gestión de Donaciones -->
@@ -308,25 +327,28 @@
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
                                 <i class="fas fa-hand-holding-usd"></i>
                             </span>
-                            <span class="nav-link-title">Donaciones</span>
-                        </a>
-                        <div class="dropdown-menu">
-                            @permission('donations.view')
-                            <a class="dropdown-item" href="{{ route('donations.index') }}">
-                                <i class="fas fa-list me-2"></i>Listar Donaciones
-                            </a>
-                            @endpermission
-                            @permission('donations.create')
-                            <a class="dropdown-item" href="{{ route('donations.create') }}">
-                                <i class="fas fa-plus me-2"></i>Registrar Donación
-                            </a>
-                            @endpermission
-                            @permission('donations.reports')
-                            <a class="dropdown-item" href="{{ route('donations.reports') }}">
-                                <i class="fas fa-chart-bar me-2"></i>Reportes de Donaciones
-                            </a>
-                            @endpermission
-                        </div>
+                           <span class="nav-link-title">Donaciones</span>
+</a>
+<div class="dropdown-menu">
+    @permission('donations.view')
+<a class="dropdown-item" href="{{ route('admin.donations.index') }}">...</a>
+        <i class="fas fa-list me-2"></i> Listar Donaciones
+    </a>
+    @endpermission
+
+    @permission('donations.create')
+    <a class="dropdown-item" href="{{ route('admin.donations.create') }}">
+        <i class="fas fa-plus me-2"></i> Registrar Donación
+    </a>
+    @endpermission
+
+    @permission('donations.reports')
+    <a class="dropdown-item" href="{{ route('admin.donations.reports') }}">
+        <i class="fas fa-chart-bar me-2"></i> Reportes de Donaciones
+    </a>
+    @endpermission
+</div>
+
                     </li>
                     @endpermission
 

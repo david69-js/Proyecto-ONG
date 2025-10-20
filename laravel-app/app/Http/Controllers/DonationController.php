@@ -11,9 +11,46 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class DonationController extends Controller
 {
+    /** Permisos por acción (Spatie o tu middleware) */
+    public function __construct()
+    {
+        // Ver / listar
+        $this->middleware('permission:donations.view|donations.view.own')->only(['index', 'show']);
+        // Crear
+        $this->middleware('permission:donations.create')->only(['create', 'store']);
+        // Editar
+        $this->middleware('permission:donations.edit')->only(['edit', 'update']);
+        // Eliminar
+        $this->middleware('permission:donations.delete')->only(['destroy']);
+        // Flujos de estado
+        $this->middleware('permission:donations.confirm')->only(['confirm']);
+        $this->middleware('permission:donations.process')->only(['process']);
+        $this->middleware('permission:donations.reject')->only(['reject']);
+        $this->middleware('permission:donations.cancel')->only(['cancel']);
+        // Reportes / export
+        $this->middleware('permission:donations.reports')->only(['reports', 'export']);
+    }
+
+    /** Helper: resuelve nombre de ruta admin.* o sin prefijo */
+    private function routeName(string $suffix): string
+    {
+        $admin = "admin.donations.$suffix";
+        $flat  = "donations.$suffix";
+        return app('router')->has($admin) ? $admin : $flat;
+    }
+
+    /** Helper: base de vistas dinámica (sections/donations/* o donations/*) */
+    private function viewBase(): string
+    {
+        return view()->exists('sections.donations.index') ? 'sections.donations.' : 'donations.';
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -21,7 +58,7 @@ class DonationController extends Controller
     {
         $query = Donation::with(['user', 'project', 'sponsor', 'confirmedBy', 'processedBy']);
 
-        // Aplicar filtros
+        // Filtros
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
@@ -43,7 +80,8 @@ class DonationController extends Controller
         }
 
         if ($request->filled('date_to')) {
-            $query->where('created_at', '<=', $request->date_to);
+            // incluir todo el día de date_to
+            $query->where('created_at', '<=', Carbon::parse($request->date_to)->endOfDay());
         }
 
         if ($request->filled('search')) {
@@ -56,18 +94,18 @@ class DonationController extends Controller
             });
         }
 
-        // Si el usuario solo puede ver sus propias donaciones
+        // Ver solo propias si no tiene permiso global
         if (Auth::user()->hasPermission('donations.view.own') && !Auth::user()->hasPermission('donations.view')) {
             $query->where('user_id', Auth::id());
         }
 
         $donations = $query->orderBy('created_at', 'desc')->paginate(15);
 
-        // Obtener datos para filtros
+        // Datos para filtros
         $projects = Project::select('id', 'nombre')->get();
         $sponsors = Sponsor::select('id', 'name')->get();
 
-        return view('donations.index', compact('donations', 'projects', 'sponsors'));
+        return view($this->viewBase().'index', compact('donations', 'projects', 'sponsors'));
     }
 
     /**
@@ -79,7 +117,7 @@ class DonationController extends Controller
         $sponsors = Sponsor::where('status', 'active')->get();
         $users = User::where('is_active', true)->get();
 
-        return view('donations.create', compact('projects', 'sponsors', 'users'));
+        return view($this->viewBase().'create', compact('projects', 'sponsors', 'users'));
     }
 
     /**
@@ -101,7 +139,7 @@ class DonationController extends Controller
             'user_id' => 'nullable|exists:sys_users,id',
             'project_id' => 'nullable|exists:ng_projects,id',
             'sponsor_id' => 'nullable|exists:ng_sponsors,id',
-            'payment_method' => ['required', Rule::in(['transfer', 'cash', 'check', 'kind', 'other'])],
+            'payment_method' => ['required', Rule::in(['transfer', 'cash', 'check', 'kind', 'other', 'paypal'])],
             'payment_reference' => 'nullable|string|max:255',
             'payment_notes' => 'nullable|string|max:500',
             'special_instructions' => 'nullable|string|max:1000',
@@ -110,31 +148,30 @@ class DonationController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+            return back()->withErrors($validator)->withInput();
         }
 
         $data = $request->all();
+        $data['currency'] = strtoupper($data['currency'] ?? 'USD');
         $data['created_by'] = Auth::id();
         $data['updated_by'] = Auth::id();
 
-        // Manejar archivo de comprobante
+        // Archivo de comprobante
         if ($request->hasFile('receipt')) {
             $file = $request->file('receipt');
-            $filename = 'donations/receipts/' . time() . '_' . $file->getClientOriginalName();
+            $filename = 'donations/receipts/' . time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public', $filename);
             $data['receipt_path'] = $filename;
         }
 
-        // Si no se especifica usuario, usar el usuario autenticado
+        // Usuario autenticado por defecto
         if (empty($data['user_id'])) {
             $data['user_id'] = Auth::id();
         }
 
         $donation = Donation::create($data);
 
-        return redirect()->route('donations.show', $donation)
+        return redirect()->route($this->routeName('show'), $donation)
             ->with('success', 'Donación creada exitosamente.');
     }
 
@@ -144,8 +181,7 @@ class DonationController extends Controller
     public function show(Donation $donation)
     {
         $donation->load(['user', 'project', 'sponsor', 'confirmedBy', 'processedBy', 'createdBy', 'updatedBy']);
-
-        return view('donations.show', compact('donation'));
+        return view($this->viewBase().'show', compact('donation'));
     }
 
     /**
@@ -157,7 +193,7 @@ class DonationController extends Controller
         $sponsors = Sponsor::where('status', 'active')->get();
         $users = User::where('is_active', true)->get();
 
-        return view('donations.edit', compact('donation', 'projects', 'sponsors', 'users'));
+        return view($this->viewBase().'edit', compact('donation', 'projects', 'sponsors', 'users'));
     }
 
     /**
@@ -179,7 +215,7 @@ class DonationController extends Controller
             'user_id' => 'nullable|exists:sys_users,id',
             'project_id' => 'nullable|exists:ng_projects,id',
             'sponsor_id' => 'nullable|exists:ng_sponsors,id',
-            'payment_method' => ['required', Rule::in(['transfer', 'cash', 'check', 'kind', 'other'])],
+            'payment_method' => ['required', Rule::in(['transfer', 'cash', 'check', 'kind', 'other', 'paypal'])],
             'payment_reference' => 'nullable|string|max:255',
             'payment_notes' => 'nullable|string|max:500',
             'special_instructions' => 'nullable|string|max:1000',
@@ -189,30 +225,27 @@ class DonationController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+            return back()->withErrors($validator)->withInput();
         }
 
         $data = $request->all();
+        $data['currency'] = strtoupper($data['currency'] ?? $donation->currency);
         $data['updated_by'] = Auth::id();
 
-        // Manejar archivo de comprobante
+        // Reemplazo de archivo
         if ($request->hasFile('receipt')) {
-            // Eliminar archivo anterior si existe
             if ($donation->receipt_path) {
                 Storage::disk('public')->delete($donation->receipt_path);
             }
-
             $file = $request->file('receipt');
-            $filename = 'donations/receipts/' . time() . '_' . $file->getClientOriginalName();
+            $filename = 'donations/receipts/' . time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public', $filename);
             $data['receipt_path'] = $filename;
         }
 
         $donation->update($data);
 
-        return redirect()->route('donations.show', $donation)
+        return redirect()->route($this->routeName('show'), $donation)
             ->with('success', 'Donación actualizada exitosamente.');
     }
 
@@ -221,30 +254,24 @@ class DonationController extends Controller
      */
     public function destroy(Donation $donation)
     {
-        // Solo permitir eliminar donaciones pendientes
         if ($donation->status !== 'pending') {
-            return redirect()->back()
-                ->with('error', 'Solo se pueden eliminar donaciones pendientes.');
+            return back()->with('error', 'Solo se pueden eliminar donaciones pendientes.');
         }
 
-        // Eliminar archivos asociados
         if ($donation->receipt_path) {
             Storage::disk('public')->delete($donation->receipt_path);
         }
-
         if ($donation->tax_receipt_path) {
             Storage::disk('public')->delete($donation->tax_receipt_path);
         }
 
         $donation->delete();
 
-        return redirect()->route('donations.index')
+        return redirect()->route($this->routeName('index'))
             ->with('success', 'Donación eliminada exitosamente.');
     }
 
-    /**
-     * Confirm a donation
-     */
+    /** Confirm a donation */
     public function confirm(Request $request, Donation $donation)
     {
         $request->validate([
@@ -252,8 +279,7 @@ class DonationController extends Controller
         ]);
 
         if ($donation->status !== 'pending') {
-            return redirect()->back()
-                ->with('error', 'Solo se pueden confirmar donaciones pendientes.');
+            return back()->with('error', 'Solo se pueden confirmar donaciones pendientes.');
         }
 
         $donation->update([
@@ -264,13 +290,10 @@ class DonationController extends Controller
             'updated_by' => Auth::id(),
         ]);
 
-        return redirect()->back()
-            ->with('success', 'Donación confirmada exitosamente.');
+        return back()->with('success', 'Donación confirmada exitosamente.');
     }
 
-    /**
-     * Process a donation
-     */
+    /** Process a donation */
     public function process(Request $request, Donation $donation)
     {
         $request->validate([
@@ -280,8 +303,7 @@ class DonationController extends Controller
         ]);
 
         if ($donation->status !== 'confirmed') {
-            return redirect()->back()
-                ->with('error', 'Solo se pueden procesar donaciones confirmadas.');
+            return back()->with('error', 'Solo se pueden procesar donaciones confirmadas.');
         }
 
         $data = [
@@ -293,28 +315,22 @@ class DonationController extends Controller
             'updated_by' => Auth::id(),
         ];
 
-        // Manejar archivo de recibo fiscal
         if ($request->hasFile('tax_receipt')) {
-            // Eliminar archivo anterior si existe
             if ($donation->tax_receipt_path) {
                 Storage::disk('public')->delete($donation->tax_receipt_path);
             }
-
             $file = $request->file('tax_receipt');
-            $filename = 'donations/tax-receipts/' . time() . '_' . $file->getClientOriginalName();
+            $filename = 'donations/tax-receipts/' . time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public', $filename);
             $data['tax_receipt_path'] = $filename;
         }
 
         $donation->update($data);
 
-        return redirect()->back()
-            ->with('success', 'Donación procesada exitosamente.');
+        return back()->with('success', 'Donación procesada exitosamente.');
     }
 
-    /**
-     * Reject a donation
-     */
+    /** Reject a donation */
     public function reject(Request $request, Donation $donation)
     {
         $request->validate([
@@ -322,8 +338,7 @@ class DonationController extends Controller
         ]);
 
         if (!in_array($donation->status, ['pending', 'confirmed'])) {
-            return redirect()->back()
-                ->with('error', 'Solo se pueden rechazar donaciones pendientes o confirmadas.');
+            return back()->with('error', 'Solo se pueden rechazar donaciones pendientes o confirmadas.');
         }
 
         $donation->update([
@@ -332,13 +347,10 @@ class DonationController extends Controller
             'updated_by' => Auth::id(),
         ]);
 
-        return redirect()->back()
-            ->with('success', 'Donación rechazada exitosamente.');
+        return back()->with('success', 'Donación rechazada exitosamente.');
     }
 
-    /**
-     * Cancel a donation
-     */
+    /** Cancel a donation */
     public function cancel(Request $request, Donation $donation)
     {
         $request->validate([
@@ -346,8 +358,7 @@ class DonationController extends Controller
         ]);
 
         if (!in_array($donation->status, ['pending', 'confirmed'])) {
-            return redirect()->back()
-                ->with('error', 'Solo se pueden cancelar donaciones pendientes o confirmadas.');
+            return back()->with('error', 'Solo se pueden cancelar donaciones pendientes o confirmadas.');
         }
 
         $donation->update([
@@ -356,59 +367,42 @@ class DonationController extends Controller
             'updated_by' => Auth::id(),
         ]);
 
-        return redirect()->back()
-            ->with('success', 'Donación cancelada exitosamente.');
+        return back()->with('success', 'Donación cancelada exitosamente.');
     }
 
-    /**
-     * Show donation reports
-     */
+    /** Show donation reports */
     public function reports(Request $request)
     {
         $filters = $request->only(['project_id', 'date_from', 'date_to', 'status']);
         $statistics = Donation::getStatistics($filters);
 
-        // Obtener datos para gráficos
         $donationsByType = Donation::selectRaw('donation_type, COUNT(*) as count')
-            ->when($request->filled('date_from'), function ($query) use ($request) {
-                return $query->where('created_at', '>=', $request->date_from);
-            })
-            ->when($request->filled('date_to'), function ($query) use ($request) {
-                return $query->where('created_at', '<=', $request->date_to);
-            })
+            ->when($request->filled('date_from'), fn($q) => $q->where('created_at', '>=', $request->date_from))
+            ->when($request->filled('date_to'), fn($q) => $q->where('created_at', '<=', Carbon::parse($request->date_to)->endOfDay()))
             ->groupBy('donation_type')
             ->get();
 
         $donationsByStatus = Donation::selectRaw('status, COUNT(*) as count')
-            ->when($request->filled('date_from'), function ($query) use ($request) {
-                return $query->where('created_at', '>=', $request->date_from);
-            })
-            ->when($request->filled('date_to'), function ($query) use ($request) {
-                return $query->where('created_at', '<=', $request->date_to);
-            })
+            ->when($request->filled('date_from'), fn($q) => $q->where('created_at', '>=', $request->date_from))
+            ->when($request->filled('date_to'), fn($q) => $q->where('created_at', '<=', Carbon::parse($request->date_to)->endOfDay()))
             ->groupBy('status')
             ->get();
 
-        // Usar función compatible con SQLite para formatear fechas
-        $dateFormat = config('database.default') === 'sqlite' 
-            ? 'strftime("%Y-%m", created_at)' 
+        $dateFormat = config('database.default') === 'sqlite'
+            ? 'strftime("%Y-%m", created_at)'
             : 'DATE_FORMAT(created_at, "%Y-%m")';
-            
-        $monthlyDonations = Donation::selectRaw("{$dateFormat} as month, SUM(amount) as total")
+
+        $monthlyDonations = Donation::selectRaw("$dateFormat as month, SUM(amount) as total")
             ->where('donation_type', 'monetary')
-            ->when($request->filled('date_from'), function ($query) use ($request) {
-                return $query->where('created_at', '>=', $request->date_from);
-            })
-            ->when($request->filled('date_to'), function ($query) use ($request) {
-                return $query->where('created_at', '<=', $request->date_to);
-            })
+            ->when($request->filled('date_from'), fn($q) => $q->where('created_at', '>=', $request->date_from))
+            ->when($request->filled('date_to'), fn($q) => $q->where('created_at', '<=', Carbon::parse($request->date_to)->endOfDay()))
             ->groupBy('month')
             ->orderBy('month')
             ->get();
 
         $projects = Project::select('id', 'nombre')->get();
 
-        return view('donations.reports', compact(
+        return view($this->viewBase().'reports', compact(
             'statistics',
             'donationsByType',
             'donationsByStatus',
@@ -417,36 +411,28 @@ class DonationController extends Controller
         ));
     }
 
-    /**
-     * Export donations data
-     */
+    /** Export donations data */
     public function export(Request $request)
     {
         $query = Donation::with(['user', 'project', 'sponsor']);
 
-        // Aplicar filtros
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
-
         if ($request->filled('donation_type')) {
             $query->where('donation_type', $request->donation_type);
         }
-
         if ($request->filled('project_id')) {
             $query->where('project_id', $request->project_id);
         }
-
         if ($request->filled('date_from')) {
             $query->where('created_at', '>=', $request->date_from);
         }
-
         if ($request->filled('date_to')) {
-            $query->where('created_at', '<=', $request->date_to);
+            $query->where('created_at', '<=', Carbon::parse($request->date_to)->endOfDay());
         }
 
         $donations = $query->get();
-
         $filename = 'donaciones_' . now()->format('Y-m-d_H-i-s') . '.csv';
 
         $headers = [
@@ -457,27 +443,12 @@ class DonationController extends Controller
         $callback = function () use ($donations) {
             $file = fopen('php://output', 'w');
 
-            // Headers
             fputcsv($file, [
-                'Código',
-                'Tipo',
-                'Monto',
-                'Moneda',
-                'Descripción',
-                'Donante',
-                'Email',
-                'Teléfono',
-                'Tipo Donante',
-                'Proyecto',
-                'Patrocinador',
-                'Método Pago',
-                'Estado',
-                'Fecha Creación',
-                'Fecha Confirmación',
-                'Fecha Procesamiento',
+                'Código','Tipo','Monto','Moneda','Descripción','Donante','Email','Teléfono',
+                'Tipo Donante','Proyecto','Patrocinador','Método Pago','Estado',
+                'Fecha Creación','Fecha Confirmación','Fecha Procesamiento',
             ]);
 
-            // Data
             foreach ($donations as $donation) {
                 fputcsv($file, [
                     $donation->donation_code,
@@ -493,9 +464,9 @@ class DonationController extends Controller
                     $donation->sponsor?->name,
                     $donation->payment_method_formatted,
                     $donation->status_formatted,
-                    $donation->created_at->format('Y-m-d H:i:s'),
-                    $donation->confirmed_at?->format('Y-m-d H:i:s'),
-                    $donation->processed_at?->format('Y-m-d H:i:s'),
+                    optional($donation->created_at)->format('Y-m-d H:i:s'),
+                    optional($donation->confirmed_at)->format('Y-m-d H:i:s'),
+                    optional($donation->processed_at)->format('Y-m-d H:i:s'),
                 ]);
             }
 
@@ -504,165 +475,161 @@ class DonationController extends Controller
 
         return response()->stream($callback, 200, $headers);
     }
+
+    /** ---------- PayPal ---------- */
+
     private function paypalBaseUrl(): string
-{
-    $mode = env('PAYPAL_MODE', 'sandbox');
-    return $mode === 'live' ? 'https://api-m.paypal.com' : 'https://api-m.sandbox.paypal.com';
-}
+    {
+        $mode = env('PAYPAL_MODE', 'sandbox');
+        return $mode === 'live' ? 'https://api-m.paypal.com' : 'https://api-m.sandbox.paypal.com';
+    }
 
-private function paypalAccessToken()
-{
-    $resp = Http::asForm()
-        ->withBasicAuth(env('PAYPAL_CLIENT_ID'), env('PAYPAL_SECRET'))
-        ->post($this->paypalBaseUrl() . '/v1/oauth2/token', [
-            'grant_type' => 'client_credentials',
+    private function paypalAccessToken()
+    {
+        $resp = Http::asForm()
+            ->withBasicAuth(env('PAYPAL_CLIENT_ID'), env('PAYPAL_SECRET'))
+            ->post($this->paypalBaseUrl() . '/v1/oauth2/token', [
+                'grant_type' => 'client_credentials',
+            ]);
+
+        if (!$resp->successful()) {
+            return response()->json(['error' => 'paypal_oauth_error', 'details' => $resp->json()], 500);
+        }
+        return $resp->json()['access_token'];
+    }
+
+    /** Crear orden PayPal y crear Donation (pending) */
+    public function createPaypalOrder(Request $request)
+    {
+        $validated = $request->validate([
+            'amount'      => 'required|numeric|min:1',
+            'donor_name'  => 'nullable|string|max:255',
+            'donor_email' => 'nullable|email|max:255',
+            'project_id'  => 'nullable|exists:ng_projects,id',
+            'notes'       => 'nullable|string|max:500',
+            'currency'    => 'nullable|string|size:3',
         ]);
 
-    if (!$resp->successful()) {
-        return response()->json(['error' => 'paypal_oauth_error', 'details' => $resp->json()], 500);
-    }
-    return $resp->json()['access_token'];
-}
+        $amount   = number_format($validated['amount'], 2, '.', '');
+        $currency = strtoupper($validated['currency'] ?? env('PAYPAL_CURRENCY', 'USD'));
 
-/**
- * Crear orden PayPal y crear Donation (pending)
- */
-public function createPaypalOrder(Request $request)
-{
-    $validated = $request->validate([
-        'amount'      => 'required|numeric|min:1',
-        'donor_name'  => 'nullable|string|max:255',
-        'donor_email' => 'nullable|email|max:255',
-        'project_id'  => 'nullable|exists:ng_projects,id',
-        'notes'       => 'nullable|string|max:500',
-        'currency'    => 'nullable|string|size:3', // usaremos PAYPAL_CURRENCY por defecto
-    ]);
+        // 1) Crear la orden en PayPal
+        $token = $this->paypalAccessToken();
+        if (is_object($token)) return $token; // error json
 
-    $amount   = number_format($validated['amount'], 2, '.', '');
-    $currency = strtoupper($validated['currency'] ?? env('PAYPAL_CURRENCY', 'USD'));
-
-    // 1) Crear la orden en PayPal
-    $token = $this->paypalAccessToken();
-    if (is_object($token)) return $token; // error json
-
-    $payload = [
-        'intent' => 'CAPTURE',
-        'purchase_units' => [[
-            'amount' => [
-                'currency_code' => $currency,
-                'value' => $amount,
+        $payload = [
+            'intent' => 'CAPTURE',
+            'purchase_units' => [[
+                'amount' => [
+                    'currency_code' => $currency,
+                    'value' => $amount,
+                ],
+                'description' => 'Donación ONG',
+            ]],
+            'application_context' => [
+                'shipping_preference' => 'NO_SHIPPING',
+                'user_action' => 'PAY_NOW',
             ],
-            'description' => 'Donación ONG',
-        ]],
-        'application_context' => [
-            'shipping_preference' => 'NO_SHIPPING',
-            'user_action' => 'PAY_NOW',
-        ],
-    ];
+        ];
 
-    $resp = Http::withToken($token)->post($this->paypalBaseUrl() . '/v2/checkout/orders', $payload);
+        $resp = Http::withToken($token)->post($this->paypalBaseUrl() . '/v2/checkout/orders', $payload);
 
-    if (!$resp->successful()) {
-        return response()->json(['error' => 'paypal_create_error', 'details' => $resp->json()], 500);
-    }
+        if (!$resp->successful()) {
+            return response()->json(['error' => 'paypal_create_error', 'details' => $resp->json()], 500);
+        }
 
-    $order = $resp->json(); // contiene id, links, etc.
-    $orderId = $order['id'] ?? null;
+        $order = $resp->json();
+        $orderId = $order['id'] ?? null;
 
-    // 2) Crear Donation en tu BD (pending)
-    $donationData = [
-        'donation_type'   => 'monetary',
-        'amount'          => $amount,
-        'currency'        => $currency,      // Para PayPal
-        'description'     => 'Donación vía PayPal',
-        'donor_name'      => $validated['donor_name'] ?? 'Donante',
-        'donor_email'     => $validated['donor_email'] ?? null,
-        'donor_type'      => 'individual',
-        'is_anonymous'    => false,
-        'user_id'         => auth()->id() ?: null,
-        'project_id'      => $validated['project_id'] ?? null,
-        'payment_method'  => 'paypal',
-        'payment_reference' => $orderId,     // guardamos el orderId
-        'payment_notes'   => $validated['notes'] ?? null,
-        'status'          => 'pending',
-        'created_by'      => auth()->id() ?: null,
-        'updated_by'      => auth()->id() ?: null,
-        'metadata'        => [
-            'paypal_order' => $order,
-        ],
-    ];
+        // 2) Crear Donation (pending)
+        $donationData = [
+            'donation_type'   => 'monetary',
+            'amount'          => $amount,
+            'currency'        => $currency,
+            'description'     => 'Donación vía PayPal',
+            'donor_name'      => $validated['donor_name'] ?? 'Donante',
+            'donor_email'     => $validated['donor_email'] ?? null,
+            'donor_type'      => 'individual',
+            'is_anonymous'    => false,
+            'user_id'         => auth()->id() ?: null,
+            'project_id'      => $validated['project_id'] ?? null,
+            'payment_method'  => 'paypal',
+            'payment_reference' => $orderId,
+            'payment_notes'   => $validated['notes'] ?? null,
+            'status'          => 'pending',
+            'created_by'      => auth()->id() ?: null,
+            'updated_by'      => auth()->id() ?: null,
+            'metadata'        => [
+                'paypal_order' => $order,
+            ],
+        ];
 
-    $donation = \App\Models\Donation::create($donationData);
+        $donation = Donation::create($donationData);
 
-    return response()->json([
-        'id' => $orderId,
-        'donation_id' => $donation->id,
-        'links' => $order['links'] ?? [],
-    ]);
-}
-
-/**
- * Capturar orden PayPal y actualizar Donation
- */
-public function capturePaypalOrder(Request $request)
-{
-    $validated = $request->validate([
-        'orderID'     => 'required|string',
-        'donation_id' => 'nullable|integer', // opcional
-    ]);
-
-    $token = $this->paypalAccessToken();
-    if (is_object($token)) return $token; // error json
-
-    $orderId = $validated['orderID'];
-
-    $resp = Http::withToken($token)
-        ->post($this->paypalBaseUrl() . "/v2/checkout/orders/{$orderId}/capture", []);
-
-    if (!$resp->successful()) {
-        return response()->json(['error' => 'paypal_capture_error', 'details' => $resp->json()], 500);
-    }
-
-    $capture = $resp->json();
-
-    // Localizar la Donation por donation_id o por payment_reference (orderId)
-    $donation = null;
-    if (!empty($validated['donation_id'])) {
-        $donation = \App\Models\Donation::find($validated['donation_id']);
-    }
-    if (!$donation) {
-        $donation = \App\Models\Donation::where('payment_reference', $orderId)->first();
-    }
-
-    if ($donation) {
-        // Extraer datos útiles
-        $payer = $capture['payer'] ?? [];
-        $captures = $capture['purchase_units'][0]['payments']['captures'] ?? [];
-        $firstCap = $captures[0] ?? [];
-        $captureId = $firstCap['id'] ?? null;
-        $status = strtolower($firstCap['status'] ?? ($capture['status'] ?? 'COMPLETED'));
-
-        // Mapear estados PayPal -> tus estados
-        // COMPLETED -> processed (o confirmed si prefieres revisarla)
-        $toStatus = ($status === 'completed') ? 'processed' : 'confirmed';
-
-        $donation->update([
-            'status'         => $toStatus,
-            'processed_at'   => now(),
-            'processed_by'   => auth()->id() ?: null,
-            'status_notes'   => 'Pago PayPal ' . strtoupper($status),
-            'updated_by'     => auth()->id() ?: null,
-            'payment_reference' => $captureId ?: $orderId, // ahora guardamos captureId si existe
-            'metadata'       => array_merge($donation->metadata ?? [], [
-                'paypal_capture' => $capture,
-                'paypal_payer'   => $payer,
-            ]),
-            // si quieres actualizar datos de donante desde PayPal:
-            'donor_email'    => $donation->donor_email ?: ($payer['email_address'] ?? null),
-            'donor_name'     => $donation->donor_name  ?: (($payer['name']['given_name'] ?? '').' '.($payer['name']['surname'] ?? '')),
+        return response()->json([
+            'id' => $orderId,
+            'donation_id' => $donation->id,
+            'links' => $order['links'] ?? [],
         ]);
     }
 
-    return response()->json($capture);
-}
+    /** Capturar orden PayPal y actualizar Donation */
+    public function capturePaypalOrder(Request $request)
+    {
+        $validated = $request->validate([
+            'orderID'     => 'required|string',
+            'donation_id' => 'nullable|integer',
+        ]);
+
+        $token = $this->paypalAccessToken();
+        if (is_object($token)) return $token; // error json
+
+        $orderId = $validated['orderID'];
+
+        $resp = Http::withToken($token)
+            ->post($this->paypalBaseUrl() . "/v2/checkout/orders/{$orderId}/capture", []);
+
+        if (!$resp->successful()) {
+            return response()->json(['error' => 'paypal_capture_error', 'details' => $resp->json()], 500);
+        }
+
+        $capture = $resp->json();
+
+        // Buscar Donation
+        $donation = null;
+        if (!empty($validated['donation_id'])) {
+            $donation = Donation::find($validated['donation_id']);
+        }
+        if (!$donation) {
+            $donation = Donation::where('payment_reference', $orderId)->first();
+        }
+
+        if ($donation) {
+            $payer = $capture['payer'] ?? [];
+            $captures = $capture['purchase_units'][0]['payments']['captures'] ?? [];
+            $firstCap = $captures[0] ?? [];
+            $captureId = $firstCap['id'] ?? null;
+            $status = strtolower($firstCap['status'] ?? ($capture['status'] ?? 'COMPLETED'));
+
+            // COMPLETED -> processed (puedes cambiar a confirmed si tu flujo lo requiere)
+            $toStatus = ($status === 'completed') ? 'processed' : 'confirmed';
+
+            $donation->update([
+                'status'           => $toStatus,
+                'processed_at'     => now(),
+                'processed_by'     => auth()->id() ?: null,
+                'status_notes'     => 'Pago PayPal ' . strtoupper($status),
+                'updated_by'       => auth()->id() ?: null,
+                'payment_reference'=> $captureId ?: $orderId,
+                'metadata'         => array_merge($donation->metadata ?? [], [
+                    'paypal_capture' => $capture,
+                    'paypal_payer'   => $payer,
+                ]),
+                'donor_email'      => $donation->donor_email ?: ($payer['email_address'] ?? null),
+                'donor_name'       => $donation->donor_name  ?: trim(($payer['name']['given_name'] ?? '') . ' ' . ($payer['name']['surname'] ?? '')),
+            ]);
+        }
+
+        return response()->json($capture);
+    }
 }

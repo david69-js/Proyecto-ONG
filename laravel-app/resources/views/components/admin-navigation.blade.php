@@ -16,17 +16,30 @@
                 <a href="#" class="d-block">{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</a>
                 <small class="text-muted">
                     @foreach(auth()->user()->roles as $role)
-                        {{ $role->name }}
-                        @if(!$loop->last), @endif
+                        {{ $role->name }}@if(!$loop->last), @endif
                     @endforeach
                 </small>
             </div>
         </div>
 
+        @php
+            // Resolver rutas de Events
+            $evIndex  = Route::has('admin.events.index') ? 'admin.events.index' : (Route::has('events.index') ? 'events.index' : null);
+            $evCreate = Route::has('admin.events.create') ? 'admin.events.create' : (Route::has('events.create') ? 'events.create' : null);
+
+            // Resolver rutas de Donations
+            $donIndex = Route::has('admin.donations.index') ? 'admin.donations.index' : (Route::has('donations.index') ? 'donations.index' : null);
+            $donCreate= Route::has('admin.donations.create') ? 'admin.donations.create' : (Route::has('donations.create') ? 'donations.create' : null);
+            $donRpt   = Route::has('admin.donations.reports') ? 'admin.donations.reports' : (Route::has('donations.reports') ? 'donations.reports' : null);
+
+            // Proyectos admin
+            $projAdminIndex = Route::has('admin.projects.index') ? 'admin.projects.index' : (Route::has('projects.index') ? 'projects.index' : null);
+        @endphp
+
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                
+
                 <!-- Dashboard -->
                 <li class="nav-item">
                     <a href="{{ route('dashboard') }}" class="nav-link">
@@ -35,11 +48,10 @@
                     </a>
                 </li>
 
-                {{-- ========================================== --}}
-                {{-- MENÚ PARA BENEFICIARIOS (simple y directo) --}}
-                {{-- ========================================== --}}
+                {{-- ====================== --}}
+                {{-- MENÚ: BENEFICIARIOS   --}}
+                {{-- ====================== --}}
                 @role('beneficiary')
-                    <!-- Mi Perfil -->
                     <li class="nav-item">
                         <a href="{{ route('users.show', auth()->id()) }}" class="nav-link">
                             <i class="nav-icon fas fa-user"></i>
@@ -47,7 +59,6 @@
                         </a>
                     </li>
 
-                    <!-- Mi Proyecto -->
                     @if(auth()->user()->beneficiary && auth()->user()->beneficiary->project)
                     <li class="nav-item">
                         <a href="{{ route('projects.show', auth()->user()->beneficiary->project_id) }}" class="nav-link">
@@ -57,7 +68,6 @@
                     </li>
                     @endif
 
-                    <!-- Mis Beneficios -->
                     @if(auth()->user()->beneficiary)
                     <li class="nav-item">
                         <a href="{{ route('beneficiaries.show', auth()->user()->beneficiary->id) }}" class="nav-link">
@@ -68,55 +78,52 @@
                     @endif
                 @endrole
 
-                {{-- ========================================== --}}
-                {{-- MENÚ PARA DONANTES (acceso limitado) --}}
-                {{-- ========================================== --}}
+                {{-- ====================== --}}
+                {{-- MENÚ: DONANTES        --}}
+                {{-- ====================== --}}
                 @role('donor')
-                    <!-- Mis Donaciones -->
                     @permission('donations.view.own')
+                    @if($donIndex)
                     <li class="nav-item">
-                        <a href="{{ route('admin.donations.index') }}" class="nav-link">
+                        <a href="{{ route($donIndex) }}" class="nav-link">
                             <i class="nav-icon fas fa-hand-holding-usd"></i>
                             <p>Mis Donaciones</p>
                         </a>
                     </li>
+                    @endif
                     @endpermission
-                    
-                    <!-- Registrar Donación -->
+
                     @permission('donations.create')
+                    @if($donCreate)
                     <li class="nav-item">
-                        <a href="{{ route('donations.create') }}" class="nav-link">
+                        <a href="{{ route($donCreate) }}" class="nav-link">
                             <i class="nav-icon fas fa-plus-circle"></i>
                             <p>Registrar Donación</p>
                         </a>
                     </li>
+                    @endif
                     @endpermission
                 @endrole
 
-                {{-- ========================================== --}}
-                {{-- MENÚ PARA ROLES ADMINISTRATIVOS --}}
-                {{-- ========================================== --}}
-                @hasanyrole('super-admin', 'admin', 'project-coordinator', 'beneficiary-coordinator', 'volunteer', 'consultant')
-                
-                    <!-- Gestión de Usuarios (SOLO roles administrativos) -->
+                {{-- =============================== --}}
+                {{-- MENÚ: ROLES ADMINISTRATIVOS     --}}
+                {{-- =============================== --}}
+                @hasanyrole('super-admin|admin|project-coordinator|beneficiary-coordinator|volunteer|consultant')
+
+                    <!-- Usuarios -->
                     @permission('users.view')
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-users"></i>
-                            <p>
-                                Usuarios
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
+                            <p>Usuarios <i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
-                            @permission('users.view')
                             <li class="nav-item">
                                 <a href="{{ route('users.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Listar Usuarios</p>
                                 </a>
                             </li>
-                            @endpermission
                             @permission('users.create')
                             <li class="nav-item">
                                 <a href="{{ route('users.create') }}" class="nav-link">
@@ -129,25 +136,20 @@
                     </li>
                     @endpermission
 
-                    <!-- Gestión de Proyectos (SOLO roles administrativos) -->
+                    <!-- Proyectos -->
                     @permission('projects.view')
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-project-diagram"></i>
-                            <p>
-                                Proyectos
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
+                            <p>Proyectos <i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
-                            @permission('projects.view')
                             <li class="nav-item">
                                 <a href="{{ route('projects.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Listar Proyectos</p>
                                 </a>
                             </li>
-                            @endpermission
                             @permission('projects.create')
                             <li class="nav-item">
                                 <a href="{{ route('projects.create') }}" class="nav-link">
@@ -160,25 +162,20 @@
                     </li>
                     @endpermission
 
-                    <!-- Gestión de Beneficiarios (SOLO roles administrativos) -->
+                    <!-- Beneficiarios -->
                     @permission('beneficiaries.view')
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-heart"></i>
-                            <p>
-                                Beneficiarios
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
+                            <p>Beneficiarios <i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
-                            @permission('beneficiaries.view')
                             <li class="nav-item">
                                 <a href="{{ route('beneficiaries.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Listar Beneficiarios</p>
                                 </a>
                             </li>
-                            @endpermission
                             @permission('beneficiaries.create')
                             <li class="nav-item">
                                 <a href="{{ route('beneficiaries.create') }}" class="nav-link">
@@ -191,25 +188,20 @@
                     </li>
                     @endpermission
 
-                    <!-- Gestión de Ubicaciones -->
+                    <!-- Ubicaciones -->
                     @permission('locations.view')
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-map-marker-alt"></i>
-                            <p>
-                                Ubicaciones
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
+                            <p>Ubicaciones <i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
-                            @permission('locations.view')
                             <li class="nav-item">
                                 <a href="{{ route('locations.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Listar Ubicaciones</p>
                                 </a>
                             </li>
-                            @endpermission
                             @permission('locations.create')
                             <li class="nav-item">
                                 <a href="{{ route('locations.create') }}" class="nav-link">
@@ -222,25 +214,20 @@
                     </li>
                     @endpermission
 
-                    <!-- Gestión de Patrocinadores -->
+                    <!-- Patrocinadores -->
                     @permission('sponsors.view')
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-handshake"></i>
-                            <p>
-                                Patrocinadores
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
+                            <p>Patrocinadores <i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
-                            @permission('sponsors.view')
                             <li class="nav-item">
                                 <a href="{{ route('sponsors.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Listar Patrocinadores</p>
                                 </a>
                             </li>
-                            @endpermission
                             @permission('sponsors.create')
                             <li class="nav-item">
                                 <a href="{{ route('sponsors.create') }}" class="nav-link">
@@ -253,222 +240,117 @@
                     </li>
                     @endpermission
 
-                    <!-- Gestión de Eventos -->
+                    <!-- Eventos (con lógica segura) -->
                     @permission('events.view')
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-calendar-alt"></i>
-                            <p>
-                                Eventos
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
+                            <p>Eventos <i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
-                            @permission('events.view')
+                            @if($evIndex)
                             <li class="nav-item">
-                                <a href="{{ route('events.index') }}" class="nav-link">
+                                <a href="{{ route($evIndex) }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Listar Eventos</p>
                                 </a>
                             </li>
-                            @endpermission
+                            @endif
                             @permission('events.create')
+                            @if($evCreate)
                             <li class="nav-item">
-                                <a href="{{ route('events.create') }}" class="nav-link">
+                                <a href="{{ route($evCreate) }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Crear Evento</p>
                                 </a>
                             </li>
+                            @endif
                             @endpermission
                         </ul>
                     </li>
                     @endpermission
 
-                    <!-- Gestión de Donaciones -->
+                    <!-- Donaciones (con lógica segura) -->
                     @permission('donations.view')
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-hand-holding-usd"></i>
-                            <p>
-                                Donaciones
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
+                            <p>Donaciones <i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
-                            @permission('donations.view')
+                            @if($donIndex)
                             <li class="nav-item">
-                                <a href="{{ route('admin.donations.index') }}" class="nav-link">
+                                <a href="{{ route($donIndex) }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Listar Donaciones</p>
                                 </a>
                             </li>
-                            @endpermission
+                            @endif
                             @permission('donations.create')
+                            @if($donCreate)
                             <li class="nav-item">
-                                <a href="{{ route('donations.create') }}" class="nav-link">
+                                <a href="{{ route($donCreate) }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Registrar Donación</p>
                                 </a>
                             </li>
+                            @endif
                             @endpermission
                             @permission('donations.reports')
+                            @if($donRpt)
                             <li class="nav-item">
-                                <a href="{{ route('donations.reports') }}" class="nav-link">
+                                <a href="{{ route($donRpt) }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Reportes de Donaciones</p>
                                 </a>
                             </li>
+                            @endif
                             @endpermission
                         </ul>
                     </li>
                     @endpermission
 
-                    <!-- Gestión de Productos -->
-                    @permission('products.view')
+                    <!-- Secciones -->
                     <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-box"></i>
-                            <p>
-                                Productos
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
+                            <i class="fas fa-th-large nav-icon"></i>
+                            <p>Secciones <i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
-                            @permission('products.view')
                             <li class="nav-item">
-                                <a href="{{ route('products.index') }}" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Listar Productos</p>
+                                <a href="{{ route('admin.hero.index') }}" class="nav-link {{ request()->routeIs('admin.hero.*') ? 'active' : '' }}">
+                                    <i class="fas fa-star nav-icon"></i>
+                                    <p>Hero</p>
                                 </a>
                             </li>
-                            @endpermission
-                            @permission('products.create')
                             <li class="nav-item">
-                                <a href="{{ route('products.create') }}" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Crear Producto</p>
+                                <a href="{{ route('admin.about.index') }}" class="nav-link">
+                                    <i class="fas fa-info-circle nav-icon"></i>
+                                    <p>Sobre Nosotros</p>
                                 </a>
                             </li>
-                            @endpermission
-                            @permission('products.catalog')
+                            @if($evIndex)
                             <li class="nav-item">
-                                <a href="{{ route('products.catalog') }}" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Catálogo Público</p>
+                                <a href="{{ route($evIndex) }}" class="nav-link">
+                                    <i class="fas fa-calendar-alt nav-icon"></i>
+                                    <p>Eventos</p>
                                 </a>
                             </li>
-                            @endpermission
-                            @permission('products.statistics')
+                            @endif
+                            @if($projAdminIndex)
                             <li class="nav-item">
-                                <a href="{{ route('products.statistics') }}" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Estadísticas</p>
+                                <a href="{{ route($projAdminIndex) }}" class="nav-link">
+                                    <i class="fas fa-briefcase nav-icon"></i>
+                                    <p>Proyectos</p>
                                 </a>
                             </li>
-                            @endpermission
+                            @endif
                         </ul>
                     </li>
-                    @endpermission
-
-                    <!-- Reportes -->
-                    @permission('reports.view')
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-chart-bar"></i>
-                            <p>
-                                Reportes
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            @permission('reports.impact-statistics')
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Estadísticas de Impacto</p>
-                                </a>
-                            </li>
-                            @endpermission
-                            @permission('reports.export')
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Exportar Informes</p>
-                                </a>
-                            </li>
-                            @endpermission
-                        </ul>
-                    </li>
-                    @endpermission
 
                 @endhasanyrole
-               <!-- Menú Secciones -->
-<li class="nav-item has-treeview">
-    <a href="#" class="nav-link">
-        <i class="fas fa-th-large nav-icon"></i>
-        <p>
-            Secciones
-            <i class="right fas fa-angle-left"></i>
-        </p>
-    </a>
-<ul class="nav nav-treeview">
-    <li class="nav-item">
-        <a href="{{ route('admin.hero.index') }}" class="nav-link {{ request()->routeIs('admin.hero.*') ? 'active' : '' }}">
-            <i class="fas fa-star nav-icon"></i>
-            <p>Hero</p>
-        </a>
-    </li>
-</ul>
 
-
-
-
-<li class="nav-item">
-    <a href="{{ route('admin.about.index') }}" class="nav-link">
-        <i class="fas fa-info-circle nav-icon"></i>
-        <p>Sobre Nosotros</p>
-    </a>
-</li>
-
-
-<li class="nav-item">
-<a href="{{ route('admin.events.index') }}" class="nav-link">
-        <i class="fas fa-calendar-alt nav-icon"></i>
-        <p>Eventos</p>
-    </a>
-</li>
-
-<a href="{{ route('admin.projects.index') }}" class="nav-link">
-    <i class="fas fa-briefcase nav-icon"></i>
-    <p>Proyectos</p>
-</a>
-
-
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="fas fa-users nav-icon"></i>
-                <p>Beneficiarios</p>
-            </a>
-        </li>
-
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="fas fa-handshake nav-icon"></i>
-                <p>Patrocinadores</p>
-            </a>
-        </li>
-
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="fas fa-donate nav-icon"></i>
-                <p>Donadores</p>
-            </a>
-        </li>
-    </ul>
-</li>
-
-
-                <!-- Logout (para todos) -->
+                <!-- Logout -->
                 <li class="nav-item">
                     <form method="POST" action="{{ route('logout') }}" class="d-inline">
                         @csrf
