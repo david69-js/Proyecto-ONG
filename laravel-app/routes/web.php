@@ -186,10 +186,9 @@ Route::middleware(['auth'])
         Route::get('about', [AboutSectionController::class, 'index'])->name('about.index');
         Route::put('about/{id}', [AboutSectionController::class, 'update'])->name('about.update');
 
-        // ====== Hero Section ======
-        Route::get('hero', [HeroSectionController::class, 'index'])->name('hero.index');
-        Route::post('hero', [HeroSectionController::class, 'store'])->name('hero.store');
-        Route::put('hero/{id}', [HeroSectionController::class, 'update'])->name('hero.update');
+      // ====== Hero Section ======
+Route::get('hero', [HeroSectionController::class, 'index'])->name('hero.index');
+Route::put('hero/{hero}', [HeroSectionController::class, 'update'])->name('hero.update');
 
         // ====== Project Index (admin listado rápido) ======
         Route::prefix('projects')->name('projects.')->group(function() {
