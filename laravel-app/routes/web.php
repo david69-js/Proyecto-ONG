@@ -73,6 +73,7 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle-status')->middleware('permission:users.edit');
         Route::get('/{user}/permissions', [UserController::class, 'permissions'])->name('permissions')->middleware('permission:roles.assign');
         Route::put('/{user}/permissions', [UserController::class, 'updatePermissions'])->name('update-permissions')->middleware('permission:roles.assign');
+        Route::delete('/{user}/avatar', [UserController::class, 'deleteAvatar'])->name('avatar.delete')->middleware('any.permission:users.edit,profile.edit.own');
     });
 
     // Projects
@@ -84,6 +85,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{project}/edit', [ProjectController::class, 'edit'])->name('edit')->middleware('permission:projects.edit');
         Route::put('/{project}', [ProjectController::class, 'update'])->name('update')->middleware('permission:projects.edit');
         Route::delete('/{project}', [ProjectController::class, 'destroy'])->name('destroy')->middleware('permission:projects.delete');
+        Route::delete('/phase-images/{image}', [ProjectController::class, 'deletePhaseImage'])->name('phase-images.destroy')->middleware('permission:projects.edit');
     });
 
     // Locations

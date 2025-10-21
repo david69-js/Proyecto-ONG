@@ -13,7 +13,7 @@
             </div>
             <div class="card-body">
 
-    <form action="{{ route('projects.store') }}" method="POST">
+    <form action="{{ route('projects.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         {{-- Pasamos $project y $usuarios al formulario --}}
         @include('projects.partials.form', ['project' => $project, 'usuarios' => $usuarios])

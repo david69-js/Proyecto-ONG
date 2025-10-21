@@ -17,7 +17,7 @@
                 </div>
                 
                 <div class="card-body">
-                    <form action="{{ route('users.store') }}" method="POST">
+                    <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         
                         <div class="row">
@@ -57,6 +57,21 @@
                                                     @enderror
                                                 </div>
                                             </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="avatar">Foto de Perfil</label>
+                                            <input type="file" 
+                                                   class="form-control @error('avatar') is-invalid @enderror" 
+                                                   id="avatar" 
+                                                   name="avatar" 
+                                                   accept="image/*">
+                                            @error('avatar')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                            <small class="form-text text-muted">
+                                                Formatos permitidos: JPEG, PNG, JPG, GIF, WEBP. Máximo 2MB.
+                                            </small>
                                         </div>
                                         
                                         <div class="form-group">

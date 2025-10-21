@@ -14,7 +14,13 @@
         <div class="navbar-nav">
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                    <span class="avatar avatar-sm" style="background-image: url({{ asset('assets/img/default-avatar.png') }})"></span>
+                    @if(auth()->user()->avatar)
+                        <span class="avatar avatar-sm" style="background-image: url({{ asset('storage/' . auth()->user()->avatar) }})"></span>
+                    @else
+                        <span class="avatar avatar-sm bg-primary text-white d-flex align-items-center justify-content-center">
+                            {{ substr(auth()->user()->first_name, 0, 1) }}{{ substr(auth()->user()->last_name, 0, 1) }}
+                        </span>
+                    @endif
                     <div class="d-none d-xl-block ps-2">
                         <div>{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</div>
                         <div class="mt-1 small text-muted">
@@ -25,12 +31,26 @@
                         </div>
                     </div>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <a href="{{ route('users.show', auth()->id()) }}" class="dropdown-item">Mi Perfil</a>
-                    <div class="dropdown-divider"></div>
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" style="background: white; border: 1px solid #e5e7eb; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); min-width: 200px;">
+                    <a href="{{ route('users.show', auth()->id()) }}" class="dropdown-item d-flex align-items-center" style="padding: 0.75rem 1rem; color: #374151; text-decoration: none; border-bottom: 1px solid #f3f4f6;">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+                            <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/>
+                            <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"/>
+                        </svg>
+                        Mi Perfil
+                    </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="dropdown-item">Cerrar Sesión</button>
+                        <button type="submit" class="dropdown-item d-flex align-items-center w-100" style="padding: 0.75rem 1rem; color: #dc2626; text-decoration: none; background: none; border: none; text-align: left;">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/>
+                                <path d="M7 12h14l-3 -3m0 6l3 -3"/>
+                            </svg>
+                            Cerrar Sesión
+                        </button>
                     </form>
                 </div>
             </div>
@@ -416,3 +436,46 @@
         </div>
     </div>
 </aside>
+
+<style>
+/* Estilos para el dropdown del usuario */
+.dropdown-menu {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease-in-out;
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #f8fafc !important;
+    color: #1f2937 !important;
+}
+
+.dropdown-item:focus {
+    background-color: #f1f5f9 !important;
+    color: #1f2937 !important;
+    outline: none;
+}
+
+/* Estilo específico para el botón de cerrar sesión */
+.dropdown-item button:hover {
+    background-color: #fef2f2 !important;
+    color: #b91c1c !important;
+}
+
+.dropdown-item button:focus {
+    background-color: #fef2f2 !important;
+    color: #b91c1c !important;
+    outline: none;
+}
+</style>
