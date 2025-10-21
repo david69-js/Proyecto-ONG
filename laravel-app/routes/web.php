@@ -179,8 +179,11 @@ Route::middleware(['auth'])
         Route::get('donations/export', [DonationController::class, 'export'])->name('donations.export');
 
         // PayPal
-        Route::post('donations/paypal/create-order', [DonationController::class, 'createPaypalOrder'])->name('donations.paypal.create');
-        Route::post('donations/paypal/capture-order', [DonationController::class, 'capturePaypalOrder'])->name('donations.paypal.capture');
+Route::post('/donations/paypal/create-order', [DonationController::class, 'createPaypalOrder'])
+    ->name('donations.paypal.create');
+
+Route::post('/donations/paypal/capture-order', [DonationController::class, 'capturePaypalOrder'])
+    ->name('donations.paypal.capture');
 
         // ====== About Section ======
         Route::get('about', [AboutSectionController::class, 'index'])->name('about.index');

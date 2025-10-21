@@ -54,6 +54,14 @@ class Donation extends Model
     'confirmed_at' => 'datetime',
     'processed_at' => 'datetime',
     ];
+    protected static function booted()
+{
+    static::creating(function ($donation) {
+        if (empty($donation->donation_code)) {
+            $donation->donation_code = 'DN-'.now()->format('YmdHis').'-'.\Str::upper(\Str::random(6));
+        }
+    });
+}
 
     protected $attributes = [
         'currency' => 'GTQ',

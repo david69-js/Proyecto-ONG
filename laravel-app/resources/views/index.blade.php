@@ -757,103 +757,138 @@
   </div>
 </div>
   <!-- FIN Contenido de Donadores -->
-<!-- Sección de Llamado a la Acción / Donaciones -->
+@php
+  // Variables de PayPal (puedes mover a config/services.php)
+  $paypalClientId = config('services.paypal.client_id', env('PAYPAL_CLIENT_ID'));
+  $paypalCurrency = config('services.paypal.currency', env('PAYPAL_CURRENCY', 'USD')); // o 'GTQ'
+
+  // URLs robustas con fallback (si cambian nombres o están bajo admin.*)
+  use Illuminate\Support\Facades\Route as R;
+  $paypalCreateUrl  = R::has('donations.paypal.create')
+      ? route('donations.paypal.create')
+      : (R::has('admin.donations.paypal.create')
+          ? route('admin.donations.paypal.create')
+          : url('/donations/paypal/create-order'));
+
+  $paypalCaptureUrl = R::has('donations.paypal.capture')
+      ? route('donations.paypal.capture')
+      : (R::has('admin.donations.paypal.capture')
+          ? route('admin.donations.paypal.capture')
+          : url('/donations/paypal/capture-order'));
+@endphp
+
+<!-- SDK de PayPal (solo UNA vez y después de definir $paypalClientId/$paypalCurrency) -->
+<script src="https://www.paypal.com/sdk/js?client-id={{ $paypalClientId }}&currency={{ $paypalCurrency }}&intent=capture"></script>
+
 <section id="call-to-action" class="call-to-action section light-background">
-
   <div class="container" data-aos="fade-up" data-aos-delay="100">
-
     <div class="row g-5 align-items-center">
 
-      <!-- Lado izquierdo: Mensaje inspirador -->
+      <!-- Lado izquierdo -->
       <div class="col-lg-6">
         <div class="cta-hero-content" data-aos="fade-right" data-aos-delay="200">
           <div class="badge-wrapper">
-            <span class="cta-badge">
-              <i class="bi bi-heart-fill"></i>
-              Contribuyendo al Hogar y la Comunidad
-            </span>
+            <span class="cta-badge"><i class="bi bi-heart-fill"></i> Contribuyendo al Hogar y la Comunidad</span>
           </div>
-
           <h2>Ayuda a Construir un Hogar para Familias Necesitadas</h2>
           <p>Tu apoyo permite que familias en Guatemala tengan acceso a viviendas seguras y dignas, mejorando su calidad de vida y fortaleciendo la comunidad.</p>
-
           <div class="feature-highlights">
-            <div class="highlight-item">
-              <i class="bi bi-check-circle-fill"></i>
-              <span>Proyectos de vivienda sostenibles y seguros</span>
-            </div>
-            <div class="highlight-item">
-              <i class="bi bi-check-circle-fill"></i>
-              <span>Programas de educación y fortalecimiento comunitario</span>
-            </div>
-            <div class="highlight-item">
-              <i class="bi bi-check-circle-fill"></i>
-              <span>Impacto directo en familias con necesidad</span>
-            </div>
+            <div class="highlight-item"><i class="bi bi-check-circle-fill"></i> <span>Proyectos de vivienda sostenibles y seguros</span></div>
+            <div class="highlight-item"><i class="bi bi-check-circle-fill"></i> <span>Programas de educación y fortalecimiento comunitario</span></div>
+            <div class="highlight-item"><i class="bi bi-check-circle-fill"></i> <span>Impacto directo en familias con necesidad</span></div>
           </div>
         </div>
       </div>
 
-      <!-- Lado derecho: Formulario de donación / contacto -->
+      <!-- Lado derecho -->
       <div class="col-lg-6">
         <div class="cta-form-section" data-aos="fade-left" data-aos-delay="300">
           <div class="form-container">
             <div class="form-header">
-              <h3>Haz tu Donación o Contáctanos</h3>
-              <p>Con tu apoyo, podemos cambiar vidas. Completa el formulario y únete a nuestra causa.</p>
+              <h3>Haz tu Donación</h3>
+              <p>Completa tus datos y realiza tu aporte seguro con PayPal.</p>
             </div>
 
-            <form action="forms/donacion.php" method="post" class="php-email-form">
+            <form id="donation-form" class="php-email-form" onsubmit="return false;">
+              @csrf
               <div class="row g-3">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <input type="text" name="name" class="form-control" placeholder="Tu Nombre" required="">
+                    <input type="text" name="donor_name" class="form-control" placeholder="Tu Nombre" required>
                   </div>
                 </div>
+
                 <div class="col-md-6">
                   <div class="form-group">
-                    <input type="email" name="email" class="form-control" placeholder="Tu Correo Electrónico" required="">
+                    <input type="email" name="donor_email" class="form-control" placeholder="Tu Correo (opcional)">
                   </div>
                 </div>
+
                 <div class="col-12">
                   <div class="form-group">
-                    <input type="tel" name="phone" class="form-control" placeholder="Número de Teléfono" required="">
+                    <input type="tel" name="donor_phone" class="form-control" placeholder="Número de Teléfono (opcional)">
                   </div>
                 </div>
+
+                <!-- Monto + botones rápidos -->
                 <div class="col-12">
+                  <label class="form-label mb-1">Selecciona un monto rápido o escribe el tuyo</label>
+                  <div class="d-flex flex-wrap gap-2 mb-2">
+                    <button type="button" class="btn btn-outline-primary btn-sm quick-amt" data-amount="100">100 {{ $paypalCurrency }}</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm quick-amt" data-amount="200">200 {{ $paypalCurrency }}</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm quick-amt" data-amount="500">500 {{ $paypalCurrency }}</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm quick-amt" data-amount="1000">1000 {{ $paypalCurrency }}</button>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
                   <div class="form-group">
-                    <select name="donation_type" class="form-control" required="">
-                      <option value="">Tipo de Apoyo</option>
-                      <option value="donacion-monetaria">Donación Monetaria</option>
-                      <option value="voluntariado">Voluntariado</option>
-                      <option value="apoyo-material">Apoyo con Materiales</option>
-                      <option value="otro">Otro</option>
+                    <input type="number" min="1" step="0.01" name="amount" class="form-control" placeholder="Monto ({{ $paypalCurrency }})" required>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <select name="currency" class="form-control" required>
+                      <option value="{{ $paypalCurrency }}" selected>{{ $paypalCurrency }}</option>
                     </select>
                   </div>
                 </div>
+
+                {{-- Proyecto (opcional) --}}
+                @isset($projects)
                 <div class="col-12">
                   <div class="form-group">
-                    <textarea name="message" class="form-control" rows="4" placeholder="Mensaje / Comentarios" required=""></textarea>
+                    <select name="project_id" class="form-control">
+                      <option value="">Apoyar a la ONG (sin proyecto)</option>
+                      @foreach($projects as $p)
+                        <option value="{{ $p->id }}">{{ $p->nombre }}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+                @endisset
+
+                <div class="col-12">
+                  <div class="form-group">
+                    <input type="text" name="notes" class="form-control" placeholder="Motivo / Programa (opcional)">
                   </div>
                 </div>
               </div>
 
-              <div class="loading">Cargando</div>
-              <div class="error-message"></div>
-              <div class="sent-message">¡Gracias! Tu solicitud ha sido enviada y recibida correctamente.</div>
+              <div class="loading" style="display:none">Cargando…</div>
+              <div class="error-message alert alert-danger py-2 px-3 my-2" style="display:none"></div>
+              <div class="sent-message alert alert-success py-2 px-3 my-2" style="display:none">¡Gracias! Tu donación fue procesada.</div>
 
-              <div class="form-actions">
-                <button type="submit" class="btn btn-primary">
-                  <i class="bi bi-heart"></i>
-                  Enviar Apoyo
-                </button>
+              <!-- Botón de PayPal -->
+              <div id="paypal-button-wrapper" class="mt-2">
+                <div id="paypal-button-container"></div>
+              </div>
 
+              <div class="form-actions mt-3">
                 <div class="contact-alternative">
                   <span>O contáctanos directamente:</span>
-                  <a href="tel:+50212345678" class="phone-link">
-                    <i class="bi bi-telephone-fill"></i>
-                    +502 1234-5678
-                  </a>
+                  <a href="tel:+50212345678" class="phone-link"><i class="bi bi-telephone-fill"></i> +502 1234-5678</a>
                 </div>
               </div>
             </form>
@@ -862,37 +897,13 @@
           <div class="trust-indicators" data-aos="fade-up" data-aos-delay="400">
             <div class="row g-3">
               <div class="col-4">
-                <div class="trust-item">
-                  <div class="trust-icon">
-                    <i class="bi bi-clock"></i>
-                  </div>
-                  <div class="trust-content">
-                    <span class="trust-number">24h</span>
-                    <span class="trust-label">Tiempo de Respuesta</span>
-                  </div>
-                </div>
+                <div class="trust-item"><div class="trust-icon"><i class="bi bi-clock"></i></div><div class="trust-content"><span class="trust-number">24h</span><span class="trust-label">Tiempo de Respuesta</span></div></div>
               </div>
               <div class="col-4">
-                <div class="trust-item">
-                  <div class="trust-icon">
-                    <i class="bi bi-people-fill"></i>
-                  </div>
-                  <div class="trust-content">
-                    <span class="trust-number">500+</span>
-                    <span class="trust-label">Familias Apoyadas</span>
-                  </div>
-                </div>
+                <div class="trust-item"><div class="trust-icon"><i class="bi bi-people-fill"></i></div><div class="trust-content"><span class="trust-number">500+</span><span class="trust-label">Familias Apoyadas</span></div></div>
               </div>
               <div class="col-4">
-                <div class="trust-item">
-                  <div class="trust-icon">
-                    <i class="bi bi-house-fill"></i>
-                  </div>
-                  <div class="trust-content">
-                    <span class="trust-number">120+</span>
-                    <span class="trust-label">Viviendas Construidas</span>
-                  </div>
-                </div>
+                <div class="trust-item"><div class="trust-icon"><i class="bi bi-house-fill"></i></div><div class="trust-content"><span class="trust-number">120+</span><span class="trust-label">Viviendas Construidas</span></div></div>
               </div>
             </div>
           </div>
@@ -901,10 +912,145 @@
       </div>
 
     </div>
-
   </div>
-
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('donation-form');
+  const loadingEl = form.querySelector('.loading');
+  const errorEl = form.querySelector('.error-message');
+  const okEl = form.querySelector('.sent-message');
+  const paypalWrapper = document.getElementById('paypal-button-wrapper');
+  const amountInput = form.amount;
+
+  function showLoading(show) { loadingEl.style.display = show ? '' : 'none'; }
+  function showError(msg) { errorEl.textContent = msg || ''; errorEl.style.display = msg ? '' : 'none'; }
+  function showOk() { okEl.style.display = ''; }
+  function validAmount() {
+    const val = parseFloat(amountInput.value);
+    return !isNaN(val) && val >= 1;
+  }
+
+  // Monto rápido
+  document.querySelectorAll('.quick-amt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      amountInput.value = parseFloat(btn.dataset.amount).toFixed(2);
+      togglePaypalVisibility();
+    });
+  });
+
+  // Mostrar/ocultar y renderizar al escribir/cambiar
+  amountInput.addEventListener('input', togglePaypalVisibility);
+  amountInput.addEventListener('change', togglePaypalVisibility);
+
+  let paypalRendered = false;
+  function togglePaypalVisibility() {
+    const valid = validAmount();
+    paypalWrapper.style.display = valid ? '' : 'none';
+    if (valid) renderPaypal();
+  }
+
+  const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
+               form.querySelector('input[name="_token"]')?.value;
+
+  function renderPaypal() {
+    if (paypalRendered) return;
+    paypalRendered = true;
+
+    paypal.Buttons({
+      style: { layout: 'horizontal', label: 'donate', shape: 'pill' },
+
+      createOrder: async () => {
+        showError('');
+        if (!validAmount()) throw new Error('Monto inválido');
+        showLoading(true);
+
+        const payload = {
+          amount: form.amount.value,
+          donor_name: form.donor_name.value,
+          donor_email: form.donor_email.value || null,
+          project_id: form.project_id ? (form.project_id.value || null) : null,
+          notes: form.notes.value || null,
+          currency: form.currency.value
+        };
+
+        const res = await fetch('{{ $paypalCreateUrl }}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrf,
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        showLoading(false);
+
+        if (!res.ok) {
+          let msg = 'No se pudo iniciar la orden con PayPal.';
+          try {
+            const err = await res.json();
+            if (err.errors) msg += ' ' + Object.values(err.errors).flat().join(' ');
+            else if (err.message) msg += ' ' + err.message;
+          } catch (_) {}
+          showError(msg);
+          throw new Error('paypal_create_error');
+        }
+
+        const data = await res.json();
+        form.dataset.donationId = data.donation_id;
+        return data.id; // orderID
+      },
+
+      onApprove: async (data) => {
+        showError('');
+        showLoading(true);
+
+        const res = await fetch('{{ $paypalCaptureUrl }}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrf,
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            orderID: data.orderID,
+            donation_id: form.dataset.donationId || null
+          })
+        });
+
+        showLoading(false);
+
+        if (!res.ok) {
+          let msg = 'No se pudo capturar el pago en PayPal.';
+          try {
+            const err = await res.json();
+            if (err.message) msg += ' ' + err.message;
+          } catch (_) {}
+          showError(msg);
+          return;
+        }
+
+        await res.json();
+        showOk();
+        form.reset();
+        paypalRendered = false; // permite re-render si el usuario vuelve a donar
+        togglePaypalVisibility();
+      },
+
+      onError: (err) => {
+        showError('Ocurrió un error con PayPal. Inténtalo nuevamente.');
+        console.error(err);
+      }
+    }).render('#paypal-button-container');
+  }
+
+  // Inicial: si ya hay un valor válido, muestra y renderiza
+  togglePaypalVisibility();
+});
+</script>
+
   </main>
 
   <x-footer />
