@@ -29,6 +29,9 @@ class DatabaseSeeder extends Seeder
             // 5. Crear proyectos
             ProjectSeeder::class,
             
+            // 5.1. Crear imágenes de fases de proyectos
+            ProjectPhaseImageSeeder::class,
+            
             // 6. Crear patrocinadores
             SponsorSeeder::class,
             

@@ -27,6 +27,8 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Estado</th>
+                        <th>Fase</th>
+                        <th>Progreso</th>
                         <th>Responsable</th>
                         <th>Fecha Inicio</th>
                         <th>Acciones</th>
@@ -38,6 +40,23 @@
                             <td>{{ $project->nombre }}</td>
                             <td>
                                 <span class="badge bg-info">{{ ucfirst($project->estado) }}</span>
+                            </td>
+                            <td>
+                                @if($project->fase)
+                                    <span class="badge bg-primary">{{ \App\Models\Project::PHASES[$project->fase]['name'] ?? ucfirst($project->fase) }}</span>
+                                @else
+                                    <span class="text-muted">Sin fase</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar" role="progressbar" 
+                                         style="width: {{ $project->porcentaje ?? 0 }}%"
+                                         aria-valuenow="{{ $project->porcentaje ?? 0 }}" 
+                                         aria-valuemin="0" aria-valuemax="100">
+                                        {{ $project->porcentaje ?? 0 }}%
+                                    </div>
+                                </div>
                             </td>
                             <td>
                                 {{ $project->responsable?->first_name }} {{ $project->responsable?->last_name }}
@@ -73,7 +92,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center">
+                            <td colspan="7" class="text-center">
                                 @role('beneficiary')
                                     No tienes proyectos asignados.
                                 @else

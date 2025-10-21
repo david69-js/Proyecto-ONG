@@ -9,6 +9,7 @@ use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -81,6 +82,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:sys_users',
             'phone' => 'nullable|string|max:20',
             'password' => 'required|min:5|confirmed',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'roles' => 'required|array|min:1',
             'roles.*' => 'exists:cfg_roles,id',
             'is_active' => 'boolean',
@@ -101,6 +103,12 @@ class UserController extends Controller
         ]);
 
         DB::transaction(function () use ($request) {
+            // Handle avatar upload
+            $avatarPath = null;
+            if ($request->hasFile('avatar')) {
+                $avatarPath = $request->file('avatar')->store('users/avatars', 'public');
+            }
+
             // Create user
             $user = User::create([
                 'first_name' => $request->first_name,
@@ -108,6 +116,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'password' => Hash::make($request->password),
+                'avatar' => $avatarPath,
                 'is_active' => $request->boolean('is_active', true),
                 'is_verified' => $request->boolean('is_verified', false),
             ]);
@@ -176,6 +185,7 @@ class UserController extends Controller
             'last_name' => 'required|string|max:100',
             'email' => ['required', 'email', Rule::unique('sys_users')->ignore($user->id)],
             'phone' => 'nullable|string|max:20',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'roles' => 'required|array|min:1',
             'roles.*' => 'exists:cfg_roles,id',
             'is_active' => 'boolean',
@@ -203,6 +213,15 @@ class UserController extends Controller
         $request->validate($validationRules);
 
         DB::transaction(function () use ($request, $user) {
+            // Handle avatar upload
+            if ($request->hasFile('avatar')) {
+                // Delete old avatar if exists
+                if ($user->avatar) {
+                    Storage::disk('public')->delete($user->avatar);
+                }
+                $avatarPath = $request->file('avatar')->store('users/avatars', 'public');
+            }
+
             // Update user
             $userData = [
                 'first_name' => $request->first_name,
@@ -215,6 +234,10 @@ class UserController extends Controller
 
             if ($request->filled('password')) {
                 $userData['password'] = Hash::make($request->password);
+            }
+
+            if (isset($avatarPath)) {
+                $userData['avatar'] = $avatarPath;
             }
 
             $user->update($userData);
@@ -327,5 +350,32 @@ class UserController extends Controller
 
         return redirect()->route('users.permissions', $user)
             ->with('success', 'User permissions updated successfully.');
+    }
+
+    /**
+     * Delete user avatar.
+     */
+    public function deleteAvatar(User $user)
+    {
+        // Verificar autorización
+        $this->authorize('update', $user);
+
+        if ($user->avatar) {
+            // Delete physical file
+            Storage::disk('public')->delete($user->avatar);
+            
+            // Update database
+            $user->update(['avatar' => null]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Avatar eliminado correctamente'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'No hay avatar para eliminar'
+        ]);
     }
 }

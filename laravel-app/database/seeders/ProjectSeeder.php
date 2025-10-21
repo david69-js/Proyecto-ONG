@@ -33,6 +33,8 @@ class ProjectSeeder extends Seeder
                 'ubicacion' => 'Comunidades rurales del estado de Oaxaca',
                 'resultados_esperados' => 'Mejora en el rendimiento académico, reducción del abandono escolar, capacitación de maestros',
                 'resultados_obtenidos' => 'Se han capacitado 30 maestros, se han distribuido 200 kits escolares',
+                'fase' => 'ejecucion',
+                'porcentaje' => 50,
             ],
             [
                 'nombre' => 'Salud Preventiva Infantil',
@@ -49,6 +51,8 @@ class ProjectSeeder extends Seeder
                 'ubicacion' => 'Colonias marginadas de la Ciudad de México',
                 'resultados_esperados' => 'Reducción de enfermedades prevenibles, mejora en el estado nutricional infantil',
                 'resultados_obtenidos' => 'Se han vacunado 600 niños, se han realizado 150 consultas nutricionales',
+                'fase' => 'evaluacion',
+                'porcentaje' => 80,
             ],
             [
                 'nombre' => 'Desarrollo Empresarial Femenino',
@@ -65,6 +69,8 @@ class ProjectSeeder extends Seeder
                 'ubicacion' => 'Comunidades rurales de Chiapas y Guerrero',
                 'resultados_esperados' => 'Empoderamiento económico femenino, generación de empleo local, desarrollo comunitario',
                 'resultados_obtenidos' => 'Se han capacitado 60 mujeres, se han creado 15 microempresas',
+                'fase' => 'financiacion',
+                'porcentaje' => 30,
             ],
             [
                 'nombre' => 'Agua Potable y Saneamiento',
@@ -81,6 +87,8 @@ class ProjectSeeder extends Seeder
                 'ubicacion' => 'Comunidades rurales de Puebla y Veracruz',
                 'resultados_esperados' => 'Acceso a agua potable, reducción de enfermedades gastrointestinales, mejora en la calidad de vida',
                 'resultados_obtenidos' => 'Se han instalado 2 sistemas de purificación, se han construido 50 letrinas',
+                'fase' => 'ejecucion',
+                'porcentaje' => 50,
             ],
             [
                 'nombre' => 'Apoyo a Adultos Mayores',
@@ -97,6 +105,8 @@ class ProjectSeeder extends Seeder
                 'ubicacion' => 'Centros comunitarios en zonas urbanas marginadas',
                 'resultados_esperados' => 'Mejora en la calidad de vida de adultos mayores, reducción del aislamiento social',
                 'resultados_obtenidos' => 'Se han atendido 80 adultos mayores, se han realizado 200 consultas médicas',
+                'fase' => 'formulacion',
+                'porcentaje' => 15,
             ],
             [
                 'nombre' => 'Capacitación Técnica Juvenil',
@@ -113,6 +123,8 @@ class ProjectSeeder extends Seeder
                 'ubicacion' => 'Centros de capacitación en 5 ciudades principales',
                 'resultados_esperados' => 'Inserción laboral del 70% de los capacitados, mejora en las oportunidades económicas',
                 'resultados_obtenidos' => 'Proyecto en fase de planificación',
+                'fase' => 'diagnostico',
+                'porcentaje' => 0,
             ],
             [
                 'nombre' => 'Conservación Ambiental Comunitaria',
@@ -129,6 +141,8 @@ class ProjectSeeder extends Seeder
                 'ubicacion' => 'Reservas naturales y comunidades rurales de Michoacán',
                 'resultados_esperados' => 'Restauración de ecosistemas, conciencia ambiental comunitaria, prácticas sostenibles',
                 'resultados_obtenidos' => 'Se han reforestado 15 hectáreas, se han capacitado 80 familias',
+                'fase' => 'cierre',
+                'porcentaje' => 100,
             ],
         ];
 

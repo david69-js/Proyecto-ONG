@@ -33,10 +33,11 @@
                             <div class="card">
                                 <div class="card-body text-center">
                                     @if($user->avatar)
-                                        <img src="{{ $user->avatar }}" 
+                                        <img src="{{ asset('storage/' . $user->avatar) }}" 
                                              alt="{{ $user->full_name }}" 
                                              class="rounded-circle mb-3" 
-                                             width="120" height="120">
+                                             width="120" height="120"
+                                             style="object-fit: cover;">
                                     @else
                                         <div class="avatar-placeholder rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" 
                                              style="width: 120px; height: 120px;">

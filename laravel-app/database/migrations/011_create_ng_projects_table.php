@@ -27,6 +27,8 @@ return new class extends Migration
         $table->string('ubicacion')->nullable();
         $table->text('resultados_esperados')->nullable();
         $table->text('resultados_obtenidos')->nullable();
+        $table->enum('fase', ['diagnostico', 'formulacion', 'financiacion', 'ejecucion', 'evaluacion', 'cierre'])->default('diagnostico');
+        $table->integer('porcentaje')->default(0);
         $table->timestamps();
 
         $table->foreign('responsable_id')->references('id')->on('sys_users')->onDelete('set null');

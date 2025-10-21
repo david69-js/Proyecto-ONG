@@ -45,7 +45,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('users.update', $user) }}" method="POST">
+                    <form action="{{ route('users.update', $user) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         
@@ -86,6 +86,48 @@
                                                     @enderror
                                                 </div>
                                             </div>
+                                        </div>
+                                        
+                                        <!-- Avatar Section -->
+                                        <div class="mb-3">
+                                            <label class="form-label" for="avatar">Foto de Perfil</label>
+                                            
+                                            <!-- Current Avatar Display -->
+                                            @if($user->avatar)
+                                                <div class="mb-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="{{ asset('storage/' . $user->avatar) }}" 
+                                                             alt="Avatar actual" 
+                                                             class="rounded-circle me-3" 
+                                                             style="width: 60px; height: 60px; object-fit: cover;">
+                                                        <div>
+                                                            <p class="mb-1 text-muted">Avatar actual</p>
+                                                            <button type="button" 
+                                                                    class="btn btn-sm btn-outline-danger delete-avatar-btn"
+                                                                    data-user-id="{{ $user->id }}"
+                                                                    title="Eliminar avatar">
+                                                                <i class="fas fa-trash"></i> Eliminar
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            
+                                            <!-- New Avatar Upload -->
+                                            <input type="file" 
+                                                   class="form-control @error('avatar') is-invalid @enderror" 
+                                                   id="avatar" 
+                                                   name="avatar" 
+                                                   accept="image/*">
+                                            @error('avatar')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                            <small class="form-text text-muted">
+                                                Formatos permitidos: JPEG, PNG, JPG, GIF, WEBP. Máximo 2MB.
+                                                @if($user->avatar)
+                                                    Dejar vacío para mantener la imagen actual.
+                                                @endif
+                                            </small>
                                         </div>
                                         
                                         <div class="mb-3">
@@ -432,4 +474,41 @@
         border-radius: 0.3rem;
     }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Manejar eliminación de avatar
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.delete-avatar-btn')) {
+            const button = e.target.closest('.delete-avatar-btn');
+            const userId = button.getAttribute('data-user-id');
+            
+            if (confirm('¿Estás seguro de que quieres eliminar el avatar actual?')) {
+                fetch(`/users/${userId}/avatar`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Recargar la página para mostrar los cambios
+                        location.reload();
+                    } else {
+                        alert('Error al eliminar el avatar: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al eliminar el avatar');
+                });
+            }
+        }
+    });
+});
+</script>
 @endpush

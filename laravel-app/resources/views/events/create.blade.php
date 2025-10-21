@@ -15,14 +15,14 @@
                         Información del Evento
                     </h3>
                     <div class="card-actions">
-                        <a href="{{ route('events.index') }}" class="btn btn-outline-secondary custom">
+                        <a href="{{ route('admin.events.index') }}" class="btn btn-outline-secondary custom">
                             <i class="fas fa-arrow-left me-1"></i>
                             Volver
                         </a>
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.events.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         
                         <!-- Alertas de Errores -->
@@ -488,7 +488,7 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body text-center">
-                                        <a href="{{ route('events.index') }}" class="btn btn-outline-secondary me-2 custom">
+                                        <a href="{{ route('admin.events.index') }}" class="btn btn-outline-secondary me-2 custom">
                                             <i class="fas fa-arrow-left me-1"></i>
                                             Cancelar
                                         </a>

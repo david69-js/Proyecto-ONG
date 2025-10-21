@@ -91,10 +91,11 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 @if($user->avatar)
-                                                    <img src="{{ $user->avatar }}" 
+                                                    <img src="{{ asset('storage/' . $user->avatar) }}" 
                                                          alt="{{ $user->full_name }}" 
                                                          class="rounded-circle me-2" 
-                                                         width="32" height="32">
+                                                         width="32" height="32"
+                                                         style="object-fit: cover;">
                                                 @else
                                                     <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" 
                                                          style="width: 32px; height: 32px;">
