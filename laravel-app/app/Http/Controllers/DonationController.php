@@ -21,7 +21,7 @@ class DonationController extends Controller
     public function __construct()
     {
         // Ver / listar
-        $this->middleware('permission:donations.view|donations.view.own')->only(['index', 'show']);
+        $this->middleware('any.permission:donations.view,donations.view.own')->only(['index', 'show']);
         // Crear
         $this->middleware('permission:donations.create')->only(['create', 'store']);
         // Editar
@@ -45,10 +45,23 @@ class DonationController extends Controller
         return app('router')->has($admin) ? $admin : $flat;
     }
 
-    /** Helper: base de vistas dinámica (sections/donations/* o donations/*) */
+    /** Helper: base de vistas dinámica (donations-admin/*, sections/donations/* o donations/*) */
     private function viewBase(): string
     {
-        return view()->exists('sections.donations.index') ? 'sections.donations.' : 'donations.';
+        $currentRoute = request()->route()->getName();
+        
+        // Detectar si es ruta donations-admin
+        if (str_contains($currentRoute, 'donations-admin')) {
+            return 'donations-admin.';
+        }
+        
+        // Detectar si es ruta admin (sin donations-admin)
+        if (str_contains($currentRoute, 'admin.donations')) {
+            return view()->exists('sections.donations.index') ? 'sections.donations.' : 'donations.';
+        }
+        
+        // Ruta normal
+        return 'donations.';
     }
 
     /**

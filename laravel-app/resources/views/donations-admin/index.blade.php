@@ -16,7 +16,7 @@
                         Gestión de Donaciones
                     </h3>
                     @permission('donations.create')
-                    <a href="{{ route('donations.create') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.donations-admin.create') }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Nueva Donación
                     </a>
                     @endpermission
@@ -155,19 +155,19 @@
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('donations.show', $donation) }}" class="btn btn-sm btn-outline-primary">
+                                            <a href="{{ route('admin.donations-admin.show', $donation) }}" class="btn btn-sm btn-outline-primary">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                             
                                             @permission('donations.edit')
-                                            <a href="{{ route('donations.edit', $donation) }}" class="btn btn-sm btn-outline-secondary">
+                                            <a href="{{ route('admin.donations-admin.edit', $donation) }}" class="btn btn-sm btn-outline-secondary">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             @endpermission
 
                                             @permission('donations.confirm')
                                             @if($donation->status === 'pending')
-                                            <form method="POST" action="{{ route('donations.confirm', $donation) }}" class="d-inline">
+                                            <form method="POST" action="{{ route('admin.donations-admin.confirm', $donation) }}" class="d-inline">
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-outline-success" 
                                                         onclick="return confirm('¿Confirmar esta donación?')">
@@ -179,7 +179,7 @@
 
                                             @permission('donations.process')
                                             @if($donation->status === 'confirmed')
-                                            <form method="POST" action="{{ route('donations.process', $donation) }}" class="d-inline">
+                                            <form method="POST" action="{{ route('admin.donations-admin.process', $donation) }}" class="d-inline">
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-outline-info" 
                                                         onclick="return confirm('¿Procesar esta donación?')">
@@ -207,13 +207,13 @@
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <div>
                             @permission('donations.reports')
-                            <a href="{{ route('donations.reports') }}" class="btn btn-outline-info">
+                            <a href="{{ route('admin.donations-admin.reports') }}" class="btn btn-outline-info">
                                 <i class="fas fa-chart-bar"></i> Reportes
                             </a>
                             @endpermission
 
                             @permission('donations.export')
-                            <a href="{{ route('donations.export', request()->query()) }}" class="btn btn-outline-success">
+                            <a href="{{ route('admin.donations-admin.export', request()->query()) }}" class="btn btn-outline-success">
                                 <i class="fas fa-download"></i> Exportar
                             </a>
                             @endpermission

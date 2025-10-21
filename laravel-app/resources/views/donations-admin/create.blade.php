@@ -15,7 +15,7 @@
                         Nueva Donación
                     </h3>
                     <div class="card-actions">
-                        <a href="{{ route('admin.donations.index') }}" class="btn btn-outline-secondary custom">
+                        <a href="{{ route('admin.donations-admin.index') }}" class="btn btn-outline-secondary custom">
                             <i class="fas fa-arrow-left me-1"></i>
                             Volver
                         </a>
@@ -45,7 +45,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('donations.store') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('admin.donations-admin.store') }}" enctype="multipart/form-data">
                         @csrf
                         
                         <div class="row">
@@ -291,7 +291,7 @@
 
                         <div class="card-footer">
                             <div class="d-flex justify-content-between">
-                                <a href="{{ route('admin.donations.index') }}" class="btn btn-outline-secondary custom">
+                                <a href="{{ route('admin.donations-admin.index') }}" class="btn btn-outline-secondary custom">
                                     <i class="fas fa-arrow-left me-1"></i>
                                     Cancelar
                                 </a>

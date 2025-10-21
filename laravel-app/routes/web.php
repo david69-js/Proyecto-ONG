@@ -164,6 +164,18 @@ Route::middleware(['auth'])
         // ====== Events ======
         Route::resource('events', EventController::class)->names('events');
 
+        // ====== Events Admin (vistas específicas) ======
+        Route::prefix('events-admin')->name('events-admin.')->group(function () {
+            Route::get('/', [EventController::class, 'index'])->name('index');
+            Route::get('/create', [EventController::class, 'create'])->name('create');
+            Route::post('/', [EventController::class, 'store'])->name('store');
+            Route::get('/{event}', [EventController::class, 'show'])->name('show');
+            Route::get('/{event}/edit', [EventController::class, 'edit'])->name('edit');
+            Route::put('/{event}', [EventController::class, 'update'])->name('update');
+            Route::delete('/{event}', [EventController::class, 'destroy'])->name('destroy');
+            Route::get('/reports', [EventController::class, 'reports'])->name('reports');
+        });
+
         // Extras de Events
         Route::get('events/reports', [EventController::class, 'reports'])->name('events.reports');
         Route::get('events/{event}/registrations', [EventController::class, 'registrations'])->name('events.registrations');
@@ -173,12 +185,31 @@ Route::middleware(['auth'])
         Route::post('registrations/{registration}/status', [EventController::class, 'updateRegistrationStatus'])->name('registrations.update-status');
         Route::delete('registrations/{registration}', [EventController::class, 'deleteRegistration'])->name('registrations.destroy');
         Route::post('events/{event}/toggle-featured', [EventController::class, 'toggleFeatured'])
-            ->name('events.toggle-featured'); //
+            ->name('events.toggle-featured'); 
 
         // ====== Donations ======
         Route::resource('donations', DonationController::class)->names('donations');
         Route::get('donations/reports', [DonationController::class, 'reports'])->name('donations.reports');
         Route::get('donations/export', [DonationController::class, 'export'])->name('donations.export');
+
+        // ====== Donations Admin (vistas específicas) ======
+        Route::prefix('donations-admin')->name('donations-admin.')->group(function () {
+            Route::get('/', [DonationController::class, 'index'])->name('index');
+            Route::get('/create', [DonationController::class, 'create'])->name('create');
+            Route::post('/', [DonationController::class, 'store'])->name('store');
+            Route::get('/reports', [DonationController::class, 'reports'])->name('reports');
+            Route::get('/export', [DonationController::class, 'export'])->name('export');
+            Route::get('/{donation}', [DonationController::class, 'show'])->name('show');
+            Route::get('/{donation}/edit', [DonationController::class, 'edit'])->name('edit');
+            Route::put('/{donation}', [DonationController::class, 'update'])->name('update');
+            Route::delete('/{donation}', [DonationController::class, 'destroy'])->name('destroy');
+            
+            // Rutas adicionales para flujos de estado
+            Route::post('/{donation}/confirm', [DonationController::class, 'confirm'])->name('confirm');
+            Route::post('/{donation}/process', [DonationController::class, 'process'])->name('process');
+            Route::post('/{donation}/reject', [DonationController::class, 'reject'])->name('reject');
+            Route::post('/{donation}/cancel', [DonationController::class, 'cancel'])->name('cancel');
+        });
 
         // PayPal
 Route::post('/donations/paypal/create-order', [DonationController::class, 'createPaypalOrder'])

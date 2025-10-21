@@ -66,9 +66,14 @@ class RolePermissionSeeder extends Seeder
 
             // Permisos de Donaciones
             ['name' => 'Ver Donaciones', 'slug' => 'donations.view', 'description' => 'Ver donaciones'],
+            ['name' => 'Ver Solo Sus Donaciones', 'slug' => 'donations.view.own', 'description' => 'Ver solo sus propias donaciones'],
             ['name' => 'Crear Donación', 'slug' => 'donations.create', 'description' => 'Registrar nuevas donaciones'],
             ['name' => 'Editar Donación', 'slug' => 'donations.edit', 'description' => 'Editar donaciones'],
             ['name' => 'Eliminar Donación', 'slug' => 'donations.delete', 'description' => 'Eliminar donaciones'],
+            ['name' => 'Confirmar Donaciones', 'slug' => 'donations.confirm', 'description' => 'Confirmar donaciones pendientes'],
+            ['name' => 'Procesar Donaciones', 'slug' => 'donations.process', 'description' => 'Procesar donaciones confirmadas'],
+            ['name' => 'Ver Reportes de Donaciones', 'slug' => 'donations.reports', 'description' => 'Ver reportes y estadísticas de donaciones'],
+            ['name' => 'Exportar Donaciones', 'slug' => 'donations.export', 'description' => 'Exportar datos de donaciones'],
 
             // Permisos de Reportes
             ['name' => 'Ver Reportes', 'slug' => 'reports.view', 'description' => 'Ver reportes'],
@@ -139,6 +144,15 @@ class RolePermissionSeeder extends Seeder
                 'sponsors.create',
                 'sponsors.edit',
                 
+                // Donaciones - Gestión completa
+                'donations.view',
+                'donations.create',
+                'donations.edit',
+                'donations.confirm',
+                'donations.process',
+                'donations.reports',
+                'donations.export',
+                
                 // Reportes - Ver propios
                 'reports.view',
             ])->get();
@@ -185,6 +199,10 @@ class RolePermissionSeeder extends Seeder
                 
                 // Eventos - Solo ver
                 'events.view',
+                
+                // Donaciones - Ver y crear básicas
+                'donations.view',
+                'donations.create',
             ])->get();
             $volunteer->permissions()->sync($volunteerPermissions->pluck('id'));
         }
@@ -208,6 +226,11 @@ class RolePermissionSeeder extends Seeder
                 // Patrocinadores - Solo ver
                 'sponsors.view',
                 
+                // Donaciones - Ver y reportes
+                'donations.view',
+                'donations.reports',
+                'donations.export',
+                
                 // Reportes - Ver y exportar
                 'reports.view',
                 'reports.export',
@@ -225,6 +248,10 @@ class RolePermissionSeeder extends Seeder
                 
                 // Patrocinadores - Ver
                 'sponsors.view',
+                
+                // Donaciones - Ver y crear sus propias donaciones
+                'donations.view.own',
+                'donations.create',
                 
                 // Reportes - Ver y exportar
                 'reports.view',

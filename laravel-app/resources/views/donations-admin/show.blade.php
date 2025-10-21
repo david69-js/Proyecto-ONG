@@ -15,12 +15,12 @@
                 </h3>
                     <div>
                         @permission('donations.edit')
-                        <a href="{{ route('donations.edit', $donation) }}" class="btn btn-outline-primary">
+                        <a href="{{ route('admin.donations-admin.edit', $donation) }}" class="btn btn-outline-primary">
                             <i class="fas fa-edit"></i> Editar
                         </a>
                         @endpermission
                         
-                        <a href="{{ route('admin.donations.index') }}" class="btn btn-secondary">
+                        <a href="{{ route('admin.donations-admin.index') }}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> Volver
                         </a>
                     </div>
@@ -247,7 +247,7 @@
                                 <div class="card-body">
                                     @permission('donations.confirm')
                                     @if($donation->status === 'pending')
-                                    <form method="POST" action="{{ route('donations.confirm', $donation) }}" class="mb-2">
+                                    <form method="POST" action="{{ route('admin.donations-admin.confirm', $donation) }}" class="mb-2">
                                         @csrf
                                         <button type="submit" class="btn btn-success w-100" 
                                                 onclick="return confirm('¿Confirmar esta donación?')">
@@ -259,7 +259,7 @@
 
                                     @permission('donations.process')
                                     @if($donation->status === 'confirmed')
-                                    <form method="POST" action="{{ route('donations.process', $donation) }}" class="mb-2">
+                                    <form method="POST" action="{{ route('admin.donations-admin.process', $donation) }}" class="mb-2">
                                         @csrf
                                         <button type="submit" class="btn btn-info w-100" 
                                                 onclick="return confirm('¿Procesar esta donación?')">
@@ -381,7 +381,7 @@
                 <h5 class="modal-title">Rechazar Donación</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="POST" action="{{ route('donations.reject', $donation) }}">
+            <form method="POST" action="{{ route('admin.donations-admin.reject', $donation) }}">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -406,7 +406,7 @@
                 <h5 class="modal-title">Cancelar Donación</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="POST" action="{{ route('donations.cancel', $donation) }}">
+            <form method="POST" action="{{ route('admin.donations-admin.cancel', $donation) }}">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">

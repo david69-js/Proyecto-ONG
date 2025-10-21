@@ -295,8 +295,8 @@
                     @endpermission
 <!-- Gestión de Eventos -->
 @php
-    $eventsIndex  = Route::has('admin.events.index')  ? 'admin.events.index'  : (Route::has('events.index')  ? 'events.index'  : null);
-    $eventsCreate = Route::has('admin.events.create') ? 'admin.events.create' : (Route::has('events.create') ? 'events.create' : null);
+    $eventsIndex  = Route::has('admin.events-admin.index')  ? 'admin.events-admin.index'  : (Route::has('admin.events.index')  ? 'admin.events.index'  : (Route::has('events.index')  ? 'events.index'  : null));
+    $eventsCreate = Route::has('admin.events-admin.create') ? 'admin.events-admin.create' : (Route::has('admin.events.create') ? 'admin.events.create' : (Route::has('events.create') ? 'events.create' : null));
 @endphp
 
 @permission('events.view')
@@ -327,7 +327,11 @@
         @endpermission
 
         @permission('events.reports')
-            @if(Route::has('admin.events.reports'))
+            @if(Route::has('admin.events-admin.reports'))
+            <a class="dropdown-item" href="{{ route('admin.events-admin.reports') }}">
+                <i class="fas fa-chart-bar me-2"></i> Reportes de Eventos
+            </a>
+            @elseif(Route::has('admin.events.reports'))
             <a class="dropdown-item" href="{{ route('admin.events.reports') }}">
                 <i class="fas fa-chart-bar me-2"></i> Reportes de Eventos
             </a>
@@ -347,28 +351,45 @@
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
                                 <i class="fas fa-hand-holding-usd"></i>
                             </span>
-                           <span class="nav-link-title">Donaciones</span>
-</a>
-<div class="dropdown-menu">
-    @permission('donations.view')
-<a class="dropdown-item" href="{{ route('admin.donations.index') }}">...</a>
-        <i class="fas fa-list me-2"></i> Listar Donaciones
-    </a>
-    @endpermission
+                            <span class="nav-link-title">Donaciones</span>
+                        </a>
+                        <div class="dropdown-menu">
+                            @permission('donations.view')
+                            @if(Route::has('admin.donations-admin.index'))
+                            <a class="dropdown-item" href="{{ route('admin.donations-admin.index') }}">
+                                <i class="fas fa-list me-2"></i> Listar Donaciones
+                            </a>
+                            @elseif(Route::has('admin.donations.index'))
+                            <a class="dropdown-item" href="{{ route('admin.donations.index') }}">
+                                <i class="fas fa-list me-2"></i> Listar Donaciones
+                            </a>
+                            @endif
+                            @endpermission
 
-    @permission('donations.create')
-    <a class="dropdown-item" href="{{ route('admin.donations.create') }}">
-        <i class="fas fa-plus me-2"></i> Registrar Donación
-    </a>
-    @endpermission
+                            @permission('donations.create')
+                            @if(Route::has('admin.donations-admin.create'))
+                            <a class="dropdown-item" href="{{ route('admin.donations-admin.create') }}">
+                                <i class="fas fa-plus me-2"></i> Registrar Donación
+                            </a>
+                            @elseif(Route::has('admin.donations.create'))
+                            <a class="dropdown-item" href="{{ route('admin.donations.create') }}">
+                                <i class="fas fa-plus me-2"></i> Registrar Donación
+                            </a>
+                            @endif
+                            @endpermission
 
-    @permission('donations.reports')
-    <a class="dropdown-item" href="{{ route('admin.donations.reports') }}">
-        <i class="fas fa-chart-bar me-2"></i> Reportes de Donaciones
-    </a>
-    @endpermission
-</div>
-
+                            @permission('donations.reports')
+                            @if(Route::has('admin.donations-admin.reports'))
+                            <a class="dropdown-item" href="{{ route('admin.donations-admin.reports') }}">
+                                <i class="fas fa-chart-bar me-2"></i> Reportes de Donaciones
+                            </a>
+                            @elseif(Route::has('admin.donations.reports'))
+                            <a class="dropdown-item" href="{{ route('admin.donations.reports') }}">
+                                <i class="fas fa-chart-bar me-2"></i> Reportes de Donaciones
+                            </a>
+                            @endif
+                            @endpermission
+                        </div>
                     </li>
                     @endpermission
 
