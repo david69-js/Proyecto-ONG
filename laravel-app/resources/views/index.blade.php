@@ -1,5 +1,7 @@
 <x-head>
   <link rel="stylesheet" href="assets/css/donadores.css">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
 </x-head>
 <body class="index-page">
 <x-header />
@@ -758,13 +760,15 @@
 </div>
   <!-- FIN Contenido de Donadores -->
 @php
-  // Variables de PayPal (puedes mover a config/services.php)
+  // Lee credenciales desde config/services.php o .env
   $paypalClientId = config('services.paypal.client_id', env('PAYPAL_CLIENT_ID'));
-  $paypalCurrency = config('services.paypal.currency', env('PAYPAL_CURRENCY', 'USD')); // o 'GTQ'
+  $paypalCurrency = config('services.paypal.currency', env('PAYPAL_CURRENCY', 'USD'));
+@endphp
 
-  // URLs robustas con fallback (si cambian nombres o están bajo admin.*)
+@php
   use Illuminate\Support\Facades\Route as R;
-  $paypalCreateUrl  = R::has('donations.paypal.create')
+
+  $paypalCreateUrl = R::has('donations.paypal.create')
       ? route('donations.paypal.create')
       : (R::has('admin.donations.paypal.create')
           ? route('admin.donations.paypal.create')
@@ -777,8 +781,16 @@
           : url('/donations/paypal/capture-order'));
 @endphp
 
-<!-- SDK de PayPal (solo UNA vez y después de definir $paypalClientId/$paypalCurrency) -->
+<!-- SDK de PayPal (cargar SOLO una vez en toda la página) -->
 <script src="https://www.paypal.com/sdk/js?client-id={{ $paypalClientId }}&currency={{ $paypalCurrency }}&intent=capture"></script>
+{{-- DEBUG PayPal: client-id inicia con: {{ substr($paypalClientId ?? '', 0, 8) ?: 'VACÍO' }} / currency: {{ $paypalCurrency ?? 'VACÍA' }} --}}
+
+<script>
+  // Comprobación defensiva en consola si el SDK no cargó
+  if (!window.paypal || typeof window.paypal.Buttons !== 'function') {
+    console.warn('PayPal SDK: cargando… (si no aparece en 5s, revisa client-id/adblock/HTTP 400)');
+  }
+</script>
 
 <section id="call-to-action" class="call-to-action section light-background">
   <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -932,7 +944,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return !isNaN(val) && val >= 1;
   }
 
-  // Monto rápido
+  // Botones de monto rápido
   document.querySelectorAll('.quick-amt').forEach(btn => {
     btn.addEventListener('click', () => {
       amountInput.value = parseFloat(btn.dataset.amount).toFixed(2);
@@ -940,15 +952,30 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Mostrar/ocultar y renderizar al escribir/cambiar
-  amountInput.addEventListener('input', togglePaypalVisibility);
-  amountInput.addEventListener('change', togglePaypalVisibility);
+  // Espera hasta 5s a que el SDK esté disponible antes de renderizar el botón
+  function waitForPaypalReady(cb) {
+    if (window.paypal && typeof window.paypal.Buttons === 'function') {
+      cb();
+      return;
+    }
+    const started = Date.now();
+    const int = setInterval(() => {
+      if (window.paypal && typeof window.paypal.Buttons === 'function') {
+        clearInterval(int);
+        cb();
+      } else if (Date.now() - started > 5000) {
+        clearInterval(int);
+        console.warn('PayPal SDK no se cargó en 5s (¿client-id vacío / adblock / error 400?).');
+        showError('No se pudo cargar el SDK de PayPal. Revisa tu conexión o desactiva bloqueadores.');
+      }
+    }, 200);
+  }
 
+  // Mostrar contenedor y renderizar cuando el SDK esté listo
   let paypalRendered = false;
   function togglePaypalVisibility() {
-    const valid = validAmount();
-    paypalWrapper.style.display = valid ? '' : 'none';
-    if (valid) renderPaypal();
+    paypalWrapper.style.display = '';     // siempre visible
+    waitForPaypalReady(renderPaypal);     // render cuando el SDK esté listo
   }
 
   const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
@@ -956,8 +983,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function renderPaypal() {
     if (paypalRendered) return;
-    paypalRendered = true;
+    if (!window.paypal || typeof window.paypal.Buttons !== 'function') return;
 
+    paypalRendered = true;
     paypal.Buttons({
       style: { layout: 'horizontal', label: 'donate', shape: 'pill' },
 
@@ -1035,7 +1063,7 @@ document.addEventListener('DOMContentLoaded', function () {
         await res.json();
         showOk();
         form.reset();
-        paypalRendered = false; // permite re-render si el usuario vuelve a donar
+        paypalRendered = false; // permite donar de nuevo sin recargar
         togglePaypalVisibility();
       },
 
@@ -1046,10 +1074,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }).render('#paypal-button-container');
   }
 
-  // Inicial: si ya hay un valor válido, muestra y renderiza
+  // Inicial: mostrar y renderizar
   togglePaypalVisibility();
 });
 </script>
+
 
   </main>
 
