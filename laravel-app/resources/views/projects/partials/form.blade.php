@@ -56,3 +56,70 @@
         </select>
     </div>
 </div>
+
+<!-- Fases del Proyecto -->
+<div class="row mt-4">
+    <div class="col-12">
+        <h5 class="text-primary">Fases del Proyecto</h5>
+        <hr>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-6">
+        <label for="fase_actual" class="form-label">Fase Actual</label>
+        <select name="fase_actual" class="form-select">
+            @foreach(['diagnostico' => 'Diagnóstico', 'formulacion' => 'Formulación', 'financiacion' => 'Financiación', 'ejecucion' => 'Ejecución', 'evaluacion' => 'Evaluación', 'cierre' => 'Cierre'] as $key => $nombre)
+                <option value="{{ $key }}" 
+                        {{ old('fase_actual', $project->fase_actual ?? 'diagnostico') == $key ? 'selected' : '' }}>
+                    {{ $nombre }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-4">
+        <label for="porcentaje_diagnostico" class="form-label">Diagnóstico (%)</label>
+        <input type="number" name="porcentaje_diagnostico" class="form-control" 
+               min="0" max="100" value="{{ old('porcentaje_diagnostico', $project->porcentaje_diagnostico ?? 0) }}">
+    </div>
+    <div class="col-md-4">
+        <label for="porcentaje_formulacion" class="form-label">Formulación (%)</label>
+        <input type="number" name="porcentaje_formulacion" class="form-control" 
+               min="0" max="100" value="{{ old('porcentaje_formulacion', $project->porcentaje_formulacion ?? 0) }}">
+    </div>
+    <div class="col-md-4">
+        <label for="porcentaje_financiacion" class="form-label">Financiación (%)</label>
+        <input type="number" name="porcentaje_financiacion" class="form-control" 
+               min="0" max="100" value="{{ old('porcentaje_financiacion', $project->porcentaje_financiacion ?? 0) }}">
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-4">
+        <label for="porcentaje_ejecucion" class="form-label">Ejecución (%)</label>
+        <input type="number" name="porcentaje_ejecucion" class="form-control" 
+               min="0" max="100" value="{{ old('porcentaje_ejecucion', $project->porcentaje_ejecucion ?? 0) }}">
+    </div>
+    <div class="col-md-4">
+        <label for="porcentaje_evaluacion" class="form-label">Evaluación (%)</label>
+        <input type="number" name="porcentaje_evaluacion" class="form-control" 
+               min="0" max="100" value="{{ old('porcentaje_evaluacion', $project->porcentaje_evaluacion ?? 0) }}">
+    </div>
+    <div class="col-md-4">
+        <label for="porcentaje_cierre" class="form-label">Cierre (%)</label>
+        <input type="number" name="porcentaje_cierre" class="form-control" 
+               min="0" max="100" value="{{ old('porcentaje_cierre', $project->porcentaje_cierre ?? 0) }}">
+    </div>
+</div>
+
+<!-- Texto de prueba para verificar que el formulario se renderiza completo -->
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="alert alert-success">
+            <strong>¡Formulario completo!</strong> Si ves este mensaje, el formulario se está renderizando correctamente.
+        </div>
+    </div>
+</div>

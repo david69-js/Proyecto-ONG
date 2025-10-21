@@ -18,8 +18,15 @@
         {{-- Pasamos $project y $usuarios al formulario --}}
         @include('projects.partials.form', ['project' => $project, 'usuarios' => $usuarios])
 
-        <button type="submit" class="btn btn-success mt-3">Guardar</button>
-        <a href="{{ route('projects.index') }}" class="btn btn-secondary mt-3">Cancelar</a>
+        <div class="row mt-3">
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <a href="{{ route('projects.index') }}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </div>
     </form>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection

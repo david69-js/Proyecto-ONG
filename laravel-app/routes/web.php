@@ -84,6 +84,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{project}/edit', [ProjectController::class, 'edit'])->name('edit')->middleware('permission:projects.edit');
         Route::put('/{project}', [ProjectController::class, 'update'])->name('update')->middleware('permission:projects.edit');
         Route::delete('/{project}', [ProjectController::class, 'destroy'])->name('destroy')->middleware('permission:projects.delete');
+        
+        // Project phases management
+        Route::put('/{project}/phases', [ProjectController::class, 'updatePhases'])->name('update-phases')->middleware('permission:projects.edit');
+        Route::post('/{project}/phases/upload-image', [ProjectController::class, 'uploadPhaseImage'])->name('upload-phase-image')->middleware('permission:projects.edit');
+        Route::delete('/phases/{phaseImage}', [ProjectController::class, 'deletePhaseImage'])->name('delete-phase-image')->middleware('permission:projects.edit');
     });
 
     // Locations

@@ -27,6 +27,30 @@ return new class extends Migration
         $table->string('ubicacion')->nullable();
         $table->text('resultados_esperados')->nullable();
         $table->text('resultados_obtenidos')->nullable();
+        
+        // Campos para fases del proyecto con porcentajes
+        $table->enum('fase_actual', ['diagnostico', 'formulacion', 'financiacion', 'ejecucion', 'evaluacion', 'cierre'])->default('diagnostico');
+        $table->integer('porcentaje_diagnostico')->default(0);
+        $table->integer('porcentaje_formulacion')->default(0);
+        $table->integer('porcentaje_financiacion')->default(0);
+        $table->integer('porcentaje_ejecucion')->default(0);
+        $table->integer('porcentaje_evaluacion')->default(0);
+        $table->integer('porcentaje_cierre')->default(0);
+        
+        // Campos para fechas de cada fase
+        $table->date('fecha_inicio_diagnostico')->nullable();
+        $table->date('fecha_fin_diagnostico')->nullable();
+        $table->date('fecha_inicio_formulacion')->nullable();
+        $table->date('fecha_fin_formulacion')->nullable();
+        $table->date('fecha_inicio_financiacion')->nullable();
+        $table->date('fecha_fin_financiacion')->nullable();
+        $table->date('fecha_inicio_ejecucion')->nullable();
+        $table->date('fecha_fin_ejecucion')->nullable();
+        $table->date('fecha_inicio_evaluacion')->nullable();
+        $table->date('fecha_fin_evaluacion')->nullable();
+        $table->date('fecha_inicio_cierre')->nullable();
+        $table->date('fecha_fin_cierre')->nullable();
+        
         $table->timestamps();
 
         $table->foreign('responsable_id')->references('id')->on('sys_users')->onDelete('set null');
