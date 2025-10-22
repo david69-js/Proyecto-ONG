@@ -1,0 +1,209 @@
+/* Estilos para el sidebar - Componente tabler-sidebar */
+
+/* Botón hamburguesa para móvil */
+.mobile-menu-btn {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-menu-btn:focus {
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Estilos para el modal móvil */
+#mobileSidebarModal .modal-dialog {
+    margin: 0;
+    max-width: 100%;
+}
+
+#mobileSidebarModal .modal-content {
+    border: none;
+    border-radius: 0;
+    height: 100vh;
+}
+
+#mobileSidebarModal .modal-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 1.5rem;
+}
+
+#mobileSidebarModal .modal-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+#mobileSidebarModal .modal-body {
+    padding: 0;
+    overflow-y: auto;
+}
+
+/* Contenido del sidebar móvil */
+.mobile-sidebar-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.mobile-menu-items {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Estilos para los elementos del menú móvil */
+.mobile-menu-items .list-group-item {
+    border-left: none;
+    border-right: none;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.mobile-menu-items .list-group-item:hover {
+    background-color: #f8f9fa;
+    color: #0d6efd;
+    transform: translateX(4px);
+}
+
+.mobile-menu-items .list-group-item i {
+    width: 20px;
+    text-align: center;
+    color: #6c757d;
+}
+
+.mobile-menu-items .list-group-item:hover i {
+    color: #0d6efd;
+}
+
+/* Estilos para las secciones del menú */
+.mobile-menu-items .list-group-item .fw-bold {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+}
+
+/* Información del usuario en móvil */
+.mobile-sidebar-content .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Footer del modal */
+#mobileSidebarModal .modal-footer {
+    border-top: 1px solid #dee2e6;
+    padding: 1rem 1.5rem;
+    background-color: #f8f9fa;
+}
+
+/* Estilos para el dropdown del usuario */
+.user-dropdown {
+    background: white;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    min-width: 200px;
+}
+
+.dropdown-menu {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease-in-out;
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.user-dropdown-item {
+    padding: 0.75rem 1rem;
+    color: #374151;
+    text-decoration: none;
+    border-bottom: 1px solid #f3f4f6;
+    transition: background-color 0.2s ease;
+}
+
+.user-dropdown-item:hover {
+    background-color: #f8fafc !important;
+    color: #1f2937 !important;
+}
+
+.user-dropdown-item:focus {
+    background-color: #f1f5f9 !important;
+    color: #1f2937 !important;
+    outline: none;
+}
+
+.logout-button {
+    padding: 0.75rem 1rem;
+    color: #dc2626;
+    text-decoration: none;
+    background: none;
+    border: none;
+    text-align: left;
+    transition: background-color 0.2s ease;
+}
+
+.logout-button:hover {
+    background-color: #fef2f2 !important;
+    color: #b91c1c !important;
+}
+
+.logout-button:focus {
+    background-color: #fef2f2 !important;
+    color: #b91c1c !important;
+    outline: none;
+}
+
+/* Estilos para el botón de cerrar sesión */
+.btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-outline-danger:focus {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Asegurar que el botón esté en la parte inferior */
+.mt-auto {
+    margin-top: auto !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .mobile-menu-btn {
+        display: flex !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .mobile-menu-btn {
+        display: none !important;
+    }
+}

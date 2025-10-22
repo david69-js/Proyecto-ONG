@@ -30,6 +30,9 @@
     
     <!-- Custom Button Styles -->
     <link href="{{ asset('assets/css/button-custom.css') }}" rel="stylesheet">
+    
+    <!-- Sidebar Styles -->
+    <link href="{{ asset('assets/css/sidebar.css') }}" rel="stylesheet">
 
     @stack('styles')
 </head>
