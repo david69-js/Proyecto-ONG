@@ -5,46 +5,114 @@ namespace App\Http\Controllers;
 use App\Models\HeroSection;
 use App\Models\AboutSection;
 use App\Models\Project;
+use App\Models\Event;
 use App\Models\BeneficiaryTestimonial;
 use App\Models\SponsorHighlight;
 use App\Models\DonorHighlight;
 
 class HomeController extends Controller
 {
+    /**
+     * Página principal (index original)
+     */
     public function index()
     {
         $hero = HeroSection::first();
         $about = AboutSection::first();
 
+        // Proyectos visibles en el inicio
         $projects = Project::query()
             ->where('show_in_index', true)
             ->latest('created_at')
             ->take(12)
             ->get();
 
-        // Trae SOLO los publicados, sin caché
+        // Testimonios publicados
         $testimonials = BeneficiaryTestimonial::with('beneficiary')
             ->where('is_published', true)
             ->whereNotNull('published_at')
             ->latest('published_at')
-            ->take(50) // o el número que quieras
+            ->take(50)
             ->get();
-            
- // Trae SOLO los publicados, sin caché
-            $sponsors = SponsorHighlight::with('sponsor')
-    ->published()
-    ->orderBy('is_featured','desc')
-    ->orderBy('sort_order')
-    ->get();
 
-    $donors = DonorHighlight::published()
-    ->orderBy('is_featured','desc')
-    ->orderBy('sort_order')
-    ->orderByDesc('id')
-    ->get();
+        // Patrocinadores publicados
+        $sponsors = SponsorHighlight::with('sponsor')
+            ->published()
+            ->orderByDesc('is_featured')
+            ->orderBy('sort_order')
+            ->get();
 
-        return view('index', compact('hero', 'about', 'projects', 'testimonials', 'sponsors', 'donors'));
+        // Donadores destacados
+        $donors = DonorHighlight::published()
+            ->orderByDesc('is_featured')
+            ->orderBy('sort_order')
+            ->orderByDesc('id')
+            ->get();
+
+        return view('index', compact(
+            'hero',
+            'about',
+            'projects',
+            'testimonials',
+            'sponsors',
+            'donors'
+        ));
     }
 
+    /**
+     * Página alternativa (index2) con diseño UpConstruction
+     */
+    public function index2()
+    {
+        $hero = HeroSection::first();
+        $about = AboutSection::first();
 
+        // Proyectos para mostrar
+        $projects = Project::query()
+            ->where('show_in_index', true)
+            ->latest('created_at')
+            ->take(12)
+            ->get();
+
+        // Eventos (si existen)
+        $events = Event::query()
+            ->where('status', 'publicado')
+            ->latest('start_date')
+            ->take(6)
+            ->get();
+
+        // Testimonios
+        $testimonials = BeneficiaryTestimonial::with('beneficiary')
+            ->where('is_published', true)
+            ->whereNotNull('published_at')
+            ->latest('published_at')
+            ->take(20)
+            ->get();
+
+        // Patrocinadores
+        $sponsors = SponsorHighlight::with('sponsor')
+            ->published()
+            ->orderByDesc('is_featured')
+            ->orderBy('sort_order')
+            ->get();
+
+        // Donadores
+        $donors = DonorHighlight::published()
+            ->orderByDesc('is_featured')
+            ->orderBy('sort_order')
+            ->orderByDesc('id')
+            ->get();
+
+        return view('index2', compact(
+            'hero',
+            'about',
+            'projects',
+            'events',
+            'testimonials',
+            'sponsors',
+            'donors'
+        ));
+    }
+
+    
 }

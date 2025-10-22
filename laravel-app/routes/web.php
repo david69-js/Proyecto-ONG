@@ -191,10 +191,12 @@ Route::post('/donations/paypal/capture-order', [DonationController::class, 'capt
         Route::get('about', [AboutSectionController::class, 'index'])->name('about.index');
         Route::put('about/{id}', [AboutSectionController::class, 'update'])->name('about.update');
 
-        // ====== Hero Section ======
-        Route::get('hero', [HeroSectionController::class, 'index'])->name('hero.index');
+   // ====== Hero Section ======
+Route::get('hero', [HeroSectionController::class, 'index'])->name('hero.index');
         Route::post('hero', [HeroSectionController::class, 'store'])->name('hero.store');
-        Route::put('hero/{id}', [HeroSectionController::class, 'update'])->name('hero.update');
+        Route::put('hero/{hero}', [HeroSectionController::class, 'update'])->name('hero.update');
+
+        // ====== Project Index ======
 
         // ====== Project Index (admin listado rápido) ======
         Route::prefix('projects')->name('projects.')->group(function() {
@@ -224,4 +226,6 @@ Route::post('/donations/paypal/capture-order', [DonationController::class, 'capt
         Route::delete('donors/{highlight}', [DonorHighlightController::class, 'destroy'])->name('donors.destroy');
         Route::post('donors/{highlight}/toggle-publish', [DonorHighlightController::class, 'togglePublish'])->name('donors.toggle-publish');
     });
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/index2', [HomeController::class, 'index2'])->name('home.alt');
 

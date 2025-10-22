@@ -162,6 +162,9 @@
                             <a class="dropdown-item" href="{{ route('admin.events.index') }}">
                                 <i class="fas fa-calendar-alt me-2"></i>Eventos
                             </a>
+                            <a class="dropdown-item" href="{{ route('admin.testimonials.index') }}">
+                                <i class="fas fa-star me-2"></i>Beneficiarios
+                            </a>
                             <a class="dropdown-item" href="{{ route('admin.projects.index') }}">
                                 <i class="fas fa-briefcase me-2"></i>Proyectos
                           
