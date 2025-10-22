@@ -3,7 +3,7 @@
         <i class="fas fa-bars"></i>
     </button>
 
-    <aside class="navbar navbar-vertical navbar-expand-lg navbar-dark d-none d-lg-block">
+    <aside class="navbar navbar-vertical navbar-expand-lg navbar-dark d-none custom-sidebar">
     <div class="container-fluid">
         <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="true" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

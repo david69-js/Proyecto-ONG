@@ -39,7 +39,7 @@
     max-width: 1140px;
   }
 }
-@media (min-width: 1400px) {
+@media (min-width: 1) {
   .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
     max-width: 1320px;
   }
@@ -50,7 +50,7 @@
   --bs-breakpoint-md: 768px;
   --bs-breakpoint-lg: 992px;
   --bs-breakpoint-xl: 1200px;
-  --bs-breakpoint-xxl: 1400px;
+  --bs-breakpoint-xxl: 1;
 }
 
 .row {
