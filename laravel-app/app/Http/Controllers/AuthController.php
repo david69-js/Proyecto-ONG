@@ -62,7 +62,7 @@ class AuthController extends Controller
             'last_login_ip' => $request->ip(),
         ]);
 
-        return redirect()->intended('/users');
+        return redirect()->intended('/dashboard');
     }
 
 

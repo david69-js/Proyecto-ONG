@@ -701,9 +701,11 @@ function updateBeneficiariesCard(type) {
         }
     });
     
-    // Actualizar texto del dropdown toggle
-    const dropdownToggle = document.querySelector('.dropdown-toggle');
-    dropdownToggle.textContent = data.label.split(' ')[0]; // Tomar primera palabra
+    // Actualizar texto del dropdown toggle (solo el de beneficiarios)
+    const dropdownToggle = document.querySelector('.card .dropdown-toggle');
+    if (dropdownToggle) {
+        dropdownToggle.textContent = data.label.split(' ')[0]; // Tomar primera palabra
+    }
 }
 
 // Inicializar al cargar la página
