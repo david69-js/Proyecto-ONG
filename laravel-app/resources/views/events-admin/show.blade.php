@@ -215,7 +215,7 @@
                 <div class="d-grid gap-2">
 
                     @can('update', $event)
-                        <a href="{{ route('admin.events.edit', $event) }}" class="btn btn-primary">
+                        <a href="{{ route('admin.events-admin.edit', $event) }}" class="btn btn-primary">
                             <i class="fas fa-edit"></i>
                             Editar Evento
                         </a>
@@ -264,7 +264,7 @@
                         </div>
                     @endcan
 
-                    <a href="{{ route('admin.events.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('admin.events-admin.index') }}" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i>
                         Volver a la Lista
                     </a>

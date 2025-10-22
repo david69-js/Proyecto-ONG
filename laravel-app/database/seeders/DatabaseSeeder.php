@@ -42,7 +42,7 @@ class DatabaseSeeder extends Seeder
             EventRegistrationSeeder::class,
             
             // 9. Crear productos
-            ProductSeeder::class,
+            ProductSeeder::class,   
             
             // 10. Crear donaciones
             DonationSeeder::class,

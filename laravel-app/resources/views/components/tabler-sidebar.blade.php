@@ -1,4 +1,4 @@
-<aside class="navbar navbar-vertical navbar-expand-lg navbar-dark">
+    <aside class="navbar navbar-vertical navbar-expand-lg navbar-dark">
     <div class="container-fluid">
         <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="true" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -56,8 +56,8 @@
             </div>
         </div>
         
-        <div class="collapse navbar-collapse show" id="sidebar-menu">
-            <ul class="navbar-nav pt-lg-3">
+        <div class="collapse navbar-collapse show d-flex flex-column" id="sidebar-menu" style="height: calc(100vh - 80px);">
+            <ul class="navbar-nav pt-lg-3 flex-grow-1">
                 
                 <!-- Dashboard -->
                 <li class="nav-item">
@@ -228,7 +228,7 @@
                     <!-- Gestión de Beneficiarios -->
                     @permission('beneficiaries.view')
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#navbar-beneficiaries" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#navbar-beneficiarios" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
                                 <i class="fas fa-heart"></i>
                             </span>
@@ -298,8 +298,8 @@
                     @endpermission
 <!-- Gestión de Eventos -->
 @php
-    $eventsIndex  = Route::has('admin.events.index')  ? 'admin.events.index'  : (Route::has('events.index')  ? 'events.index'  : null);
-    $eventsCreate = Route::has('admin.events.create') ? 'admin.events.create' : (Route::has('events.create') ? 'events.create' : null);
+    $eventsIndex  = Route::has('admin.events-admin.index')  ? 'admin.events-admin.index'  : (Route::has('admin.events.index')  ? 'admin.events.index'  : (Route::has('events.index')  ? 'events.index'  : null));
+    $eventsCreate = Route::has('admin.events-admin.create') ? 'admin.events-admin.create' : (Route::has('admin.events.create') ? 'admin.events.create' : (Route::has('events.create') ? 'events.create' : null));
 @endphp
 
 @permission('events.view')
@@ -330,7 +330,11 @@
         @endpermission
 
         @permission('events.reports')
-            @if(Route::has('admin.events.reports'))
+            @if(Route::has('admin.events-admin.reports'))
+            <a class="dropdown-item" href="{{ route('admin.events-admin.reports') }}">
+                <i class="fas fa-chart-bar me-2"></i> Reportes de Eventos
+            </a>
+            @elseif(Route::has('admin.events.reports'))
             <a class="dropdown-item" href="{{ route('admin.events.reports') }}">
                 <i class="fas fa-chart-bar me-2"></i> Reportes de Eventos
             </a>
@@ -350,28 +354,45 @@
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
                                 <i class="fas fa-hand-holding-usd"></i>
                             </span>
-                           <span class="nav-link-title">Donaciones</span>
-</a>
-<div class="dropdown-menu">
-    @permission('donations.view')
-<a class="dropdown-item" href="{{ route('admin.donations.index') }}">...</a>
-        <i class="fas fa-list me-2"></i> Listar Donaciones
-    </a>
-    @endpermission
+                            <span class="nav-link-title">Donaciones</span>
+                        </a>
+                        <div class="dropdown-menu">
+                            @permission('donations.view')
+                            @if(Route::has('admin.donations-admin.index'))
+                            <a class="dropdown-item" href="{{ route('admin.donations-admin.index') }}">
+                                <i class="fas fa-list me-2"></i> Listar Donaciones
+                            </a>
+                            @elseif(Route::has('admin.donations.index'))
+                            <a class="dropdown-item" href="{{ route('admin.donations.index') }}">
+                                <i class="fas fa-list me-2"></i> Listar Donaciones
+                            </a>
+                            @endif
+                            @endpermission
 
-    @permission('donations.create')
-    <a class="dropdown-item" href="{{ route('admin.donations.create') }}">
-        <i class="fas fa-plus me-2"></i> Registrar Donación
-    </a>
-    @endpermission
+                            @permission('donations.create')
+                            @if(Route::has('admin.donations-admin.create'))
+                            <a class="dropdown-item" href="{{ route('admin.donations-admin.create') }}">
+                                <i class="fas fa-plus me-2"></i> Registrar Donación
+                            </a>
+                            @elseif(Route::has('admin.donations.create'))
+                            <a class="dropdown-item" href="{{ route('admin.donations.create') }}">
+                                <i class="fas fa-plus me-2"></i> Registrar Donación
+                            </a>
+                            @endif
+                            @endpermission
 
-    @permission('donations.reports')
-    <a class="dropdown-item" href="{{ route('admin.donations.reports') }}">
-        <i class="fas fa-chart-bar me-2"></i> Reportes de Donaciones
-    </a>
-    @endpermission
-</div>
-
+                            @permission('donations.reports')
+                            @if(Route::has('admin.donations-admin.reports'))
+                            <a class="dropdown-item" href="{{ route('admin.donations-admin.reports') }}">
+                                <i class="fas fa-chart-bar me-2"></i> Reportes de Donaciones
+                            </a>
+                            @elseif(Route::has('admin.donations.reports'))
+                            <a class="dropdown-item" href="{{ route('admin.donations.reports') }}">
+                                <i class="fas fa-chart-bar me-2"></i> Reportes de Donaciones
+                            </a>
+                            @endif
+                            @endpermission
+                        </div>
                     </li>
                     @endpermission
 
@@ -436,6 +457,17 @@
                 @endhasanyrole
 
             </ul>
+            
+            <!-- Botón de Cerrar Sesión -->
+            <div class="mt-auto p-3">
+                <form method="POST" action="{{ route('logout') }}" class="w-100">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        Cerrar Sesión
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </aside>
@@ -480,5 +512,29 @@
     background-color: #fef2f2 !important;
     color: #b91c1c !important;
     outline: none;
+}
+
+/* Estilos para el botón de cerrar sesión */
+.btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-outline-danger:focus {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Asegurar que el botón esté en la parte inferior */
+.mt-auto {
+    margin-top: auto !important;
 }
 </style>

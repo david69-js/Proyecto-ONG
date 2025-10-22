@@ -84,8 +84,11 @@ class EventController extends Controller
             'completed' => 'Completado',
         ];
 
-        // ÚNICA VISTA ADMIN
-        return view('sections.events.index', compact('events', 'projects', 'eventTypes', 'eventStatuses'));
+        // Detectar si es ruta events-admin
+        $isEventsAdminRoute = request()->routeIs('admin.events-admin.*');
+        $viewName = $isEventsAdminRoute ? 'events-admin.index' : 'sections.events.index';
+        
+        return view($viewName, compact('events', 'projects', 'eventTypes', 'eventStatuses'));
     }
 
     /**
@@ -132,12 +135,79 @@ class EventController extends Controller
     }
 
     /**
+     * Mostrar formulario de creación
+     */
+    public function create()
+    {
+        $projects = Project::where('estado', '!=', 'completado')->get();
+        
+        $eventTypes = [
+            'fundraising' => 'Recaudación de Fondos',
+            'volunteer'   => 'Voluntariado',
+            'awareness'   => 'Concientización',
+            'community'   => 'Comunitario',
+            'training'    => 'Capacitación',
+            'other'       => 'Otro',
+        ];
+
+        $eventStatuses = [
+            'draft'     => 'Borrador',
+            'published' => 'Publicado',
+            'cancelled' => 'Cancelado',
+            'completed' => 'Completado',
+        ];
+
+        // Detectar si es ruta events-admin
+        $isEventsAdminRoute = request()->routeIs('admin.events-admin.*');
+        $viewName = $isEventsAdminRoute ? 'events-admin.create' : 'events.create';
+        
+        return view($viewName, compact('projects', 'eventTypes', 'eventStatuses'));
+    }
+
+    /**
+     * Mostrar formulario de edición
+     */
+    public function edit(Event $event)
+    {
+        $event->load(['creator', 'project']);
+        
+        $projects = Project::where('estado', '!=', 'completado')->get();
+        
+        $eventTypes = [
+            'fundraising' => 'Recaudación de Fondos',
+            'volunteer'   => 'Voluntariado',
+            'awareness'   => 'Concientización',
+            'community'   => 'Comunitario',
+            'training'    => 'Capacitación',
+            'other'       => 'Otro',
+        ];
+
+        $eventStatuses = [
+            'draft'     => 'Borrador',
+            'published' => 'Publicado',
+            'cancelled' => 'Cancelado',
+            'completed' => 'Completado',
+        ];
+
+        // Detectar si es ruta events-admin
+        $isEventsAdminRoute = request()->routeIs('admin.events-admin.*');
+        $viewName = $isEventsAdminRoute ? 'events-admin.edit' : 'events.edit';
+        
+        return view($viewName, compact('event', 'projects', 'eventTypes', 'eventStatuses'));
+    }
+
+    /**
      * Mostrar detalle público (si lo usas)
      */
     public function show(Event $event)
     {
         $event->load(['creator', 'project', 'registrations']);
-        return view('events.show', compact('event'));
+        
+        // Detectar si es ruta events-admin
+        $isEventsAdminRoute = request()->routeIs('admin.events-admin.*');
+        $viewName = $isEventsAdminRoute ? 'events-admin.show' : 'events.show';
+        
+        return view($viewName, compact('event'));
     }
 
     /**
@@ -304,4 +374,85 @@ class EventController extends Controller
     return view('events.public_show', compact('event'));
 }
 
+    /**
+     * Mostrar reportes de eventos
+     */
+    public function reports(Request $request)
+    {
+        $query = Event::with(['creator', 'project', 'registrations']);
+
+        // Filtros para reportes
+        if ($request->filled('date_from')) {
+            $query->where('start_date', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->where('start_date', '<=', $request->date_to);
+        }
+
+        if ($request->filled('event_type')) {
+            $query->where('event_type', $request->event_type);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $events = $query->orderBy('start_date', 'desc')->get();
+
+        // Estadísticas
+        $totalEvents = $events->count();
+        $publishedEvents = $events->where('status', 'published')->count();
+        $draftEvents = $events->where('status', 'draft')->count();
+        $cancelledEvents = $events->where('status', 'cancelled')->count();
+        $completedEvents = $events->where('status', 'completed')->count();
+
+        // Eventos por tipo
+        $eventsByType = $events->groupBy('event_type')->map->count();
+
+        // Eventos por mes
+        $eventsByMonth = $events->groupBy(function($event) {
+            return $event->start_date->format('Y-m');
+        })->map->count();
+
+        // Total de registros
+        $totalRegistrations = $events->sum(function($event) {
+            return $event->registrations->count();
+        });
+
+        $eventTypes = [
+            'fundraising' => 'Recaudación de Fondos',
+            'volunteer'   => 'Voluntariado',
+            'awareness'   => 'Concientización',
+            'community'   => 'Comunitario',
+            'training'    => 'Capacitación',
+            'other'       => 'Otro',
+        ];
+
+        $eventStatuses = [
+            'all'       => 'Todos',
+            'draft'     => 'Borrador',
+            'published' => 'Publicado',
+            'cancelled' => 'Cancelado',
+            'completed' => 'Completado',
+        ];
+
+        // Detectar si es ruta events-admin
+        $isEventsAdminRoute = request()->routeIs('admin.events-admin.*');
+        $viewName = $isEventsAdminRoute ? 'events-admin.reports' : 'events.reports';
+        
+        return view($viewName, compact(
+            'events', 
+            'totalEvents', 
+            'publishedEvents', 
+            'draftEvents', 
+            'cancelledEvents', 
+            'completedEvents',
+            'eventsByType',
+            'eventsByMonth',
+            'totalRegistrations',
+            'eventTypes',
+            'eventStatuses'
+        ));
+    }
 }

@@ -16,7 +16,7 @@
             </div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('donations.update', $donation) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('admin.donations-admin.update', $donation) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         
@@ -274,7 +274,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            <a href="{{ route('donations.show', $donation) }}" class="btn btn-secondary">
+                            <a href="{{ route('admin.donations-admin.show', $donation) }}" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Cancelar
                             </a>
                             <button type="submit" class="btn btn-primary">

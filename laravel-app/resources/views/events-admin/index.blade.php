@@ -22,12 +22,12 @@
                             <i class="fas fa-search"></i>
                             <span class="d-none d-sm-inline ml-1">Buscar</span>
                         </button>
-                        <a href="{{ route('admin.events.index') }}" class="btn btn-secondary btn-sm mr-2">
+                        <a href="{{ route('admin.events-admin.index') }}" class="btn btn-secondary btn-sm mr-2">
                             <i class="fas fa-times"></i>
                             <span class="d-none d-sm-inline ml-1">Limpiar</span>
                         </a>
                         @permission('events.create')
-                        <a href="{{ route('admin.events.create') }}" class="btn btn-success btn-sm">
+                        <a href="{{ route('admin.events-admin.create') }}" class="btn btn-success btn-sm">
                             <i class="fas fa-plus mr-1"></i>
                             Nuevo Evento
                         </a>
@@ -37,7 +37,7 @@
 
                 <!-- Filtros -->
                 <div class="card-body">
-                    <form method="GET" action="{{ route('admin.events.index') }}" id="filterForm" class="mb-4">
+                    <form method="GET" action="{{ route('admin.events-admin.index') }}" id="filterForm" class="mb-4">
                         <div class="row">
                             <div class="col-12 col-sm-6 col-md-3">
                                 <div class="form-group">
@@ -203,20 +203,20 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('admin.events.show', $event) }}" 
+                                                <a href="{{ route('admin.events-admin.show', $event) }}" 
                                                    class="btn btn-sm btn-outline-primary" 
                                                    data-toggle="tooltip" title="Ver detalles">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                                 @permission('events.edit')
-                                                <a href="{{ route('admin.events.edit', $event) }}" 
+                                                <a href="{{ route('admin.events-admin.edit', $event) }}" 
                                                    class="btn btn-sm btn-outline-warning" 
                                                    data-toggle="tooltip" title="Editar">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 @endpermission
                                                 @permission('events.delete')
-                                                <form method="POST" action="{{ route('admin.events.destroy', $event) }}" 
+                                                <form method="POST" action="{{ route('admin.events-admin.destroy', $event) }}" 
                                                       class="d-inline" 
                                                       onsubmit="return confirm('¿Estás seguro de eliminar este evento?')">
                                                     @csrf
@@ -276,17 +276,17 @@
                                             <i class="fas fa-ellipsis-v"></i>
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="{{ route('admin.events.show', $event) }}">
+                                            <a class="dropdown-item" href="{{ route('admin.events-admin.show', $event) }}">
                                                 <i class="fas fa-eye mr-2"></i>Ver detalles
                                             </a>
                                             @permission('events.edit')
-                                            <a class="dropdown-item" href="{{ route('admin.events.edit', $event) }}">
+                                            <a class="dropdown-item" href="{{ route('admin.events-admin.edit', $event) }}">
                                                 <i class="fas fa-edit mr-2"></i>Editar
                                             </a>
                                             @endpermission
                                             @permission('events.delete')
                                             <div class="dropdown-divider"></div>
-                                            <form method="POST" action="{{ route('admin.events.destroy', $event) }}" 
+                                            <form method="POST" action="{{ route('admin.events-admin.destroy', $event) }}" 
                                                   onsubmit="return confirm('¿Eliminar evento?')">
                                                 @csrf
                                                 @method('DELETE')
