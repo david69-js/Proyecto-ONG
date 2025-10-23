@@ -83,7 +83,7 @@
 
     {{-- Botón de regreso --}}
     <div class="mt-5 text-center">
-      <a href="{{ route('home.alt') }}#events" class="btn btn-outline-primary px-4 py-2">
+      <a href="{{ route('home') }}#events" class="btn btn-outline-primary px-4 py-2">
         <i class="bi bi-arrow-left"></i> Volver a Eventos
       </a>
     </div>
