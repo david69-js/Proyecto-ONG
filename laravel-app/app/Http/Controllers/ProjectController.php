@@ -23,7 +23,6 @@ class ProjectController extends Controller
 
         return view('projects.index', compact('projects'));
     }
-    
 
     public function create()
     {
@@ -64,7 +63,7 @@ class ProjectController extends Controller
 
         $project = Project::create($validated);
 
-        // Handle phase images upload
+        // Manejar imágenes por fase
         if ($request->has('phase_images_data')) {
             $this->handlePhaseImagesUpload($request, $project);
         }
@@ -95,7 +94,6 @@ class ProjectController extends Controller
         ]);
     }
 
-
     public function update(Request $request, Project $project)
     {
         // Verificar autorización
@@ -124,7 +122,7 @@ class ProjectController extends Controller
 
         $project->update($validated);
 
-        // Handle phase images upload
+        // Manejar imágenes por fase
         if ($request->has('phase_images_data')) {
             $this->handlePhaseImagesUpload($request, $project);
         }
@@ -138,7 +136,7 @@ class ProjectController extends Controller
         // Verificar autorización
         $this->authorize('delete', $project);
 
-        // Delete phase images
+        // Eliminar imágenes de fase
         foreach ($project->phaseImages as $image) {
             Storage::disk('public')->delete($image->image_path);
         }
@@ -149,17 +147,14 @@ class ProjectController extends Controller
     }
 
     /**
-     * Delete a phase image
+     * Eliminar imagen por fase
      */
     public function deletePhaseImage(ProjectPhaseImage $image)
     {
         // Verificar autorización
         $this->authorize('update', $image->project);
 
-        // Eliminar archivo físico
         Storage::disk('public')->delete($image->image_path);
-
-        // Eliminar registro de la base de datos
         $image->delete();
 
         return response()->json([
@@ -169,7 +164,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * Handle phase images upload
+     * Manejar carga de imágenes por fase
      */
     private function handlePhaseImagesUpload(Request $request, Project $project)
     {
@@ -199,4 +194,21 @@ class ProjectController extends Controller
             }
         }
     }
+
+    /**
+     *Publicar o despublicar proyecto
+     */
+public function togglePublish(Project $project)
+{
+    // Cambiar el estado actual
+    $project->is_published = !$project->is_published;
+    $project->save();
+
+    // Mensaje según la acción
+    $message = $project->is_published
+        ? 'El proyecto ha sido publicado correctamente y ahora es visible en el sitio público.'
+        : 'El proyecto ha sido despublicado y ya no aparecerá en el sitio público.';
+
+    return redirect()->back()->with('success', $message);
+}
 }
