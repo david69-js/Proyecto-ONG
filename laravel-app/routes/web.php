@@ -18,6 +18,7 @@ use App\Http\Controllers\BeneficiaryTestimonialController;
 use App\Http\Controllers\SponsorHighlightController;
 use App\Http\Controllers\DonorHighlightController;
 use App\Http\Controllers\ProjectReportController;
+use App\Http\Controllers\VisitorTrackingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -264,6 +265,11 @@ Route::get('hero', [HeroSectionController::class, 'index'])->name('hero.index');
             Route::get('projects/{project}', [ProjectReportController::class, 'show'])->name('projects.show');
             Route::get('projects/export/pdf', [ProjectReportController::class, 'export'])->name('projects.export');
             Route::get('projects/{project}/export/pdf', [ProjectReportController::class, 'exportProject'])->name('projects.export-project');
+        });
+
+        // ====== Visitor Tracking ======
+        Route::prefix('visitor-tracking')->name('visitor-tracking.')->group(function () {
+            Route::get('/', [VisitorTrackingController::class, 'index'])->name('index');
         });
     });
 Route::get('/', [HomeController::class, 'index'])->name('home');
