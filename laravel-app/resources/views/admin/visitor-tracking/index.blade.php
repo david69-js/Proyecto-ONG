@@ -1,10 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.tabler')
 
 @section('title', 'Visitor Tracking - Estadísticas de Visitantes')
 
 @section('header', 'Visitor Tracking')
 
 @section('content')
+
 <div class="row">
     <!-- Estadísticas Generales -->
     <div class="col-lg-3 col-md-6 mb-4">
