@@ -17,6 +17,7 @@ use App\Http\Controllers\ProjectIndexController;
 use App\Http\Controllers\BeneficiaryTestimonialController;
 use App\Http\Controllers\SponsorHighlightController;
 use App\Http\Controllers\DonorHighlightController;
+use App\Http\Controllers\ProjectReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -256,6 +257,14 @@ Route::get('hero', [HeroSectionController::class, 'index'])->name('hero.index');
         Route::put('donors/{highlight}', [DonorHighlightController::class, 'update'])->name('donors.update');
         Route::delete('donors/{highlight}', [DonorHighlightController::class, 'destroy'])->name('donors.destroy');
         Route::post('donors/{highlight}/toggle-publish', [DonorHighlightController::class, 'togglePublish'])->name('donors.toggle-publish');
+
+        // ====== Project Reports ======
+        Route::prefix('reports')->name('reports.')->group(function () {
+            Route::get('projects', [ProjectReportController::class, 'index'])->name('projects.index');
+            Route::get('projects/{project}', [ProjectReportController::class, 'show'])->name('projects.show');
+            Route::get('projects/export/pdf', [ProjectReportController::class, 'export'])->name('projects.export');
+            Route::get('projects/{project}/export/pdf', [ProjectReportController::class, 'exportProject'])->name('projects.export-project');
+        });
     });
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/index2', [HomeController::class, 'index2'])->name('home.alt');

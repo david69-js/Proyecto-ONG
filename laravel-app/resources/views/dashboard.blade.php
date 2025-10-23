@@ -316,7 +316,7 @@
 
                     @permission('reports.view')
                     <div class="col-md-6 col-lg-4 mb-3">
-                        <a href="{{ route('admin.donations.reports') }}" class="btn btn-outline-secondary w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
+                        <a href="{{ route('admin.reports.projects.index') }}" class="btn btn-outline-secondary w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
                             <i class="fas fa-chart-bar fa-2x mb-2"></i>
                             <strong>Ver Reportes</strong>
                             <small class="text-muted">Estadísticas e informes</small>

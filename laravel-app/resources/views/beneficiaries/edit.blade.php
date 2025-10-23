@@ -17,11 +17,6 @@
                         <i class="fas fa-user-edit mr-2"></i>
                         Editar Beneficiario: {{ $beneficiary->name }}
                     </h3>
-                    <div class="card-tools">
-                        <a href="{{ route('beneficiaries.index') }}" class="btn btn-tool" data-toggle="tooltip" title="Volver a la lista">
-                            <i class="fas fa-arrow-left"></i>
-                        </a>
-                    </div>
                 </div>
 
                 @if ($errors->any())

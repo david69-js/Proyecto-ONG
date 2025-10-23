@@ -445,13 +445,18 @@
                             <span class="nav-link-title">Reportes</span>
                         </a>
                         <div class="dropdown-menu">
+                            @permission('reports.view')
+                            <a class="dropdown-item" href="{{ route('admin.reports.projects.index') }}">
+                                <i class="fas fa-tachometer-alt me-2"></i>Dashboard de Reportes
+                            </a>
+                            @endpermission
                             @permission('reports.impact-statistics')
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="{{ route('admin.reports.projects.index') }}">
                                 <i class="fas fa-chart-pie me-2"></i>Estadísticas de Impacto
                             </a>
                             @endpermission
                             @permission('reports.export')
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="{{ url('/admin/reports/projects/export/pdf') }}">
                                 <i class="fas fa-download me-2"></i>Exportar Informes
                             </a>
                             @endpermission
@@ -806,17 +811,51 @@
                                     <div class="fw-bold text-muted mb-2">Reportes</div>
                                 </div>
                                 @permission('reports.impact-statistics')
-                                <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                                <a href="{{ route('admin.reports.projects.index') }}" class="list-group-item list-group-item-action d-flex align-items-center">
                                     <i class="fas fa-chart-pie me-3"></i>
                                     Estadísticas de Impacto
                                 </a>
                                 @endpermission
                                 @permission('reports.export')
-                                <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                                <a href="{{ url('/admin/reports/projects/export/pdf') }}" class="list-group-item list-group-item-action d-flex align-items-center">
                                     <i class="fas fa-download me-3"></i>
                                     Exportar Informes
                                 </a>
                                 @endpermission
+                                @endpermission
+
+                                <!-- Reportes Adicionales -->
+                                @permission('reports.view')
+                                <div class="list-group-item">
+                                    <div class="dropdown">
+                                        <a class="dropdown-toggle text-decoration-none d-flex align-items-center" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-file-alt me-3"></i>
+                                            <span>Reportes Adicionales</span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            @permission('reports.export')
+                                            <a class="dropdown-item" href="{{ url('/admin/reports/projects/export/pdf') }}">
+                                                <i class="fas fa-download me-2"></i>
+                                                Exportar PDF Completo
+                                            </a>
+                                            @endpermission
+                                            @permission('reports.impact-statistics')
+                                            <a class="dropdown-item" href="{{ route('admin.reports.projects.index') }}">
+                                                <i class="fas fa-chart-line me-2"></i>
+                                                Análisis de Proyectos
+                                            </a>
+                                            @endpermission
+                                            <div class="dropdown-divider"></div>
+                                            <h6 class="dropdown-header">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                Próximamente
+                                            </h6>
+                                            <span class="dropdown-item-text text-muted small">
+                                                Reportes de donaciones, beneficiarios y eventos
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                                 @endpermission
                             @endhasanyrole
                         </div>

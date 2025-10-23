@@ -5,12 +5,7 @@
 @section('page-description', 'Asignar permisos al usuario: ' . $user->full_name)
 
 @section('content')
-<div class="container-fluid">
-    <!-- Navegación -->
-    <x-head-admin />
-    <!-- Fin Navegación -->
-
-    <div class="row">
+<div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
