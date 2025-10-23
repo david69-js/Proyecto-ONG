@@ -50,15 +50,6 @@ class Project extends Model
     /**
      * Conversiones automáticas de tipo.
      */
-    protected $casts = [
-        'is_published'   => 'boolean',
-        'fecha_inicio'   => 'date',
-        'fecha_fin'      => 'date',
-        'presupuesto_total' => 'decimal:2',
-        'fondos_asignados'  => 'decimal:2',
-        'fondos_ejecutados' => 'decimal:2',
-    ];
-
     /*-----------------------------------------
      | RELACIONES
      |-----------------------------------------*/
