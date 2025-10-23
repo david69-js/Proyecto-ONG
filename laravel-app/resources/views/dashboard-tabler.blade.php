@@ -262,7 +262,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('donations.show', $donation) }}" class="btn btn-sm btn-outline-primary">
+                                    <a href="{{ route('admin.donations-admin.show', $donation) }}" class="btn btn-sm btn-outline-primary">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 </td>

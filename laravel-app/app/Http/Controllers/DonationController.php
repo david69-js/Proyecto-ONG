@@ -41,7 +41,7 @@ class DonationController extends Controller
     private function routeName(string $suffix): string
     {
         $admin = "admin.donations.$suffix";
-        $flat  = "donations.$suffix";
+        $flat  = "admin.$suffix";
         return app('router')->has($admin) ? $admin : $flat;
     }
 
@@ -184,7 +184,7 @@ class DonationController extends Controller
 
         $donation = Donation::create($data);
 
-        return redirect()->route($this->routeName('show'), $donation)
+        return redirect()->route($this->routeName('donations-admin.show'), $donation)
             ->with('success', 'Donación creada exitosamente.');
     }
 
