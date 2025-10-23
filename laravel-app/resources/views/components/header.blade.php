@@ -20,7 +20,7 @@
     <div class="container position-relative d-flex align-items-center justify-content-between">
       <a href="index.html" class="logo d-flex align-items-center">
         <!-- Logo de Habitat Guatemala -->
-        <img src="assets/img/habitat-logo.webp" alt="Habitat Guatemala" style="height:50px;">
+       
         <h1 class="sitename ms-2">Habitat Guatemala</h1>
       </a>
 

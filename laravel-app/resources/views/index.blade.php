@@ -14,6 +14,10 @@
     use App\Models\HeroSection;
     $hero = HeroSection::first();
 @endphp 
+@php
+    use App\Models\SponsorHighlight;
+    $sponsors = SponsorHighlight::first();
+@endphp 
 
 
    <!-- Sección Hero -->
@@ -476,7 +480,12 @@
 
     {{-- Grid de tarjetas (todos los publicados; omite el destacado si quieres) --}}
     <div class="patrocinador-grid" data-aos="fade-up" data-aos-delay="400">
-      @forelse(($sponsors ?? collect()) as $sp)
+      @php
+  $validSponsors = $sponsors instanceof \Illuminate\Support\Collection ? $sponsors : collect();
+@endphp
+
+@forelse($validSponsors as $sp)
+
         <div class="patro-card" data-aos="flip-left" data-aos-delay="{{ 100 + ($loop->index % 6)*100 }}">
           <div class="patro-icon">
             <img src="{{ $sp->logo_path ? asset('storage/'.$sp->logo_path) : asset('assets/img/construction/badge-1.webp') }}"
@@ -489,14 +498,9 @@
           </div>
         </div>
       @empty
-        <p class="text-center w-100">Pronto anunciaremos nuestros patrocinadores.</p>
+        <p class="text-center w-100">Nuestros Patrocinadores.</p>
       @endforelse
     </div>
-
-
-  </div>
-</section>
-<!-- Fin Sección de Beneficiarios -->
 
 
 <!-- Donadores Section -->
