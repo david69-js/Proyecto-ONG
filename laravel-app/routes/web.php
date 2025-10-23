@@ -27,6 +27,7 @@ use App\Models\Event;
 use App\Models\Sponsor;
 use App\Models\DonorHighlight;
 use App\Models\BeneficiaryTestimonial;
+use App\Http\Controllers\VisitorTrackingController;
 /*
 |--------------------------------------------------------------------------
 | Rutas públicas
@@ -214,6 +215,10 @@ Route::middleware(['auth'])
     ->name('admin.')
     ->withoutMiddleware(['permission','any.permission'])
     ->group(function () {
+        Route::prefix('visitor-tracking')->name('visitor-tracking.')->group(function () {
+            Route::get('/', [VisitorTrackingController::class, 'index'])->name('index');
+        });
+        
 
         // ====== Events ======
         Route::resource('events', EventController::class)->names('events');

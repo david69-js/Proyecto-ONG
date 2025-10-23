@@ -113,6 +113,9 @@
 <!-- Custom JS -->
 <script src="{{ asset('assets/js/main.js') }}"></script>
 
+<!-- Visitor Tracking JS -->
+<script src="{{ asset('assets/js/visitor-tracking.js') }}"></script>
+
 @stack('scripts')
 </body>
 </html>

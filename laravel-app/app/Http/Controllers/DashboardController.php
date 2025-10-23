@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\Event;
 use App\Models\Sponsor;
 use App\Models\Location;
+use App\Models\VisitorTracking;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -139,6 +140,17 @@ class DashboardController extends Controller
             })
             ->countBy();
 
+        // Estadísticas de Visitor Tracking
+        $visitor_stats = [
+            'total_visitors_today' => VisitorTracking::whereDate('created_at', Carbon::today())->distinct('session_id')->count(),
+            'total_visitors_week' => VisitorTracking::where('created_at', '>=', Carbon::now()->subDays(7))->distinct('session_id')->count(),
+            'total_page_views_today' => VisitorTracking::whereDate('created_at', Carbon::today())->count(),
+            'active_visitors_now' => VisitorTracking::getActiveVisitors(5)->count(),
+            'top_pages_today' => VisitorTracking::getTopPages(5),
+            'visitor_stats_week' => VisitorTracking::getVisitorStats(7),
+            'device_stats' => VisitorTracking::getDeviceStats(),
+        ];
+
         return view('dashboard', compact(
             'stats',
             'recent_projects',
@@ -148,7 +160,8 @@ class DashboardController extends Controller
             'monthly_stats',
             'projects_by_status',
             'donations_by_status',
-            'users_by_role'
+            'users_by_role',
+            'visitor_stats'
         ));
     }
 }

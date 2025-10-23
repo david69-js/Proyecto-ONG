@@ -263,6 +263,149 @@
     </div>
 </div>
 
+<!-- Tercera fila: Visitor Tracking -->
+<div class="row row-deck row-cards mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-line me-2"></i>Visitor Tracking - Estadísticas en Tiempo Real
+                </h3>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="refreshVisitorStats()">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                    <a href="{{ route('admin.visitor-tracking.index') }}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-chart-bar"></i> Ver Detalles
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Tarjetas de Visitor Tracking -->
+                <div class="row mb-4">
+                    <div class="col-sm-6 col-lg-3 mb-3">
+                        <div class="card border-primary">
+                            <div class="card-body text-center">
+                                <div class="h2 text-primary mb-2">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="h3 mb-1" id="visitors-today">{{ $visitor_stats['total_visitors_today'] ?? 0 }}</div>
+                                <div class="text-muted">Visitantes Hoy</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6 col-lg-3 mb-3">
+                        <div class="card border-success">
+                            <div class="card-body text-center">
+                                <div class="h2 text-success mb-2">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <div class="h3 mb-1" id="page-views-today">{{ $visitor_stats['total_page_views_today'] ?? 0 }}</div>
+                                <div class="text-muted">Páginas Vistas Hoy</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6 col-lg-3 mb-3">
+                        <div class="card border-info">
+                            <div class="card-body text-center">
+                                <div class="h2 text-info mb-2">
+                                    <i class="fas fa-user-clock"></i>
+                                </div>
+                                <div class="h3 mb-1" id="active-visitors-now">{{ $visitor_stats['active_visitors_now'] ?? 0 }}</div>
+                                <div class="text-muted">Visitantes Activos</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6 col-lg-3 mb-3">
+                        <div class="card border-warning">
+                            <div class="card-body text-center">
+                                <div class="h2 text-warning mb-2">
+                                    <i class="fas fa-calendar-week"></i>
+                                </div>
+                                <div class="h3 mb-1" id="visitors-week">{{ $visitor_stats['total_visitors_week'] ?? 0 }}</div>
+                                <div class="text-muted">Esta Semana</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráfico y tabla de páginas más visitadas -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Visitantes por Día (Últimos 7 días)</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="visitorsChart" height="100"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Páginas Más Visitadas Hoy</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group list-group-flush" id="top-pages-list">
+                                    @if(isset($visitor_stats['top_pages_today']) && $visitor_stats['top_pages_today']->count() > 0)
+                                        @foreach($visitor_stats['top_pages_today']->take(5) as $page)
+                                            <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                                <div>
+                                                    <small class="text-muted">{{ Str::limit($page->page_title ?: $page->page_url, 30) }}</small>
+                                                </div>
+                                                <span class="badge bg-primary rounded-pill">{{ $page->visits }}</span>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="text-center text-muted py-3">
+                                            <i class="fas fa-info-circle"></i><br>
+                                            <small>No hay datos de visitas hoy</small>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estadísticas de dispositivos -->
+                <div class="row mt-4">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Dispositivos</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="deviceChart" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Visitantes Activos en Tiempo Real</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="active-visitors-list" style="max-height: 200px; overflow-y: auto;">
+                                    <div class="text-center text-muted">
+                                        <i class="fas fa-spinner fa-spin"></i> Cargando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row row-deck row-cards mt-4">
     <!-- Acciones Rápidas -->
     <div class="col-12">
@@ -594,6 +737,7 @@
 @endsection
 
 @push('styles')
+<link href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css" rel="stylesheet">
 <style>
     .card {
         border: 1px solid rgba(0, 0, 0, 0.05);
@@ -653,6 +797,7 @@
 @endpush
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 <script>
 // Datos de beneficiarios para el card interactivo
 const beneficiariesData = {
@@ -712,6 +857,281 @@ function updateBeneficiariesCard(type) {
 document.addEventListener('DOMContentLoaded', function() {
     // Hacer funcional el dropdown de beneficiarios
     updateBeneficiariesCard('active');
+    
+    // Inicializar visitor tracking
+    initializeVisitorTracking();
+});
+
+// Visitor Tracking JavaScript para Dashboard
+let visitorsChart, deviceChart;
+let autoRefreshInterval;
+
+// Inicializar visitor tracking
+function initializeVisitorTracking() {
+    loadVisitorCharts();
+    loadActiveVisitors();
+    startAutoRefresh();
+}
+
+// Cargar gráficos de visitor tracking
+async function loadVisitorCharts() {
+    try {
+        // Cargar estadísticas de la semana
+        const statsResponse = await fetch('/api/visitor-tracking/stats?days=7');
+        const statsData = await statsResponse.json();
+        
+        if (statsData.success) {
+            updateVisitorsChart(statsData.data);
+        }
+
+        // Cargar estadísticas de dispositivos
+        const deviceResponse = await fetch('/api/visitor-tracking/device-stats');
+        const deviceData = await deviceResponse.json();
+        
+        if (deviceData.success) {
+            updateDeviceChart(deviceData.data);
+        }
+    } catch (error) {
+        console.error('Error cargando gráficos de visitor tracking:', error);
+    }
+}
+
+// Actualizar gráfico de visitantes
+function updateVisitorsChart(stats) {
+    const ctx = document.getElementById('visitorsChart').getContext('2d');
+    
+    if (visitorsChart) {
+        visitorsChart.destroy();
+    }
+    
+    const labels = stats.map(stat => {
+        const date = new Date(stat.date);
+        return date.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' });
+    });
+    
+    const visitors = stats.map(stat => stat.unique_visitors);
+    const pageViews = stats.map(stat => stat.total_page_views);
+    
+    visitorsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Visitantes Únicos',
+                data: visitors,
+                borderColor: '#36A2EB',
+                backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                tension: 0.4,
+                fill: true
+            }, {
+                label: 'Páginas Vistas',
+                data: pageViews,
+                borderColor: '#FF6384',
+                backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                tension: 0.4,
+                fill: true,
+                yAxisID: 'y1'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    beginAtZero: true
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    beginAtZero: true,
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+}
+
+// Actualizar gráfico de dispositivos
+function updateDeviceChart(stats) {
+    const ctx = document.getElementById('deviceChart').getContext('2d');
+    
+    if (deviceChart) {
+        deviceChart.destroy();
+    }
+    
+    const deviceData = {};
+    
+    stats.forEach(stat => {
+        deviceData[stat.device_type] = (deviceData[stat.device_type] || 0) + stat.visitors;
+    });
+    
+    deviceChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(deviceData),
+            datasets: [{
+                data: Object.values(deviceData),
+                backgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56',
+                    '#4BC0C0',
+                    '#9966FF'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            }
+        }
+    });
+}
+
+// Cargar visitantes activos
+async function loadActiveVisitors() {
+    try {
+        const response = await fetch('/api/visitor-tracking/active-visitors?minutes=5');
+        const data = await response.json();
+        
+        if (data.success) {
+            updateActiveVisitorsList(data.data, data.count);
+        }
+    } catch (error) {
+        console.error('Error cargando visitantes activos:', error);
+    }
+}
+
+// Actualizar lista de visitantes activos
+function updateActiveVisitorsList(visitors, count) {
+    const container = document.getElementById('active-visitors-list');
+    
+    if (count === 0) {
+        container.innerHTML = '<div class="text-center text-muted py-3"><i class="fas fa-info-circle"></i><br><small>No hay visitantes activos</small></div>';
+        return;
+    }
+    
+    let html = '';
+    Object.values(visitors).forEach(session => {
+        const visit = session[0]; // Tomar la primera visita de la sesión
+        const timeSpent = visit.time_spent || 0;
+        
+        html += `
+            <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
+                <div>
+                    <small class="text-muted">${visit.ip_address}</small><br>
+                    <small>${visit.page_title || visit.page_url}</small>
+                </div>
+                <div class="text-end">
+                    <small class="text-success">${formatTime(timeSpent)}</small><br>
+                    <small class="text-muted">${formatDevice(visit.device_type)}</small>
+                </div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+// Actualizar estadísticas de visitor tracking
+async function refreshVisitorStats() {
+    try {
+        // Actualizar contadores principales
+        const statsResponse = await fetch('/api/visitor-tracking/stats?days=1');
+        const statsData = await statsResponse.json();
+        
+        if (statsData.success && statsData.data.length > 0) {
+            const todayStats = statsData.data[statsData.data.length - 1];
+            document.getElementById('visitors-today').textContent = todayStats.unique_visitors;
+            document.getElementById('page-views-today').textContent = todayStats.total_page_views;
+        }
+
+        // Actualizar visitantes activos
+        await loadActiveVisitors();
+        
+        // Actualizar gráficos
+        await loadVisitorCharts();
+        
+        // Mostrar notificación de éxito
+        showNotification('Estadísticas actualizadas correctamente', 'success');
+        
+    } catch (error) {
+        console.error('Error actualizando estadísticas:', error);
+        showNotification('Error al actualizar estadísticas', 'error');
+    }
+}
+
+// Iniciar auto-actualización
+function startAutoRefresh() {
+    autoRefreshInterval = setInterval(() => {
+        loadActiveVisitors(); // Solo actualizar visitantes activos cada 30 segundos
+    }, 30000);
+}
+
+// Funciones de utilidad
+function formatTime(seconds) {
+    if (seconds < 60) {
+        return `${seconds}s`;
+    } else if (seconds < 3600) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes}m ${remainingSeconds}s`;
+    } else {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        return `${hours}h ${minutes}m`;
+    }
+}
+
+function formatDevice(deviceType) {
+    const devices = {
+        'desktop': '🖥️ Desktop',
+        'mobile': '📱 Móvil',
+        'tablet': '📱 Tablet'
+    };
+    return devices[deviceType] || '❓ Desconocido';
+}
+
+function showNotification(message, type = 'info') {
+    // Crear notificación toast simple
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type === 'error' ? 'danger' : type} alert-dismissible fade show position-fixed`;
+    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    toast.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Auto-remover después de 3 segundos
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+        }
+    }, 3000);
+}
+
+// Limpiar intervalos cuando se cambie de página
+window.addEventListener('beforeunload', function() {
+    if (autoRefreshInterval) {
+        clearInterval(autoRefreshInterval);
+    }
 });
 </script>
 @endpush
