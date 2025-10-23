@@ -7,6 +7,10 @@
 
     <title>@yield('title', 'ONG Management System')</title>
 
+    <!-- Favicons -->
+    <link href="{{ asset('assets/img/logo-pestañas.ico') }}" rel="icon" type="image/x-icon">
+    <link href="{{ asset('assets/img/logo-pestañas.ico') }}" rel="apple-touch-icon">
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">

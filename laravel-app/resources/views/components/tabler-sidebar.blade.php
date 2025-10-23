@@ -483,7 +483,7 @@
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title" id="mobileSidebarModalLabel">
-                    <img src="{{ asset('assets/img/logo_habitat.jpeg') }}" width="24" height="24" alt="ONG" class="me-2">
+                    <img src="{{ asset('assets/img/logo-pestañas.ico') }}" width="24" height="24" alt="ONG" class="me-2">
                     ONG Sistema
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>

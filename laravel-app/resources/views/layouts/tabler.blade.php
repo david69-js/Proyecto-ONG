@@ -7,6 +7,10 @@
 
     <title>@yield('title', 'ONG Management System')</title>
 
+    <!-- Favicons -->
+    <link href="{{ asset('assets/img/logo-pestañas.ico') }}" rel="icon" type="image/x-icon">
+    <link href="{{ asset('assets/img/logo-pestañas.ico') }}" rel="apple-touch-icon">
+
     <!-- Tabler CSS -->
     <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler-flags.min.css" rel="stylesheet">
