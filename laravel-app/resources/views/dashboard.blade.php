@@ -296,7 +296,7 @@
 
                     @permission('donations.create')
                     <div class="col-md-6 col-lg-4 mb-3">
-                        <a href="{{ route('admin.donations.create') }}" class="btn btn-outline-warning w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
+                        <a href="{{ route('admin.donations-admin.create') }}" class="btn btn-outline-warning w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center">
                             <i class="fas fa-hand-holding-heart fa-2x mb-2"></i>
                             <strong>Registrar Donación</strong>
                             <small class="text-muted">Nueva donación recibida</small>
