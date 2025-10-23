@@ -17,11 +17,12 @@ return new class extends Migration
     });
 }
 
-public function down()
+public function down(): void
 {
-    Schema::table('ng_projects', function (Blueprint $table) {
-        $table->dropColumn('is_published');
-    });
+    if (Schema::hasTable('ng_projects')) {
+        Schema::table('ng_projects', function (Blueprint $table) {
+            $table->dropColumn('is_published');
+        });
+    }
 }
-
 };

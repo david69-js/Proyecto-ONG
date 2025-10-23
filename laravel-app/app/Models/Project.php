@@ -50,6 +50,7 @@ class Project extends Model
     /**
      * Conversiones automáticas de tipo.
      */
+
     /*-----------------------------------------
      | RELACIONES
      |-----------------------------------------*/
