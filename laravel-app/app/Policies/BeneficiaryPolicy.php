@@ -43,7 +43,7 @@ class BeneficiaryPolicy
         // Project coordinator - solo ve beneficiarios de sus proyectos asignados
         if ($user->hasRole('project-coordinator')) {
             return $user->assignedProjects()
-                ->where('projects.id', $beneficiary->project_id)
+                ->where('ng_projects.id', $beneficiary->project_id)
                 ->exists();
         }
 
@@ -55,7 +55,7 @@ class BeneficiaryPolicy
         // Volunteer - solo ve beneficiarios de sus proyectos asignados
         if ($user->hasRole('volunteer')) {
             return $user->assignedProjects()
-                ->where('projects.id', $beneficiary->project_id)
+                ->where('ng_projects.id', $beneficiary->project_id)
                 ->exists();
         }
 
@@ -94,7 +94,7 @@ class BeneficiaryPolicy
         // Project coordinator - solo edita beneficiarios de sus proyectos
         if ($user->hasRole('project-coordinator')) {
             return $user->assignedProjects()
-                ->where('projects.id', $beneficiary->project_id)
+                ->where('ng_projects.id', $beneficiary->project_id)
                 ->exists() 
                 && $user->hasPermission('beneficiaries.edit');
         }
@@ -149,7 +149,7 @@ class BeneficiaryPolicy
 
         // Project coordinator - solo ve beneficiarios de sus proyectos asignados
         if ($user->hasRole('project-coordinator')) {
-            return $query->whereIn('project_id', $user->assignedProjects()->pluck('projects.id'));
+            return $query->whereIn('project_id', $user->assignedProjects()->pluck('ng_projects.id'));
         }
 
         // Beneficiary coordinator y consultant - ven todos
@@ -159,7 +159,7 @@ class BeneficiaryPolicy
 
         // Volunteer - solo ve beneficiarios de sus proyectos asignados
         if ($user->hasRole('volunteer')) {
-            return $query->whereIn('project_id', $user->assignedProjects()->pluck('projects.id'));
+            return $query->whereIn('project_id', $user->assignedProjects()->pluck('ng_projects.id'));
         }
 
         // Beneficiarios solo ven su propio registro
