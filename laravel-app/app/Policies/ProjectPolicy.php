@@ -8,7 +8,7 @@ use App\Models\User;
 class ProjectPolicy
 {
     /**
-     * Determine if the user can view any projects.
+     * Determine if the user can view any ng_projects.
      */
     public function viewAny(User $user): bool
     {
@@ -19,17 +19,17 @@ class ProjectPolicy
 
         // Project coordinator, beneficiary coordinator, consultant y donor necesitan permiso
         if ($user->hasAnyRole(['project-coordinator', 'beneficiary-coordinator', 'consultant', 'donor'])) {
-            return $user->hasPermission('projects.view');
+            return $user->hasPermission('ng_projects.view');
         }
 
         // Volunteer solo ve proyectos asignados
         if ($user->hasRole('volunteer')) {
-            return $user->hasPermission('projects.view.own');
+            return $user->hasPermission('ng_projects.view.own');
         }
 
         // Beneficiarios solo pueden ver proyectos asignados
         if ($user->hasRole('beneficiary')) {
-            return $user->hasPermission('projects.view.own');
+            return $user->hasPermission('ng_projects.view.own');
         }
 
         return false;
@@ -52,29 +52,29 @@ class ProjectPolicy
 
         // Project coordinator - solo ve proyectos asignados o donde es responsable
         if ($user->hasRole('project-coordinator')) {
-            return $user->assignedProjects()->where('projects.id', $project->id)->exists();
+            return $user->assignedng_Projects()->where('ng_projects.id', $project->id)->exists();
         }
 
         // Beneficiary coordinator - puede ver todos
         if ($user->hasRole('beneficiary-coordinator')) {
-            return $user->hasPermission('projects.view');
+            return $user->hasPermission('ng_projects.view');
         }
 
         // Consultant - puede ver todos
         if ($user->hasRole('consultant')) {
-            return $user->hasPermission('projects.view');
+            return $user->hasPermission('ng_projects.view');
         }
 
         // Donor - puede ver proyectos donde tiene donaciones
         if ($user->hasRole('donor')) {
             // Aquí puedes agregar lógica para verificar si el donante tiene donaciones en este proyecto
             // Por ahora, permitimos que vea todos si tiene el permiso
-            return $user->hasPermission('projects.view');
+            return $user->hasPermission('ng_projects.view');
         }
 
         // Volunteer - solo ve proyectos asignados
         if ($user->hasRole('volunteer')) {
-            return $user->assignedProjects()->where('projects.id', $project->id)->exists();
+            return $user->assignedng_Projects()->where('ng_projects.id', $project->id)->exists();
         }
 
         // Beneficiarios solo pueden ver si están asignados al proyecto
@@ -87,11 +87,11 @@ class ProjectPolicy
     }
 
     /**
-     * Determine if the user can create projects.
+     * Determine if the user can create ng_projects.
      */
     public function create(User $user): bool
     {
-        return $user->hasPermission('projects.create');
+        return $user->hasPermission('ng_projects.create');
     }
 
     /**
@@ -106,18 +106,18 @@ class ProjectPolicy
 
         // Admin puede editar si tiene el permiso
         if ($user->hasRole('admin')) {
-            return $user->hasPermission('projects.edit');
+            return $user->hasPermission('ng_projects.edit');
         }
 
         // El responsable del proyecto puede editarlo si tiene el permiso
-        if ($project->responsable_id === $user->id && $user->hasPermission('projects.edit')) {
+        if ($project->responsable_id === $user->id && $user->hasPermission('ng_projects.edit')) {
             return true;
         }
 
         // Project coordinator - solo edita sus proyectos asignados
         if ($user->hasRole('project-coordinator')) {
-            return $user->assignedProjects()->where('projects.id', $project->id)->exists() 
-                   && $user->hasPermission('projects.edit');
+            return $user->assignedng_Projects()->where('ng_projects.id', $project->id)->exists() 
+                   && $user->hasPermission('ng_projects.edit');
         }
 
         // Otros roles no pueden editar
@@ -131,12 +131,12 @@ class ProjectPolicy
     {
         // Super admin puede eliminar
         if ($user->hasRole('super-admin')) {
-            return $user->hasPermission('projects.delete');
+            return $user->hasPermission('ng_projects.delete');
         }
 
         // Admin puede eliminar si tiene el permiso
         if ($user->hasRole('admin')) {
-            return $user->hasPermission('projects.delete');
+            return $user->hasPermission('ng_projects.delete');
         }
 
         // Otros roles no pueden eliminar
@@ -144,7 +144,7 @@ class ProjectPolicy
     }
 
     /**
-     * Scope query to filter projects based on user role.
+     * Scope query to filter ng_projects based on user role.
      */
     public static function scopeForUser(User $user, $query)
     {
@@ -157,7 +157,7 @@ class ProjectPolicy
         if ($user->hasRole('project-coordinator')) {
             return $query->where(function($q) use ($user) {
                 $q->where('responsable_id', $user->id)
-                  ->orWhereIn('id', $user->assignedProjects()->pluck('projects.id'));
+                  ->orWhereIn('id', $user->assignedng_Projects()->pluck('ng_projects.id'));
             });
         }
 
@@ -168,7 +168,7 @@ class ProjectPolicy
 
         // Volunteer - solo ve proyectos asignados
         if ($user->hasRole('volunteer')) {
-            return $query->whereIn('id', $user->assignedProjects()->pluck('projects.id'));
+            return $query->whereIn('id', $user->assignedng_Projects()->pluck('ng_projects.id'));
         }
 
         // Beneficiarios solo ven su proyecto
