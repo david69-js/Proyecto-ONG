@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -28,3 +27,5 @@ class SponsorHighlight extends Model
         return $q->where('is_published', true)->whereNotNull('published_at');
     }
 }
+
+
