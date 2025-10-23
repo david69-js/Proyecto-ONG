@@ -14,10 +14,7 @@
     use App\Models\HeroSection;
     $hero = HeroSection::first();
 @endphp 
- @php
-    use App\Models\Project; // 
-    $projects = Project::all(); 
-@endphp
+
 
    <!-- Sección Hero -->
 <section id="hero" class="hero section">
@@ -222,8 +219,8 @@
                 <span><i class="bi bi-clock-history"></i> {{ $event->end_date->format('d/m/Y H:i') }}</span>
               @endif
             </div>
-    <a href="{{ route('events.public.show', ['event' => $event->id]) }}" class="service-link">
-  Ver más <i class="bi bi-arrow-right"></i>
+    <a href="{{ route('events.public.show', $event) }}" class="btn btn-outline-primary mt-auto">
+  Ver más <i class="bi bi-arrow-right ms-1"></i>
 </a>
 
 
@@ -256,6 +253,8 @@
     <div class="projects-grid">
       @forelse($projects as $project)
         <div class="project-item" data-aos="zoom-in" data-aos-delay="{{ $loop->iteration * 100 }}">
+
+          {{-- Contenido principal --}}
           <div class="project-content">
             <div class="project-header">
               <span class="project-category">{{ $project->categoria ?? 'Sin categoría' }}</span>
@@ -272,20 +271,17 @@
                 <div class="project-specs">
                   @if($project->viviendas)
                     <span class="spec-item">
-                      <i class="bi bi-house"></i>
-                      {{ $project->viviendas }} Viviendas
+                      <i class="bi bi-house"></i> {{ $project->viviendas }} Viviendas
                     </span>
                   @endif
                   @if($project->duracion_meses)
                     <span class="spec-item">
-                      <i class="bi bi-calendar-check"></i>
-                      {{ $project->duracion_meses }} Meses
+                      <i class="bi bi-calendar-check"></i> {{ $project->duracion_meses }} Meses
                     </span>
                   @endif
                   @if($project->area_km)
                     <span class="spec-item">
-                      <i class="bi bi-rulers"></i>
-                      {{ $project->area_km }} km²
+                      <i class="bi bi-rulers"></i> {{ $project->area_km }} km²
                     </span>
                   @endif
                 </div>
@@ -297,17 +293,52 @@
               </div>
             </div>
 
-            <a href="{{ route('projects.show', $project) }}" class="project-link">
+<a href="{{ route('projects.public.show', $project) }}" class="project-link">
               <span>Ver Proyecto</span>
               <i class="bi bi-arrow-right"></i>
             </a>
           </div>
 
-          <div class="project-visual">
-            <img src="{{ $project->imagen ?? asset('assets/img/construction/default.webp') }}" 
-                 alt="{{ $project->nombre }}" 
-                 class="img-fluid">
+          {{-- Carrusel de imágenes de fases --}}
+          <div id="carouselProject{{ $project->id }}" class="carousel slide project-visual" data-bs-ride="carousel">
+            <div class="carousel-inner rounded shadow-sm">
+
+              @forelse($project->phaseImages as $index => $image)
+                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                  <img src="{{ asset('storage/' . $image->image_path) }}"
+                       class="d-block w-100 img-fluid"
+                       alt="{{ $image->description ?? $project->nombre }}"
+                       style="object-fit: cover; height: 280px;">
+                  @if($image->description)
+                    <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+                      <p class="small text-white mb-0">{{ $image->description }}</p>
+                    </div>
+                  @endif
+                </div>
+              @empty
+                <div class="carousel-item active">
+                  <img src="{{ $project->imagen ?? asset('assets/img/construction/default.webp') }}"
+                       class="d-block w-100 img-fluid"
+                       alt="{{ $project->nombre }}"
+                       style="object-fit: cover; height: 280px;">
+                </div>
+              @endforelse
+
+            </div>
+
+            {{-- Controles del carrusel --}}
+            @if($project->phaseImages->count() > 1)
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselProject{{ $project->id }}" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselProject{{ $project->id }}" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+              </button>
+            @endif
           </div>
+
         </div>
       @empty
         <p class="text-center">No hay proyectos publicados por el momento.</p>
@@ -315,6 +346,7 @@
     </div>
   </div>
 </section>
+
 
 
  <style>
@@ -461,39 +493,6 @@
       @endforelse
     </div>
 
-    {{-- Mantén tu achievements-banner si gustas tal cual --}}
-    <div class="achievements-banner" data-aos="zoom-in" data-aos-delay="700">
-      <div class="row text-center">
-        <div class="col-lg-3 col-sm-6">
-          <div class="achievement-item">
-            <i class="bi bi-award"></i>
-            <h3>15+</h3>
-            <p>Premios y Reconocimientos</p>
-          </div>
-        </div>
-        <div class="col-lg-3 col-sm-6">
-          <div class="achievement-item">
-            <i class="bi bi-shield-check"></i>
-            <h3>Cero</h3>
-            <p>Incidentes de Seguridad</p>
-          </div>
-        </div>
-        <div class="col-lg-3 col-sm-6">
-          <div class="achievement-item">
-            <i class="bi bi-clock-history"></i>
-            <h3>18</h3>
-            <p>Años de Experiencia</p>
-          </div>
-        </div>
-        <div class="col-lg-3 col-sm-6">
-          <div class="achievement-item">
-            <i class="bi bi-people"></i>
-            <h3>350+</h3>
-            <p>Beneficiarios Apoyados</p>
-          </div>
-        </div>
-      </div>
-    </div>
 
   </div>
 </section>

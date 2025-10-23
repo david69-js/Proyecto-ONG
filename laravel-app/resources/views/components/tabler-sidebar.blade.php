@@ -170,15 +170,21 @@
                             <a class="dropdown-item" href="{{ route('admin.testimonials.index') }}">
                                 <i class="fas fa-star me-2"></i>Beneficiarios
                             </a>
-                            <a class="dropdown-item" href="{{ route('admin.projects.index') }}">
-                                <i class="fas fa-briefcase me-2"></i>Proyectos
-                          
+<a class="dropdown-item" href="{{ route('admin.sections.projects.index') }}">
+    <i class="fas fa-briefcase me-2"></i>Proyectos
+</a>
+
+
                             <a class="dropdown-item" href="{{ route('admin.sponsors.index') }}">
                                 <i class="fas fa-handshake me-2"></i>Patrocinadores
                             </a>
                             <a class="dropdown-item" href="{{ route('admin.donations.index') }}">
                                 <i class="fas fa-donate me-2"></i>Donadores
                             </a>
+<a class="dropdown-item" href="{{ route('admin.public.index-selector') }}">
+    <i class="fas fa-globe me-2"></i> Página pública predeterminada
+</a>
+
                         </div>
                     </li>
 
@@ -622,10 +628,10 @@
                                     <i class="fas fa-calendar-alt me-3"></i>
                                     Eventos
                                 </a>
-                                <a href="{{ route('admin.projects.index') }}" class="list-group-item list-group-item-action d-flex align-items-center">
-                                    <i class="fas fa-briefcase me-3"></i>
-                                    Proyectos
-                                </a>
+  <a href="{{ route('projects.index') }}" class="list-group-item list-group-item-action d-flex align-items-center">
+    <i class="fas fa-briefcase me-3"></i>
+    Proyectos
+</a>
                                 <a href="{{ route('admin.sponsors.index') }}" class="list-group-item list-group-item-action d-flex align-items-center">
                                     <i class="fas fa-handshake me-3"></i>
                                     Patrocinadores

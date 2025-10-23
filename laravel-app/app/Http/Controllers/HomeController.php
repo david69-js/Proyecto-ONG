@@ -20,14 +20,15 @@ class HomeController extends Controller
         $hero = HeroSection::first();
         $about = AboutSection::first();
 
-        // Proyectos visibles en el inicio
+        // ✅ Solo proyectos publicados
         $projects = Project::query()
-            ->where('show_in_index', true)
+            ->where('is_published', true)
+               ->with('phaseImages')
             ->latest('created_at')
             ->take(12)
             ->get();
 
-        // Testimonios publicados
+        // ✅ Testimonios publicados
         $testimonials = BeneficiaryTestimonial::with('beneficiary')
             ->where('is_published', true)
             ->whereNotNull('published_at')
@@ -35,14 +36,14 @@ class HomeController extends Controller
             ->take(50)
             ->get();
 
-        // Patrocinadores publicados
+        // ✅ Patrocinadores publicados
         $sponsors = SponsorHighlight::with('sponsor')
             ->published()
             ->orderByDesc('is_featured')
             ->orderBy('sort_order')
             ->get();
 
-        // Donadores destacados
+        // ✅ Donadores destacados publicados
         $donors = DonorHighlight::published()
             ->orderByDesc('is_featured')
             ->orderBy('sort_order')
@@ -67,21 +68,21 @@ class HomeController extends Controller
         $hero = HeroSection::first();
         $about = AboutSection::first();
 
-        // Proyectos para mostrar
+        // ✅ Solo proyectos publicados
         $projects = Project::query()
-            ->where('show_in_index', true)
+            ->where('is_published', true)
             ->latest('created_at')
             ->take(12)
             ->get();
 
-        // Eventos (si existen)
+        // ✅ Eventos públicos
         $events = Event::query()
             ->where('status', 'publicado')
             ->latest('start_date')
             ->take(6)
             ->get();
 
-        // Testimonios
+        // ✅ Testimonios publicados
         $testimonials = BeneficiaryTestimonial::with('beneficiary')
             ->where('is_published', true)
             ->whereNotNull('published_at')
@@ -89,14 +90,14 @@ class HomeController extends Controller
             ->take(20)
             ->get();
 
-        // Patrocinadores
+        // ✅ Patrocinadores publicados
         $sponsors = SponsorHighlight::with('sponsor')
             ->published()
             ->orderByDesc('is_featured')
             ->orderBy('sort_order')
             ->get();
 
-        // Donadores
+        // ✅ Donadores destacados
         $donors = DonorHighlight::published()
             ->orderByDesc('is_featured')
             ->orderBy('sort_order')
@@ -113,6 +114,4 @@ class HomeController extends Controller
             'donors'
         ));
     }
-
-    
 }

@@ -455,4 +455,9 @@ class EventController extends Controller
             'eventStatuses'
         ));
     }
+    public function publicShow(Event $event)
+{
+    return view('events.public-show', compact('event'));
+}
+
 }

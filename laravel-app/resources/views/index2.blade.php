@@ -506,9 +506,10 @@ document.addEventListener('DOMContentLoaded', function () {
             </ul>
 
             {{-- Botón Ver más --}}
-            <a href="{{ route('events.public.show', $event->id) }}" class="readmore stretched-link fw-semibold text-primary">
-              Ver más <i class="bi bi-arrow-right ms-1"></i>
-            </a>
+            <a href="{{ route('events.public.show', $event) }}" class="btn btn-outline-primary mt-auto">
+  Ver más <i class="bi bi-arrow-right ms-1"></i>
+</a>
+
 
           </div>
         </div>
@@ -607,7 +608,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  <!-- Sección de Proyectos -->
+<!-- Sección de Proyectos -->
 <section id="projects" class="projects section">
 
   <!-- Título de sección -->
@@ -624,12 +625,49 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="{{ $loop->iteration * 100 }}">
           <div class="card project-card h-100 border-0 shadow-sm rounded overflow-hidden">
 
-            <!-- Imagen del proyecto -->
-            <div class="project-image position-relative">
-              <img src="{{ $project->imagen ? asset('storage/'.$project->imagen) : asset('assets2/img/projects/construction-1.jpg') }}"
-                   alt="{{ $project->nombre }}"
-                   class="img-fluid w-100" style="object-fit: cover; height: 220px;">
+            <!-- Carrusel de imágenes de fases -->
+            <div id="carouselProject{{ $project->id }}" class="carousel slide position-relative" data-bs-ride="carousel">
+              <div class="carousel-inner">
 
+                @forelse($project->phaseImages as $index => $image)
+                  <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                    <img src="{{ asset('storage/' . $image->image_path) }}"
+                         class="d-block w-100"
+                         alt="{{ $image->description ?? $project->nombre }}"
+                         style="object-fit: cover; height: 220px;">
+                    <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded px-2 py-1">
+                      <small class="text-white">
+                        Fase: {{ ucfirst($image->fase) }}
+                        @if($image->description)
+                          — {{ Str::limit($image->description, 50) }}
+                        @endif
+                      </small>
+                    </div>
+                  </div>
+                @empty
+                  <div class="carousel-item active">
+                    <img src="{{ $project->imagen ? asset('storage/'.$project->imagen) : asset('assets2/img/projects/construction-1.jpg') }}"
+                         class="d-block w-100"
+                         alt="{{ $project->nombre }}"
+                         style="object-fit: cover; height: 220px;">
+                  </div>
+                @endforelse
+
+              </div>
+
+              {{-- Controles solo si hay más de una imagen --}}
+              @if($project->phaseImages->count() > 1)
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselProject{{ $project->id }}" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselProject{{ $project->id }}" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Siguiente</span>
+                </button>
+              @endif
+
+              <!-- Etiquetas sobre la imagen -->
               <span class="badge bg-primary position-absolute top-0 start-0 m-2">
                 {{ $project->categoria ?? 'Proyecto' }}
               </span>
@@ -664,7 +702,7 @@ document.addEventListener('DOMContentLoaded', function () {
               </ul>
 
               <!-- Botón Ver más -->
-              <a href="{{ route('projects.show', $project) }}" class="btn btn-outline-primary mt-auto">
+<a href="{{ route('projects.public.show', $project) }}" class="project-link">
                 Ver proyecto <i class="bi bi-arrow-right ms-1"></i>
               </a>
             </div>
@@ -681,6 +719,7 @@ document.addEventListener('DOMContentLoaded', function () {
   </div>
 </section>
 <!-- /Sección de Proyectos -->
+
 
 
    <!-- Sección de Donadores -->

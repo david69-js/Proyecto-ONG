@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
@@ -18,14 +19,19 @@ use App\Http\Controllers\BeneficiaryTestimonialController;
 use App\Http\Controllers\SponsorHighlightController;
 use App\Http\Controllers\DonorHighlightController;
 use App\Http\Controllers\ProjectReportController;
-
+use App\Http\Controllers\Admin\PublicIndexSelectorController;
+use App\Http\Controllers\ProjectPublicController;
+use App\Models\Project;
+use App\Models\HeroSection;
+use App\Models\Event;
+use App\Models\Sponsor;
+use App\Models\DonorHighlight;
+use App\Models\BeneficiaryTestimonial;
 /*
 |--------------------------------------------------------------------------
 | Rutas públicas
 |--------------------------------------------------------------------------
 */
-Route::get('/', [HomeController::class, 'index'])->name('home');
-
 Route::get('/about', fn() => view('about'));
 
 Route::get('/login', fn() => view('auth.login'))->name('login');
@@ -77,17 +83,64 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{user}/avatar', [UserController::class, 'deleteAvatar'])->name('avatar.delete')->middleware('any.permission:users.edit,profile.edit.own');
     });
 
-    // Projects
-    Route::prefix('projects')->name('projects.')->middleware('any.permission:projects.view,projects.view.own')->group(function () {
-        Route::get('/', [ProjectController::class, 'index'])->name('index');
-        Route::get('/create', [ProjectController::class, 'create'])->name('create')->middleware('permission:projects.create');
-        Route::post('/', [ProjectController::class, 'store'])->name('store')->middleware('permission:projects.create');
-        Route::get('/{project}', [ProjectController::class, 'show'])->name('show');
-        Route::get('/{project}/edit', [ProjectController::class, 'edit'])->name('edit')->middleware('permission:projects.edit');
-        Route::put('/{project}', [ProjectController::class, 'update'])->name('update')->middleware('permission:projects.edit');
-        Route::delete('/{project}', [ProjectController::class, 'destroy'])->name('destroy')->middleware('permission:projects.delete');
-        Route::delete('/phase-images/{image}', [ProjectController::class, 'deletePhaseImage'])->name('phase-images.destroy')->middleware('permission:projects.edit');
+
+// ======================================================
+// CRUD PRINCIPAL DE PROYECTOS (Gestión completa)
+// ======================================================
+Route::prefix('projects')
+    ->name('projects.')
+    ->middleware('any.permission:projects.view,projects.view.own')
+    ->group(function () {
+
+        Route::get('/', [ProjectController::class, 'index'])
+            ->name('index');
+
+        Route::get('/create', [ProjectController::class, 'create'])
+            ->name('create')
+            ->middleware('permission:projects.create');
+
+        Route::post('/', [ProjectController::class, 'store'])
+            ->name('store')
+            ->middleware('permission:projects.create');
+
+        Route::get('/{project}', [ProjectController::class, 'show'])
+            ->name('show');
+
+        Route::get('/{project}/edit', [ProjectController::class, 'edit'])
+            ->name('edit')
+            ->middleware('permission:projects.edit');
+
+        Route::put('/{project}', [ProjectController::class, 'update'])
+            ->name('update')
+            ->middleware('permission:projects.edit');
+
+        Route::delete('/{project}', [ProjectController::class, 'destroy'])
+            ->name('destroy')
+            ->middleware('permission:projects.delete');
+
+        Route::delete('/phase-images/{image}', [ProjectController::class, 'deletePhaseImage'])
+            ->name('phase-images.destroy')
+            ->middleware('permission:projects.edit');
+
+        // Ruta para publicar o despublicar proyectos
+        Route::patch('/{project}/toggle-publish', [ProjectController::class, 'togglePublish'])
+            ->name('toggle-publish')
+            ->middleware('permission:projects.edit');
     });
+    Route::patch('/projects/{project}/toggle-publish', [ProjectController::class, 'togglePublish'])
+    ->name('projects.toggle-publish')
+    ->middleware('permission:projects.edit');
+
+
+
+// ======================================================
+// VISTA ADMINISTRATIVA DE PROYECTOS (Secciones → Proyectos)
+// ======================================================
+Route::get('/admin/sections/projects', function () {
+    $projects = Project::with('responsable')->get();
+    return view('sections.projects.index', compact('projects'));
+})->name('admin.sections.projects.index');
+
 
     // Locations
     Route::prefix('locations')->name('locations.')->middleware('permission:locations.view')->group(function () {
@@ -189,7 +242,7 @@ Route::middleware(['auth'])
             ->name('events.toggle-featured'); 
 
         // ====== Donations ======
-        Route::resource('donations', DonationController::class)->names('donations');
+Route::get('donations', [DonorHighlightController::class, 'index'])->name('donations.index');
         Route::get('donations/reports', [DonationController::class, 'reports'])->name('donations.reports');
         Route::get('donations/export', [DonationController::class, 'export'])->name('donations.export');
 
@@ -228,14 +281,6 @@ Route::get('hero', [HeroSectionController::class, 'index'])->name('hero.index');
         Route::post('hero', [HeroSectionController::class, 'store'])->name('hero.store');
         Route::put('hero/{hero}', [HeroSectionController::class, 'update'])->name('hero.update');
 
-        // ====== Project Index ======
-
-        // ====== Project Index (admin listado rápido) ======
-        Route::prefix('projects')->name('projects.')->group(function() {
-            Route::get('/', [ProjectIndexController::class, 'indexAdmin'])->name('index');
-            Route::patch('{project}/toggle', [ProjectIndexController::class, 'toggle'])->name('toggle');
-            Route::delete('{project}', [ProjectIndexController::class, 'destroy'])->name('destroy');
-        });
 
         // ====== Beneficiary Testimonials ======
         Route::get('testimonials', [BeneficiaryTestimonialController::class, 'index'])->name('testimonials.index');
@@ -266,6 +311,44 @@ Route::get('hero', [HeroSectionController::class, 'index'])->name('hero.index');
             Route::get('projects/{project}/export/pdf', [ProjectReportController::class, 'exportProject'])->name('projects.export-project');
         });
     });
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/index2', [HomeController::class, 'index2'])->name('home.alt');
+//seleccionar que vista cargar en la página de inicio
+Route::get('/', function () {
+    $file = 'settings/home_index.json';
+    $selected = 'index';
 
+    if (Storage::disk('local')->exists($file)) {
+        $data = json_decode(Storage::disk('local')->get($file), true);
+        $selected = $data['selected'] ?? 'index';
+    }
+
+    // 🔹 Variables que tus vistas públicas esperan
+    $hero = HeroSection::first();
+    $projects = Project::where('is_published', true)->latest()->take(6)->get();
+
+    // 🔹 Aquí cambiamos el filtro a status
+    $events = Event::where('status', '!=', 'finalizado')->latest()->take(6)->get();
+
+    $sponsors = Sponsor::where('is_featured', true)->take(10)->get();
+    $donors = DonorHighlight::where('is_featured', true)->take(6)->get();
+    $testimonials = BeneficiaryTestimonial::take(6)->get();
+
+    return view($selected, compact('hero', 'projects', 'events', 'sponsors', 'donors', 'testimonials'));
+})->name('home');
+
+
+
+// =============================================
+// Página pública de detalle de proyecto y evento
+// =============================================
+
+Route::get('/proyectos/{project}', [ProjectPublicController::class, 'show'])
+    ->name('projects.public.show');
+Route::get('/eventos/{event}', [EventController::class, 'publicShow'])->name('events.public.show');
+
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/public-selector', [App\Http\Controllers\Admin\PublicIndexSelectorController::class, 'index'])
+        ->name('public.index-selector');
+    Route::post('/public-selector', [App\Http\Controllers\Admin\PublicIndexSelectorController::class, 'update'])
+        ->name('public.index-selector.update');
+});
