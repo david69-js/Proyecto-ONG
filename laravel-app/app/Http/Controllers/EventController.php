@@ -371,7 +371,7 @@ class EventController extends Controller
     }
 
     $event->load(['creator', 'project']); // Relaciones útiles
-    return view('events.public_show', compact('event'));
+    return view('events.public-show', compact('event'));
 }
 
     /**
@@ -456,8 +456,8 @@ class EventController extends Controller
         ));
     }
     public function publicShow(Event $event)
-{
-    return view('events.public-show', compact('event'));
-}
+    {
+        return view('events.public-show', compact('event'));
+    }
 
 }

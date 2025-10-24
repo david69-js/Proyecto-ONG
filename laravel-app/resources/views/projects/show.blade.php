@@ -1,6 +1,6 @@
 @extends('layouts.tabler')
 
-@section('page-title', 'Detalles del Proyecto')
+@section('page-title', 'Detalles del Proyecto instant')
 @section('page-description', 'Información completa del proyecto')
 
 @section('content')

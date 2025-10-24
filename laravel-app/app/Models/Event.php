@@ -139,7 +139,7 @@ class Event extends Model
         if ($this->image_path) {
             return asset('storage/' . $this->image_path);
         }
-        return asset('assets/img/default-event.jpg');
+        return null;
     }
 
     /**

@@ -348,7 +348,6 @@ Route::get('/', function () {
 
 Route::get('/proyectos/{project}', [ProjectPublicController::class, 'show'])
     ->name('projects.public.show');
-Route::get('/eventos/{event}', [EventController::class, 'publicShow'])->name('events.public.show');
 
 
 Route::prefix('admin')->name('admin.')->group(function () {

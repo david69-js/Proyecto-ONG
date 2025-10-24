@@ -96,4 +96,45 @@ document.addEventListener('DOMContentLoaded', function() {
 
   window.addEventListener('scroll', requestTick, { passive: true });
 });
+
+// Fix dropdown hover behavior
+document.addEventListener('DOMContentLoaded', function() {
+  const dropdown = document.querySelector('.navmenu .dropdown');
+  const dropdownToggle = document.querySelector('.navmenu .dropdown-toggle');
+  const dropdownMenu = document.querySelector('.navmenu .dropdown-menu');
+  
+  if (dropdown && dropdownToggle && dropdownMenu) {
+    let hoverTimeout;
+    
+    // Show dropdown on hover
+    dropdown.addEventListener('mouseenter', function() {
+      clearTimeout(hoverTimeout);
+      dropdownMenu.style.display = 'block';
+      dropdownMenu.style.opacity = '1';
+      dropdownMenu.style.visibility = 'visible';
+    });
+    
+    // Hide dropdown with delay to allow mouse movement
+    dropdown.addEventListener('mouseleave', function() {
+      hoverTimeout = setTimeout(function() {
+        dropdownMenu.style.display = 'none';
+        dropdownMenu.style.opacity = '0';
+        dropdownMenu.style.visibility = 'hidden';
+      }, 150); // Small delay to prevent flickering
+    });
+    
+    // Keep dropdown open when hovering over the menu itself
+    dropdownMenu.addEventListener('mouseenter', function() {
+      clearTimeout(hoverTimeout);
+    });
+    
+    dropdownMenu.addEventListener('mouseleave', function() {
+      hoverTimeout = setTimeout(function() {
+        dropdownMenu.style.display = 'none';
+        dropdownMenu.style.opacity = '0';
+        dropdownMenu.style.visibility = 'hidden';
+      }, 150);
+    });
+  }
+});
 </script>
