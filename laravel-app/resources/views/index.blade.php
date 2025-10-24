@@ -3,9 +3,9 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </x-head>
-<body class="index-page">
+<body class="index-page d-flex flex-column min-vh-100">
 <x-header />
-<main class="main">
+<main class="main flex-grow-1">
   @php
     use App\Models\AboutSection;
     $about = AboutSection::first();
@@ -38,10 +38,10 @@
 
           <!-- Botones -->
           <div class="hero-buttons">
-            <a href="{{ optional($hero)->button_primary_link ?? '#' }}" class="btn-primary">
+            <a href="#call-to-action" class="btn-primary">
               {{ optional($hero)->button_primary_text ?? 'Haz tu donación' }}
             </a>
-            <a href="{{ optional($hero)->button_secondary_link ?? '#' }}" class="btn-secondary">
+            <a href="#projects" class="btn-secondary">
               {{ optional($hero)->button_secondary_text ?? 'Conoce nuestros proyectos' }}
             </a>
           </div>
@@ -239,11 +239,8 @@
   </div>
 </section><!-- /Sección de Eventos -->
 
-  </main>
-</body>
-
 <!-- /APARTADO1 -->
-</section><!-- /Servicios Section -->
+<!-- /Servicios Section -->
 
 
 <!-- Sección de Proyectos -->
@@ -796,8 +793,8 @@
 </script>
 
 <section id="call-to-action" class="call-to-action section light-background">
-  <div class="container" data-aos="fade-up" data-aos-delay="100">
-    <div class="row g-5 align-items-center">
+  <div class="container-fluid px-0" data-aos="fade-up" data-aos-delay="100">
+    <div class="row g-5 align-items-center mx-0">
 
       <!-- Lado izquierdo -->
       <div class="col-lg-6">
@@ -1084,5 +1081,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   </main>
-
   <x-footer />
+  

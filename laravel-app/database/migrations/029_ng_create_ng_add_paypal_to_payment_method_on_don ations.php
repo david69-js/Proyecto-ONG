@@ -1,18 +1,21 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void
     {
-        // Agregamos 'paypal' al ENUM
-        DB::statement("
-            ALTER TABLE donations 
-            MODIFY COLUMN payment_method 
-            ENUM('transfer','cash','check','kind','other','paypal') 
-            DEFAULT 'transfer'
-        ");
+        // SQLite no soporta MODIFY COLUMN ni ENUM
+        // En SQLite, simplemente agregamos la columna si no existe
+        // Los valores se validan a nivel de aplicación
+        if (!Schema::hasColumn('donations', 'payment_method')) {
+            Schema::table('donations', function (Blueprint $table) {
+                $table->string('payment_method')->default('transfer');
+            });
+        }
     }
 
     public function down(): void
@@ -22,12 +25,7 @@ return new class extends Migration {
             ->where('payment_method', 'paypal')
             ->update(['payment_method' => 'transfer']);
 
-        // Luego revertimos el ENUM a la versión anterior
-        DB::statement("
-            ALTER TABLE donations 
-            MODIFY COLUMN payment_method 
-            ENUM('transfer','cash','check','kind','other') 
-            DEFAULT 'transfer'
-        ");
+        // En SQLite no podemos revertir fácilmente, pero los valores se mantienen
+        // La validación se hace a nivel de aplicación
     }
 };

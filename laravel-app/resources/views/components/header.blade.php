@@ -1,36 +1,33 @@
- <header id="header" class="header sticky-top">
-
-    <div class="topbar d-flex align-items-center dark-background">
+<header id="header" class="header fixed-top">
+    <div id="topbar" class="topbar d-flex align-items-center dark-background" style="transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);">
       <div class="container d-flex justify-content-center justify-content-md-between">
         <div class="contact-info d-flex align-items-center">
           <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@example.com">contact@example.com</a></i>
-          <i class="bi bi-phone d-flex align-items-center ms-4"><span>+1 5589 55488 55</span></i>
         </div>
-        <div class="social-links d-none d-md-flex align-items-center">
-          <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
-          <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-          <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-          <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-        </div>
+          <div class="social-links d-none d-md-flex align-items-center">
+            <a href="https://x.com/" target="_blank" rel="noopener noreferrer" class="twitter"><i class="bi bi-twitter-x"></i></a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="facebook"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="instagram"><i class="bi bi-instagram"></i></a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="linkedin"><i class="bi bi-linkedin"></i></a>
+          </div>
       </div>
     </div><!-- End Top Bar -->
-<header id="header" class="header fixed-top">
   <div class="branding d-flex align-items-center">
 
     <div class="container position-relative d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a href="{{ route('home') }}" class="logo d-flex align-items-center">
         <!-- Logo de Habitat Guatemala -->
-       
+        <img src="{{ asset('assets/img/logo_habitat.jpeg') }}" alt="Habitat Guatemala" class="logo-img me-2" style="height: 50px; width: auto;">
         <h1 class="sitename ms-2">Habitat Guatemala</h1>
       </a>
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="index.html" class="active">Inicio</a></li>
-          <li><a href="about.html">Quiénes Somos</a></li>
-          <li><a href="programs.html">Programas</a></li>
-          <li><a href="projects.html">Proyectos</a></li>
-          <li><a href="team.html">Equipo</a></li>
+          <li><a href="{{ route('home') }}" class="active">Inicio</a></li>
+          <li><a href="#about">Quiénes Somos</a></li>
+          <li><a href="#services">Programas</a></li>
+          <li><a href="#projects">Proyectos</a></li>
+          <li><a href="#donadores">Equipo</a></li>
           @auth
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
@@ -52,36 +49,8 @@
             </li>
           @else
             <li><a href="{{ route('login') }}">Ingresar</a></li>
-            <li><a href="{{ route('register') }}">Registrarse</a></li>
           @endauth 
-          <li class="dropdown"><a href="#"><span>Más Páginas</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="service-details.html">Detalles del Programa</a></li>
-              <li><a href="project-details.html">Detalles del Proyecto</a></li>
-              <li><a href="quote.html">Formulario de Donación</a></li>
-              <li><a href="terms.html">Términos</a></li>
-              <li><a href="privacy.html">Privacidad</a></li>
-              <li><a href="404.html">404</a></li>
-            </ul>
-          </li>
-          <li class="dropdown"><a href="#"><span>Participa</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#">Voluntariado</a></li>
-              <li class="dropdown"><a href="#"><span>Campañas</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a href="#">Campaña 1</a></li>
-                  <li><a href="#">Campaña 2</a></li>
-                  <li><a href="#">Campaña 3</a></li>
-                  <li><a href="#">Campaña 4</a></li>
-                  <li><a href="#">Campaña 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Donaciones</a></li>
-              <li><a href="#">Eventos</a></li>
-              <li><a href="#">Alianzas</a></li>
-            </ul>
-          </li>
-          <li><a href="contact.html">Contacto</a></li>
+          <li><a href="#call-to-action">Contacto</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
@@ -89,3 +58,42 @@
 
   </div>
 </header>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const topbar = document.getElementById('topbar');
+  let lastScrollTop = 0;
+  let ticking = false;
+  let isHidden = false;
+
+  function updateTopbar() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollDelta = scrollTop - lastScrollTop;
+    
+    // Solo cambiar si hay un cambio significativo en el scroll
+    if (Math.abs(scrollDelta) > 5) {
+      if (scrollDelta > 0 && scrollTop > 100 && !isHidden) {
+        // Scrolling down - hide topbar gradually
+        topbar.style.transform = 'translateY(-100%)';
+        isHidden = true;
+      } else if (scrollDelta < 0 && isHidden) {
+        // Scrolling up - show topbar gradually
+        topbar.style.transform = 'translateY(0)';
+        isHidden = false;
+      }
+    }
+    
+    lastScrollTop = scrollTop;
+    ticking = false;
+  }
+
+  function requestTick() {
+    if (!ticking) {
+      requestAnimationFrame(updateTopbar);
+      ticking = true;
+    }
+  }
+
+  window.addEventListener('scroll', requestTick, { passive: true });
+});
+</script>

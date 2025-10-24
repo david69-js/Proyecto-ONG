@@ -2567,7 +2567,8 @@ section,
   z-index: 1;
 }
 
-.call-to-action .container {
+.call-to-action .container,
+.call-to-action .container-fluid {
   position: relative;
   z-index: 2;
 }
