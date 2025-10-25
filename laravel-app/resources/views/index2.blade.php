@@ -489,36 +489,140 @@ document.addEventListener('DOMContentLoaded', function() {
 </style>
 <!-- /Get Started Section -->
 
-<!-- Script de integración con PayPal -->
+@php
+  // 🔹 Leer credenciales desde config/services.php o .env
+  $paypalClientId = config('services.paypal.client_id', env('PAYPAL_CLIENT_ID'));
+  $paypalCurrency = config('services.paypal.currency', env('PAYPAL_CURRENCY', 'USD'));
+
+  use Illuminate\Support\Facades\Route as R;
+
+  // 🔹 Detectar rutas backend para PayPal
+  $paypalCreateUrl = R::has('donations.paypal.create')
+      ? route('donations.paypal.create')
+      : (R::has('admin.donations.paypal.create')
+          ? route('admin.donations.paypal.create')
+          : url('/donations/paypal/create-order'));
+
+  $paypalCaptureUrl = R::has('donations.paypal.capture')
+      ? route('donations.paypal.capture')
+      : (R::has('admin.donations.paypal.capture')
+          ? route('admin.donations.paypal.capture')
+          : url('/donations/paypal/capture-order'));
+@endphp
+
+<!-- SDK de PayPal -->
+<script src="https://www.paypal.com/sdk/js?client-id={{ $paypalClientId }}&currency={{ $paypalCurrency }}&intent=capture"></script>
+
+<!-- Formulario de donación -->
+<form id="donation-form" class="php-email-form" onsubmit="return false;">
+  @csrf
+  <div class="row g-3">
+    <div class="col-md-6">
+      <input type="text" name="donor_name" class="form-control" placeholder="Tu Nombre" required>
+    </div>
+    <div class="col-md-6">
+      <input type="email" name="donor_email" class="form-control" placeholder="Tu Correo (opcional)">
+    </div>
+    <div class="col-12">
+      <input type="tel" name="donor_phone" class="form-control" placeholder="Número de Teléfono (opcional)">
+    </div>
+
+    <div class="col-12">
+      <label class="form-label mb-1">Selecciona un monto rápido o escribe el tuyo</label>
+      <div class="d-flex flex-wrap gap-2 mb-2">
+        <button type="button" class="btn btn-outline-primary btn-sm quick-amt active" data-amount="10">10 {{ $paypalCurrency }}</button>
+        <button type="button" class="btn btn-outline-primary btn-sm quick-amt" data-amount="100">100 {{ $paypalCurrency }}</button>
+        <button type="button" class="btn btn-outline-primary btn-sm quick-amt" data-amount="200">200 {{ $paypalCurrency }}</button>
+        <button type="button" class="btn btn-outline-primary btn-sm quick-amt" data-amount="500">500 {{ $paypalCurrency }}</button>
+        <button type="button" class="btn btn-outline-primary btn-sm quick-amt" data-amount="1000">1000 {{ $paypalCurrency }}</button>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <input type="number" min="1" step="0.01" name="amount" class="form-control" value="10" required>
+    </div>
+
+    <div class="col-md-6">
+      <select name="currency" class="form-control" required>
+        <option value="{{ $paypalCurrency }}" selected>{{ $paypalCurrency }}</option>
+      </select>
+    </div>
+
+    @isset($projects)
+      <div class="col-12">
+        <select name="project_id" class="form-control">
+          <option value="">Apoyar a la ONG (sin proyecto)</option>
+          @foreach($projects as $p)
+            <option value="{{ $p->id }}">{{ $p->nombre }}</option>
+          @endforeach
+        </select>
+      </div>
+    @endisset
+
+    <div class="col-12">
+      <input type="text" name="notes" class="form-control" placeholder="Motivo / Programa (opcional)">
+    </div>
+  </div>
+
+  <div class="loading" style="display:none">Cargando…</div>
+  <div class="error-message alert alert-danger py-2 px-3 my-2" style="display:none"></div>
+  <div class="sent-message alert alert-success py-2 px-3 my-2" style="display:none">¡Gracias! Tu donación fue procesada.</div>
+
+  <!-- Botón de PayPal -->
+  <div id="paypal-button-container" class="mt-3"></div>
+</form>
+
+<!-- Script funcional PayPal -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('donation-form');
+  if (!form) { console.warn('No existe #donation-form'); return; }
+
   const loadingEl = form.querySelector('.loading');
   const errorEl = form.querySelector('.error-message');
   const okEl = form.querySelector('.sent-message');
   const amountInput = form.amount;
 
-  function showLoading(show) { loadingEl.style.display = show ? '' : 'none'; }
-  function showError(msg) { errorEl.textContent = msg || ''; errorEl.style.display = msg ? '' : 'none'; }
-  function showOk() { okEl.style.display = ''; }
-  function validAmount() {
-    const val = parseFloat(amountInput.value);
-    return !isNaN(val) && val >= 1;
-  }
+  function showLoading(show){ if(loadingEl) loadingEl.style.display = show ? '' : 'none'; }
+  function showError(msg){ if(errorEl){ errorEl.textContent = msg||''; errorEl.style.display = msg ? '' : 'none'; } }
+  function showOk(){ if(okEl) okEl.style.display = ''; }
+  function validAmount(){ const v = parseFloat(amountInput?.value); return !isNaN(v) && v >= 1; }
 
+  // 🔹 Monto rápido
   document.querySelectorAll('.quick-amt').forEach(btn => {
     btn.addEventListener('click', () => {
+      document.querySelectorAll('.quick-amt').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
       amountInput.value = parseFloat(btn.dataset.amount).toFixed(2);
     });
   });
 
+  // 🔹 Esperar SDK de PayPal
+  function waitForPaypalReady(cb){
+    if (window.paypal && typeof window.paypal.Buttons === 'function') return cb();
+    const start = Date.now();
+    const int = setInterval(() => {
+      if (window.paypal && typeof window.paypal.Buttons === 'function'){
+        clearInterval(int); cb();
+      } else if (Date.now() - start > 5000){
+        clearInterval(int);
+        showError('No se pudo cargar el SDK de PayPal. Verifica tu conexión o el client-id.');
+      }
+    }, 200);
+  }
+
   const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
                form.querySelector('input[name="_token"]')?.value;
 
-  if (window.paypal && typeof window.paypal.Buttons === 'function') {
+  let paypalRendered = false;
+  waitForPaypalReady(() => {
+    if (paypalRendered) return;
+    paypalRendered = true;
+
     paypal.Buttons({
       style: { layout: 'horizontal', label: 'donate', shape: 'pill' },
 
+      // 🔹 Crear orden
       createOrder: async () => {
         showError('');
         if (!validAmount()) throw new Error('Monto inválido');
@@ -533,51 +637,43 @@ document.addEventListener('DOMContentLoaded', function () {
           currency: form.currency.value
         };
 
-        const res = await fetch('{{ $paypalCreateUrl }}', {
+        const res = await fetch(`{{ $paypalCreateUrl }}`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrf,
-            'Accept': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json' },
           body: JSON.stringify(payload)
         });
-
         showLoading(false);
-        if (!res.ok) {
-          showError('Error al crear la orden en PayPal.');
-          throw new Error('paypal_create_error');
+
+        if (!res.ok){
+          let msg = 'Error al crear la orden en PayPal.';
+          try { const j = await res.json(); if (j.errors) msg += ' ' + Object.values(j.errors).flat().join(' '); else if (j.message) msg += ' ' + j.message; } catch(_){}
+          showError(msg); throw new Error('paypal_create_error');
         }
+
         const data = await res.json();
         form.dataset.donationId = data.donation_id;
-        return data.id;
+        return data.id; // orderID
       },
 
+      // 🔹 Capturar pago
       onApprove: async (data) => {
         showError('');
         showLoading(true);
 
-        const res = await fetch('{{ $paypalCaptureUrl }}', {
+        const res = await fetch(`{{ $paypalCaptureUrl }}`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrf,
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            orderID: data.orderID,
-            donation_id: form.dataset.donationId || null
-          })
+          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json' },
+          body: JSON.stringify({ orderID: data.orderID, donation_id: form.dataset.donationId || null })
         });
 
         showLoading(false);
-        if (!res.ok) {
-          showError('No se pudo capturar el pago en PayPal.');
-          return;
-        }
+        if (!res.ok){ showError('No se pudo capturar el pago en PayPal.'); return; }
 
+        await res.json();
         showOk();
         form.reset();
+        paypalRendered = false;
+        waitForPaypalReady(() => paypal.Buttons().render('#paypal-button-container'));
       },
 
       onError: (err) => {
@@ -585,12 +681,9 @@ document.addEventListener('DOMContentLoaded', function () {
         showError('Ocurrió un error con PayPal. Inténtalo nuevamente.');
       }
     }).render('#paypal-button-container');
-  } else {
-    console.warn('PayPal SDK no se cargó correctamente.');
-  }
+  });
 });
 </script>
-
 
   <!-- Sección de Beneficiarios -->
 <section id="beneficiarios" class="beneficiarios section py-5">
