@@ -56,6 +56,10 @@
   <link href="{{ asset('assets2/css/main.css') }}" rel="stylesheet">
 
   <style>
+    .footer .footer-links ul a,.footer-contact,.footer-about,.Copyright 
+{
+    z-index:1;
+    }
     /* —— Ajustes específicos para página de evento con look & feel del tema —— */
     body.event-page { background-color: var(--background-color, #fff); }
 
