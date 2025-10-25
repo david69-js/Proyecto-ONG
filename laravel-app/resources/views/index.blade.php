@@ -546,7 +546,22 @@
                   @endif
                 </div>
               </div>
+<style>
+  /* 🔧 FIX FINAL: habilita clics en el footer */
+  .footer::before {
+    pointer-events: none !important;
+  }
 
+  footer, .footer, #footer {
+    position: relative !important;
+    z-index: 10 !important;
+    pointer-events: auto !important;
+  }
+
+  footer a, .footer a {
+    pointer-events: auto !important;
+  }
+</style>
               <div class="project-location">
                 <i class="bi bi-geo-alt-fill"></i>
                 <span>{{ $project->ubicacion ?? 'Ubicación no definida' }}</span>

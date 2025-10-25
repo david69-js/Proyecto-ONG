@@ -36,50 +36,116 @@
   <link href="{{ asset('assets2/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
   <link href="{{ asset('assets2/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
   <link href="{{ asset('assets2/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+  <style>
+    /* --- FIX: enlaces no presionables en el footer --- */
+    footer, .footer, #footer {
+      position: relative !important;
+      z-index: 10 !important;
+    }
+
+    /* Asegura que ningún overlay tape el footer */
+    section, .section, .hero, .hero-bg, .dark-background {
+      z-index: 1 !important;
+    }
+
+    /* Rehabilita clics dentro del footer */
+    footer a, .footer a {
+      pointer-events: auto !important;
+    }
+
+    /* Evita que capas del hero o fondo bloqueen los clics */
+    .hero .hero-bg,
+    .hero.section.dark-background.position-relative {
+      pointer-events: none !important;
+    }
+    
+  </style>
+  <style>
+  /* 🔧 FIX FINAL: habilita clics en el footer */
+  .footer::before {
+    pointer-events: none !important;
+  }
+
+  footer, .footer, #footer {
+    position: relative !important;
+    z-index: 10 !important;
+    pointer-events: auto !important;
+  }
+
+  footer a, .footer a {
+    pointer-events: auto !important;
+  }
+</style>
+
+
+
 
   <!-- Main CSS File -->
   <link href="{{ asset('assets2/css/main.css') }}" rel="stylesheet">
+  
 
 </head>
-
 
 <body class="index-page">
 
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="index.html" class="logo d-flex align-items-center">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="assets2/img/logo.png" alt=""> -->
+      {{-- Logo principal --}}
+      <a href="{{ route('home') }}" class="logo d-flex align-items-center">
+        <!-- Si deseas usar imagen -->
+        <!-- <img src="{{ asset('assets2/img/logo.png') }}" alt=""> -->
         <h1 class="sitename">Habitat Guatemala</h1> <span>.</span>
       </a>
 
+      {{-- Menú de navegación --}}
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="index.html" class="active">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="projects.html">Projects</a></li>
-          <li><a href="blog.html">Blog</a></li>
-          <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+          <li><a href="{{ route('home') }}" class="{{ request()->is('/') ? 'active' : '' }}">Inicio</a></li>
+          <li><a href="#about">Quiénes Somos</a></li>
+          <li><a href="#services">Eventos</a></li>
+          <li><a href="#projects">Proyectos</a></li>
+          <li><a href="#get-started">Donaciones</a></li>
+
+          {{-- Menú desplegable opcional --}}
+          <li class="dropdown">
+            <a href="#"><span>Más</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
-              <li><a href="#">Dropdown 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a href="#">Deep Dropdown 1</a></li>
-                  <li><a href="#">Deep Dropdown 2</a></li>
-                  <li><a href="#">Deep Dropdown 3</a></li>
-                  <li><a href="#">Deep Dropdown 4</a></li>
-                  <li><a href="#">Deep Dropdown 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Dropdown 2</a></li>
-              <li><a href="#">Dropdown 3</a></li>
-              <li><a href="#">Dropdown 4</a></li>
+              <li><a href="#testimonios">Testimonios</a></li>
+              <li><a href="#patrocinadores">Patrocinadores</a></li>
+              <li><a href="#contact">Contacto</a></li>
             </ul>
           </li>
-          <li><a href="contact.html">Contact</a></li>
+
+          {{-- Si el usuario está autenticado --}}
+          @auth
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fas fa-user"></i> {{ auth()->user()->first_name }}
+                <i class="bi bi-chevron-down toggle-dropdown"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="/users" class="dropdown-item"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                    @csrf
+                    <button type="submit" class="dropdown-item">
+                      <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+          @else
+            {{-- Si no ha iniciado sesión --}}
+            <li><a href="{{ route('login') }}">Ingresar</a></li>
+          @endauth
+
+          {{--Enlace público a productos --}}
+          <li><a href="{{ route('products.public.index') }}">Productos</a></li>
         </ul>
+
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
@@ -87,6 +153,8 @@
   </header>
 
   <main class="main">
+
+
 
 <!-- Hero Section -->
 <section id="hero" class="hero section dark-background position-relative" style="height: 100vh; overflow: hidden;">
@@ -156,6 +224,129 @@
 
 </section>
 <!-- /Hero Section -->
+<!-- 🌟 Sección Misión, Visión y Valores (versión carrusel) -->
+<section id="mission-vision" class="mission-vision section py-5" style="background: linear-gradient(180deg, #fff8e1 0%, #ffffff 100%);">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+    <!-- Encabezado -->
+    <div class="text-center mb-5">
+      <h2 class="fw-bold text-uppercase" style="color:#b8860b;">Misión, Visión y Valores</h2>
+      <p class="text-muted">Descubre los principios que inspiran cada acción de Habitat Guatemala</p>
+    </div>
+
+    <!-- Carrusel principal -->
+    <div id="missionVisionCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="8000">
+      <div class="carousel-inner">
+
+        <!-- 🟡 Misión -->
+        <div class="carousel-item active">
+          <div class="card border-0 shadow-lg rounded-4 p-5 mx-auto" style="max-width:900px; background:#fff;">
+            <div class="text-center mb-4">
+              <i class="bi bi-heart-fill fs-1" style="color:#b8860b;"></i>
+              <h3 class="fw-bold mt-3" style="color:#b8860b;">Nuestra Misión</h3>
+            </div>
+            <p class="text-center text-muted mb-4">
+              Construir viviendas seguras y dignas para familias guatemaltecas de escasos recursos, 
+              promoviendo el desarrollo comunitario sostenible y fortaleciendo los lazos sociales 
+              a través del trabajo voluntario y la solidaridad.
+            </p>
+            <div class="row justify-content-center">
+              <div class="col-md-4 text-center">
+                <i class="bi bi-check-circle-fill text-warning"></i>
+                <p class="small mt-2 mb-0">Viviendas seguras y dignas</p>
+              </div>
+              <div class="col-md-4 text-center">
+                <i class="bi bi-check-circle-fill text-warning"></i>
+                <p class="small mt-2 mb-0">Desarrollo sostenible</p>
+              </div>
+              <div class="col-md-4 text-center">
+                <i class="bi bi-check-circle-fill text-warning"></i>
+                <p class="small mt-2 mb-0">Solidaridad y voluntariado</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🟡 Visión -->
+        <div class="carousel-item">
+          <div class="card border-0 shadow-lg rounded-4 p-5 mx-auto" style="max-width:900px; background:#fff;">
+            <div class="text-center mb-4">
+              <i class="bi bi-eye-fill fs-1" style="color:#f1c40f;"></i>
+              <h3 class="fw-bold mt-3" style="color:#b8860b;">Nuestra Visión</h3>
+            </div>
+            <p class="text-center text-muted mb-4">
+              Ser la organización líder en Guatemala en la construcción de viviendas sociales, 
+              creando comunidades prósperas donde cada familia tenga un hogar digno 
+              y las oportunidades necesarias para su desarrollo integral.
+            </p>
+            <div class="row justify-content-center">
+              <div class="col-md-4 text-center">
+                <i class="bi bi-star-fill text-warning"></i>
+                <p class="small mt-2 mb-0">Liderazgo en vivienda social</p>
+              </div>
+              <div class="col-md-4 text-center">
+                <i class="bi bi-star-fill text-warning"></i>
+                <p class="small mt-2 mb-0">Comunidades prósperas</p>
+              </div>
+              <div class="col-md-4 text-center">
+                <i class="bi bi-star-fill text-warning"></i>
+                <p class="small mt-2 mb-0">Desarrollo familiar integral</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 💛 Valores -->
+        <div class="carousel-item">
+          <div class="card border-0 shadow-lg rounded-4 p-5 mx-auto" style="max-width:900px; background:#fff;">
+            <div class="text-center mb-4">
+              <i class="bi bi-gem fs-1" style="color:#b8860b;"></i>
+              <h3 class="fw-bold mt-3" style="color:#b8860b;">Nuestros Valores</h3>
+            </div>
+            <div class="row g-4 justify-content-center">
+              <div class="col-6 col-md-3 text-center">
+                <i class="bi bi-people-fill fs-3 text-warning"></i>
+                <h6 class="fw-bold mt-2">Solidaridad</h6>
+              </div>
+              <div class="col-6 col-md-3 text-center">
+                <i class="bi bi-shield-check fs-3 text-warning"></i>
+                <h6 class="fw-bold mt-2">Transparencia</h6>
+              </div>
+              <div class="col-6 col-md-3 text-center">
+                <i class="bi bi-award-fill fs-3 text-warning"></i>
+                <h6 class="fw-bold mt-2">Excelencia</h6>
+              </div>
+              <div class="col-6 col-md-3 text-center">
+                <i class="bi bi-heart-pulse fs-3 text-warning"></i>
+                <h6 class="fw-bold mt-2">Compasión</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Controles -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#missionVisionCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#missionVisionCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+        <span class="visually-hidden">Siguiente</span>
+      </button>
+
+      <!-- Indicadores -->
+      <div class="carousel-indicators mt-4">
+        <button type="button" data-bs-target="#missionVisionCarousel" data-bs-slide-to="0" class="active bg-warning" aria-label="Misión"></button>
+        <button type="button" data-bs-target="#missionVisionCarousel" data-bs-slide-to="1" class="bg-warning" aria-label="Visión"></button>
+        <button type="button" data-bs-target="#missionVisionCarousel" data-bs-slide-to="2" class="bg-warning" aria-label="Valores"></button>
+      </div>
+
+    </div>
+
+  </div>
+</section>
 
 
 
@@ -699,7 +890,7 @@ document.addEventListener('DOMContentLoaded', function () {
               </ul>
 
               <!-- Botón Ver más -->
-<a href="{{ route('projects.public.show', $project) }}" class="project-link">
+<a href="{{ route('projects.public.show2', $project) }}" class="project-link">
                 Ver proyecto <i class="bi bi-arrow-right ms-1"></i>
               </a>
             </div>
@@ -1095,32 +1286,127 @@ document.addEventListener('DOMContentLoaded', function () {
 
   </main>
 
+    </main>
 
-    <div class="container copyright text-center mt-4">
-      <p>© <span>Copyright</span> <strong class="px-1 sitename">HABITAT</strong> <span>All Rights Reserved</span></p>
+  <footer id="footer" class="footer dark-background w-100" style="margin-top: auto; padding: 0;">
+    <div class="container-fluid footer-top" style="padding: 2rem 1rem;">
+      <div class="row gy-4">
+
+        {{-- Columna 1: Descripción --}}
+        <div class="col-lg-5 col-md-12 footer-about">
+          <a href="{{ route('home') }}" class="logo d-flex align-items-center">
+            <span class="sitename">Habitat Guatemala</span>
+          </a>
+          <p>
+            Construyendo esperanza desde 1995. Trabajamos cada día para que las familias guatemaltecas 
+            tengan acceso a una vivienda segura y un entorno digno.
+          </p>
+          <div class="social-links d-flex mt-4">
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i class="bi bi-twitter-x"></i></a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><i class="bi bi-instagram"></i></a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+              {{-- Columna 2: Enlaces útiles --}}
+      <div class="col-lg-2 col-6 footer-links">
+        <h4>Enlaces Útiles</h4>
+        <ul>
+          <li><a href="{{ route('home') }}">Inicio</a></li>
+          <li><a href="#about">Quiénes Somos</a></li>
+          <li><a href="#services">Eventos</a></li>
+          <li><a href="#projects">Proyectos</a></li>
+         <li><a href="#get-started">Donar</a></li>
+
+        </ul>
+      </div>
+
+{{-- Columna 3: Otros Enlaces --}}
+<div class="col-lg-2 col-6 footer-links">
+  <h4>Otros Enlaces</h4>
+  <ul>
+    {{-- Teléfono (abre marcador en móviles) --}}
+    <li>
+      <a href="tel:+50235957273" class="text-decoration-none">
+        📞 +502 35957273
+      </a>
+    </li>
+
+    {{-- Correo (abre el cliente de correo) --}}
+    <li>
+      <a href="mailto:info@habitatguatemala.org" class="text-decoration-none">
+        ✉️ info@habitatguatemala.org
+      </a>
+    </li>
+
+    {{-- Redes sociales (abre en nueva pestaña) --}}
+    <li>
+      <a href="https://www.facebook.com/habitatguatemala" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+        <i class="bi bi-facebook me-1"></i> Facebook
+      </a>
+    </li>
+
+    <li>
+      <a href="https://www.instagram.com/habitatguatemala" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+        <i class="bi bi-instagram me-1"></i> Instagram
+      </a>
+    </li>
+
+    <li>
+      <a href="https://www.linkedin.com/company/habitatguatemala" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+        <i class="bi bi-linkedin me-1"></i> LinkedIn
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+        {{-- Columna 4: Contacto --}}
+        <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+          <h4>Contáctanos</h4>
+          <p>Santa Cruz del Quiché</p>
+          <p>Guatemala, Centroamérica</p>
+          <p>América Central</p>
+          <p class="mt-4"><strong>Teléfono:</strong> <span>+502 1234-5678</span></p>
+          <p><strong>Email:</strong> <span>info@habitatguatemala.org</span></p>
+        </div>
+
+      </div>
     </div>
 
+    {{-- Derechos de autor --}}
+    <div class="container-fluid copyright text-center mt-4" style="padding: 1rem;">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">Habitat ong-umg</strong></p>
+    </div>
   </footer>
 
   <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
 
   <!-- Preloader -->
   <div id="preloader"></div>
 
-  <!-- Vendor JS Files -->
-  <script src="assets2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets2/vendor/php-email-form/validate.js"></script>
-  <script src="assets2/vendor/aos/aos.js"></script>
-  <script src="assets2/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets2/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-  <script src="assets2/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets2/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets2/vendor/purecounter/purecounter_vanilla.js"></script>
+  <!-- Vendor JS con helpers Laravel -->
+  <script src="{{ asset('assets2/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ asset('assets2/vendor/php-email-form/validate.js') }}"></script>
+  <script src="{{ asset('assets2/vendor/aos/aos.js') }}"></script>
+  <script src="{{ asset('assets2/vendor/glightbox/js/glightbox.min.js') }}"></script>
+  <script src="{{ asset('assets2/vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
+  <script src="{{ asset('assets2/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
+  <script src="{{ asset('assets2/vendor/swiper/swiper-bundle.min.js') }}"></script>
+  <script src="{{ asset('assets2/vendor/purecounter/purecounter_vanilla.js') }}"></script>
 
-  <!-- Main JS File -->
-  <script src="assets2/js/main.js"></script>
+  <!-- Main JS -->
+  <script src="{{ asset('assets2/js/main.js') }}"></script>
 
 </body>
+</html>
+
+
+</body>
+</html>
+
 
 </html>

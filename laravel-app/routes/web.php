@@ -56,7 +56,7 @@ Route::get('/productos/{product}', [ProductController::class, 'publicShow'])->na
 Route::get('/test-productos', function() {
     return 'Ruta de productos funciona correctamente';
 });
-
+Route::get('/projects/public/{project}/show2', [ProjectController::class, 'publicShow2'])->name('projects.public.show2');
 /*
 |--------------------------------------------------------------------------
 | Rutas de prueba (solo autenticados)
