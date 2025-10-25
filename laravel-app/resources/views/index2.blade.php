@@ -2,8 +2,17 @@
 <html lang="es">
 @php
     use App\Models\SponsorHighlight;
-    $sponsors = SponsorHighlight::first();
-@endphp 
+
+    // Trae solo los patrocinadores publicados
+    $sponsors = SponsorHighlight::with('sponsor')
+        ->where('is_published', true)
+        ->whereNotNull('published_at')
+        ->orderByDesc('is_featured')
+        ->orderBy('sort_order')
+        ->orderByDesc('id')
+        ->get();
+@endphp
+
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -533,53 +542,42 @@ document.addEventListener('DOMContentLoaded', function () {
   </div>
 
   <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-    {{-- Bloque destacado --}}
     @php
-      $featured = ($sponsors ?? collect())->firstWhere('is_featured', true);
+      // Asegurar que sponsors sea una colección válida
+      $validSponsors = $sponsors instanceof \Illuminate\Support\Collection ? $sponsors : collect();
+
+      // Separar los destacados del resto
+      $featuredSponsors = $validSponsors->where('is_featured', true);
+      $normalSponsors = $validSponsors->where('is_featured', false);
     @endphp
 
-    @if($featured)
-      <div class="row align-items-center mb-5">
-        <div class="col-lg-6 order-2 order-lg-1 mt-4 mt-lg-0" data-aos="fade-right" data-aos-delay="200">
-          <h3 class="fw-bold mb-3">
-            {{ $featured->title ?? ($featured->sponsor?->name ?? 'Patrocinador Destacado') }}
-          </h3>
-          <p class="text-muted mb-4">
-            {{ $featured->description ?? 'Patrocinador con apoyo constante a nuestros proyectos comunitarios.' }}
-          </p>
-
-          @if($featured->category)
-            <p><i class="bi bi-award text-primary me-2"></i> <strong>{{ $featured->category }}</strong></p>
-          @endif
-        </div>
-
-        <div class="col-lg-6 order-1 order-lg-2 text-center" data-aos="fade-left" data-aos-delay="300">
-          <div class="position-relative d-inline-block rounded overflow-hidden shadow" style="max-width:400px;">
-            <img src="{{ $featured->logo_path ? asset('storage/'.$featured->logo_path) : asset('assets2/img/constructions-1.jpg') }}"
-                 alt="Logo de patrocinador destacado"
-                 class="img-fluid w-100 rounded" style="object-fit:cover;">
-
-            <!-- Overlay elegante -->
-            <div class="position-absolute bottom-0 start-0 w-100 text-white p-3"
-                 style="background: linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0.2));">
-              <h5 class="mb-1 fw-semibold">{{ $featured->sponsor?->name ?? 'Patrocinador destacado' }}</h5>
-              <small>{{ $featured->category ?? 'Colaborador principal' }}</small>
+    {{-- 🟢 Bloque de patrocinadores destacados --}}
+    @if($featuredSponsors->count() > 0)
+      <div class="row mb-5 gy-4">
+        @foreach($featuredSponsors as $sp)
+          <div class="col-lg-6" data-aos="zoom-in" data-aos-delay="{{ 100 + ($loop->index * 100) }}">
+            <div class="d-flex flex-column flex-md-row align-items-center bg-white rounded shadow-sm p-3 h-100">
+              <div class="text-center me-md-4 mb-3 mb-md-0">
+                <img src="{{ $sp->logo_path ? asset('storage/'.$sp->logo_path) : asset('assets2/img/constructions-1.jpg') }}"
+                     alt="{{ $sp->title ?? $sp->sponsor?->name }}"
+                     class="img-fluid rounded" style="max-height:120px; object-fit:contain;">
+              </div>
+              <div>
+                <h4 class="fw-bold mb-2">{{ $sp->title ?? $sp->sponsor?->name ?? 'Patrocinador destacado' }}</h4>
+                @if($sp->category)
+                  <p class="mb-1"><i class="bi bi-award text-primary me-2"></i> <strong>{{ $sp->category }}</strong></p>
+                @endif
+                <p class="text-muted small mb-0">{{ $sp->description ?? 'Apoyo constante a nuestros proyectos comunitarios.' }}</p>
+              </div>
             </div>
           </div>
-        </div>
+        @endforeach
       </div>
     @endif
 
-    {{-- Grid de patrocinadores --}}
+    {{-- 🔵 Grid de patrocinadores normales --}}
     <div class="row gy-4">
-      @php
-  $validSponsors = $sponsors instanceof \Illuminate\Support\Collection ? $sponsors : collect();
-@endphp
-
-@forelse($validSponsors as $sp)
-
-        @if(!$featured || $featured->id !== $sp->id)
+      @forelse($normalSponsors as $sp)
         <div class="col-xl-3 col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="{{ 150 + ($loop->index * 50) }}">
           <div class="patro-card text-center p-4 border rounded shadow-sm bg-white h-100">
             <div class="patro-icon mb-3">
@@ -596,17 +594,15 @@ document.addEventListener('DOMContentLoaded', function () {
             @endif
           </div>
         </div>
-        @endif
       @empty
         <div class="col-12 text-center py-5">
-          <p class="text-muted">Nuestros Patrocinadores.</p>
+          <p class="text-muted">No hay patrocinadores registrados aún.</p>
         </div>
       @endforelse
     </div>
 
   </div>
 </section>
-
 
 
 <!-- Sección de Proyectos -->

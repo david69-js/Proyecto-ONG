@@ -16,8 +16,16 @@
 @endphp 
 @php
     use App\Models\SponsorHighlight;
-    $sponsors = SponsorHighlight::first();
-@endphp 
+
+    // Trae solo los patrocinadores publicados
+    $sponsors = SponsorHighlight::with('sponsor')
+        ->where('is_published', true)
+        ->whereNotNull('published_at')
+        ->orderByDesc('is_featured')
+        ->orderBy('sort_order')
+        ->orderByDesc('id')
+        ->get();
+@endphp
 
 
    <!-- Sección Hero -->
@@ -693,7 +701,7 @@
 <!-- fin Sección de Beneficiarios -->
 
 
-<!-- Sección de Patroninadores -->
+<!-- Sección de Patrocinadores -->
 <section id="patrocinadores" class="patrocinadores section">
   <div class="container section-title">
     <h2>Patrocinadores &amp; Colaboradores</h2>
@@ -701,55 +709,70 @@
   </div>
 
   <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-    {{-- Bloque destacado (toma el primero con is_featured) --}}
     @php
-      $featured = ($sponsors ?? collect())->firstWhere('is_featured', true);
+      // Garantizar que sea colección válida
+      $validSponsors = $sponsors instanceof \Illuminate\Support\Collection ? $sponsors : collect();
+
+      // Separar destacados y normales
+      $featuredSponsors = $validSponsors->where('is_featured', true);
+      $normalSponsors = $validSponsors->where('is_featured', false);
     @endphp
 
-    @if($featured)
+    {{-- Bloques de patrocinadores destacados --}}
+    @if($featuredSponsors->count() > 0)
       <div class="row align-items-center mb-5 content">
-        <div class="col-lg-6" data-aos="fade-right" data-aos-delay="200">
-          <h2>{{ $featured->title ?? ($featured->sponsor?->name ?? 'Patrocinador Destacado') }}</h2>
-          <p>{{ $featured->description ?? 'Patrocinador con apoyo constante a proyectos comunitarios.' }}</p>
-        </div>
-        <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
-          <div class="badge-highlight">
-            <img src="{{ $featured->logo_path ? asset('storage/'.$featured->logo_path) : asset('assets/img/construction/badge-5.webp') }}"
-                 alt="Sello" class="img-fluid">
-            <div class="badge-content">
-              <h4>{{ $featured->category ?? 'Patrocinador Destacado' }}</h4>
-              <p>{{ $featured->sponsor?->name }}</p>
+        @foreach($featuredSponsors as $featured)
+          <div class="col-lg-6 mb-4" data-aos="zoom-in" data-aos-delay="{{ 100 + ($loop->index * 100) }}">
+            <div class="badge-highlight p-3 bg-white rounded shadow-sm h-100 text-center text-lg-start">
+              <div class="row align-items-center g-3">
+                <div class="col-md-5 text-center">
+                  <img src="{{ $featured->logo_path ? asset('storage/'.$featured->logo_path) : asset('assets/img/construction/badge-5.webp') }}"
+                       alt="{{ $featured->title ?? $featured->sponsor?->name }}"
+                       class="img-fluid rounded" style="max-height:120px; object-fit:contain;">
+                </div>
+                <div class="col-md-7">
+                  <h4 class="fw-bold mb-1">
+                    {{ $featured->title ?? ($featured->sponsor?->name ?? 'Patrocinador Destacado') }}
+                  </h4>
+                  @if($featured->category)
+                    <span class="patro-category d-block mb-1">{{ $featured->category }}</span>
+                  @endif
+                  <p class="small text-muted mb-1">
+                    {{ $featured->description ?? 'Patrocinador con apoyo constante a proyectos comunitarios.' }}
+                  </p>
+                  <p class="mb-0 fw-semibold">{{ $featured->sponsor?->name }}</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        @endforeach
       </div>
     @endif
 
-    {{-- Grid de tarjetas (todos los publicados; omite el destacado si quieres) --}}
+    {{--Grid de tarjetas (todos los demás patrocinadores) --}}
     <div class="patrocinador-grid" data-aos="fade-up" data-aos-delay="400">
-      @php
-  $validSponsors = $sponsors instanceof \Illuminate\Support\Collection ? $sponsors : collect();
-@endphp
-
-@forelse($validSponsors as $sp)
-
-        <div class="patro-card" data-aos="flip-left" data-aos-delay="{{ 100 + ($loop->index % 6)*100 }}">
+      @forelse($normalSponsors as $sp)
+        <div class="patro-card" data-aos="flip-left" data-aos-delay="{{ 100 + ($loop->index % 6) * 100 }}">
           <div class="patro-icon">
             <img src="{{ $sp->logo_path ? asset('storage/'.$sp->logo_path) : asset('assets/img/construction/badge-1.webp') }}"
                  alt="{{ $sp->title ?? $sp->sponsor?->name }}" class="img-fluid">
           </div>
           <div class="patro-details">
             <h5>{{ $sp->title ?? $sp->sponsor?->name }}</h5>
-            @if($sp->category)<span class="patro-category">{{ $sp->category }}</span>@endif
-            @if($sp->description)<p>{{ $sp->description }}</p>@endif
+            @if($sp->category)
+              <span class="patro-category">{{ $sp->category }}</span>
+            @endif
+            @if($sp->description)
+              <p>{{ $sp->description }}</p>
+            @endif
           </div>
         </div>
       @empty
         <p class="text-center w-100">Nuestros Patrocinadores.</p>
       @endforelse
     </div>
-
+  </div>
+</section
 
 <!-- Donadores Section -->
 <section id="donadores" class="donadores section">

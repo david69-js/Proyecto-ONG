@@ -108,68 +108,6 @@
                 </form>
               </td>
             </tr>
-
-            {{-- Modal edición --}}
-            <div class="modal fade" id="editSponsor{{ $it->id }}" tabindex="-1" aria-hidden="true">
-              <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">Editar #{{ $it->id }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                  </div>
-                  <form action="{{ route('admin.sponsors.update',$it) }}" method="post" enctype="multipart/form-data">
-                    @csrf @method('PUT')
-                    <div class="modal-body">
-                      <div class="row g-3">
-                        <div class="col-md-4">
-                          <label class="form-label">Patrocinador</label>
-                          <select name="sponsor_id" class="form-select" required>
-                            @foreach($sponsors as $s)
-                              <option value="{{ $s->id }}" @selected(old('sponsor_id',$it->sponsor_id)==$s->id)>{{ $s->name ?? ('Sponsor #'.$s->id) }}</option>
-                            @endforeach
-                          </select>
-                        </div>
-                        <div class="col-md-4">
-                          <label class="form-label">Título</label>
-                          <input name="title" class="form-control" value="{{ old('title',$it->title) }}">
-                        </div>
-                        <div class="col-md-4">
-                          <label class="form-label">Categoría</label>
-                          <input name="category" class="form-control" value="{{ old('category',$it->category) }}">
-                        </div>
-                        <div class="col-md-12">
-                          <label class="form-label">Descripción</label>
-                          <textarea name="description" rows="3" class="form-control">{{ old('description',$it->description) }}</textarea>
-                        </div>
-                        <div class="col-md-4">
-                          <label class="form-label">Logo/Badge</label>
-                          <input type="file" name="logo" class="form-control">
-                          @if($it->logo_path)
-                            <div class="mt-2">
-                              <img src="{{ asset('storage/'.$it->logo_path) }}" alt="logo" height="60">
-                            </div>
-                          @endif
-                        </div>
-                        <div class="col-md-2">
-                          <label class="form-label">Destacado</label>
-                          <div class="form-check mt-2">
-                            <input class="form-check-input" type="checkbox" name="is_featured" value="1" id="featured_{{ $it->id }}" @checked($it->is_featured)>
-                            <label for="featured_{{ $it->id }}" class="form-check-label">Sí</label>
-                          </div>
-                        </div>
-                        <div class="col-md-2">
-                          <label class="form-label">Orden</label>
-                          <input type="number" name="sort_order" class="form-control" min="0" value="{{ old('sort_order',$it->sort_order) }}">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button class="btn btn-primary">Guardar cambios</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
             @empty
             <tr>
               <td colspan="8" class="text-center p-4">No hay elementos en la vitrina.</td>
@@ -185,4 +123,93 @@
   </div>
 
 </div>
+
+{{-- === MODALES DE EDICIÓN (FUERA DE LA CARD Y TABLA) === --}}
+@foreach($items as $it)
+<div class="modal fade" id="editSponsor{{ $it->id }}" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar #{{ $it->id }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form action="{{ route('admin.sponsors.update',$it) }}" method="post" enctype="multipart/form-data">
+        @csrf @method('PUT')
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Patrocinador</label>
+              <select name="sponsor_id" class="form-select" required>
+                @foreach($sponsors as $s)
+                  <option value="{{ $s->id }}" @selected(old('sponsor_id',$it->sponsor_id)==$s->id)>{{ $s->name ?? ('Sponsor #'.$s->id) }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Título</label>
+              <input name="title" class="form-control" value="{{ old('title',$it->title) }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Categoría</label>
+              <input name="category" class="form-control" value="{{ old('category',$it->category) }}">
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Descripción</label>
+              <textarea name="description" rows="3" class="form-control">{{ old('description',$it->description) }}</textarea>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Logo/Badge</label>
+              <input type="file" name="logo" class="form-control">
+              @if($it->logo_path)
+                <div class="mt-2">
+                  <img src="{{ asset('storage/'.$it->logo_path) }}" alt="logo" height="60">
+                </div>
+              @endif
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Destacado</label>
+              <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" name="is_featured" value="1" id="featured_{{ $it->id }}" @checked($it->is_featured)>
+                <label for="featured_{{ $it->id }}" class="form-check-label">Sí</label>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Orden</label>
+              <input type="number" name="sort_order" class="form-control" min="0" value="{{ old('sort_order',$it->sort_order) }}">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+@endforeach
 @endsection
+
+{{-- ==== FIX VISUAL Y CLICK EN MODALES ==== --}}
+<style>
+.card, .table-responsive {
+  overflow: visible !important;
+}
+
+.modal-backdrop {
+  z-index: 2050 !important;
+}
+
+.modal {
+  z-index: 2060 !important;
+}
+
+.modal-dialog {
+  margin-top: 5vh !important;
+  max-width: 900px !important;
+}
+
+.modal-dialog-scrollable .modal-body {
+  max-height: 65vh;
+  overflow-y: auto;
+}
+</style>
