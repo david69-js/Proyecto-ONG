@@ -787,7 +787,7 @@
       @endforelse
     </div>
   </div>
-</section
+      </section>
 
 <!-- Donadores Section -->
 <section id="donadores" class="donadores section">
@@ -1114,27 +1114,20 @@
               @csrf
               <div class="row g-3">
                 <div class="col-md-6">
-                  <div class="form-group">
-                    <input type="text" name="donor_name" class="form-control" placeholder="Tu Nombre" required>
-                  </div>
+                  <input type="text" name="donor_name" class="form-control" placeholder="Tu Nombre" required>
                 </div>
-
                 <div class="col-md-6">
-                  <div class="form-group">
-                    <input type="email" name="donor_email" class="form-control" placeholder="Tu Correo (opcional)">
-                  </div>
+                  <input type="email" name="donor_email" class="form-control" placeholder="Tu Correo (opcional)">
                 </div>
-
                 <div class="col-12">
-                  <div class="form-group">
-                    <input type="tel" name="donor_phone" class="form-control" placeholder="Número de Teléfono (opcional)">
-                  </div>
+                  <input type="tel" name="donor_phone" class="form-control" placeholder="Número de Teléfono (opcional)">
                 </div>
 
                 <!-- Monto + botones rápidos -->
                 <div class="col-12">
                   <label class="form-label mb-1">Selecciona un monto rápido o escribe el tuyo</label>
                   <div class="d-flex flex-wrap gap-2 mb-2">
+                    <button type="button" class="btn btn-outline-primary btn-sm quick-amt active" data-amount="10">10 {{ $paypalCurrency }}</button>
                     <button type="button" class="btn btn-outline-primary btn-sm quick-amt" data-amount="100">100 {{ $paypalCurrency }}</button>
                     <button type="button" class="btn btn-outline-primary btn-sm quick-amt" data-amount="200">200 {{ $paypalCurrency }}</button>
                     <button type="button" class="btn btn-outline-primary btn-sm quick-amt" data-amount="500">500 {{ $paypalCurrency }}</button>
@@ -1143,37 +1136,28 @@
                 </div>
 
                 <div class="col-md-6">
-                  <div class="form-group">
-                    <input type="number" min="1" step="0.01" name="amount" class="form-control" placeholder="Monto ({{ $paypalCurrency }})" required>
-                  </div>
+                  <input type="number" min="1" step="0.01" name="amount" class="form-control" value="10" required>
                 </div>
 
                 <div class="col-md-6">
-                  <div class="form-group">
-                    <select name="currency" class="form-control" required>
-                      <option value="{{ $paypalCurrency }}" selected>{{ $paypalCurrency }}</option>
-                    </select>
-                  </div>
+                  <select name="currency" class="form-control" required>
+                    <option value="{{ $paypalCurrency }}" selected>{{ $paypalCurrency }}</option>
+                  </select>
                 </div>
 
-                {{-- Proyecto (opcional) --}}
                 @isset($projects)
                 <div class="col-12">
-                  <div class="form-group">
-                    <select name="project_id" class="form-control">
-                      <option value="">Apoyar a la ONG (sin proyecto)</option>
-                      @foreach($projects as $p)
-                        <option value="{{ $p->id }}">{{ $p->nombre }}</option>
-                      @endforeach
-                    </select>
-                  </div>
+                  <select name="project_id" class="form-control">
+                    <option value="">Apoyar a la ONG (sin proyecto)</option>
+                    @foreach($projects as $p)
+                      <option value="{{ $p->id }}">{{ $p->nombre }}</option>
+                    @endforeach
+                  </select>
                 </div>
                 @endisset
 
                 <div class="col-12">
-                  <div class="form-group">
-                    <input type="text" name="notes" class="form-control" placeholder="Motivo / Programa (opcional)">
-                  </div>
+                  <input type="text" name="notes" class="form-control" placeholder="Motivo / Programa (opcional)">
                 </div>
               </div>
 
@@ -1186,26 +1170,18 @@
                 <div id="paypal-button-container"></div>
               </div>
 
-              <div class="form-actions mt-3">
-                <div class="contact-alternative">
-                  <span>O contáctanos directamente:</span>
-                  <a href="tel:+50235957273" class="phone-link"><i class="bi bi-telephone-fill"></i> +502 35957273</a>
-                </div>
+              <div class="form-actions mt-3 text-center">
+                <span>O contáctanos directamente:</span>
+                <a href="tel:+50235957273" class="ms-2 phone-link"><i class="bi bi-telephone-fill"></i> +502 35957273</a>
               </div>
             </form>
           </div>
 
-          <div class="trust-indicators" data-aos="fade-up" data-aos-delay="400">
-            <div class="row g-3">
-              <div class="col-4">
-                <div class="trust-item"><div class="trust-icon"><i class="bi bi-clock"></i></div><div class="trust-content"><span class="trust-number">24h</span><span class="trust-label">Tiempo de Respuesta</span></div></div>
-              </div>
-              <div class="col-4">
-                <div class="trust-item"><div class="trust-icon"><i class="bi bi-people-fill"></i></div><div class="trust-content"><span class="trust-number">500+</span><span class="trust-label">Familias Apoyadas</span></div></div>
-              </div>
-              <div class="col-4">
-                <div class="trust-item"><div class="trust-icon"><i class="bi bi-house-fill"></i></div><div class="trust-content"><span class="trust-number">120+</span><span class="trust-label">Viviendas Construidas</span></div></div>
-              </div>
+          <div class="trust-indicators mt-4" data-aos="fade-up" data-aos-delay="400">
+            <div class="row g-3 text-center">
+              <div class="col-4"><i class="bi bi-clock display-6 d-block text-primary"></i><small>24h<br>Respuesta</small></div>
+              <div class="col-4"><i class="bi bi-people-fill display-6 d-block text-primary"></i><small>500+<br>Familias</small></div>
+              <div class="col-4"><i class="bi bi-house-fill display-6 d-block text-primary"></i><small>120+<br>Viviendas</small></div>
             </div>
           </div>
 
@@ -1215,6 +1191,25 @@
     </div>
   </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const amountInput = document.querySelector('input[name="amount"]');
+  const quickBtns = document.querySelectorAll('.quick-amt');
+
+  // establecer monto inicial 10 USD
+  if (amountInput) amountInput.value = 10;
+
+  quickBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      quickBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      amountInput.value = btn.dataset.amount;
+    });
+  });
+});
+</script>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -1370,5 +1365,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   </main>
+  <style>
+  /* 🔧 Quitar flechas de navegación del carrusel de beneficiarios/testimoniales */
+  .beneficiarios .swiper-button-next,
+  .beneficiarios .swiper-button-prev {
+    display: none !important;
+    visibility: hidden !important;
+  }
+</style>
+
   <x-footer />
   
