@@ -14,18 +14,18 @@
       <div class="col-lg-6">
         <div class="hero-content" data-aos="fade-right" data-aos-delay="200">
           <!-- Subtítulo -->
-          <span class="subtitle">Materiales y herramientas disponibles</span>
+          <span class="subtitle">Apóyanos comprando</span>
           
           <!-- Título principal -->
-          <h1>Productos para Construir Hogares</h1>
+          <h1>Nuestros Productos</h1>
           
           <!-- Descripción -->
-          <p>Explora los materiales de construcción, herramientas y suministros disponibles para las familias que construyen sus hogares con Habitat Guatemala.</p>
+          <p>Estos productos nos ayudan a mantener nuestra labor solidaria. Cada compra contribuye directamente a nuestros proyectos de construcción de hogares para familias necesitadas en Guatemala.</p>
           
           <!-- Botones -->
           <div class="hero-buttons">
             <a href="#products" class="btn-primary">
-              Ver Productos Disponibles
+              Apóyanos
             </a>
           </div>
           
@@ -59,13 +59,9 @@
       <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
         <div class="hero-image">
           <!-- Imagen principal -->
-          <img src="{{ asset('assets/img/construction/showcase-3.webp') }}" alt="Materiales de construcción" class="img-fluid">
+          <img src="{{ asset('assets/img/apoyo.png') }}" alt="Apóyanos comprando" class="img-fluid">
           
-          <!-- Badge de la imagen -->
-          <div class="image-badge">
-            <span>Materiales de calidad</span>
-            <p>Para construir hogares seguros</p>
-          </div>
+      
         </div>
       </div>
     </div>
@@ -76,7 +72,7 @@
 <section id="products" class="products section">
   <div class="container section-title">
     <h2>Nuestros Productos</h2>
-    <p>Materiales de construcción, herramientas y suministros disponibles para las familias que construyen sus hogares con Habitat Guatemala</p>
+    <p>Con cada producto que adquieres, apoyas directamente nuestra misión de construir hogares seguros y dignos para familias guatemaltecas que más lo necesitan</p>
   </div>
 
   <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -125,7 +121,7 @@
     <div class="row gy-4">
       @forelse($products as $product)
         <div class="col-lg-4" data-aos="fade-up" data-aos-delay="{{ 200 + $loop->index * 100 }}">
-          <div class="service-card {{ $product->is_featured ? 'featured' : '' }}">
+          <div class="service-card {{ $product->is_featured ? 'featured' : '' }} product-card">
             @if($product->is_featured)
               <div class="service-badge">Destacado</div>
             @endif
@@ -136,18 +132,20 @@
                    style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;"
                    loading="lazy">
             </div>
-            <h3>{{ $product->name }}</h3>
-            <p>{{ Str::limit($product->short_description ?? $product->description, 100) }}</p>
-            <div class="service-features">
-              <span><i class="bi bi-tag"></i> {{ $product->category }}</span>
-              <span><i class="bi bi-box"></i> {{ $product->stock_quantity }} unidades</span>
-              @if($product->suggested_price)
-                <span><i class="bi bi-currency-dollar"></i> {{ $product->formatted_suggested_price }}</span>
-              @endif
+            <div class="product-content">
+              <h3>{{ $product->name }}</h3>
+              <p>{{ Str::limit($product->short_description ?? $product->description, 100) }}</p>
+                  <div class="service-features">
+                    <span><i class="bi bi-tag {{ $product->is_featured ? 'product-icon' : '' }}"></i> {{ $product->category }}</span>
+                    <span><i class="bi bi-box {{ $product->is_featured ? 'product-icon' : '' }}"></i> {{ $product->stock_quantity }} unidades</span>
+                    @if($product->suggested_price)
+                      <span><i class="bi bi-currency-dollar {{ $product->is_featured ? 'product-icon' : '' }}"></i> {{ $product->formatted_suggested_price }}</span>
+                    @endif
+                  </div>
+                  <a href="{{ route('products.public.show', $product) }}" class="btn btn-outline-primary {{ $product->is_featured ? 'product-btn' : '' }} mt-auto">
+                    Ver más <i class="bi bi-arrow-right ms-1 {{ $product->is_featured ? 'product-icon' : '' }}"></i>
+                  </a>
             </div>
-            <a href="{{ route('products.public.show', $product) }}" class="btn btn-outline-primary mt-auto">
-              Ver más <i class="bi bi-arrow-right ms-1"></i>
-            </a>
           </div>
         </div>
       @empty
@@ -181,6 +179,111 @@
 </main>
 
 <style>
+/* Estilos para tarjetas de productos */
+.product-card {
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid transparent;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+        /* Borde naranja para productos destacados */
+        .product-card.featured {
+          border-color: #ff8c00;
+          box-shadow: 0 5px 15px rgba(255, 140, 0, 0.2);
+        }
+
+        .product-card.featured:hover {
+          box-shadow: 0 15px 35px rgba(255, 140, 0, 0.3);
+        }
+
+/* Contenido con padding */
+.product-content {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #333;
+  line-height: 1.3;
+}
+
+.product-content p {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  flex: 1;
+}
+
+/* Características del producto */
+.service-features {
+  margin-bottom: 1rem;
+}
+
+.service-features span {
+  display: block;
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0;
+}
+
+        .service-features i {
+          color: #007bff;
+          margin-right: 0.5rem;
+          width: 16px;
+        }
+
+        /* Iconos de productos en naranja */
+        .product-icon {
+          color: #ff8c00 !important;
+        }
+
+        /* Botón */
+        .product-content .btn {
+          margin-top: auto;
+          font-size: 0.9rem;
+          padding: 0.6rem 1.2rem;
+          border-radius: 8px;
+          font-weight: 500;
+          transition: all 0.3s ease;
+        }
+
+        .product-content .btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Botón de productos en naranja */
+        .product-btn {
+          border-color: #ff8c00 !important;
+          color: #ff8c00 !important;
+        }
+
+        .product-btn:hover {
+          background-color: #ff8c00 !important;
+          border-color: #ff8c00 !important;
+          color: white !important;
+          box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3) !important;
+        }
+
+/* Imagen del producto */
 .product-image {
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
@@ -192,15 +295,6 @@
 .product-image:hover {
   transform: scale(1.05);
   filter: brightness(1.1) contrast(1.1);
-}
-
-.service-card {
-  overflow: hidden;
-  transition: box-shadow 0.3s ease;
-}
-
-.service-card:hover {
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
 .service-icon {
@@ -247,10 +341,47 @@
   image-rendering: -webkit-optimize-contrast;
 }
 
-/* Padding-top para elementos flex en móvil */
+        /* Badge destacado */
+        .service-badge {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: #ff8c00;
+          color: white;
+          padding: 0.4rem 0.8rem;
+          border-radius: 20px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          z-index: 2;
+          box-shadow: 0 2px 8px rgba(255, 140, 0, 0.3);
+        }
+
+/* Responsive */
 @media (max-width: 768px) {
+  .product-content {
+    padding: 1rem;
+  }
+  
+  .product-content h3 {
+    font-size: 1.1rem;
+  }
+  
+  .product-content p {
+    font-size: 0.85rem;
+  }
+  
+  .service-features span {
+    font-size: 0.8rem;
+  }
+  
   .d-flex.justify-content-between.align-items-center {
     padding-top: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .product-content {
+    padding: 0.75rem;
   }
 }
 
