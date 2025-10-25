@@ -191,6 +191,257 @@
 </section>
 <!-- /Sección Sobre Nosotros -->
 
+<!-- Sección Misión y Visión -->
+<section id="mission-vision" class="mission-vision section">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row">
+      <div class="col-lg-12 text-center mb-5">
+        <h2>Nuestra Misión y Visión</h2>
+        <p>Los principios que guían nuestro trabajo en Habitat Guatemala</p>
+      </div>
+    </div>
+    
+    <div class="row g-5">
+      <!-- Misión -->
+      <div class="col-lg-6" data-aos="fade-right" data-aos-delay="200">
+        <div class="mission-card">
+          <div class="card-icon">
+            <i class="bi bi-heart-fill"></i>
+          </div>
+          <h3>Nuestra Misión</h3>
+          <p>Construir viviendas seguras y dignas para familias guatemaltecas de escasos recursos, promoviendo el desarrollo comunitario sostenible y fortaleciendo los lazos sociales a través del trabajo voluntario y la solidaridad.</p>
+          <div class="mission-features">
+            <div class="feature-item">
+              <i class="bi bi-check-circle"></i>
+              <span>Viviendas seguras y dignas</span>
+            </div>
+            <div class="feature-item">
+              <i class="bi bi-check-circle"></i>
+              <span>Desarrollo comunitario sostenible</span>
+            </div>
+            <div class="feature-item">
+              <i class="bi bi-check-circle"></i>
+              <span>Trabajo voluntario y solidaridad</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Visión -->
+      <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
+        <div class="vision-card">
+          <div class="card-icon">
+            <i class="bi bi-eye-fill"></i>
+          </div>
+          <h3>Nuestra Visión</h3>
+          <p>Ser la organización líder en Guatemala en la construcción de viviendas sociales, creando comunidades prósperas donde cada familia tenga un hogar digno y las oportunidades necesarias para su desarrollo integral.</p>
+          <div class="vision-features">
+            <div class="feature-item">
+              <i class="bi bi-star"></i>
+              <span>Organización líder en vivienda social</span>
+            </div>
+            <div class="feature-item">
+              <i class="bi bi-star"></i>
+              <span>Comunidades prósperas y sostenibles</span>
+            </div>
+            <div class="feature-item">
+              <i class="bi bi-star"></i>
+              <span>Desarrollo integral de las familias</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Valores -->
+    <div class="row mt-5">
+      <div class="col-12" data-aos="fade-up" data-aos-delay="400">
+        <div class="values-section">
+          <h3 class="text-center mb-4">Nuestros Valores</h3>
+          <div class="row g-4">
+            <div class="col-md-3 col-sm-6">
+              <div class="value-item text-center">
+                <div class="value-icon">
+                  <i class="bi bi-people-fill"></i>
+                </div>
+                <h5>Solidaridad</h5>
+                <p>Apoyo mutuo y trabajo en equipo</p>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <div class="value-item text-center">
+                <div class="value-icon">
+                  <i class="bi bi-shield-check"></i>
+                </div>
+                <h5>Transparencia</h5>
+                <p>Honestidad en todas nuestras acciones</p>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <div class="value-item text-center">
+                <div class="value-icon">
+                  <i class="bi bi-award-fill"></i>
+                </div>
+                <h5>Excelencia</h5>
+                <p>Calidad en cada proyecto</p>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <div class="value-item text-center">
+                <div class="value-icon">
+                  <i class="bi bi-heart-pulse"></i>
+                </div>
+                <h5>Compasión</h5>
+                <p>Empatía hacia las familias necesitadas</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.mission-vision {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.mission-card, .vision-card {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mission-card:hover, .vision-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.card-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 25px;
+  color: #fff;
+  font-size: 2rem;
+}
+
+.mission-card h3, .vision-card h3 {
+  color: #333;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.mission-card p, .vision-card p {
+  color: #666;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.mission-features, .vision-features {
+  margin-top: 25px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+.feature-item:hover {
+  background: #e9ecef;
+}
+
+.feature-item i {
+  color: #007bff;
+  font-size: 1.2rem;
+  margin-right: 12px;
+  width: 20px;
+}
+
+.feature-item span {
+  color: #333;
+  font-weight: 500;
+}
+
+.values-section {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.values-section h3 {
+  color: #333;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+.value-item {
+  padding: 20px 15px;
+  transition: transform 0.3s ease;
+}
+
+.value-item:hover {
+  transform: translateY(-5px);
+}
+
+.value-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #28a745, #20c997);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+.value-item h5 {
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.value-item p {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .mission-card, .vision-card {
+    padding: 30px 20px;
+    margin-bottom: 30px;
+  }
+  
+  .values-section {
+    padding: 30px 20px;
+  }
+}
+</style>
+
    <!-- Sección de Eventos/Publicados -->
 <section id="services" class="services section">
 

@@ -181,6 +181,9 @@
                             <a class="dropdown-item" href="{{ route('admin.donations.index') }}">
                                 <i class="fas fa-donate me-2"></i>Donadores
                             </a>
+                            <a class="dropdown-item" href="{{ route('admin.contact-messages.index') }}">
+                                <i class="fas fa-envelope me-2"></i>Mensajes de Contacto
+                            </a>
 <a class="dropdown-item" href="{{ route('admin.public.index-selector') }}">
     <i class="fas fa-globe me-2"></i> Página pública predeterminada
 </a>
@@ -639,6 +642,10 @@
                                 <a href="{{ route('admin.donations.index') }}" class="list-group-item list-group-item-action d-flex align-items-center">
                                     <i class="fas fa-donate me-3"></i>
                                     Donadores
+                                </a>
+                                <a href="{{ route('admin.contact-messages.index') }}" class="list-group-item list-group-item-action d-flex align-items-center">
+                                    <i class="fas fa-envelope me-3"></i>
+                                    Mensajes de Contacto
                                 </a>
 
                                 <!-- Gestión de Usuarios -->

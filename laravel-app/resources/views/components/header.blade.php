@@ -2,7 +2,7 @@
     <div id="topbar" class="topbar d-flex align-items-center dark-background" style="transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);">
       <div class="container d-flex justify-content-center justify-content-md-between">
         <div class="contact-info d-flex align-items-center">
-          <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@example.com">contact@example.com</a></i>
+          <i class="bi bi-envelope d-flex align-items-center"><a href="https://mail.google.com/mail/?view=cm&fs=1&to=ongumg@gmail.com&su=Consulta%20desde%20sitio%20web%20Habitat%20Guatemala&body=Hola,%20me%20interesa%20obtener%20más%20información%20sobre%20sus%20servicios%20y%20cómo%20puedo%20ayudar." target="_blank">ongumg@gmail.com</a></i>
         </div>
           <div class="social-links d-none d-md-flex align-items-center">
             <a href="https://x.com/" target="_blank" rel="noopener noreferrer" class="twitter"><i class="bi bi-twitter-x"></i></a>
@@ -28,6 +28,7 @@
           <li><a href="#services">Programas</a></li>
           <li><a href="#projects">Proyectos</a></li>
           <li><a href="#donadores">Equipo</a></li>
+          <li><a href="{{ route('contact') }}">Contáctanos</a></li>
           @auth
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
@@ -50,7 +51,7 @@
           @else
             <li><a href="{{ route('login') }}">Ingresar</a></li>
           @endauth 
-          <li><a href="#call-to-action">Contacto</a></li>
+          <li><a href="{{ route('products.public.index') }}">Productos</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>

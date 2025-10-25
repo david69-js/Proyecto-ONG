@@ -121,6 +121,33 @@
            border-color: var(--accent-color) !important;
            color: white !important;
          }
+         
+         /* Indicadores cíclicos del carousel */
+         .carousel-indicators-custom {
+           position: relative;
+           z-index: 10;
+         }
+         
+         .carousel-indicator-dot {
+           width: 12px;
+           height: 12px;
+           border-radius: 50%;
+           background: rgba(255, 255, 255, 0.5);
+           border: 2px solid rgba(255, 255, 255, 0.8);
+           cursor: pointer;
+           transition: all 0.3s ease;
+         }
+         
+         .carousel-indicator-dot.active {
+           background: var(--accent-color);
+           border-color: var(--accent-color);
+           transform: scale(1.2);
+         }
+         
+         .carousel-indicator-dot:hover {
+           background: rgba(255, 255, 255, 0.8);
+           transform: scale(1.1);
+         }
        </style>
 </x-head>
 
@@ -279,7 +306,7 @@
               </div>
             </div>
             
-            <div id="carouselProject{{ $project->id }}" class="carousel slide shadow" data-bs-ride="carousel">
+            <div id="carouselProject{{ $project->id }}" class="carousel slide shadow" data-bs-ride="false" data-bs-interval="false">
         <div class="carousel-inner rounded">
           @foreach($project->phaseImages as $index => $image)
                   <div class="carousel-item {{ $index === 0 ? 'active' : '' }}" data-phase="{{ $image->fase }}">
@@ -306,6 +333,13 @@
           <button class="carousel-control-next" type="button" data-bs-target="#carouselProject{{ $project->id }}" data-bs-slide="next">
             <span class="carousel-control-next-icon"></span>
           </button>
+                
+                <!-- Indicadores cíclicos -->
+                <div class="carousel-indicators-custom">
+                  <div id="carouselIndicators{{ $project->id }}" class="d-flex justify-content-center gap-2 mt-3">
+                    <!-- Los indicadores se generarán dinámicamente con JavaScript -->
+                  </div>
+                </div>
         @endif
             </div>
           </div>
@@ -464,7 +498,7 @@
 
 <x-footer />
 
-<script>
+  <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Filtro de fases del carousel
     const filterButtons = document.querySelectorAll('.phase-filter-btn');
@@ -482,41 +516,59 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Función para ir al siguiente elemento visible
+    // Función para ir al siguiente elemento visible (cíclico)
     function goToNextVisible() {
         updateVisibleItems();
         if (visibleItems.length === 0) return;
         
         const currentActive = document.querySelector('.carousel-item.active');
         const currentIndex = visibleItems.indexOf(currentActive);
+        
+        // Navegación cíclica: si está en la última, va a la primera
         let nextIndex = (currentIndex + 1) % visibleItems.length;
         
         // Remover active de todos
-        carouselItems.forEach(item => item.classList.remove('active'));
+        carouselItems.forEach(item => {
+            item.classList.remove('active');
+            item.style.display = 'none';
+        });
         
-        // Activar el siguiente
+        // Activar el siguiente (cíclico)
         if (visibleItems[nextIndex]) {
             visibleItems[nextIndex].classList.add('active');
+            visibleItems[nextIndex].style.display = 'block';
         }
+        
+        // Actualizar indicadores
+        updateActiveIndicator();
     }
     
-    // Función para ir al elemento visible anterior
+    // Función para ir al elemento visible anterior (cíclico)
     function goToPrevVisible() {
         updateVisibleItems();
         if (visibleItems.length === 0) return;
         
         const currentActive = document.querySelector('.carousel-item.active');
         const currentIndex = visibleItems.indexOf(currentActive);
+        
+        // Navegación cíclica: si está en la primera, va a la última
         let prevIndex = currentIndex - 1;
         if (prevIndex < 0) prevIndex = visibleItems.length - 1;
         
         // Remover active de todos
-        carouselItems.forEach(item => item.classList.remove('active'));
+        carouselItems.forEach(item => {
+            item.classList.remove('active');
+            item.style.display = 'none';
+        });
         
-        // Activar el anterior
+        // Activar el anterior (cíclico)
         if (visibleItems[prevIndex]) {
             visibleItems[prevIndex].classList.add('active');
+            visibleItems[prevIndex].style.display = 'block';
         }
+        
+        // Actualizar indicadores
+        updateActiveIndicator();
     }
     
     // Event listeners para filtros
@@ -548,8 +600,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // Activar el primer elemento visible
             updateVisibleItems();
             if (visibleItems.length > 0) {
+                // Remover active de todos primero
+                carouselItems.forEach(item => item.classList.remove('active'));
+                // Activar el primero
                 visibleItems[0].classList.add('active');
             }
+            
+            // Actualizar indicadores cíclicos
+            updateIndicators();
         });
     });
     
@@ -561,7 +619,9 @@ document.addEventListener('DOMContentLoaded', function() {
         prevButton.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
+            e.stopImmediatePropagation();
             goToPrevVisible();
+            return false;
         });
     }
     
@@ -569,7 +629,75 @@ document.addEventListener('DOMContentLoaded', function() {
         nextButton.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
+            e.stopImmediatePropagation();
             goToNextVisible();
+            return false;
+        });
+    }
+    
+    // Deshabilitar completamente el carousel de Bootstrap
+    if (carousel) {
+        carousel.setAttribute('data-bs-ride', 'false');
+        carousel.setAttribute('data-bs-interval', 'false');
+        carousel.setAttribute('data-bs-pause', 'true');
+    }
+    
+    // Función para actualizar indicadores cíclicos
+    function updateIndicators() {
+        const indicatorsContainer = document.getElementById('carouselIndicators{{ $project->id }}');
+        if (!indicatorsContainer) return;
+        
+        updateVisibleItems();
+        
+        // Limpiar indicadores existentes
+        indicatorsContainer.innerHTML = '';
+        
+        // Crear indicadores para elementos visibles
+        visibleItems.forEach((item, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'carousel-indicator-dot';
+            dot.setAttribute('data-index', index);
+            
+            // Click en indicador
+            dot.addEventListener('click', function() {
+                goToSlide(index);
+            });
+            
+            indicatorsContainer.appendChild(dot);
+        });
+        
+        // Activar el indicador correspondiente
+        updateActiveIndicator();
+    }
+    
+    // Función para ir a una slide específica
+    function goToSlide(index) {
+        updateVisibleItems();
+        if (visibleItems.length === 0) return;
+        
+        // Remover active de todos
+        carouselItems.forEach(item => {
+            item.classList.remove('active');
+            item.style.display = 'none';
+        });
+        
+        // Activar la slide seleccionada
+        if (visibleItems[index]) {
+            visibleItems[index].classList.add('active');
+            visibleItems[index].style.display = 'block';
+        }
+        
+        updateActiveIndicator();
+    }
+    
+    // Función para actualizar indicador activo
+    function updateActiveIndicator() {
+        const indicators = document.querySelectorAll('.carousel-indicator-dot');
+        const currentActive = document.querySelector('.carousel-item.active');
+        const currentIndex = visibleItems.indexOf(currentActive);
+        
+        indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === currentIndex);
         });
     }
     
@@ -583,5 +711,8 @@ document.addEventListener('DOMContentLoaded', function() {
             goToNextVisible();
         }
     });
+    
+    // Inicializar indicadores al cargar la página
+    updateIndicators();
 });
-</script>
+  </script>

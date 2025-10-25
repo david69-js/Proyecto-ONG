@@ -38,7 +38,7 @@
 
         <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
           <h4>Contáctanos</h4>
-          <p>Zona 10, Ciudad de Guatemala</p>
+          <p>Santa Cruz del Quiche</p>
           <p>Guatemala, Centroamérica</p>
           <p>América Central</p>
           <p class="mt-4"><strong>Teléfono:</strong> <span>+502 1234-5678</span></p>
@@ -49,7 +49,7 @@
     </div>
 
     <div class="container-fluid copyright text-center mt-4" style="padding: 1rem;">
-      <p>© <span>Copyright</span> <strong class="px-1 sitename">HABITAT GUATEMALA</strong> <span>All Rights Reserved</span></p>
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">Habitat ong-umg</strong> </p>
     </div>
 
   </footer>
