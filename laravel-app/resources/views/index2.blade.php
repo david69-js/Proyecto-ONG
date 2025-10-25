@@ -1085,8 +1085,11 @@ document.addEventListener('DOMContentLoaded', function() {
       padding: 0.2rem 0.5rem;
       border-radius: 8px;
     }
+.footer .footer-links ul a,.footer-contact,.footer-about,.Copyright 
+{
+    z-index:1;
+    }
   </style>
-
   <!-- ======= Contenido ======= -->
   <div class="container section-title" data-aos="fade-up">
     <h2>Donadores</h2>

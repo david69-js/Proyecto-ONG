@@ -33,6 +33,10 @@
   <link href="{{ asset('assets2/css/main.css') }}" rel="stylesheet">
 
   <style>
+    .footer .footer-links ul a,.footer-contact,.footer-about,.Copyright 
+{
+    z-index:1;
+    }
     /* Ajustes específicos para esta página de proyecto con el estilo del tema */
     body.project-page { background-color: var(--background-color, #ffffff); }
 

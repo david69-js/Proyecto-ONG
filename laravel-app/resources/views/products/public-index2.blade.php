@@ -36,6 +36,10 @@
       --accent-color: #b8860b;   /* dorado oscuro */
       --accent-color-2: #f1c40f; /* dorado claro */
     }
+    .footer .footer-links ul a,.footer-contact,.footer-about,.Copyright 
+{
+    z-index:1;
+    }
 
     /* ---------- HERO ---------- */
     #products-hero.hero{
