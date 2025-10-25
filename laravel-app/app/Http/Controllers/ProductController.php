@@ -13,7 +13,8 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        // Solo aplicar middleware de autenticación a rutas administrativas
+        $this->middleware('auth')->except(['publicIndex', 'publicShow']);
     }
 
     /**

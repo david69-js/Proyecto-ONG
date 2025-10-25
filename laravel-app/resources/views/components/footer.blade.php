@@ -26,13 +26,13 @@
         </div>
 
         <div class="col-lg-2 col-6 footer-links">
-          <h4>Nuestros Programas</h4>
+          <h4>Otros enlaces</h4>
           <ul>
-            <li><a href="#projects">Construcción de Viviendas</a></li>
-            <li><a href="#services">Eventos Comunitarios</a></li>
-            <li><a href="#donadores">Programa de Donadores</a></li>
-            <li><a href="#patrocinadores">Alianzas Estratégicas</a></li>
-            <li><a href="#beneficiarios">Testimonios</a></li>
+            <li><a href="tel:+50235957273">+502 35957273</a></li>
+            <li><a href="{{ route('contact') }}">info@habitatguatemala.org</a></li>
+            <li><a href="https://www.facebook.com/habitatguatemala">Facebook</a></li>
+            <li><a href="https://www.instagram.com/habitatguatemala">Instagram</a></li>
+            <li><a href="https://www.linkedin.com/company/habitatguatemala">LinkedIn</a></li>
           </ul>
         </div>
 

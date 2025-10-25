@@ -118,9 +118,9 @@
 
               <div class="mt-3 contact-alternative">
                 <span>O contáctanos directamente:</span>
-                <a href="tel:+50212345678" class="phone-link">
+                <a href="tel:+50235957273" class="phone-link">
                   <i class="bi bi-telephone-fill"></i>
-                  +502 1234-5678
+                  +502 3595-7272
                 </a>
               </div>
             </form>
