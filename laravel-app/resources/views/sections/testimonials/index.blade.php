@@ -161,89 +161,95 @@
                             </td>
                         </tr>
 
-                        {{-- Modal de edición --}}
-                        <div class="modal fade" id="editModal{{ $t->id }}" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Editar Testimonio #{{ $t->id }}</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                    </div>
-                                    <form action="{{ route('admin.testimonials.update', $t) }}" method="post" enctype="multipart/form-data">
-                                        @csrf @method('PUT')
-                                        <div class="modal-body">
-                                            <div class="row g-3">
-                                                <div class="col-md-4">
-                                                    <label class="form-label">Beneficiario</label>
-                                                    <select name="beneficiary_id" class="form-select" required>
-                                                        @foreach($beneficiaries as $b)
-                                                            <option value="{{ $b->id }}" @selected(old('beneficiary_id', $t->beneficiary_id) == $b->id)>{{ $b->name }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <label class="form-label">Autor (opcional)</label>
-                                                    <input name="author_name" class="form-control" value="{{ old('author_name', $t->author_name) }}">
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <label class="form-label">Título (opcional)</label>
-                                                    <input name="title" class="form-control" value="{{ old('title', $t->title) }}">
-                                                </div>
-
-                                                <div class="col-md-12">
-                                                    <label class="form-label">Comentario</label>
-                                                    <textarea name="body" rows="4" class="form-control" required>{{ old('body', $t->body) }}</textarea>
-                                                </div>
-
-                                                <div class="col-md-3">
-                                                    <label class="form-label">Rol</label>
-                                                    <input name="role" class="form-control" value="{{ old('role', $t->role) }}">
-                                                </div>
-
-                                                <div class="col-md-3">
-                                                    <label class="form-label">Comunidad / Empresa</label>
-                                                    <input name="company" class="form-control" value="{{ old('company', $t->company) }}">
-                                                </div>
-
-                                                <div class="col-md-2">
-                                                    <label class="form-label">Rating (1-5)</label>
-                                                    <input type="number" min="1" max="5" name="rating" class="form-control" value="{{ old('rating', $t->rating) }}" required>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <label class="form-label">Avatar (opcional)</label>
-                                                    <input type="file" name="avatar" class="form-control">
-                                                    @if($t->avatar_path)
-                                                        <div class="mt-2">
-                                                            <img src="{{ asset('storage/'.$t->avatar_path) }}" alt="avatar" class="rounded border" height="60">
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                            <button class="btn btn-primary">Guardar cambios</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    @empty
+                        @empty
                         <tr>
                             <td colspan="7" class="text-center py-4 text-muted">No hay testimonios registrados.</td>
                         </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card-footer">
+                {{ $testimonials->links() }}
+            </div>
         </div>
 
-        <div class="card-footer">
-            {{ $testimonials->links() }}
+    </div>
+@endsection
+@forelse($testimonials as $t)
+{{-- Modal de edición --}}
+<div class="modal fade" id="editModal{{ $t->id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Testimonio #{{ $t->id }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form action="{{ route('admin.testimonials.update', $t) }}" method="post" enctype="multipart/form-data">
+                @csrf @method('PUT')
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Beneficiario</label>
+                            <select name="beneficiary_id" class="form-select" required>
+                                @foreach($beneficiaries as $b)
+                                    <option value="{{ $b->id }}" @selected(old('beneficiary_id', $t->beneficiary_id) == $b->id)>{{ $b->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Autor (opcional)</label>
+                            <input name="author_name" class="form-control" value="{{ old('author_name', $t->author_name) }}">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Título (opcional)</label>
+                            <input name="title" class="form-control" value="{{ old('title', $t->title) }}">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label">Comentario</label>
+                            <textarea name="body" rows="4" class="form-control" required>{{ old('body', $t->body) }}</textarea>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Rol</label>
+                            <input name="role" class="form-control" value="{{ old('role', $t->role) }}">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Comunidad / Empresa</label>
+                            <input name="company" class="form-control" value="{{ old('company', $t->company) }}">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label class="form-label">Rating (1-5)</label>
+                            <input type="number" min="1" max="5" name="rating" class="form-control" value="{{ old('rating', $t->rating) }}" required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Avatar (opcional)</label>
+                            <input type="file" name="avatar" class="form-control">
+                            @if($t->avatar_path)
+                                <div class="mt-2">
+                                    <img src="{{ asset('storage/'.$t->avatar_path) }}" alt="avatar" class="rounded border" height="60">
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </form>
         </div>
     </div>
-
 </div>
-@endsection
+  @empty
+<tr>
+    <td colspan="7" class="text-center py-4 text-muted">No hay testimonios registrados.</td>
+</tr>
+@endforelse

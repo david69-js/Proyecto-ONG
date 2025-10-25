@@ -140,118 +140,6 @@
               </td>
             </tr>
 
-            {{-- Modal edición --}}
-            <div class="modal fade" id="editDonor{{ $it->id }}" tabindex="-1" aria-hidden="true">
-              <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">Editar #{{ $it->id }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                  </div>
-                  <form action="{{ route('admin.donors.update',$it) }}" method="post" enctype="multipart/form-data">
-                    @csrf @method('PUT')
-                    <div class="modal-body">
-                      <div class="row g-3">
-                        <div class="col-md-4">
-                          <label class="form-label">Nombre</label>
-                          <input name="name" class="form-control" value="{{ old('name',$it->name) }}" required>
-                        </div>
-                        <div class="col-md-4">
-                          <label class="form-label">Cargo</label>
-                          <input name="position" class="form-control" value="{{ old('position',$it->position) }}">
-                        </div>
-                        <div class="col-md-4">
-                          <label class="form-label">Badge</label>
-                          <input name="badge_text" class="form-control" value="{{ old('badge_text',$it->badge_text) }}">
-                        </div>
-
-                        <div class="col-md-4">
-                          <label class="form-label">Email</label>
-                          <input name="email" type="email" class="form-control" value="{{ old('email',$it->email) }}">
-                        </div>
-                        <div class="col-md-4">
-                          <label class="form-label">Teléfono</label>
-                          <input name="phone" class="form-control" value="{{ old('phone',$it->phone) }}">
-                        </div>
-                        <div class="col-md-4">
-                          <label class="form-label">Avatar</label>
-                          <input type="file" name="avatar" class="form-control">
-                          @if($it->avatar_path)
-                            <div class="mt-2"><img src="{{ asset('storage/'.$it->avatar_path) }}" height="60"></div>
-                          @endif
-                        </div>
-
-                        <div class="col-md-12">
-                          <label class="form-label">Bio</label>
-                          <textarea name="bio" rows="3" class="form-control">{{ old('bio',$it->bio) }}</textarea>
-                        </div>
-
-                        <div class="col-md-6">
-                          <label class="form-label">Skills (csv)</label>
-                          <input name="skills" class="form-control" value="{{ old('skills',$it->skills) }}">
-                        </div>
-                        <div class="col-md-2">
-                          <label class="form-label">Destacado</label>
-                          <div class="form-check mt-2">
-                            <input class="form-check-input" type="checkbox" name="is_featured" value="1" @checked($it->is_featured)>
-                            <label class="form-check-label">Sí</label>
-                          </div>
-                        </div>
-                        <div class="col-md-2">
-                          <label class="form-label">Orden</label>
-                          <input type="number" name="sort_order" min="0" class="form-control" value="{{ old('sort_order',$it->sort_order) }}">
-                        </div>
-
-                        <div class="col-md-6">
-                          <label class="form-label">LinkedIn</label>
-                          <input name="linkedin_url" class="form-control" value="{{ old('linkedin_url',$it->linkedin_url) }}">
-                        </div>
-                        <div class="col-md-6">
-                          <label class="form-label">Twitter</label>
-                          <input name="twitter_url" class="form-control" value="{{ old('twitter_url',$it->twitter_url) }}">
-                        </div>
-                        <div class="col-md-6">
-                          <label class="form-label">Facebook</label>
-                          <input name="facebook_url" class="form-control" value="{{ old('facebook_url',$it->facebook_url) }}">
-                        </div>
-                        <div class="col-md-6">
-                          <label class="form-label">Instagram</label>
-                          <input name="instagram_url" class="form-control" value="{{ old('instagram_url',$it->instagram_url) }}">
-                        </div>
-                        <div class="col-md-12">
-                          <label class="form-label">Website</label>
-                          <input name="website_url" class="form-control" value="{{ old('website_url',$it->website_url) }}">
-                        </div>
-
-                        <div class="col-md-6">
-                          <label class="form-label">Donation (opcional)</label>
-                          <select name="donation_id" class="form-select">
-                            <option value="">-- Selecciona --</option>
-                            @foreach($donations as $d)
-                              <option value="{{ $d->id }}" @selected(old('donation_id',$it->donation_id)==$d->id)>
-                                #{{ $d->id }} — {{ $d->donation_code ?? $d->id }} ({{ $d->donor_name }})
-                              </option>
-                            @endforeach
-                          </select>
-                        </div>
-                        <div class="col-md-6">
-                          <label class="form-label">Sponsor (opcional)</label>
-                          <select name="sponsor_id" class="form-select">
-                            <option value="">-- Selecciona --</option>
-                            @foreach($sponsors as $s)
-                              <option value="{{ $s->id }}" @selected(old('sponsor_id',$it->sponsor_id)==$s->id)>{{ $s->name ?? ('#'.$s->id) }}</option>
-                            @endforeach
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button class="btn btn-primary">Guardar cambios</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
             @empty
             <tr><td colspan="7" class="text-center p-4">No hay donadores en la vitrina.</td></tr>
             @endforelse
@@ -265,3 +153,115 @@
   </div>
 </div>
 @endsection
+{{-- Modal edición --}}
+<div class="modal fade" id="editDonor{{ $it->id }}" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar #{{ $it->id }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form action="{{ route('admin.donors.update',$it) }}" method="post" enctype="multipart/form-data">
+        @csrf @method('PUT')
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Nombre</label>
+              <input name="name" class="form-control" value="{{ old('name',$it->name) }}" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Cargo</label>
+              <input name="position" class="form-control" value="{{ old('position',$it->position) }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Badge</label>
+              <input name="badge_text" class="form-control" value="{{ old('badge_text',$it->badge_text) }}">
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Email</label>
+              <input name="email" type="email" class="form-control" value="{{ old('email',$it->email) }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Teléfono</label>
+              <input name="phone" class="form-control" value="{{ old('phone',$it->phone) }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Avatar</label>
+              <input type="file" name="avatar" class="form-control">
+              @if($it->avatar_path)
+                <div class="mt-2"><img src="{{ asset('storage/'.$it->avatar_path) }}" height="60"></div>
+              @endif
+            </div>
+
+            <div class="col-md-12">
+              <label class="form-label">Bio</label>
+              <textarea name="bio" rows="3" class="form-control">{{ old('bio',$it->bio) }}</textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Skills (csv)</label>
+              <input name="skills" class="form-control" value="{{ old('skills',$it->skills) }}">
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Destacado</label>
+              <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" name="is_featured" value="1" @checked($it->is_featured)>
+                <label class="form-check-label">Sí</label>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Orden</label>
+              <input type="number" name="sort_order" min="0" class="form-control" value="{{ old('sort_order',$it->sort_order) }}">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">LinkedIn</label>
+              <input name="linkedin_url" class="form-control" value="{{ old('linkedin_url',$it->linkedin_url) }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Twitter</label>
+              <input name="twitter_url" class="form-control" value="{{ old('twitter_url',$it->twitter_url) }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Facebook</label>
+              <input name="facebook_url" class="form-control" value="{{ old('facebook_url',$it->facebook_url) }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Instagram</label>
+              <input name="instagram_url" class="form-control" value="{{ old('instagram_url',$it->instagram_url) }}">
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Website</label>
+              <input name="website_url" class="form-control" value="{{ old('website_url',$it->website_url) }}">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Donation (opcional)</label>
+              <select name="donation_id" class="form-select">
+                <option value="">-- Selecciona --</option>
+                @foreach($donations as $d)
+                  <option value="{{ $d->id }}" @selected(old('donation_id',$it->donation_id)==$d->id)>
+                    #{{ $d->id }} — {{ $d->donation_code ?? $d->id }} ({{ $d->donor_name }})
+                  </option>
+                @endforeach
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Sponsor (opcional)</label>
+              <select name="sponsor_id" class="form-select">
+                <option value="">-- Selecciona --</option>
+                @foreach($sponsors as $s)
+                  <option value="{{ $s->id }}" @selected(old('sponsor_id',$it->sponsor_id)==$s->id)>{{ $s->name ?? ('#'.$s->id) }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
