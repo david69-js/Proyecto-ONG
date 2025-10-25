@@ -25,7 +25,7 @@
         <ul>
           <li><a href="{{ route('home') }}" class="active">Inicio</a></li>
           <li><a href="#about">Quiénes Somos</a></li>
-          <li><a href="#services">Programas</a></li>
+          <li><a href="#services">Eventos</a></li>
           <li><a href="#projects">Proyectos</a></li>
           <li><a href="#donadores">Equipo</a></li>
           <li><a href="{{ route('contact') }}">Contáctanos</a></li>
