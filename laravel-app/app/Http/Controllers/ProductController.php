@@ -451,4 +451,46 @@ class ProductController extends Controller
 
         return view('products.public-show', compact('product'));
     }
+    public function publicShow2(\App\Models\Product $product)
+{
+    return view('products.public-show2', compact('product'));
+}
+public function publicIndex2(Request $request)
+{
+    // Filtros
+    $query = \App\Models\Product::query();
+
+    if ($search = $request->get('search')) {
+        $query->where('name', 'like', "%{$search}%");
+    }
+
+    if ($cat = $request->get('category')) {
+        $query->where('category', $cat);
+    }
+
+    if ($cond = $request->get('condition')) {
+        $query->where('condition', $cond);
+    }
+
+    // Resultados filtrados
+    $products = $query->latest()->paginate(12);
+
+    // Categorías distintas
+    $categories = \App\Models\Product::query()
+        ->select('category')
+        ->distinct()
+        ->pluck('category')
+        ->filter()
+        ->values();
+
+    // Conteo de destacados
+    $featuredCount = \App\Models\Product::query()
+        ->where('is_featured', true)
+        ->count();
+
+    return view('products.public-index2', compact('products', 'categories', 'featuredCount'));
+}
+
+
+
 }

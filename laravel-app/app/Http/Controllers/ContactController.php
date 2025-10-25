@@ -17,6 +17,11 @@ class ContactController extends Controller
         return view('contact.index');
     }
 
+    public function index2()
+{
+    return view('contact.index2'); // vista dorada
+}
+
     /**
      * Enviar el mensaje de contacto por email
      */

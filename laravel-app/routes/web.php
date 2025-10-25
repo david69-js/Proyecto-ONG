@@ -48,9 +48,15 @@ Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->
 /* Público: detalle de evento */
 Route::get('/eventos/{event}', [EventController::class, 'showPublic'])->name('events.public.show');
 
-/* Público: productos */
+
+/* Público: productos (estilo clásico) */
 Route::get('/productos', [ProductController::class, 'publicIndex'])->name('products.public.index');
 Route::get('/productos/{product}', [ProductController::class, 'publicShow'])->name('products.public.show');
+
+/* Público: productos (estilo dorado) */
+Route::get('/productos-dorado', [ProductController::class, 'publicIndex2'])->name('products.public.index2');
+Route::get('/productos-dorado/{product}', [ProductController::class, 'publicShow2'])->name('products.public.show2');
+
 
 /* Público: ubicaciones */
 Route::get('/ubicaciones', [LocationController::class, 'publicIndex'])->name('locations.public.index');
@@ -62,6 +68,8 @@ Route::get('/test-productos', function() {
 });
 Route::get('/projects/public/{project}/show2', [ProjectController::class, 'publicShow2'])->name('projects.public.show2');
 Route::get('/events/{event}', [App\Http\Controllers\EventController::class, 'publicShow2'])->name('events.public.show2');
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -369,6 +377,9 @@ Route::get('/proyectos/{project}', [ProjectPublicController::class, 'show'])
 // Rutas de contacto
 Route::get('/contacto', [ContactController::class, 'index'])->name('contact');
 Route::post('/contacto/enviar', [ContactController::class, 'send'])->name('contact.send');
+Route::get('/contacto-dorado', [ContactController::class, 'index2'])->name('contact.index2');
+Route::post('/contacto-dorado/enviar', [ContactController::class, 'send'])->name('contact.send2');
+
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/public-selector', [App\Http\Controllers\Admin\PublicIndexSelectorController::class, 'index'])

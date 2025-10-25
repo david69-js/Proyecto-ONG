@@ -106,16 +106,9 @@
           <li><a href="#services">Eventos</a></li>
           <li><a href="#projects">Proyectos</a></li>
           <li><a href="#get-started">Donaciones</a></li>
+          <li><a href="{{ route('contact.index2') }}">Contacto</a></li>
 
-          {{-- Menú desplegable opcional --}}
-          <li class="dropdown">
-            <a href="#"><span>Más</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#testimonios">Testimonios</a></li>
-              <li><a href="#patrocinadores">Patrocinadores</a></li>
-              <li><a href="#contact">Contacto</a></li>
-            </ul>
-          </li>
+       
 
           {{-- Si el usuario está autenticado --}}
           @auth
@@ -143,7 +136,7 @@
           @endauth
 
           {{--Enlace público a productos --}}
-          <li><a href="{{ route('products.public.index') }}">Productos</a></li>
+          <li><a href="{{ route('products.public.index2') }}">Productos</a></li>
         </ul>
 
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -188,16 +181,16 @@
         <p class="text-light mb-4 fs-5">
           {{ optional($hero)->description ?? 'Trabajamos cada día para mejorar la calidad de vida de las familias guatemaltecas más necesitadas.' }}
         </p>
-
-        <!-- Botones -->
-        <div class="d-flex justify-content-center gap-3 flex-wrap">
-          <a href="{{ optional($hero)->button_primary_link ?? '#' }}" class="btn-get-started">
-            {{ optional($hero)->button_primary_text ?? 'Haz tu donación' }}
-          </a>
-          <a href="{{ optional($hero)->button_secondary_link ?? '#' }}" class="btn btn-outline-light">
-            {{ optional($hero)->button_secondary_text ?? 'Conoce nuestros proyectos' }}
-          </a>
-        </div>
+<!-- Botones -->
+<div class="d-flex justify-content-center gap-3 flex-wrap">
+  <a href="{{ optional($hero)->button_primary_link ?? '#' }}" class="btn-get-started">
+    {{ optional($hero)->button_primary_text ?? 'Haz tu donación' }}
+  </a>
+  
+  <a href="{{ optional($hero)->button_secondary_link ?? '#' }}" class="btn-get-started">
+    {{ optional($hero)->button_secondary_text ?? 'Conoce nuestros proyectos' }}
+  </a>
+</div>
 
         <!-- Logros -->
         <div class="d-flex justify-content-center mt-5 text-white small gap-4 flex-wrap" data-aos="fade-up" data-aos-delay="300">
@@ -224,8 +217,10 @@
 
 </section>
 <!-- /Hero Section -->
-<!-- 🌟 Sección Misión, Visión y Valores (versión carrusel) -->
-<section id="mission-vision" class="mission-vision section py-5" style="background: linear-gradient(180deg, #fff8e1 0%, #ffffff 100%);">
+<!-- Sección Misión, Visión y Valores (corregido y completo) -->
+<section id="mission-vision" class="mission-vision section py-5" 
+  style="background: linear-gradient(180deg, #fff8e1 0%, #ffffff 100%); position: relative; overflow-x: hidden;">
+
   <div class="container" data-aos="fade-up" data-aos-delay="100">
 
     <!-- Encabezado -->
@@ -234,91 +229,97 @@
       <p class="text-muted">Descubre los principios que inspiran cada acción de Habitat Guatemala</p>
     </div>
 
-    <!-- Carrusel principal -->
-    <div id="missionVisionCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="8000">
-      <div class="carousel-inner">
-
-        <!-- 🟡 Misión -->
+    <!-- Carrusel -->
+    <div id="missionVisionCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="9000">
+      <div class="carousel-inner" style="min-height: 550px;"> <!-- 🔹 Aumentamos altura -->
+        
+        <!-- Misión -->
         <div class="carousel-item active">
-          <div class="card border-0 shadow-lg rounded-4 p-5 mx-auto" style="max-width:900px; background:#fff;">
-            <div class="text-center mb-4">
-              <i class="bi bi-heart-fill fs-1" style="color:#b8860b;"></i>
-              <h3 class="fw-bold mt-3" style="color:#b8860b;">Nuestra Misión</h3>
-            </div>
-            <p class="text-center text-muted mb-4">
-              Construir viviendas seguras y dignas para familias guatemaltecas de escasos recursos, 
-              promoviendo el desarrollo comunitario sostenible y fortaleciendo los lazos sociales 
-              a través del trabajo voluntario y la solidaridad.
-            </p>
-            <div class="row justify-content-center">
-              <div class="col-md-4 text-center">
-                <i class="bi bi-check-circle-fill text-warning"></i>
-                <p class="small mt-2 mb-0">Viviendas seguras y dignas</p>
+          <div class="d-flex justify-content-center align-items-center" style="min-height: 550px;"> <!-- 🔹 Centrado vertical -->
+            <div class="card border-0 shadow-lg rounded-4 p-5 w-100" style="max-width:1000px; background:#fff;">
+              <div class="text-center mb-4">
+                <i class="bi bi-heart-fill fs-1" style="color:#b8860b;"></i>
+                <h3 class="fw-bold mt-3" style="color:#b8860b;">Nuestra Misión</h3>
               </div>
-              <div class="col-md-4 text-center">
-                <i class="bi bi-check-circle-fill text-warning"></i>
-                <p class="small mt-2 mb-0">Desarrollo sostenible</p>
-              </div>
-              <div class="col-md-4 text-center">
-                <i class="bi bi-check-circle-fill text-warning"></i>
-                <p class="small mt-2 mb-0">Solidaridad y voluntariado</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 🟡 Visión -->
-        <div class="carousel-item">
-          <div class="card border-0 shadow-lg rounded-4 p-5 mx-auto" style="max-width:900px; background:#fff;">
-            <div class="text-center mb-4">
-              <i class="bi bi-eye-fill fs-1" style="color:#f1c40f;"></i>
-              <h3 class="fw-bold mt-3" style="color:#b8860b;">Nuestra Visión</h3>
-            </div>
-            <p class="text-center text-muted mb-4">
-              Ser la organización líder en Guatemala en la construcción de viviendas sociales, 
-              creando comunidades prósperas donde cada familia tenga un hogar digno 
-              y las oportunidades necesarias para su desarrollo integral.
-            </p>
-            <div class="row justify-content-center">
-              <div class="col-md-4 text-center">
-                <i class="bi bi-star-fill text-warning"></i>
-                <p class="small mt-2 mb-0">Liderazgo en vivienda social</p>
-              </div>
-              <div class="col-md-4 text-center">
-                <i class="bi bi-star-fill text-warning"></i>
-                <p class="small mt-2 mb-0">Comunidades prósperas</p>
-              </div>
-              <div class="col-md-4 text-center">
-                <i class="bi bi-star-fill text-warning"></i>
-                <p class="small mt-2 mb-0">Desarrollo familiar integral</p>
+              <p class="text-center text-muted mb-5 fs-5 px-3">
+                Construir viviendas seguras y dignas para familias guatemaltecas de escasos recursos, 
+                promoviendo el desarrollo comunitario sostenible y fortaleciendo los lazos sociales 
+                a través del trabajo voluntario y la solidaridad.
+              </p>
+              <div class="row justify-content-center">
+                <div class="col-md-4 text-center">
+                  <i class="bi bi-check-circle-fill text-warning fs-3"></i>
+                  <p class="mt-2 mb-0 fw-semibold">Viviendas seguras y dignas</p>
+                </div>
+                <div class="col-md-4 text-center">
+                  <i class="bi bi-check-circle-fill text-warning fs-3"></i>
+                  <p class="mt-2 mb-0 fw-semibold">Desarrollo sostenible</p>
+                </div>
+                <div class="col-md-4 text-center">
+                  <i class="bi bi-check-circle-fill text-warning fs-3"></i>
+                  <p class="mt-2 mb-0 fw-semibold">Solidaridad y voluntariado</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 💛 Valores -->
+        <!-- Visión -->
         <div class="carousel-item">
-          <div class="card border-0 shadow-lg rounded-4 p-5 mx-auto" style="max-width:900px; background:#fff;">
-            <div class="text-center mb-4">
-              <i class="bi bi-gem fs-1" style="color:#b8860b;"></i>
-              <h3 class="fw-bold mt-3" style="color:#b8860b;">Nuestros Valores</h3>
+          <div class="d-flex justify-content-center align-items-center" style="min-height: 550px;">
+            <div class="card border-0 shadow-lg rounded-4 p-5 w-100" style="max-width:1000px; background:#fff;">
+              <div class="text-center mb-4">
+                <i class="bi bi-eye-fill fs-1" style="color:#f1c40f;"></i>
+                <h3 class="fw-bold mt-3" style="color:#b8860b;">Nuestra Visión</h3>
+              </div>
+              <p class="text-center text-muted mb-5 fs-5 px-3">
+                Ser la organización líder en Guatemala en la construcción de viviendas sociales, 
+                creando comunidades prósperas donde cada familia tenga un hogar digno 
+                y las oportunidades necesarias para su desarrollo integral.
+              </p>
+              <div class="row justify-content-center">
+                <div class="col-md-4 text-center">
+                  <i class="bi bi-star-fill text-warning fs-3"></i>
+                  <p class="mt-2 mb-0 fw-semibold">Liderazgo en vivienda social</p>
+                </div>
+                <div class="col-md-4 text-center">
+                  <i class="bi bi-star-fill text-warning fs-3"></i>
+                  <p class="mt-2 mb-0 fw-semibold">Comunidades prósperas</p>
+                </div>
+                <div class="col-md-4 text-center">
+                  <i class="bi bi-star-fill text-warning fs-3"></i>
+                  <p class="mt-2 mb-0 fw-semibold">Desarrollo familiar integral</p>
+                </div>
+              </div>
             </div>
-            <div class="row g-4 justify-content-center">
-              <div class="col-6 col-md-3 text-center">
-                <i class="bi bi-people-fill fs-3 text-warning"></i>
-                <h6 class="fw-bold mt-2">Solidaridad</h6>
+          </div>
+        </div>
+
+        <!--Valores -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center align-items-center" style="min-height: 550px;">
+            <div class="card border-0 shadow-lg rounded-4 p-5 w-100" style="max-width:1000px; background:#fff;">
+              <div class="text-center mb-4">
+                <i class="bi bi-gem fs-1" style="color:#b8860b;"></i>
+                <h3 class="fw-bold mt-3" style="color:#b8860b;">Nuestros Valores</h3>
               </div>
-              <div class="col-6 col-md-3 text-center">
-                <i class="bi bi-shield-check fs-3 text-warning"></i>
-                <h6 class="fw-bold mt-2">Transparencia</h6>
-              </div>
-              <div class="col-6 col-md-3 text-center">
-                <i class="bi bi-award-fill fs-3 text-warning"></i>
-                <h6 class="fw-bold mt-2">Excelencia</h6>
-              </div>
-              <div class="col-6 col-md-3 text-center">
-                <i class="bi bi-heart-pulse fs-3 text-warning"></i>
-                <h6 class="fw-bold mt-2">Compasión</h6>
+              <div class="row g-4 justify-content-center">
+                <div class="col-6 col-md-3 text-center">
+                  <i class="bi bi-people-fill fs-3 text-warning"></i>
+                  <h6 class="fw-bold mt-2">Solidaridad</h6>
+                </div>
+                <div class="col-6 col-md-3 text-center">
+                  <i class="bi bi-shield-check fs-3 text-warning"></i>
+                  <h6 class="fw-bold mt-2">Transparencia</h6>
+                </div>
+                <div class="col-6 col-md-3 text-center">
+                  <i class="bi bi-award-fill fs-3 text-warning"></i>
+                  <h6 class="fw-bold mt-2">Excelencia</h6>
+                </div>
+                <div class="col-6 col-md-3 text-center">
+                  <i class="bi bi-heart-pulse fs-3 text-warning"></i>
+                  <h6 class="fw-bold mt-2">Compasión</h6>
+                </div>
               </div>
             </div>
           </div>
@@ -327,36 +328,37 @@
       </div>
 
       <!-- Controles -->
-      <button class="carousel-control-prev" type="button" data-bs-target="#missionVisionCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+      <button class="carousel-control-prev" type="button" data-bs-target="#missionVisionCarousel" data-bs-slide="prev"
+        style="left:-60px;">
+        <span class="carousel-control-prev-icon bg-warning rounded-circle p-4 shadow" aria-hidden="true"></span>
         <span class="visually-hidden">Anterior</span>
       </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#missionVisionCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+      <button class="carousel-control-next" type="button" data-bs-target="#missionVisionCarousel" data-bs-slide="next"
+        style="right:-60px;">
+        <span class="carousel-control-next-icon bg-warning rounded-circle p-4 shadow" aria-hidden="true"></span>
         <span class="visually-hidden">Siguiente</span>
       </button>
 
       <!-- Indicadores -->
       <div class="carousel-indicators mt-4">
-        <button type="button" data-bs-target="#missionVisionCarousel" data-bs-slide-to="0" class="active bg-warning" aria-label="Misión"></button>
-        <button type="button" data-bs-target="#missionVisionCarousel" data-bs-slide-to="1" class="bg-warning" aria-label="Visión"></button>
-        <button type="button" data-bs-target="#missionVisionCarousel" data-bs-slide-to="2" class="bg-warning" aria-label="Valores"></button>
+        <button type="button" data-bs-target="#missionVisionCarousel" data-bs-slide-to="0" class="active bg-warning"></button>
+        <button type="button" data-bs-target="#missionVisionCarousel" data-bs-slide-to="1" class="bg-warning"></button>
+        <button type="button" data-bs-target="#missionVisionCarousel" data-bs-slide-to="2" class="bg-warning"></button>
       </div>
 
     </div>
-
   </div>
 </section>
 
 
 
 
-   @php
+  @php
   // Credenciales de PayPal desde config/services.php o .env
+  use Illuminate\Support\Facades\Route as R;
+
   $paypalClientId = config('services.paypal.client_id', env('PAYPAL_CLIENT_ID'));
   $paypalCurrency = config('services.paypal.currency', env('PAYPAL_CURRENCY', 'USD'));
-
-  use Illuminate\Support\Facades\Route as R;
 
   $paypalCreateUrl = R::has('donations.paypal.create')
       ? route('donations.paypal.create')
@@ -409,6 +411,7 @@
             <div class="col-12">
               <label class="form-label mb-1">Selecciona un monto o escribe el tuyo</label>
               <div class="d-flex flex-wrap gap-2 mb-2">
+                <button type="button" class="btn btn-outline-primary btn-sm quick-amt active" data-amount="10">10 {{ $paypalCurrency }}</button>
                 <button type="button" class="btn btn-outline-primary btn-sm quick-amt" data-amount="100">100 {{ $paypalCurrency }}</button>
                 <button type="button" class="btn btn-outline-primary btn-sm quick-amt" data-amount="200">200 {{ $paypalCurrency }}</button>
                 <button type="button" class="btn btn-outline-primary btn-sm quick-amt" data-amount="500">500 {{ $paypalCurrency }}</button>
@@ -417,7 +420,7 @@
             </div>
 
             <div class="col-md-6">
-              <input type="number" min="1" step="0.01" name="amount" class="form-control" placeholder="Monto ({{ $paypalCurrency }})" required>
+              <input type="number" min="1" step="0.01" name="amount" class="form-control" value="10" required>
             </div>
 
             <div class="col-md-6">
@@ -454,7 +457,37 @@
       </div><!-- End Quote Form -->
     </div>
   </div>
-</section><!-- /Get Started Section -->
+</section>
+
+<!-- Script para monto inicial y botones -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const amountInput = document.querySelector('#get-started input[name="amount"]');
+  const quickBtns = document.querySelectorAll('#get-started .quick-amt');
+
+  // Establecer monto inicial 10 USD
+  if (amountInput) amountInput.value = 10;
+
+  quickBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      quickBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      amountInput.value = btn.dataset.amount;
+    });
+  });
+});
+</script>
+
+<!-- Estilo visual del botón activo -->
+<style>
+.quick-amt.active {
+  background: linear-gradient(135deg, #b8860b, #f1c40f);
+  color: #fff !important;
+  border-color: #b8860b !important;
+  font-weight: 600;
+}
+</style>
+<!-- /Get Started Section -->
 
 <!-- Script de integración con PayPal -->
 <script>
@@ -559,15 +592,14 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 
-    <!-- Sección de Beneficiarios -->
-<section id="beneficiarios" class="beneficiarios section">
+  <!-- Sección de Beneficiarios -->
+<section id="beneficiarios" class="beneficiarios section py-5">
 
   <!-- Título de la sección -->
-  <div class="container section-title" data-aos="fade-up">
-    <h2>Beneficiarios</h2>
-    <p>Transformamos vidas a través de la construcción de viviendas seguras y comunidades sostenibles.</p>
+  <div class="container section-title text-center mb-5" data-aos="fade-up">
+    <h2 class="fw-bold text-gold">Beneficiarios</h2>
+    <p class="text-muted">Transformamos vidas a través de la construcción de viviendas seguras y comunidades sostenibles.</p>
   </div>
-  <!-- /Fin título -->
 
   @if(($testimonials ?? collect())->count())
   <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -578,66 +610,59 @@ document.addEventListener('DOMContentLoaded', function () {
       <script type="application/json" class="swiper-config">
         {
           "loop": true,
-          "speed": 600,
-          "autoplay": {"delay": 5000},
+          "speed": 700,
+          "autoplay": {"delay": 6000},
           "slidesPerView": 1,
           "spaceBetween": 30,
-          "pagination": {"el": ".swiper-pagination", "type": "bullets", "clickable": true},
-          "navigation": {"nextEl": ".swiper-button-next", "prevEl": ".swiper-button-prev"}
+          "pagination": {"el": ".swiper-pagination", "type": "bullets", "clickable": true}
         }
       </script>
 
       <!-- Slides -->
       <div class="swiper-wrapper">
-        @forelse($testimonials as $t)
+        @foreach($testimonials as $t)
           <div class="swiper-slide">
-            <div class="beneficiario-slide card border-0 shadow-sm p-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="beneficiario-slide card border-0 shadow-lg p-4 position-relative overflow-hidden" data-aos="fade-up" data-aos-delay="200">
               
+              <!-- Efecto dorado de fondo -->
+              <div class="gold-gradient-overlay"></div>
+
               <!-- Cabecera con estrellas -->
-              <div class="beneficiario-header mb-3 d-flex align-items-center justify-content-between">
-                <div class="stars-rating text-warning">
+              <div class="beneficiario-header mb-3 d-flex align-items-center justify-content-between position-relative">
+                <div class="stars-rating text-gold">
                   @for($i=1; $i<=5; $i++)
                     <i class="bi {{ $i <= ($t->rating ?? 5) ? 'bi-star-fill' : 'bi-star' }}"></i>
                   @endfor
                 </div>
-                <div class="quote-icon text-primary"><i class="bi bi-quote fs-2"></i></div>
+                <div class="quote-icon text-gold"><i class="bi bi-quote fs-2"></i></div>
               </div>
 
               <!-- Cuerpo del testimonio -->
-              <div class="beneficiario-body mb-4">
-                <p class="text-muted fst-italic">{{ $t->body }}</p>
+              <div class="beneficiario-body mb-4 position-relative">
+                <p class="text-dark fst-italic">{{ $t->body }}</p>
               </div>
 
               <!-- Pie con autor -->
-              <div class="beneficiario-footer d-flex align-items-center">
+              <div class="beneficiario-footer d-flex align-items-center position-relative">
                 @php
-                  $avatar = $t->avatar_path ? asset('storage/'.$t->avatar_path) : asset('assets2/img/team/team-1.jpg');
+                  $avatar = $t->avatar_path ? asset('storage/'.$t->avatar_path) : asset('assets/img/person/person-f-12.webp');
                 @endphp
-                <img src="{{ $avatar }}" alt="Beneficiario" class="rounded-circle me-3" style="width:60px; height:60px; object-fit:cover;">
+                <img src="{{ $avatar }}" alt="Beneficiario" class="rounded-circle me-3 border border-2 border-gold" style="width:60px; height:60px; object-fit:cover;">
                 
                 <div class="author-details">
-                  <h5 class="mb-0">{{ $t->author_name ?? optional($t->beneficiary)->name ?? 'Beneficiario Anónimo' }}</h5>
-                  @if($t->role)<small class="text-secondary d-block">{{ $t->role }}</small>@endif
+                  <h5 class="mb-0 text-dark">{{ $t->author_name ?? optional($t->beneficiary)->name ?? 'Beneficiario Anónimo' }}</h5>
+                  @if($t->role)<small class="text-gold d-block">{{ $t->role }}</small>@endif
                   @if($t->company)<small class="text-secondary d-block">{{ $t->company }}</small>@endif
                 </div>
               </div>
+
             </div>
           </div>
-        @empty
-          <div class="swiper-slide">
-            <div class="beneficiario-slide card border-0 text-center p-5">
-              <p class="text-muted">Aún no hay testimonios publicados.</p>
-            </div>
-          </div>
-        @endforelse
+        @endforeach
       </div>
 
-      <!-- Controles -->
-      <div class="swiper-navigation-wrapper mt-3">
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-pagination"></div>
-        <div class="swiper-button-next"></div>
-      </div>
+      <!-- Paginación (bolitas) -->
+      <div class="swiper-pagination mt-4"></div>
 
     </div>
   </div>
@@ -648,7 +673,78 @@ document.addEventListener('DOMContentLoaded', function () {
   @endif
 
 </section>
-<!-- /Fin Sección de Beneficiarios -->
+
+<!-- Estilos -->
+<style>
+
+  .text-gold {
+    color: #b8860b !important;
+  }
+  .border-gold {
+    border-color: #d4af37 !important;
+  }
+
+
+  .gold-gradient-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top left, rgba(255, 215, 0, 0.15), transparent 70%),
+                linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(218,165,32,0.05));
+    pointer-events: none;
+    border-radius: 1rem;
+  }
+
+  .beneficiario-slide {
+    border-radius: 1rem;
+    background: #fffdf8;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .beneficiario-slide:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+  }
+
+
+  .stars-rating i {
+    font-size: 1.2rem;
+    color: #daa520;
+  }
+
+
+  .quote-icon i {
+    opacity: 0.9;
+  }
+
+
+  .author-details h5 {
+    font-weight: 600;
+  }
+  .author-details small {
+    font-size: 0.85rem;
+  }
+
+  .swiper-pagination-bullet {
+    background: #d4af37 !important;
+    opacity: 0.6;
+  }
+  .swiper-pagination-bullet-active {
+    opacity: 1;
+    background: #b8860b !important;
+  }
+
+
+  .beneficiarios .swiper-button-next,
+  .beneficiarios .swiper-button-prev {
+    display: none !important;
+  }
+
+  @media (max-width: 768px) {
+    .beneficiario-slide {
+      padding: 1.5rem;
+    }
+  }
+</style>
+
 
 
    <!-- Sección de Eventos -->
@@ -1287,28 +1383,28 @@ document.addEventListener('DOMContentLoaded', function () {
   </main>
 
     </main>
+<footer id="footer" class="footer dark-background w-100" style="margin-top: auto; padding: 0;">
+  <div class="container-fluid footer-top" style="padding: 2rem 1rem;">
+    <div class="row gy-4">
 
-  <footer id="footer" class="footer dark-background w-100" style="margin-top: auto; padding: 0;">
-    <div class="container-fluid footer-top" style="padding: 2rem 1rem;">
-      <div class="row gy-4">
-
-        {{-- Columna 1: Descripción --}}
-        <div class="col-lg-5 col-md-12 footer-about">
-          <a href="{{ route('home') }}" class="logo d-flex align-items-center">
-            <span class="sitename">Habitat Guatemala</span>
-          </a>
-          <p>
-            Construyendo esperanza desde 1995. Trabajamos cada día para que las familias guatemaltecas 
-            tengan acceso a una vivienda segura y un entorno digno.
-          </p>
-          <div class="social-links d-flex mt-4">
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i class="bi bi-twitter-x"></i></a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><i class="bi bi-facebook"></i></a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><i class="bi bi-instagram"></i></a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i></a>
-          </div>
+      {{-- Columna 1: Descripción --}}
+      <div class="col-lg-5 col-md-12 footer-about">
+        <a href="{{ route('home') }}" class="logo d-flex align-items-center">
+          <span class="sitename">Habitat Guatemala</span>
+        </a>
+        <p>
+          Construyendo esperanza desde 1995. Trabajamos cada día para que las familias guatemaltecas 
+          tengan acceso a una vivienda segura y un entorno digno.
+        </p>
+        <div class="social-links d-flex mt-4">
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i class="bi bi-twitter-x"></i></a>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><i class="bi bi-facebook"></i></a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><i class="bi bi-instagram"></i></a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i></a>
         </div>
-              {{-- Columna 2: Enlaces útiles --}}
+      </div>
+
+      {{-- Columna 2: Enlaces útiles --}}
       <div class="col-lg-2 col-6 footer-links">
         <h4>Enlaces Útiles</h4>
         <ul>
@@ -1316,94 +1412,158 @@ document.addEventListener('DOMContentLoaded', function () {
           <li><a href="#about">Quiénes Somos</a></li>
           <li><a href="#services">Eventos</a></li>
           <li><a href="#projects">Proyectos</a></li>
-         <li><a href="#get-started">Donar</a></li>
-
+          <li><a href="#get-started">Donar</a></li>
         </ul>
       </div>
 
-{{-- Columna 3: Otros Enlaces --}}
-<div class="col-lg-2 col-6 footer-links">
-  <h4>Otros Enlaces</h4>
-  <ul>
-    {{-- Teléfono (abre marcador en móviles) --}}
-    <li>
-      <a href="tel:+50235957273" class="text-decoration-none">
-        📞 +502 35957273
-      </a>
-    </li>
-
-    {{-- Correo (abre el cliente de correo) --}}
-    <li>
-      <a href="mailto:info@habitatguatemala.org" class="text-decoration-none">
-        ✉️ info@habitatguatemala.org
-      </a>
-    </li>
-
-    {{-- Redes sociales (abre en nueva pestaña) --}}
-    <li>
-      <a href="https://www.facebook.com/habitatguatemala" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
-        <i class="bi bi-facebook me-1"></i> Facebook
-      </a>
-    </li>
-
-    <li>
-      <a href="https://www.instagram.com/habitatguatemala" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
-        <i class="bi bi-instagram me-1"></i> Instagram
-      </a>
-    </li>
-
-    <li>
-      <a href="https://www.linkedin.com/company/habitatguatemala" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
-        <i class="bi bi-linkedin me-1"></i> LinkedIn
-      </a>
-    </li>
-  </ul>
-</div>
-
-
-        {{-- Columna 4: Contacto --}}
-        <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
-          <h4>Contáctanos</h4>
-          <p>Santa Cruz del Quiché</p>
-          <p>Guatemala, Centroamérica</p>
-          <p>América Central</p>
-          <p class="mt-4"><strong>Teléfono:</strong> <span>+502 1234-5678</span></p>
-          <p><strong>Email:</strong> <span>info@habitatguatemala.org</span></p>
-        </div>
-
+      {{-- Columna 3: Otros Enlaces --}}
+      <div class="col-lg-2 col-6 footer-links">
+        <h4>Otros Enlaces</h4>
+        <ul>
+          <li>
+            <a href="tel:+50235957273" class="text-decoration-none">
+              📞 +502 35957273
+            </a>
+          </li>
+          <li>
+            <a href="mailto:info@habitatguatemala.org" class="text-decoration-none">
+              ✉️ info@habitatguatemala.org
+            </a>
+          </li>
+          <li>
+            <a href="https://www.facebook.com/habitatguatemala" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+              <i class="bi bi-facebook me-1"></i> Facebook
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/habitatguatemala" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+              <i class="bi bi-instagram me-1"></i> Instagram
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/company/habitatguatemala" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+              <i class="bi bi-linkedin me-1"></i> LinkedIn
+            </a>
+          </li>
+        </ul>
       </div>
+
+      {{-- Columna 4: Contacto --}}
+      <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+        <h4>Contáctanos</h4>
+        <p>Santa Cruz del Quiché</p>
+        <p>Guatemala, Centroamérica</p>
+        <p>América Central</p>
+        <p class="mt-4"><strong>Teléfono:</strong> <span>+502 1234-5678</span></p>
+        <p><strong>Email:</strong> <span>info@habitatguatemala.org</span></p>
+      </div>
+
     </div>
+  </div>
 
-    {{-- Derechos de autor --}}
-    <div class="container-fluid copyright text-center mt-4" style="padding: 1rem;">
-      <p>© <span>Copyright</span> <strong class="px-1 sitename">Habitat ong-umg</strong></p>
-    </div>
-  </footer>
+  {{-- Derechos de autor --}}
+  <div class="container-fluid copyright text-center mt-4" style="padding: 1rem;">
+    <p>© <span>Copyright</span> <strong class="px-1 sitename">Habitat ong-umg</strong></p>
+  </div>
+</footer>
 
-  <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
-    <i class="bi bi-arrow-up-short"></i>
-  </a>
+<!-- Scroll Top -->
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+  <i class="bi bi-arrow-up-short"></i>
+</a>
 
-  <!-- Preloader -->
-  <div id="preloader"></div>
+<!-- Preloader -->
+<div id="preloader"></div>
 
-  <!-- Vendor JS con helpers Laravel -->
-  <script src="{{ asset('assets2/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ asset('assets2/vendor/php-email-form/validate.js') }}"></script>
-  <script src="{{ asset('assets2/vendor/aos/aos.js') }}"></script>
-  <script src="{{ asset('assets2/vendor/glightbox/js/glightbox.min.js') }}"></script>
-  <script src="{{ asset('assets2/vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
-  <script src="{{ asset('assets2/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
-  <script src="{{ asset('assets2/vendor/swiper/swiper-bundle.min.js') }}"></script>
-  <script src="{{ asset('assets2/vendor/purecounter/purecounter_vanilla.js') }}"></script>
+<!-- Vendor JS con helpers Laravel -->
+<script src="{{ asset('assets2/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('assets2/vendor/php-email-form/validate.js') }}"></script>
+<script src="{{ asset('assets2/vendor/aos/aos.js') }}"></script>
+<script src="{{ asset('assets2/vendor/glightbox/js/glightbox.min.js') }}"></script>
+<script src="{{ asset('assets2/vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
+<script src="{{ asset('assets2/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
+<script src="{{ asset('assets2/vendor/swiper/swiper-bundle.min.js') }}"></script>
+<script src="{{ asset('assets2/vendor/purecounter/purecounter_vanilla.js') }}"></script>
 
-  <!-- Main JS -->
-  <script src="{{ asset('assets2/js/main.js') }}"></script>
+<!-- Main JS -->
+<script src="{{ asset('assets2/js/main.js') }}"></script>
 
-</body>
-</html>
+<style>
+/* ===== Footer Mejorado ===== */
+.footer.dark-background {
+  background: linear-gradient(180deg, #2d2d2d 0%, #444 100%) !important;
+  color: #fff !important;
+  border-top: 3px solid #b8860b;
+  box-shadow: inset 0 10px 30px rgba(0,0,0,0.3);
+}
 
+/* Títulos */
+.footer h4 {
+  color: #ffd700 !important;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Textos generales */
+.footer p,
+.footer span,
+.footer a {
+  color: #f5f5f5 !important;
+  font-size: 1.05rem; /* 🔹 Más grandes */
+  line-height: 1.6;
+  transition: all 0.3s ease;
+}
+
+/* Enlaces */
+.footer a:hover {
+  color: #ffd700 !important;
+  text-decoration: underline;
+}
+
+/* Íconos de redes sociales */
+.footer .social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px; /* 🔹 Más grandes */
+  height: 50px; /* 🔹 Más grandes */
+  border-radius: 50%;
+  background: rgba(255, 215, 0, 0.25);
+  color: #ffd700 !important;
+  font-size: 1.5rem; /* 🔹 Íconos más grandes */
+  margin-right: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+}
+
+.footer .social-links a:hover {
+  background: #ffd700 !important;
+  color: #2d2d2d !important;
+  transform: translateY(-4px);
+  box-shadow: 0 5px 12px rgba(255, 215, 0, 0.5);
+}
+
+/* Copyright */
+.footer .copyright {
+  background: #2b2b2b !important;
+  color: #eee;
+  font-size: 1rem;
+  letter-spacing: 0.3px;
+}
+
+.footer .copyright strong {
+  color: #ffd700 !important;
+}
+
+/* Quitar flechas del carrusel de beneficiarios/testimoniales */
+.beneficiarios .swiper-button-next,
+.beneficiarios .swiper-button-prev {
+  display: none !important;
+  visibility: hidden !important;
+}
+</style>
 
 </body>
 </html>
