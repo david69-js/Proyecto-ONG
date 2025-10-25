@@ -172,7 +172,7 @@
         <p>Nuestro equipo está aquí para ayudarte a encontrar los materiales perfectos para tu proyecto de construcción.</p>
       </div>
       <div class="col-lg-3 cta-btn-container text-center">
-        <a class="cta-btn align-middle" href="#contact">Contactar</a>
+        <a class="cta-btn align-middle" href="{{ route('contact') }}">Contactar</a>
       </div>
     </div>
   </div>

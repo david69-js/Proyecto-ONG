@@ -52,6 +52,10 @@ Route::get('/eventos/{event}', [EventController::class, 'showPublic'])->name('ev
 Route::get('/productos', [ProductController::class, 'publicIndex'])->name('products.public.index');
 Route::get('/productos/{product}', [ProductController::class, 'publicShow'])->name('products.public.show');
 
+/* Público: ubicaciones */
+Route::get('/ubicaciones', [LocationController::class, 'publicIndex'])->name('locations.public.index');
+Route::get('/ubicaciones/{location}', [LocationController::class, 'publicShow'])->name('locations.public.show');
+
 /* Ruta de prueba */
 Route::get('/test-productos', function() {
     return 'Ruta de productos funciona correctamente';
