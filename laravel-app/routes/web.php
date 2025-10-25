@@ -18,6 +18,8 @@ use App\Http\Controllers\ProjectIndexController;
 use App\Http\Controllers\BeneficiaryTestimonialController;
 use App\Http\Controllers\SponsorHighlightController;
 use App\Http\Controllers\DonorHighlightController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\ProjectReportController;
 use App\Http\Controllers\Admin\PublicIndexSelectorController;
 use App\Http\Controllers\ProjectPublicController;
@@ -45,6 +47,15 @@ Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->
 
 /* Público: detalle de evento */
 Route::get('/eventos/{event}', [EventController::class, 'showPublic'])->name('events.public.show');
+
+/* Público: productos */
+Route::get('/productos', [ProductController::class, 'publicIndex'])->name('products.public.index');
+Route::get('/productos/{product}', [ProductController::class, 'publicShow'])->name('products.public.show');
+
+/* Ruta de prueba */
+Route::get('/test-productos', function() {
+    return 'Ruta de productos funciona correctamente';
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -349,10 +360,23 @@ Route::get('/', function () {
 Route::get('/proyectos/{project}', [ProjectPublicController::class, 'show'])
     ->name('projects.public.show');
 
+// Rutas de contacto
+Route::get('/contacto', [ContactController::class, 'index'])->name('contact');
+Route::post('/contacto/enviar', [ContactController::class, 'send'])->name('contact.send');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/public-selector', [App\Http\Controllers\Admin\PublicIndexSelectorController::class, 'index'])
         ->name('public.index-selector');
     Route::post('/public-selector', [App\Http\Controllers\Admin\PublicIndexSelectorController::class, 'update'])
         ->name('public.index-selector.update');
+    
+    // Rutas de administración de mensajes de contacto
+    Route::get('/contact-messages', [ContactMessageController::class, 'index'])
+        ->name('contact-messages.index');
+    Route::get('/contact-messages/{message}', [ContactMessageController::class, 'show'])
+        ->name('contact-messages.show');
+    Route::post('/contact-messages/{message}/mark-read', [ContactMessageController::class, 'markAsRead'])
+        ->name('contact-messages.mark-read');
+    Route::delete('/contact-messages/{message}', [ContactMessageController::class, 'destroy'])
+        ->name('contact-messages.destroy');
 });

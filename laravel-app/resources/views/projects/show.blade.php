@@ -1,6 +1,6 @@
 @extends('layouts.tabler')
 
-@section('page-title', 'Detalles del Proyecto instant')
+@section('page-title', 'Detalles del Proyecto')
 @section('page-description', 'Información completa del proyecto')
 
 @section('content')
@@ -74,8 +74,9 @@
                                     <div class="position-relative">
                                         <img src="{{ asset('storage/' . $image->image_path) }}" 
                                              class="card-img-top" 
-                                             style="height: 200px; object-fit: cover;"
-                                             alt="{{ $image->original_name }}">
+                                             style="height: 200px; object-fit: cover; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;"
+                                             alt="{{ $image->original_name }}"
+                                             loading="lazy">
                                         @can('update', $project)
                                         <button type="button" 
                                                 class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 delete-image-btn"
@@ -171,6 +172,34 @@
                 });
             });
             </script>
+
+            <style>
+            .card-img-top {
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+                image-rendering: pixelated;
+                -ms-interpolation-mode: nearest-neighbor;
+                transition: transform 0.3s ease;
+            }
+            
+            .card-img-top:hover {
+                transform: scale(1.05);
+                z-index: 10;
+                position: relative;
+            }
+            
+            .card {
+                overflow: hidden;
+            }
+            
+            .phase-image .card {
+                transition: box-shadow 0.3s ease;
+            }
+            
+            .phase-image .card:hover {
+                box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            }
+            </style>
 
             <div class="mt-3">
                 <a href="{{ route('projects.edit', $project) }}" class="btn btn-warning">Editar</a>

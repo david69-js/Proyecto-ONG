@@ -392,4 +392,62 @@ class ProductController extends Controller
 
         return view('products.statistics', compact('statistics', 'categoryStats', 'conditionStats'));
     }
+
+    /**
+     * Mostrar lista pública de productos
+     */
+    public function publicIndex(Request $request)
+    {
+        // Obtener productos activos de la base de datos
+        $query = Product::where('is_active', true)->with(['creator']);
+
+        // Aplicar filtros
+        if ($request->filled('search')) {
+            $query->search($request->search);
+        }
+
+        if ($request->filled('category')) {
+            $query->byCategory($request->category);
+        }
+
+        if ($request->filled('condition')) {
+            $query->byCondition($request->condition);
+        }
+
+        if ($request->filled('featured')) {
+            $query->featured();
+        }
+
+        // Ordenamiento
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortDirection = $request->get('sort_direction', 'desc');
+        $query->orderBy($sortBy, $sortDirection);
+
+        $products = $query->get();
+
+        // Obtener categorías para el filtro
+        $categories = Product::where('is_active', true)
+            ->select('category')
+            ->distinct()
+            ->whereNotNull('category')
+            ->pluck('category')
+            ->sort();
+
+        return view('products.public-index', compact('products', 'categories'));
+    }
+
+    /**
+     * Mostrar producto específico en vista pública
+     */
+    public function publicShow(Product $product)
+    {
+        // Verificar que el producto esté activo
+        if (!$product->is_active) {
+            abort(404);
+        }
+
+        $product->load(['creator']);
+
+        return view('products.public-show', compact('product'));
+    }
 }
