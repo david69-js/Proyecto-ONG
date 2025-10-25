@@ -17,7 +17,7 @@
                     <span class="avatar avatar-sm" style="background-image: url({{ asset('assets/img/default-avatar.png') }})"></span>
                     <div class="d-none d-xl-block ps-2">
                         <div>{{ auth()->user()->full_name }}</div>
-                        <div class="mt-1 small text-muted">
+                        <div class="mt-1 small text-black">
                             @foreach(auth()->user()->roles as $role)
                                 {{ $role->name }}
                                 @if(!$loop->last), @endif

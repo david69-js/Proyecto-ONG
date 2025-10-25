@@ -28,7 +28,7 @@
                     @endif
                     <div class="d-none d-xl-block ps-2">
                         <div>{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</div>
-                        <div class="mt-1 small text-muted">
+                        <div class="mt-1 small text-success">
                             @foreach(auth()->user()->roles as $role)
                                 {{ $role->name }}
                                 @if(!$loop->last), @endif

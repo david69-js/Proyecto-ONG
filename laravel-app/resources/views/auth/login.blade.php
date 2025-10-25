@@ -12,7 +12,7 @@
     
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #adb8ee 0%, #ffffff 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -25,7 +25,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .login-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #000;  
             color: white;
             border-radius: 20px 20px 0 0;
             padding: 2rem;
@@ -42,7 +42,7 @@
             box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
         }
         .btn-login {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #000;
             border: none;
             border-radius: 10px;
             padding: 12px;
@@ -68,7 +68,7 @@
 <body>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-4 col-lg-6">
                 <div class="card login-card">
                     <div class="login-header">
                         <i class="fas fa-hands-helping fa-3x mb-3"></i>
@@ -140,15 +140,7 @@
 
                             <div class="mb-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" 
-                                           type="checkbox" 
-                                           id="remember" 
-                                           name="remember" 
-                                           value="1"
-                                           {{ old('remember') ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="remember">
-                                        <i class="fas fa-clock"></i> Recordarme
-                                    </label>
+                                   
                                 </div>
                             </div>
 
@@ -161,19 +153,11 @@
                         </form>
 
                         <hr class="my-4">
-
-                        <div class="text-center">
-                            <p class="mb-2">¿No tienes una cuenta?</p>
-                            <a href="{{ route('register') }}" class="btn btn-outline-primary">
-                                <i class="fas fa-user-plus"></i> Registrarse
-                            </a>
-                        </div>
-                    </div>
+                     </div>
                 </div>
 
                 <div class="text-center mt-4">
-                    <p class="text-white">
-                        <i class="fas fa-shield-alt"></i> 
+                    <p class="text-black">
                         Sistema seguro para organizaciones no gubernamentales
                     </p>
                 </div>
