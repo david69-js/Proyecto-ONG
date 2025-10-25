@@ -3,33 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Gate;
-use App\Models\Project;
-use App\Models\User;
-use App\Models\Beneficiary;
-use App\Models\Location;
-use App\Models\Donation;
-use App\Policies\ProjectPolicy;
-use App\Policies\UserPolicy;
-use App\Policies\BeneficiaryPolicy;
-use App\Policies\LocationPolicy;
-use App\Policies\DonationPolicy;
+use Illuminate\Support\Facades\Blade;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * The policy mappings for the application.
-     *
-     * @var array<class-string, class-string>
-     */
-    protected $policies = [
-        Project::class => ProjectPolicy::class,
-        User::class => UserPolicy::class,
-        Beneficiary::class => BeneficiaryPolicy::class,
-        Location::class => LocationPolicy::class,
-        Donation::class => DonationPolicy::class,
-    ];
-
     /**
      * Register any application services.
      */
@@ -43,32 +20,41 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Registrar las policies
-        foreach ($this->policies as $model => $policy) {
-            Gate::policy($model, $policy);
-        }
-
-        // Gate especial para super-admin: permitir todo
-        Gate::before(function ($user, $ability) {
-            if ($user->hasRole('super-admin')) {
-                return true;
-            }
-        });
-
-        // Directivas de Blade personalizadas
-        \Illuminate\Support\Facades\Blade::if('role', function ($role) {
+        // ==============================================
+        // DIRECTIVAS BLADE PARA ROLES
+        // ==============================================
+        
+        // @role('admin') - Verifica un rol específico
+        Blade::if('role', function ($role) {
             return auth()->check() && auth()->user()->hasRole($role);
         });
 
-        \Illuminate\Support\Facades\Blade::if('hasanyrole', function (...$roles) {
+        // @hasanyrole('admin', 'super-admin') - Verifica cualquiera de los roles
+        Blade::if('hasanyrole', function (...$roles) {
             return auth()->check() && auth()->user()->hasAnyRole($roles);
         });
 
-        \Illuminate\Support\Facades\Blade::if('permission', function ($permission) {
+        // @anyrole('admin', 'super-admin') - Alias más corto
+        Blade::if('anyrole', function (...$roles) {
+            return auth()->check() && auth()->user()->hasAnyRole($roles);
+        });
+
+        // ==============================================
+        // DIRECTIVAS BLADE PARA PERMISOS
+        // ==============================================
+        
+        // @permission('users.view') - Verifica un permiso específico
+        Blade::if('permission', function ($permission) {
             return auth()->check() && auth()->user()->hasPermission($permission);
         });
 
-        \Illuminate\Support\Facades\Blade::if('hasanypermission', function (...$permissions) {
+        // @hasanypermission('users.view', 'users.edit') - Verifica cualquiera de los permisos
+        Blade::if('hasanypermission', function (...$permissions) {
+            return auth()->check() && auth()->user()->hasAnyPermission($permissions);
+        });
+
+        // @anypermission('users.view', 'users.edit') - Alias más corto
+        Blade::if('anypermission', function (...$permissions) {
             return auth()->check() && auth()->user()->hasAnyPermission($permissions);
         });
     }

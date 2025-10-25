@@ -19,10 +19,23 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        // Verificar autorización
+        // Verificar autorización usando policy
         $this->authorize('viewAny', User::class);
 
         $query = User::with(['profile', 'roles']);
+
+        // Filtrar según el rol del usuario autenticado
+        $currentUser = auth()->user();
+        
+        // Si no es super-admin, filtrar usuarios que puede ver
+        if (!$currentUser->hasRole('super-admin')) {
+            // Admin no puede ver super-admins
+            if ($currentUser->hasRole('admin')) {
+                $query->whereDoesntHave('roles', function ($q) {
+                    $q->where('slug', 'super-admin');
+                });
+            }
+        }
 
         // Search functionality
         if ($request->filled('search')) {
@@ -51,7 +64,13 @@ class UserController extends Controller
         }
 
         $users = $query->latest()->paginate(15);
-        $roles = Role::active()->ordered()->get();
+        
+        // Obtener roles disponibles (excluyendo super-admin si no es super-admin)
+        $roles = Role::active()->ordered();
+        if (!$currentUser->hasRole('super-admin')) {
+            $roles->where('slug', '!=', 'super-admin');
+        }
+        $roles = $roles->get();
 
         return view('users.index', compact('users', 'roles'));
     }
@@ -61,10 +80,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        // Verificar autorización
         $this->authorize('create', User::class);
 
-        $roles = Role::active()->ordered()->get();
+        // Obtener roles disponibles
+        $roles = $this->getAvailableRoles();
+        
         return view('users.create', compact('roles'));
     }
 
@@ -73,7 +93,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // Verificar autorización
         $this->authorize('create', User::class);
 
         $request->validate([
@@ -101,6 +120,13 @@ class UserController extends Controller
             'emergency_contact_phone' => 'nullable|string|max:20',
             'emergency_contact_relationship' => 'nullable|string|max:100',
         ]);
+
+        // Verificar que no intente crear super-admin si no lo es
+        $selectedRoles = Role::whereIn('id', $request->roles)->get();
+        if ($selectedRoles->contains('slug', 'super-admin') && !auth()->user()->hasRole('super-admin')) {
+            return back()->with('error', 'No tienes permiso para crear usuarios con el rol de Super Admin.')
+                        ->withInput();
+        }
 
         DB::transaction(function () use ($request) {
             // Handle avatar upload
@@ -144,7 +170,7 @@ class UserController extends Controller
         });
 
         return redirect()->route('users.index')
-            ->with('success', 'User created successfully.');
+            ->with('success', 'Usuario creado exitosamente.');
     }
 
     /**
@@ -152,7 +178,6 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        // Verificar autorización
         $this->authorize('view', $user);
 
         $user->load(['profile', 'roles.permissions']);
@@ -164,11 +189,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        // Verificar autorización
         $this->authorize('update', $user);
 
         $user->load(['profile', 'roles']);
-        $roles = Role::active()->ordered()->get();
+        $roles = $this->getAvailableRoles();
+        
         return view('users.edit', compact('user', 'roles'));
     }
 
@@ -177,7 +202,6 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        // Verificar autorización
         $this->authorize('update', $user);
 
         $validationRules = [
@@ -211,6 +235,18 @@ class UserController extends Controller
         }
 
         $request->validate($validationRules);
+
+        // Verificar restricciones de rol
+        if ($user->hasRole('super-admin') && !auth()->user()->hasRole('super-admin')) {
+            return back()->with('error', 'No puedes modificar un usuario con el rol de Super Admin.')
+                        ->withInput();
+        }
+
+        $selectedRoles = Role::whereIn('id', $request->roles)->get();
+        if ($selectedRoles->contains('slug', 'super-admin') && !auth()->user()->hasRole('super-admin')) {
+            return back()->with('error', 'No puedes asignar el rol de Super Admin.')
+                        ->withInput();
+        }
 
         DB::transaction(function () use ($request, $user) {
             // Handle avatar upload
@@ -263,7 +299,7 @@ class UserController extends Controller
                 $user->profile()->create($profileData);
             }
 
-            // Update roles
+            // Update roles - remove old ones assigned by current user and add new ones
             $user->roles()->sync($request->roles, [
                 'assigned_at' => now(),
                 'assigned_by' => auth()->id(),
@@ -271,7 +307,7 @@ class UserController extends Controller
         });
 
         return redirect()->route('users.index')
-            ->with('success', 'User updated successfully.');
+            ->with('success', 'Usuario actualizado exitosamente.');
     }
 
     /**
@@ -279,19 +315,31 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        // Verificar autorización
         $this->authorize('delete', $user);
 
-        // Prevent deleting the last admin
-        if ($user->hasRole('super-admin') && Role::where('slug', 'super-admin')->first()->users()->count() <= 1) {
-            return redirect()->route('users.index')
-                ->with('error', 'Cannot delete the last super administrator.');
+        // No se puede eliminar a sí mismo
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'No puedes eliminar tu propia cuenta.');
+        }
+
+        // Prevent deleting the last super-admin
+        if ($user->hasRole('super-admin')) {
+            $superAdminRole = Role::where('slug', 'super-admin')->first();
+            if ($superAdminRole && $superAdminRole->users()->count() <= 1) {
+                return redirect()->route('users.index')
+                    ->with('error', 'No se puede eliminar el último Super Administrador del sistema.');
+            }
+        }
+
+        // Delete avatar if exists
+        if ($user->avatar) {
+            Storage::disk('public')->delete($user->avatar);
         }
 
         $user->delete();
 
         return redirect()->route('users.index')
-            ->with('success', 'User deleted successfully.');
+            ->with('success', 'Usuario eliminado exitosamente.');
     }
 
     /**
@@ -299,14 +347,13 @@ class UserController extends Controller
      */
     public function toggleStatus(User $user)
     {
-        // Verificar autorización
         $this->authorize('update', $user);
 
         $user->update(['is_active' => !$user->is_active]);
 
-        $status = $user->is_active ? 'activated' : 'deactivated';
+        $status = $user->is_active ? 'activado' : 'desactivado';
         return redirect()->route('users.index')
-            ->with('success', "User {$status} successfully.");
+            ->with('success', "Usuario {$status} exitosamente.");
     }
 
     /**
@@ -314,8 +361,7 @@ class UserController extends Controller
      */
     public function permissions(User $user)
     {
-        // Verificar autorización
-        $this->authorize('managePermissions', $user);
+        $this->authorize('update', $user);
 
         $user->load(['roles.permissions', 'permissions']);
         $permissions = Permission::active()->ordered()->get()->groupBy('module');
@@ -327,8 +373,7 @@ class UserController extends Controller
      */
     public function updatePermissions(Request $request, User $user)
     {
-        // Verificar autorización
-        $this->authorize('managePermissions', $user);
+        $this->authorize('update', $user);
 
         $request->validate([
             'permissions' => 'array',
@@ -337,7 +382,7 @@ class UserController extends Controller
 
         $permissions = $request->permissions ?? [];
         
-        // Sync permissions (this will remove all existing and add new ones)
+        // Sync permissions
         $user->permissions()->sync(
             collect($permissions)->mapWithKeys(function ($permissionId) {
                 return [$permissionId => [
@@ -349,7 +394,7 @@ class UserController extends Controller
         );
 
         return redirect()->route('users.permissions', $user)
-            ->with('success', 'User permissions updated successfully.');
+            ->with('success', 'Permisos del usuario actualizados exitosamente.');
     }
 
     /**
@@ -357,14 +402,10 @@ class UserController extends Controller
      */
     public function deleteAvatar(User $user)
     {
-        // Verificar autorización
         $this->authorize('update', $user);
 
         if ($user->avatar) {
-            // Delete physical file
             Storage::disk('public')->delete($user->avatar);
-            
-            // Update database
             $user->update(['avatar' => null]);
 
             return response()->json([
@@ -376,6 +417,21 @@ class UserController extends Controller
         return response()->json([
             'success' => false,
             'message' => 'No hay avatar para eliminar'
-        ]);
+        ], 404);
+    }
+
+    /**
+     * Get available roles based on current user permissions.
+     */
+    private function getAvailableRoles()
+    {
+        $roles = Role::active()->ordered();
+        
+        // Si no es super-admin, no puede ver/asignar el rol de super-admin
+        if (!auth()->user()->hasRole('super-admin')) {
+            $roles->where('slug', '!=', 'super-admin');
+        }
+        
+        return $roles->get();
     }
 }

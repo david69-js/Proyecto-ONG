@@ -16,11 +16,19 @@ class CheckPermission
     public function handle(Request $request, Closure $next, string $permission): Response
     {
         if (!auth()->check()) {
-            return redirect()->route('login');
+            return redirect()->route('login')->with('error', 'Debes iniciar sesión para continuar.');
         }
 
-        if (!auth()->user()->hasPermission($permission)) {
-            abort(403, 'No tienes permisos para acceder a esta funcionalidad.');
+        $user = auth()->user();
+
+        // Super admin siempre pasa (bypass)
+        if ($user->hasRole('super-admin')) {
+            return $next($request);
+        }
+
+        // Verificar si tiene el permiso
+        if (!$user->hasPermission($permission)) {
+            abort(403, 'No tienes permiso para acceder a esta funcionalidad.');
         }
 
         return $next($request);
