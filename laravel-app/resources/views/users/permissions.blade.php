@@ -43,57 +43,6 @@
                             </div>
                         </div>
                         
-                        <!-- Permisos por Módulo -->
-                        <div class="row">
-                            @foreach($permissions as $module => $modulePermissions)
-                                <div class="col-md-6 mb-4">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="card-title mb-0 text-capitalize">
-                                                Permisos de {{ $module }}
-                                                <span class="badge badge-secondary float-right">
-                                                    {{ $modulePermissions->count() }} permisos
-                                                </span>
-                                            </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="form-group">
-                                                <div class="custom-control custom-checkbox mb-2">
-                                                    <input type="checkbox" 
-                                                           class="custom-control-input" 
-                                                           id="select_all_{{ $module }}" 
-                                                           onchange="toggleModulePermissions('{{ $module }}', this.checked)">
-                                                    <label class="custom-control-label font-weight-bold" for="select_all_{{ $module }}">
-                                                        Seleccionar todos los permisos de {{ ucfirst($module) }}
-                                                    </label>
-                                                </div>
-                                                
-                                                <hr>
-                                                
-                                                @foreach($modulePermissions as $permission)
-                                                    <div class="custom-control custom-checkbox mb-2">
-                                                        <input type="checkbox" 
-                                                               class="custom-control-input module-{{ $module }}" 
-                                                               id="permission_{{ $permission->id }}" 
-                                                               name="permissions[]" 
-                                                               value="{{ $permission->id }}"
-                                                               {{ $user->permissions->contains($permission->id) ? 'checked' : '' }}
-                                                               onchange="updateSelectAll('{{ $module }}')">
-                                                        <label class="custom-control-label" for="permission_{{ $permission->id }}">
-                                                            <strong>{{ $permission->name }}</strong>
-                                                            @if($permission->description)
-                                                                <br><small class="text-muted">{{ $permission->description }}</small>
-                                                            @endif
-                                                        </label>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                        
                         <!-- Información de permisos por rol -->
                         <div class="row mt-4">
                             <div class="col-12">
@@ -102,11 +51,6 @@
                                         <h5 class="card-title mb-0">Permisos basados en Roles</h5>
                                     </div>
                                     <div class="card-body">
-                                        <div class="alert alert-warning">
-                                            <i class="fas fa-info-circle"></i>
-                                            <strong>Nota:</strong> El usuario también posee permisos a través de los roles asignados. 
-                                            Los permisos directos se sumarán a los permisos heredados del rol.
-                                        </div>
                                         
                                         @if($user->roles->count() > 0)
                                             <div class="row">
@@ -143,18 +87,7 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Botones de acción -->
-                        <div class="row mt-4">
-                            <div class="col-12">
-                                <div class="d-flex justify-content-end">
-                                    <a href="{{ route('users.show', $user) }}" class="btn btn-secondary me-2">Cancelar</a>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save"></i> Actualizar Permisos
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+
                     </form>
                 </div>
             </div>
@@ -162,41 +95,6 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-function toggleModulePermissions(module, checked) {
-    const checkboxes = document.querySelectorAll(`.module-${module}`);
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = checked;
-    });
-}
-
-function updateSelectAll(module) {
-    const checkboxes = document.querySelectorAll(`.module-${module}`);
-    const selectAllCheckbox = document.getElementById(`select_all_${module}`);
-    const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
-    
-    if (checkedCount === 0) {
-        selectAllCheckbox.checked = false;
-        selectAllCheckbox.indeterminate = false;
-    } else if (checkedCount === checkboxes.length) {
-        selectAllCheckbox.checked = true;
-        selectAllCheckbox.indeterminate = false;
-    } else {
-        selectAllCheckbox.checked = false;
-        selectAllCheckbox.indeterminate = true;
-    }
-}
-
-// Inicializar checkboxes de "Seleccionar todo" al cargar la página
-document.addEventListener('DOMContentLoaded', function() {
-    @foreach($permissions as $module => $modulePermissions)
-        updateSelectAll('{{ $module }}');
-    @endforeach
-});
-</script>
-@endpush
 
 @push('styles')
 <style>

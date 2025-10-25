@@ -101,7 +101,7 @@
                                                              class="rounded-circle me-3" 
                                                              style="width: 60px; height: 60px; object-fit: cover;">
                                                         <div>
-                                                            <p class="mb-1 text-muted">Avatar actual</p>
+                                                            <p class="mb-1 text-black">Avatar actual</p>
                                                             <button type="button" 
                                                                     class="btn btn-sm btn-outline-danger delete-avatar-btn"
                                                                     data-user-id="{{ $user->id }}"
@@ -122,7 +122,7 @@
                                             @error('avatar')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
-                                            <small class="form-text text-muted">
+                                            <small class="form-text text-black">
                                                 Formatos permitidos: JPEG, PNG, JPG, GIF, WEBP. Máximo 2MB.
                                                 @if($user->avatar)
                                                     Dejar vacío para mantener la imagen actual.
@@ -415,7 +415,7 @@
                                                             <label class="form-label" class="form-check-label" for="role_{{ $role->id }}">
                                                                 <strong>{{ $role->name }}</strong>
                                                                 @if($role->description)
-                                                                    <br><small class="text-muted">{{ $role->description }}</small>
+                                                                    <br><small class="text-black">{{ $role->description }}</small>
                                                                 @endif
                                                             </label>
                                                         </div>
