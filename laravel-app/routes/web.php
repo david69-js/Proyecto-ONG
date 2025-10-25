@@ -60,6 +60,8 @@ Route::get('/ubicaciones/{location}', [LocationController::class, 'publicShow'])
 Route::get('/test-productos', function() {
     return 'Ruta de productos funciona correctamente';
 });
+Route::get('/projects/public/{project}/show2', [ProjectController::class, 'publicShow2'])->name('projects.public.show2');
+Route::get('/events/{event}', [App\Http\Controllers\EventController::class, 'publicShow2'])->name('events.public.show2');
 
 /*
 |--------------------------------------------------------------------------

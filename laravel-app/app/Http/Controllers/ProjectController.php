@@ -211,4 +211,12 @@ public function togglePublish(Project $project)
 
     return redirect()->back()->with('success', $message);
 }
+public function publicShow2(Project $project)
+{
+    // 🔹 Cargar relaciones si es necesario
+    $project->load(['responsable', 'phaseImages']);
+
+    return view('projects.public-show2', compact('project'));
+}
+
 }
