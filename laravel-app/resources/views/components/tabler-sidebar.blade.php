@@ -647,6 +647,10 @@
                                     <i class="fas fa-envelope me-3"></i>
                                     Mensajes de Contacto
                                 </a>
+                                <a href="{{ route('admin.public.index-selector') }}" class="list-group-item list-group-item-action d-flex align-items-center">
+                                    <i class="fas fa-globe me-3"></i>
+                                    Página pública predeterminada
+                                </a>
 
                                 <!-- Gestión de Usuarios -->
                                 @permission('users.view')
