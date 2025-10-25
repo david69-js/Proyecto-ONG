@@ -163,8 +163,6 @@ class RolePermissionSeeder extends Seeder
         $beneficiaryCoordinator = Role::where('slug', 'beneficiary-coordinator')->first();
         if ($beneficiaryCoordinator) {
             $beneficiaryCoordinatorPermissions = Permission::whereIn('slug', [
-                // Usuarios - Solo ver
-                'users.view',
                 
                 // Proyectos - Solo ver todos
                 'projects.view',
