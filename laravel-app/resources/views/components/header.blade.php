@@ -24,9 +24,9 @@
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="{{ route('home') }}" class="active">Inicio</a></li>
-          <li><a href="#about">Quiénes Somos</a></li>
-          <li><a href="#projects">Proyectos</a></li>
-          <li><a href="#services">Eventos</a></li>
+          <li><a href="{{ route('home') }}#about">Quiénes Somos</a></li>
+          <li><a href="{{ route('home') }}#projects">Proyectos</a></li>
+          <li><a href="{{ route('home') }}#services">Eventos</a></li>
           <li><a href="{{ route('locations.public.index') }}">Ubicaciones</a></li>
           <li><a href="{{ route('contact') }}">Contáctanos</a></li>
           @auth

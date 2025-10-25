@@ -18,10 +18,10 @@
           <h4>Enlaces Útiles</h4>
           <ul>
             <li><a href="{{ route('home') }}">Inicio</a></li>
-            <li><a href="#about">Quiénes Somos</a></li>
-            <li><a href="#services">Eventos</a></li>
-            <li><a href="#projects">Proyectos</a></li>
-            <li><a href="#call-to-action">Donaciones</a></li>
+            <li><a href="{{ route('home') }}#about">Quiénes Somos</a></li>
+            <li><a href="{{ route('home') }}#services">Eventos</a></li>
+            <li><a href="{{ route('home') }}#projects">Proyectos</a></li>
+            <li><a href="{{ route('home') }}#call-to-action">Donaciones</a></li>
           </ul>
         </div>
 
