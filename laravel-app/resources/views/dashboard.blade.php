@@ -9,6 +9,53 @@
 
 
 <div class="row row-deck row-cards">
+
+    <!-- Información del Usuario -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-user me-2"></i>Mi Perfil
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        @if(auth()->user()->avatar)
+                            <img src="{{ asset('storage/' . auth()->user()->avatar) }}" 
+                                 class="avatar avatar-lg" 
+                                 alt="Avatar">
+                        @else
+                            <span class="avatar avatar-lg" style="background-image: url({{ asset('assets/img/default-avatar.png') }})"></span>
+                        @endif
+                    </div>
+                    <div class="col">
+                        <div class="font-weight-medium">{{ auth()->user()->full_name }}</div>
+                        <div class="text-muted">{{ auth()->user()->email }}</div>
+                        <div class="mt-2">
+                            @foreach(auth()->user()->roles as $role)
+                                <span class="badge bg-primary me-1">{{ $role->name }}</span>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="btn-list">
+                            @can('update', auth()->user())
+                            <a href="{{ route('users.permissions', auth()->user()) }}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-edit me-1"></i>Editar Perfil
+                            </a>
+                            @endcan
+                            @can('update', auth()->user())
+                            <a href="{{ route('users.edit', auth()->user()) }}" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-cog me-1"></i>Configuración
+                            </a>
+                            @endcan
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Tarjetas de Estadísticas -->
     <div class="col-sm-6 col-lg-3">
         <div class="card stats-card border-primary">
@@ -263,148 +310,6 @@
     </div>
 </div>
 
-<!-- Tercera fila: Visitor Tracking -->
-<div class="row row-deck row-cards mt-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h3 class="card-title">
-                    <i class="fas fa-chart-line me-2"></i>Visitor Tracking - Estadísticas en Tiempo Real
-                </h3>
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="refreshVisitorStats()">
-                        <i class="fas fa-sync-alt"></i> Actualizar
-                    </button>
-                    <a href="{{ route('admin.visitor-tracking.index') }}" class="btn btn-sm btn-primary">
-                        <i class="fas fa-chart-bar"></i> Ver Detalles
-                    </a>
-                </div>
-            </div>
-            <div class="card-body">
-                <!-- Tarjetas de Visitor Tracking -->
-                <div class="row mb-4">
-                    <div class="col-sm-6 col-lg-3 mb-3">
-                        <div class="card border-primary">
-                            <div class="card-body text-center">
-                                <div class="h2 text-primary mb-2">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                                <div class="h3 mb-1" id="visitors-today">{{ $visitor_stats['total_visitors_today'] ?? 0 }}</div>
-                                <div class="text-muted">Visitantes Hoy</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-sm-6 col-lg-3 mb-3">
-                        <div class="card border-success">
-                            <div class="card-body text-center">
-                                <div class="h2 text-success mb-2">
-                                    <i class="fas fa-eye"></i>
-                                </div>
-                                <div class="h3 mb-1" id="page-views-today">{{ $visitor_stats['total_page_views_today'] ?? 0 }}</div>
-                                <div class="text-muted">Páginas Vistas Hoy</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-sm-6 col-lg-3 mb-3">
-                        <div class="card border-info">
-                            <div class="card-body text-center">
-                                <div class="h2 text-info mb-2">
-                                    <i class="fas fa-user-clock"></i>
-                                </div>
-                                <div class="h3 mb-1" id="active-visitors-now">{{ $visitor_stats['active_visitors_now'] ?? 0 }}</div>
-                                <div class="text-muted">Visitantes Activos</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-sm-6 col-lg-3 mb-3">
-                        <div class="card border-warning">
-                            <div class="card-body text-center">
-                                <div class="h2 text-warning mb-2">
-                                    <i class="fas fa-calendar-week"></i>
-                                </div>
-                                <div class="h3 mb-1" id="visitors-week">{{ $visitor_stats['total_visitors_week'] ?? 0 }}</div>
-                                <div class="text-muted">Esta Semana</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gráfico y tabla de páginas más visitadas -->
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title mb-0">Visitantes por Día (Últimos 7 días)</h5>
-                            </div>
-                            <div class="card-body">
-                                <canvas id="visitorsChart" height="100"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title mb-0">Páginas Más Visitadas Hoy</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="list-group list-group-flush" id="top-pages-list">
-                                    @if(isset($visitor_stats['top_pages_today']) && $visitor_stats['top_pages_today']->count() > 0)
-                                        @foreach($visitor_stats['top_pages_today']->take(5) as $page)
-                                            <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                                <div>
-                                                    <small class="text-muted">{{ Str::limit($page->page_title ?: $page->page_url, 30) }}</small>
-                                                </div>
-                                                <span class="badge bg-primary rounded-pill">{{ $page->visits }}</span>
-                                            </div>
-                                        @endforeach
-                                    @else
-                                        <div class="text-center text-muted py-3">
-                                            <i class="fas fa-info-circle"></i><br>
-                                            <small>No hay datos de visitas hoy</small>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Estadísticas de dispositivos -->
-                <div class="row mt-4">
-                    <div class="col-lg-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title mb-0">Dispositivos</h5>
-                            </div>
-                            <div class="card-body">
-                                <canvas id="deviceChart" height="200"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title mb-0">Visitantes Activos en Tiempo Real</h5>
-                            </div>
-                            <div class="card-body">
-                                <div id="active-visitors-list" style="max-height: 200px; overflow-y: auto;">
-                                    <div class="text-center text-muted">
-                                        <i class="fas fa-spinner fa-spin"></i> Cargando...
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="row row-deck row-cards mt-4">
     <!-- Acciones Rápidas -->
@@ -506,53 +411,6 @@
                         </a>
                     </div>
                     @endpermission
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Información del Usuario -->
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-user me-2"></i>Mi Perfil
-                </h3>
-            </div>
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        @if(auth()->user()->avatar)
-                            <img src="{{ asset('storage/' . auth()->user()->avatar) }}" 
-                                 class="avatar avatar-lg" 
-                                 alt="Avatar">
-                        @else
-                            <span class="avatar avatar-lg" style="background-image: url({{ asset('assets/img/default-avatar.png') }})"></span>
-                        @endif
-                    </div>
-                    <div class="col">
-                        <div class="font-weight-medium">{{ auth()->user()->full_name }}</div>
-                        <div class="text-muted">{{ auth()->user()->email }}</div>
-                        <div class="mt-2">
-                            @foreach(auth()->user()->roles as $role)
-                                <span class="badge bg-primary me-1">{{ $role->name }}</span>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <div class="btn-list">
-                            @can('update', auth()->user())
-                            <a href="{{ route('users.permissions', auth()->user()) }}" class="btn btn-outline-primary btn-sm">
-                                <i class="fas fa-edit me-1"></i>Editar Perfil
-                            </a>
-                            @endcan
-                            @can('update', auth()->user())
-                            <a href="{{ route('users.edit', auth()->user()) }}" class="btn btn-outline-secondary btn-sm">
-                                <i class="fas fa-cog me-1"></i>Configuración
-                            </a>
-                            @endcan
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -734,6 +592,149 @@
     </div>
 </div>
 @endpermission
+
+<!-- Tercera fila: Visitor Tracking -->
+<div class="row row-deck row-cards mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-line me-2"></i>Visitor Tracking - Estadísticas en Tiempo Real
+                </h3>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="refreshVisitorStats()">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                    <a href="{{ route('admin.visitor-tracking.index') }}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-chart-bar"></i> Ver Detalles
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Tarjetas de Visitor Tracking -->
+                <div class="row mb-4">
+                    <div class="col-sm-6 col-lg-3 mb-3">
+                        <div class="card border-primary">
+                            <div class="card-body text-center">
+                                <div class="h2 text-primary mb-2">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="h3 mb-1" id="visitors-today">{{ $visitor_stats['total_visitors_today'] ?? 0 }}</div>
+                                <div class="text-muted">Visitantes Hoy</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6 col-lg-3 mb-3">
+                        <div class="card border-success">
+                            <div class="card-body text-center">
+                                <div class="h2 text-success mb-2">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <div class="h3 mb-1" id="page-views-today">{{ $visitor_stats['total_page_views_today'] ?? 0 }}</div>
+                                <div class="text-muted">Páginas Vistas Hoy</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6 col-lg-3 mb-3">
+                        <div class="card border-info">
+                            <div class="card-body text-center">
+                                <div class="h2 text-info mb-2">
+                                    <i class="fas fa-user-clock"></i>
+                                </div>
+                                <div class="h3 mb-1" id="active-visitors-now">{{ $visitor_stats['active_visitors_now'] ?? 0 }}</div>
+                                <div class="text-muted">Visitantes Activos</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6 col-lg-3 mb-3">
+                        <div class="card border-warning">
+                            <div class="card-body text-center">
+                                <div class="h2 text-warning mb-2">
+                                    <i class="fas fa-calendar-week"></i>
+                                </div>
+                                <div class="h3 mb-1" id="visitors-week">{{ $visitor_stats['total_visitors_week'] ?? 0 }}</div>
+                                <div class="text-muted">Esta Semana</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráfico y tabla de páginas más visitadas -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Visitantes por Día (Últimos 7 días)</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="visitorsChart" height="100"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Páginas Más Visitadas Hoy</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group list-group-flush" id="top-pages-list">
+                                    @if(isset($visitor_stats['top_pages_today']) && $visitor_stats['top_pages_today']->count() > 0)
+                                        @foreach($visitor_stats['top_pages_today']->take(5) as $page)
+                                            <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                                <div>
+                                                    <small class="text-muted">{{ Str::limit($page->page_title ?: $page->page_url, 30) }}</small>
+                                                </div>
+                                                <span class="badge bg-primary rounded-pill">{{ $page->visits }}</span>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="text-center text-muted py-3">
+                                            <i class="fas fa-info-circle"></i><br>
+                                            <small>No hay datos de visitas hoy</small>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estadísticas de dispositivos -->
+                <div class="row mt-4">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Dispositivos</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="deviceChart" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Visitantes Activos en Tiempo Real</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="active-visitors-list" style="max-height: 200px; overflow-y: auto;">
+                                    <div class="text-center text-muted">
+                                        <i class="fas fa-spinner fa-spin"></i> Cargando...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('styles')
