@@ -145,7 +145,7 @@
                 {{-- ========================================== --}}
                 {{-- MENÚ PARA ROLES ADMINISTRATIVOS --}}
                 {{-- ========================================== --}}
-                @hasanyrole('super-admin', 'admin', 'project-coordinator', 'beneficiary-coordinator', 'volunteer', 'consultant')
+                @hasanyrole('super-admin', 'admin')
                 
                     <!-- ========================================== -->
                     <!-- MENÚ DE SECCIONES -->
