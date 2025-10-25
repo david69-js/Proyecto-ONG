@@ -12,7 +12,10 @@
         ->orderByDesc('id')
         ->get();
 @endphp
-
+@php
+    // Credenciales de PayPal desde config/services.php o .env
+  use Illuminate\Support\Facades\Route as R;
+@endphp
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -354,8 +357,7 @@
 
 
   @php
-  // Credenciales de PayPal desde config/services.php o .env
-  use Illuminate\Support\Facades\Route as R;
+
 
   $paypalClientId = config('services.paypal.client_id', env('PAYPAL_CLIENT_ID'));
   $paypalCurrency = config('services.paypal.currency', env('PAYPAL_CURRENCY', 'USD'));
@@ -489,26 +491,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </style>
 <!-- /Get Started Section -->
 
-@php
-  // 🔹 Leer credenciales desde config/services.php o .env
-  $paypalClientId = config('services.paypal.client_id', env('PAYPAL_CLIENT_ID'));
-  $paypalCurrency = config('services.paypal.currency', env('PAYPAL_CURRENCY', 'USD'));
 
-  use Illuminate\Support\Facades\Route as R;
-
-  // 🔹 Detectar rutas backend para PayPal
-  $paypalCreateUrl = R::has('donations.paypal.create')
-      ? route('donations.paypal.create')
-      : (R::has('admin.donations.paypal.create')
-          ? route('admin.donations.paypal.create')
-          : url('/donations/paypal/create-order'));
-
-  $paypalCaptureUrl = R::has('donations.paypal.capture')
-      ? route('donations.paypal.capture')
-      : (R::has('admin.donations.paypal.capture')
-          ? route('admin.donations.paypal.capture')
-          : url('/donations/paypal/capture-order'));
-@endphp
 
 <!-- SDK de PayPal -->
 <script src="https://www.paypal.com/sdk/js?client-id={{ $paypalClientId }}&currency={{ $paypalCurrency }}&intent=capture"></script>
