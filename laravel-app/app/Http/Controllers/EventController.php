@@ -459,5 +459,10 @@ class EventController extends Controller
     {
         return view('events.public-show', compact('event'));
     }
+   public function publicShow2(\App\Models\Event $event)
+{
+    return view('events.public-show2', compact('event'));
+}
+
 
 }

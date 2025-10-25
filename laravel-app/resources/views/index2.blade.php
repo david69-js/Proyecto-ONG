@@ -702,7 +702,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </ul>
 
             {{-- Botón Ver más --}}
-            <a href="{{ route('events.public.show', $event) }}" class="btn btn-outline-primary mt-auto">
+            <a href="{{ route('events.public.show2', $event) }}" class="btn btn-outline-primary mt-auto">
   Ver más <i class="bi bi-arrow-right ms-1"></i>
 </a>
 
