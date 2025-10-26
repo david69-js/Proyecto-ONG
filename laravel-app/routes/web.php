@@ -62,6 +62,10 @@ Route::get('/productos-dorado/{product}', [ProductController::class, 'publicShow
 Route::get('/ubicaciones', [LocationController::class, 'publicIndex'])->name('locations.public.index');
 Route::get('/ubicaciones/{location}', [LocationController::class, 'publicShow'])->name('locations.public.show');
 
+/* Público: ubicaciones (estilo dorado) */
+Route::get('/ubicaciones-dorado', [LocationController::class, 'publicIndex2'])->name('locations.public.index2');
+Route::get('/ubicaciones-dorado/{location}', [LocationController::class, 'publicShow2'])->name('locations.public.show2');
+
 /* Ruta de prueba */
 Route::get('/test-productos', function() {
     return 'Ruta de productos funciona correctamente';

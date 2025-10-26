@@ -10,7 +10,7 @@ class LocationController extends Controller
     public function __construct()
     {
         // Solo aplicar middleware de autenticación a rutas administrativas
-        $this->middleware('auth')->except(['publicIndex', 'publicShow']);
+        $this->middleware('auth')->except(['publicIndex', 'publicShow', 'publicIndex2', 'publicShow2']);
     }
 
     // Mostrar listado
@@ -148,5 +148,53 @@ class LocationController extends Controller
 
         $location->delete();
         return redirect()->route('locations.index')->with('success', 'Ubicación eliminada correctamente');
+    }
+
+    /**
+     * Vista pública del listado de ubicaciones (estilo dorado)
+     */
+    public function publicIndex2(Request $request)
+    {
+        $query = Location::query();
+
+        // Filtros opcionales
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nombre', 'like', "%{$search}%")
+                  ->orWhere('direccion', 'like', "%{$search}%")
+                  ->orWhere('ciudad', 'like', "%{$search}%")
+                  ->orWhere('pais', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('ciudad')) {
+            $query->where('ciudad', $request->ciudad);
+        }
+
+        if ($request->filled('pais')) {
+            $query->where('pais', $request->pais);
+        }
+
+        // Ordenamiento
+        $sortBy = $request->get('sort_by', 'nombre');
+        $sortDirection = $request->get('sort_direction', 'asc');
+        $query->orderBy($sortBy, $sortDirection);
+
+        $locations = $query->get();
+
+        // Obtener ciudades y países únicos para filtros
+        $ciudades = Location::select('ciudad')->distinct()->whereNotNull('ciudad')->pluck('ciudad');
+        $paises = Location::select('pais')->distinct()->whereNotNull('pais')->pluck('pais');
+
+        return view('locations.public-index2', compact('locations', 'ciudades', 'paises'));
+    }
+
+    /**
+     * Vista pública de detalle de ubicación (estilo dorado)
+     */
+    public function publicShow2(Location $location)
+    {
+        return view('locations.public-show2', compact('location'));
     }
 }

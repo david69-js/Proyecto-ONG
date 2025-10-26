@@ -115,7 +115,7 @@
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
       <a href="{{ route('home') }}" class="logo d-flex align-items-center">
-        <h1 class="sitename">Habitat Guatemala</h1><span>.</span>
+        <h1 class="sitename">Habitat Guatemala</h1> <span>.</span>
       </a>
 
       <nav id="navmenu" class="navmenu">
@@ -124,15 +124,8 @@
           <li><a href="{{ url('/#about') }}">Quiénes Somos</a></li>
           <li><a href="{{ url('/#services') }}">Eventos</a></li>
           <li><a href="{{ url('/#projects') }}" class="active">Proyectos</a></li>
-          <li><a href="{{ url('/#get-started') }}">Donaciones</a></li>
-          <li class="dropdown">
-            <a href="#"><span>Más</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="{{ url('/#testimonios') }}">Testimonios</a></li>
-              <li><a href="{{ url('/#patrocinadores') }}">Patrocinadores</a></li>
-              <li><a href="{{ url('/#contact') }}">Contacto</a></li>
-            </ul>
-          </li>
+          <li><a href="{{ route('contact.index2') }}">Contacto</a></li>
+          <li><a href="{{ route('locations.public.index2') }}">Ubicaciones</a></li>
 
           @auth
             <li class="dropdown">
@@ -151,8 +144,9 @@
             <li><a href="{{ route('login') }}">Ingresar</a></li>
           @endauth
 
-          <li><a href="{{ route('products.public.index') }}">Productos</a></li>
+          <li><a href="{{ route('products.public.index2') }}">Productos</a></li>
         </ul>
+
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
     </div>
@@ -173,6 +167,7 @@
      style="background: radial-gradient(1200px 600px at 15% 15%, rgba(212, 175, 55, 0.35), transparent),
             linear-gradient(135deg, #b8860b 0%, #f1c40f 100%);
             opacity:.9;">
+            
 </div>
         @endif
       </div>

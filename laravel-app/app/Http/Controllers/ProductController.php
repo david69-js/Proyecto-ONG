@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function __construct()
     {
         // Solo aplicar middleware de autenticación a rutas administrativas
-        $this->middleware('auth')->except(['publicIndex', 'publicShow']);
+        $this->middleware('auth')->except(['publicIndex', 'publicShow', 'publicIndex2', 'publicShow2']);
     }
 
     /**
@@ -490,7 +490,4 @@ public function publicIndex2(Request $request)
 
     return view('products.public-index2', compact('products', 'categories', 'featuredCount'));
 }
-
-
-
 }

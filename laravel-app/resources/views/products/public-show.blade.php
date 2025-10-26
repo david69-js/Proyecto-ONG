@@ -11,7 +11,6 @@
 <section class="breadcrumbs">
   <div class="container">
     <div class="d-flex justify-content-between align-items-center">
-      <h2>{{ $product->name }}</h2>
       <ol>
         <li><a href="{{ route('home') }}"></a></li>
         <li><a href="{{ route('products.public.index') }}"></a></li>
@@ -668,6 +667,7 @@ function changeMainImage(imageUrl) {
   padding: 14px 32px !important;
   font-size: 1rem !important;
   line-height: 1.5 !important;
+  margin: auto !important;
 }
 
 .product-actions .btn-primary:hover {
@@ -681,9 +681,10 @@ function changeMainImage(imageUrl) {
   color: #102a49;
   background: transparent;
   font-weight: 500;
-  padding: 14px 32px !important;
+  padding: 14px 50px !important;
   font-size: 1rem !important;
   line-height: 1.5 !important;
+  margin: auto !important;
 }
 
 .product-actions .btn-outline-secondary:hover {

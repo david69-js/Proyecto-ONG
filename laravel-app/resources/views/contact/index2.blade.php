@@ -150,7 +150,7 @@
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
       <a href="{{ route('home') }}" class="logo d-flex align-items-center">
-        <h1 class="sitename">Habitat Guatemala</h1><span>.</span>
+        <h1 class="sitename">Habitat Guatemala</h1> <span>.</span>
       </a>
 
       <nav id="navmenu" class="navmenu">
@@ -159,9 +159,29 @@
           <li><a href="{{ url('/#about') }}">Quiénes Somos</a></li>
           <li><a href="{{ url('/#services') }}">Eventos</a></li>
           <li><a href="{{ url('/#projects') }}">Proyectos</a></li>
-          <li><a href="{{ url('/#get-started') }}">Donaciones</a></li>
           <li><a href="{{ route('contact.index2') }}" class="active">Contacto</a></li>
+          <li><a href="{{ route('locations.public.index2') }}">Ubicaciones</a></li>
+
+          @auth
+            <li class="dropdown">
+              <a href="#"><i class="fas fa-user"></i> {{ auth()->user()->first_name }} <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul class="dropdown-menu">
+                <li><a href="/users" class="dropdown-item"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <form method="POST" action="{{ route('logout') }}" class="d-inline">@csrf
+                    <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+          @else
+            <li><a href="{{ route('login') }}">Ingresar</a></li>
+          @endauth
+
+          <li><a href="{{ route('products.public.index2') }}">Productos</a></li>
         </ul>
+
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
     </div>

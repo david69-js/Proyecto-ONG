@@ -61,6 +61,385 @@
     .hero.section.dark-background.position-relative {
       pointer-events: none !important;
     }
+
+    /* ===== MEJORAS MÓVILES ===== */
+    
+    /* Hero móvil mejorado - SOLO PARA MÓVIL */
+    @media (max-width: 768px) {
+      /* Fix para hero que ocupe todo el ancho SOLO EN MÓVIL */
+      #hero {
+        height: 100vh !important;
+        padding: 120px 0 60px !important;
+        width: 105vw !important;
+        margin-left: calc(-52.5vw + 50%) !important;
+        margin-right: calc(-52.5vw + 50%) !important;
+        overflow-x: hidden !important;
+      }
+      
+      #hero .hero-bg {
+        width: 105vw !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+      }
+      
+      #hero .hero-bg img {
+        width: 105vw !important;
+        height: 100vh !important;
+        object-fit: cover !important;
+        object-position: center !important;
+      }
+      
+      #hero .container {
+        padding: 0 15px;
+        max-width: 100%;
+      }
+      
+      #hero h2 {
+        font-size: 2rem !important;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+      }
+      
+      #hero p {
+        font-size: 1rem !important;
+        margin-bottom: 1.5rem;
+      }
+      
+      #hero .btn-get-started {
+        padding: 12px 24px;
+        font-size: 1rem;
+        margin: 5px;
+        display: inline-block;
+        width: auto;
+      }
+      
+      /* Logros en móvil */
+      #hero .d-flex.justify-content-center.mt-5 {
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 2rem !important;
+      }
+      
+      #hero .d-flex.justify-content-center.mt-5 > div {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        justify-content: center;
+      }
+      
+      #hero .d-flex.justify-content-center.mt-5 i {
+        font-size: 1.5rem;
+      }
+      
+      #hero .d-flex.justify-content-center.mt-5 .fw-bold {
+        font-size: 1.2rem;
+      }
+    }
+
+    /* Misión, Visión y Valores móvil */
+    @media (max-width: 768px) {
+      #mission-vision .carousel-inner {
+        min-height: 400px !important;
+      }
+      
+      #mission-vision .card {
+        margin: 0 10px;
+        padding: 2rem 1.5rem !important;
+      }
+      
+      #mission-vision h3 {
+        font-size: 1.5rem;
+      }
+      
+      #mission-vision p {
+        font-size: 1rem;
+        padding: 0 10px;
+      }
+      
+      #mission-vision .carousel-control-prev,
+      #mission-vision .carousel-control-next {
+        display: none;
+      }
+      
+      #mission-vision .carousel-indicators {
+        margin-top: 1rem;
+      }
+    }
+
+    /* Sección de donaciones móvil */
+    @media (max-width: 768px) {
+      #get-started .row {
+        flex-direction: column-reverse;
+      }
+      
+      #get-started .col-lg-6,
+      #get-started .col-lg-5 {
+        width: 100%;
+        margin-bottom: 2rem;
+      }
+      
+      #get-started h3 {
+        font-size: 1.5rem;
+        text-align: center;
+      }
+      
+      #get-started .quick-amt {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+        margin: 2px;
+      }
+      
+      #donation-form {
+        padding: 1.5rem;
+        border-radius: 15px;
+      }
+    }
+
+    /* Beneficiarios móvil */
+    @media (max-width: 768px) {
+      #beneficiarios .beneficiario-slide {
+        margin: 0 10px;
+        padding: 1.5rem !important;
+      }
+      
+      #beneficiarios .beneficiario-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+      
+      #beneficiarios .beneficiario-footer {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+      
+      #beneficiarios .beneficiario-footer img {
+        width: 80px !important;
+        height: 80px !important;
+      }
+    }
+
+    /* Eventos móvil */
+    @media (max-width: 768px) {
+      #services .service-item {
+        margin-bottom: 1.5rem;
+        padding: 1.5rem;
+      }
+      
+      #services .service-item h3 {
+        font-size: 1.2rem;
+      }
+      
+      #services .service-item p {
+        font-size: 0.9rem;
+      }
+      
+      #services .service-item .btn {
+        width: 100%;
+        margin-top: 1rem;
+      }
+    }
+
+    /* Patrocinadores móvil */
+    @media (max-width: 768px) {
+      #patrocinadores .patro-card {
+        padding: 1.5rem !important;
+        margin-bottom: 1rem;
+      }
+      
+      #patrocinadores .d-flex.flex-column.flex-md-row {
+        flex-direction: column !important;
+        text-align: center;
+      }
+      
+      #patrocinadores .me-md-4 {
+        margin-right: 0 !important;
+        margin-bottom: 1rem;
+      }
+    }
+
+    /* Proyectos móvil */
+    @media (max-width: 768px) {
+      #projects .project-card {
+        margin-bottom: 1.5rem;
+      }
+      
+      #projects .project-card .card-body {
+        padding: 1.5rem;
+      }
+      
+      #projects .project-card h5 {
+        font-size: 1.2rem;
+      }
+      
+      #projects .project-card .btn {
+        width: 100%;
+        margin-top: 1rem;
+      }
+      
+      #projects .carousel-control-prev,
+      #projects .carousel-control-next {
+        display: none;
+      }
+    }
+
+    /* Donadores móvil */
+    @media (max-width: 768px) {
+      #donadores .donador-card.featured {
+        margin-bottom: 1.5rem;
+      }
+      
+      #donadores .donador-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+      
+      #donadores .donador-image img {
+        width: 120px !important;
+        height: 120px !important;
+      }
+      
+      #donadores .credentials {
+        justify-content: center;
+      }
+    }
+
+    /* Sobre nosotros móvil */
+    @media (max-width: 768px) {
+      #about .row {
+        flex-direction: column-reverse;
+      }
+      
+      #about .about-content h2 {
+        font-size: 1.8rem;
+        text-align: center;
+      }
+      
+      #about .achievement-boxes .col-6 {
+        margin-bottom: 1rem;
+      }
+      
+      #about .about-image {
+        margin-top: 2rem;
+      }
+      
+      #about .experience-badge {
+        position: relative;
+        margin-top: 1rem;
+      }
+    }
+
+    /* Footer móvil */
+    @media (max-width: 768px) {
+      .footer .row {
+        text-align: center;
+      }
+      
+      .footer .footer-links {
+        margin-bottom: 2rem;
+      }
+      
+      .footer .social-links {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+      
+      .footer .social-links a {
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 1.3rem !important;
+        margin: 0 8px;
+      }
+    }
+
+    /* Botones generales móvil */
+    @media (max-width: 768px) {
+      .btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+        border-radius: 8px;
+      }
+      
+      .btn-lg {
+        padding: 14px 24px;
+        font-size: 1.1rem;
+      }
+    }
+
+    /* Espaciado general móvil */
+    @media (max-width: 768px) {
+      .section {
+        padding: 3rem 0 !important;
+      }
+      
+      .container {
+        padding: 0 15px;
+      }
+      
+      .section-title h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+      
+      .section-title p {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+      }
+    }
+
+    /* Navegación móvil mejorada */
+    @media (max-width: 768px) {
+      .navmenu ul {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .navmenu .dropdown-menu {
+        position: static;
+        display: block;
+        box-shadow: none;
+        border: none;
+        background: transparent;
+      }
+      
+      .navmenu .dropdown-menu li {
+        padding-left: 1rem;
+      }
+    }
+
+    /* Mejoras adicionales para móvil */
+    @media (max-width: 768px) {
+      /* Cards más compactas */
+      .card {
+        margin-bottom: 1rem;
+      }
+      
+      /* Imágenes responsivas */
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+      
+      /* Texto más legible */
+      p, span, div {
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+      
+      /* Formularios más accesibles */
+      .form-control {
+        font-size: 16px; /* Evita zoom en iOS */
+        padding: 12px 15px;
+      }
+      
+      /* Botones más grandes para touch */
+      .btn {
+        min-height: 44px;
+        min-width: 44px;
+      }
+    }
     
   </style>
   <style>
@@ -94,57 +473,41 @@
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      {{-- Logo principal --}}
       <a href="{{ route('home') }}" class="logo d-flex align-items-center">
-        <!-- Si deseas usar imagen -->
-        <!-- <img src="{{ asset('assets2/img/logo.png') }}" alt=""> -->
         <h1 class="sitename">Habitat Guatemala</h1> <span>.</span>
       </a>
 
-      {{-- Menú de navegación --}}
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="{{ route('home') }}" class="{{ request()->is('/') ? 'active' : '' }}">Inicio</a></li>
-          <li><a href="#about">Quiénes Somos</a></li>
-          <li><a href="#services">Eventos</a></li>
-          <li><a href="#projects">Proyectos</a></li>
-          <li><a href="#get-started">Donaciones</a></li>
+          <li><a href="{{ url('/#about') }}">Quiénes Somos</a></li>
+          <li><a href="{{ url('/#services') }}">Eventos</a></li>
+          <li><a href="{{ url('/#projects') }}">Proyectos</a></li>
           <li><a href="{{ route('contact.index2') }}">Contacto</a></li>
+          <li><a href="{{ route('locations.public.index2') }}">Ubicaciones</a></li>
 
-       
-
-          {{-- Si el usuario está autenticado --}}
           @auth
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
-                <i class="fas fa-user"></i> {{ auth()->user()->first_name }}
-                <i class="bi bi-chevron-down toggle-dropdown"></i>
-              </a>
+              <a href="#"><i class="fas fa-user"></i> {{ auth()->user()->first_name }} <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul class="dropdown-menu">
                 <li><a href="/users" class="dropdown-item"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
-                  <form method="POST" action="{{ route('logout') }}" class="d-inline">
-                    @csrf
-                    <button type="submit" class="dropdown-item">
-                      <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                    </button>
+                  <form method="POST" action="{{ route('logout') }}" class="d-inline">@csrf
+                    <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
                   </form>
                 </li>
               </ul>
             </li>
           @else
-            {{-- Si no ha iniciado sesión --}}
-            <li><a href="{{ route('login') }}">Ingresar</a></li>
+            <li><a href="{{ route('login') }}" target="_blank">Ingresar</a></li>
           @endauth
 
-          {{--Enlace público a productos --}}
           <li><a href="{{ route('products.public.index2') }}">Productos</a></li>
         </ul>
 
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
-
     </div>
   </header>
 
@@ -195,24 +558,24 @@
   </a>
 </div>
 
-        <!-- Logros -->
-        <div class="d-flex justify-content-center mt-5 text-white small gap-4 flex-wrap" data-aos="fade-up" data-aos-delay="300">
-          <div class="text-center">
-            <i class="bi bi-people fs-4"></i>
-            <div class="fw-bold">{{ optional($hero)->anios_servicio ?? '25+' }}</div>
-            <div>Años de servicio</div>
-          </div>
-          <div class="text-center">
-            <i class="bi bi-house-heart fs-4"></i>
-            <div class="fw-bold">{{ optional($hero)->viviendas_construidas ?? '500+' }}</div>
-            <div>Viviendas construidas</div>
-          </div>
-          <div class="text-center">
-            <i class="bi bi-person-hearts fs-4"></i>
-            <div class="fw-bold">{{ optional($hero)->familias_beneficiadas ?? '300+' }}</div>
-            <div>Familias beneficiadas</div>
-          </div>
-        </div>
+<!-- Logros -->
+<div class="d-flex justify-content-center mt-5 text-white small gap-4 flex-wrap" data-aos="fade-up" data-aos-delay="300">
+  <div class="text-center">
+    <i class="bi bi-people fs-4"></i>
+    <div class="fw-bold">{{ optional($hero)->anios_servicio ?? '25+' }}</div>
+    <div>Años de servicio</div>
+  </div>
+  <div class="text-center">
+    <i class="bi bi-house-heart fs-4"></i>
+    <div class="fw-bold">{{ optional($hero)->viviendas_construidas ?? '500+' }}</div>
+    <div>Viviendas construidas</div>
+  </div>
+  <div class="text-center">
+    <i class="bi bi-person-hearts fs-4"></i>
+    <div class="fw-bold">{{ optional($hero)->familias_beneficiadas ?? '300+' }}</div>
+    <div>Familias beneficiadas</div>
+  </div>
+</div>
 
       </div>
     </div>
@@ -704,9 +1067,9 @@ document.addEventListener('DOMContentLoaded', function() {
             </ul>
 
             {{-- Botón Ver más --}}
-            <a href="{{ route('events.public.show2', $event) }}" class="btn btn-outline-primary mt-auto">
-  Ver más <i class="bi bi-arrow-right ms-1"></i>
-</a>
+            <a href="{{ route('events.public.show2', $event) }}" class="btn btn-outline-primary mt-auto w-100">
+              Ver más <i class="bi bi-arrow-right ms-1"></i>
+            </a>
 
 
           </div>
@@ -892,7 +1255,7 @@ document.addEventListener('DOMContentLoaded', function() {
               </ul>
 
               <!-- Botón Ver más -->
-<a href="{{ route('projects.public.show2', $project) }}" class="project-link">
+              <a href="{{ route('projects.public.show2', $project) }}" class="btn btn-outline-primary w-100 mt-auto">
                 Ver proyecto <i class="bi bi-arrow-right ms-1"></i>
               </a>
             </div>
@@ -1475,7 +1838,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </style>
 
 </body>
-</html>
-
-
 </html>

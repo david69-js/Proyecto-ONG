@@ -49,7 +49,7 @@
               </ul>
             </li>
           @else
-            <li><a href="{{ route('login') }}">Ingresar</a></li>
+            <li><a href="{{ route('login') }}" target="_blank">Ingresar</a></li>
           @endauth 
           <li><a href="{{ route('products.public.index') }}">Productos</a></li>
         </ul>
