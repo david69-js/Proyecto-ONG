@@ -1,7 +1,7 @@
 @extends('layouts.tabler')
 
 @section('title', 'Dashboard - Sistema ONG')
-@section('page-title', 'Panel Principal hola')
+@section('page-title', 'Panel Principal')
 @section('page-description', 'Resumen general del sistema de gestión de ONG')
 
 @section('content')

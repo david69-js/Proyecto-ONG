@@ -145,10 +145,13 @@
                             </div>
 
 
-                            <div class="d-grid">
+                            <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary btn-login">
                                     <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
                                 </button>
+                                <a href="/" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left"></i> Regresar a página principal
+                                </a>
                             </div>
                         </form>
 
