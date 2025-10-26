@@ -457,6 +457,11 @@
   footer a, .footer a {
     pointer-events: auto !important;
   }
+  .button--dropdown--visible{
+    background: transparent;
+    border: none !important;
+    color: #fff !important;
+  }
 </style>
 
 
@@ -488,7 +493,9 @@
 
           @auth
             <li class="dropdown">
-              <a href="#"><i class="fas fa-user"></i> {{ auth()->user()->first_name }} <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <button type="button" class="dropdown-toggle button--dropdown--visible d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user"></i> {{ auth()->user()->first_name }} <i class="bi bi-chevron-down toggle-dropdown"></i>
+              </button>
               <ul class="dropdown-menu">
                 <li><a href="/users" class="dropdown-item"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 <li><hr class="dropdown-divider"></li>
@@ -1677,7 +1684,7 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
 
       {{-- Columna 2: Enlaces útiles --}}
-      <div class="col-lg-2 col-6 footer-links">
+      <div class="col-lg-2 col-6 footer-links footer-links--overflow ">
         <h4>Enlaces Útiles</h4>
         <ul>
           <li><a href="{{ route('home') }}">Inicio</a></li>
@@ -1689,7 +1696,7 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
 
       {{-- Columna 3: Otros Enlaces --}}
-      <div class="col-lg-2 col-6 footer-links">
+      <div class="col-lg-2 col-6 footer-links footer-links--overflow">
         <h4>Otros Enlaces</h4>
         <ul>
           <li>
@@ -1834,6 +1841,9 @@ document.addEventListener('DOMContentLoaded', function() {
 .beneficiarios .swiper-button-prev {
   display: none !important;
   visibility: hidden !important;
+}
+.footer-links--overflow{
+  overflow: auto;
 }
 </style>
 
