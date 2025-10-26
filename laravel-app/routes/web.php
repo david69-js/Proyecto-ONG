@@ -298,14 +298,6 @@ Route::get('donations', [DonorHighlightController::class, 'index'])->name('donat
             Route::post('/{donation}/reject', [DonationController::class, 'reject'])->name('reject');
             Route::post('/{donation}/cancel', [DonationController::class, 'cancel'])->name('cancel');
         });
-
-        // PayPal
-Route::post('/donations/paypal/create-order', [DonationController::class, 'createPaypalOrder'])
-    ->name('donations.paypal.create');
-
-Route::post('/donations/paypal/capture-order', [DonationController::class, 'capturePaypalOrder'])
-    ->name('donations.paypal.capture');
-
         // ====== About Section ======
         Route::get('about', [AboutSectionController::class, 'index'])->name('about.index');
         Route::put('about/{id}', [AboutSectionController::class, 'update'])->name('about.update');
@@ -401,3 +393,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('/contact-messages/{message}', [ContactMessageController::class, 'destroy'])
         ->name('contact-messages.destroy');
 });
+
+        // PayPal
+Route::post('/donations/paypal/create-order', [DonationController::class, 'createPaypalOrder'])
+    ->name('donations.paypal.create');
+
+Route::post('/donations/paypal/capture-order', [DonationController::class, 'capturePaypalOrder'])
+    ->name('donations.paypal.capture');

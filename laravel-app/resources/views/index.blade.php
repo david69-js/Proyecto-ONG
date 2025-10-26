@@ -1049,7 +1049,6 @@
 </div>
   <!-- FIN Contenido de Donadores -->
 @php
-  // Lee credenciales desde config/services.php o .env
   $paypalClientId = config('services.paypal.client_id', env('PAYPAL_CLIENT_ID'));
   $paypalCurrency = config('services.paypal.currency', env('PAYPAL_CURRENCY', 'USD'));
 @endphp
